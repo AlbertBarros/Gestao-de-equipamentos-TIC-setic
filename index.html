@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Almoxarifado TI</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Configuração do Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos personalizados para barra de rolagem */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+        }
+        .dark .glass-panel {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300 min-h-screen flex">
+
+    <!-- TELA DE LOGIN -->
+    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-100 dark:bg-slate-900 transition-colors duration-300">
+        <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-2xl w-full max-w-md mx-4">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-100 dark:bg-brand-900 text-brand-600 dark:text-brand-100 mb-4">
+                    <i class="fa-solid fa-server text-2xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-slate-800 dark:text-white">Almoxarifado TI</h1>
+                <p class="text-slate-500 dark:text-slate-400 mt-2">Faça login para acessar o painel</p>
+            </div>
+            
+            <form id="login-form" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium mb-1">E-mail ou Usuário</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <input type="text" id="username" class="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 bg-transparent dark:bg-slate-700 outline-none transition-all" placeholder="admin@empresa.com" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Senha</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+                        <input type="password" id="password" class="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 bg-transparent dark:bg-slate-700 outline-none transition-all" placeholder="••••••••" required>
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-semibold py-2.5 rounded-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                    <span>Entrar</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+            <div class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+                <p>Ambiente seguro e monitorado.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD (Invisível até o login) -->
+    <div id="dashboard-screen" class="hidden flex-col w-full h-screen overflow-hidden">
+        
+        <!-- NAVBAR SUPERIOR -->
+        <header class="h-16 glass-panel border-b border-slate-200 dark:border-slate-700 flex items-center justify-between px-6 shrink-0 z-10">
+            <div class="flex items-center gap-3">
+                <div class="bg-brand-600 text-white p-2 rounded-lg">
+                    <i class="fa-solid fa-microchip"></i>
+                </div>
+                <h2 class="font-bold text-lg hidden sm:block">Almoxarifado TI - Visão Geral</h2>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <button id="theme-toggle" class="p-2 text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400 transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" title="Alternar Tema">
+                    <i class="fa-solid fa-moon text-xl" id="theme-icon"></i>
+                </button>
+                <button id="tools-btn" class="px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <span class="hidden sm:inline">Ferramentas</span>
+                </button>
+                <div class="h-8 w-px bg-slate-300 dark:bg-slate-600"></div>
+                <button id="logout-btn" class="p-2 text-red-500 hover:text-red-700 transition-colors" title="Sair">
+                    <i class="fa-solid fa-right-from-bracket text-xl"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- CONTEÚDO PRINCIPAL (Scrollable) -->
+        <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+            
+            <!-- FILTROS -->
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm mb-6 flex flex-wrap gap-4 items-end border border-slate-200 dark:border-slate-700">
+                <div class="flex-1 min-w-[200px]">
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Filtrar Categoria</label>
+                    <select id="filter-category" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 outline-none focus:border-brand-500">
+                        <option value="Todos">Todas as Categorias</option>
+                        <option value="Armazenamento">Armazenamento (HD/SSD)</option>
+                        <option value="Memória">Memórias (RAM)</option>
+                        <option value="Fonte de Alimentação">Fontes de Alimentação</option>
+                        <option value="Bateria">Baterias</option>
+                    </select>
+                </div>
+                <div class="flex-1 min-w-[200px]">
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Buscar Componente</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-search absolute left-3 top-3 text-slate-400 text-sm"></i>
+                        <input type="text" id="filter-search" placeholder="Ex: DDR 4, SSD, Dell..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg pl-9 pr-3 py-2 outline-none focus:border-brand-500">
+                    </div>
+                </div>
+                <button id="reset-filters" class="px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 rounded-lg text-sm font-medium transition-colors">
+                    Limpar
+                </button>
+            </div>
+
+            <!-- KPIs -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                <!-- KPI 1 -->
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-boxes-stacked"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Total em Estoque</p>
+                        <h3 class="text-2xl font-bold" id="kpi-total">0</h3>
+                    </div>
+                </div>
+                <!-- KPI 2 -->
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-red-100 text-red-600 dark:bg-red-900/50 dark:text-red-400 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Itens Zerados</p>
+                        <h3 class="text-2xl font-bold" id="kpi-zerados">0</h3>
+                    </div>
+                </div>
+                <!-- KPI 3 -->
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Itens "Curva A" (Maior vol.)</p>
+                        <h3 class="text-2xl font-bold" id="kpi-curvaa">0%</h3>
+                    </div>
+                </div>
+                <!-- KPI 4 -->
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-tags"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Maior Categoria</p>
+                        <h3 class="text-lg font-bold leading-tight" id="kpi-maiorcat">-</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GRÁFICOS E INSIGHTS -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <!-- Gráfico de Rosca -->
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm col-span-1">
+                    <h3 class="font-semibold text-lg mb-4">Distribuição por Categoria</h3>
+                    <div class="relative h-64 w-full flex items-center justify-center">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Gráfico de Barras -->
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm col-span-1 lg:col-span-2">
+                    <h3 class="font-semibold text-lg mb-4">Top 5 Componentes em Estoque</h3>
+                    <div class="relative h-64 w-full">
+                        <canvas id="topItemsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INSIGHTS DE IA -->
+            <div class="bg-brand-50 dark:bg-brand-900/20 border border-brand-200 dark:border-brand-800 rounded-xl p-5 mb-6 shadow-sm">
+                <div class="flex items-center gap-3 mb-4">
+                    <i class="fa-solid fa-lightbulb text-amber-500 text-xl"></i>
+                    <h3 class="font-bold text-lg text-brand-900 dark:text-brand-100">Insights Estratégicos Inteligentes</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm" id="insights-container">
+                    <!-- Gerados via JS para serem dinâmicos aos filtros -->
+                </div>
+            </div>
+
+            <!-- TABELA DE DADOS -->
+            <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden mb-10">
+                <div class="p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+                    <h3 class="font-semibold text-lg">Detalhes do Estoque</h3>
+                    <span class="text-xs bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-slate-600 dark:text-slate-300" id="table-count">0 registros</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 dark:bg-slate-900/50 text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                <th class="p-4 font-medium border-b border-slate-200 dark:border-slate-700">Categoria</th>
+                                <th class="p-4 font-medium border-b border-slate-200 dark:border-slate-700">Componente</th>
+                                <th class="p-4 font-medium border-b border-slate-200 dark:border-slate-700">Modelo</th>
+                                <th class="p-4 font-medium border-b border-slate-200 dark:border-slate-700">Especificação</th>
+                                <th class="p-4 font-medium border-b border-slate-200 dark:border-slate-700 text-right">Qtd.</th>
+                                <th class="p-4 font-medium border-b border-slate-200 dark:border-slate-700 text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body" class="divide-y divide-slate-100 dark:divide-slate-700/50 text-sm">
+                            <!-- Preenchido via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <!-- PAINEL DE FERRAMENTAS (OVERLAY & MODAL) -->
+    <div id="tools-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden mx-4 transform scale-95 transition-transform duration-300" id="tools-modal-content">
+            
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-5 border-b border-slate-200 dark:border-slate-700">
+                <h2 class="text-xl font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-toolbox text-brand-500"></i> Painel de Ferramentas
+                </h2>
+                <button id="close-tools" class="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (Abas) -->
+            <div class="flex flex-col md:flex-row h-[60vh] md:h-[500px]">
+                
+                <!-- Menu Lateral das Abas -->
+                <div class="w-full md:w-1/3 bg-slate-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 p-4 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-y-auto">
+                    <button class="tab-btn active w-full text-left px-4 py-3 rounded-lg font-medium transition-colors bg-brand-100 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300 shrink-0 md:shrink" data-target="tab-update">
+                        <i class="fa-solid fa-box-open mr-2"></i> Atualizar Estoque
+                    </button>
+                    <button class="tab-btn w-full text-left px-4 py-3 rounded-lg font-medium transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 shrink-0 md:shrink" data-target="tab-reports">
+                        <i class="fa-solid fa-file-pdf mr-2"></i> Geração de Relatórios
+                    </button>
+                    <button class="tab-btn w-full text-left px-4 py-3 rounded-lg font-medium transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 shrink-0 md:shrink" data-target="tab-prefs">
+                        <i class="fa-solid fa-gear mr-2"></i> Preferências
+                    </button>
+                </div>
+
+                <!-- Conteúdo das Abas -->
+                <div class="w-full md:w-2/3 p-6 overflow-y-auto bg-white dark:bg-slate-800">
+                    
+                    <!-- Aba: Atualizar Estoque -->
+                    <div id="tab-update" class="tab-content block">
+                        <h3 class="font-bold text-lg mb-4">Adicionar / Editar Item</h3>
+                        <form id="form-update-stock" class="space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold mb-1">Categoria</label>
+                                    <select id="form-cat" class="w-full border rounded-lg px-3 py-2 bg-slate-50 dark:bg-slate-900 dark:border-slate-600" required>
+                                        <option value="Armazenamento">Armazenamento</option>
+                                        <option value="Memória">Memória</option>
+                                        <option value="Bateria">Bateria</option>
+                                        <option value="Fonte de Alimentação">Fonte</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold mb-1">Componente</label>
+                                    <input type="text" id="form-comp" class="w-full border rounded-lg px-3 py-2 bg-slate-50 dark:bg-slate-900 dark:border-slate-600" placeholder="Ex: SSD M2" required>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold mb-1">Modelo</label>
+                                    <input type="text" id="form-mod" class="w-full border rounded-lg px-3 py-2 bg-slate-50 dark:bg-slate-900 dark:border-slate-600" placeholder="Ex: NVME">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold mb-1">Especificação</label>
+                                    <input type="text" id="form-spec" class="w-full border rounded-lg px-3 py-2 bg-slate-50 dark:bg-slate-900 dark:border-slate-600" placeholder="Ex: 512 GB">
+                                </div>
+                                <div class="col-span-2">
+                                    <label class="block text-xs font-semibold mb-1">Quantidade</label>
+                                    <input type="number" id="form-qtd" class="w-full border rounded-lg px-3 py-2 bg-slate-50 dark:bg-slate-900 dark:border-slate-600" value="1" min="0" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-2 rounded-lg font-medium transition-colors mt-4">
+                                Salvar no Estoque
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Aba: Relatórios -->
+                    <div id="tab-reports" class="tab-content hidden">
+                        <h3 class="font-bold text-lg mb-4">Exportar Dados</h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Gere planilhas atualizadas baseadas nos filtros ativos no momento no Dashboard principal.</p>
+                        
+                        <div class="space-y-4">
+                            <button id="btn-export-csv" class="w-full flex items-center justify-between p-4 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <i class="fa-solid fa-file-csv text-3xl text-emerald-600"></i>
+                                    <div class="text-left">
+                                        <h4 class="font-semibold">Exportar para CSV (Excel)</h4>
+                                        <p class="text-xs text-slate-500">Tabela completa com dados atuais</p>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-download text-slate-400"></i>
+                            </button>
+
+                            <button id="btn-export-pdf" class="w-full flex items-center justify-between p-4 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors opacity-50 cursor-not-allowed" title="Em breve">
+                                <div class="flex items-center gap-3">
+                                    <i class="fa-solid fa-file-pdf text-3xl text-red-500"></i>
+                                    <div class="text-left">
+                                        <h4 class="font-semibold">Relatório Gerencial (PDF)</h4>
+                                        <p class="text-xs text-slate-500">Inclui gráficos e insights (Em breve)</p>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-lock text-slate-400"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Aba: Preferências -->
+                    <div id="tab-prefs" class="tab-content hidden">
+                        <h3 class="font-bold text-lg mb-4">Configurações do Sistema</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="text-sm font-semibold mb-2">Aparência</h4>
+                                <div class="flex items-center justify-between p-3 border border-slate-200 dark:border-slate-700 rounded-lg">
+                                    <span>Modo Noturno (Dark Mode)</span>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="toggle-dark-pref" class="sr-only peer">
+                                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-500"></div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold mb-2">Alertas de Estoque</h4>
+                                <div class="flex items-center justify-between p-3 border border-slate-200 dark:border-slate-700 rounded-lg">
+                                    <span>Destacar itens zerados em vermelho</span>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" checked class="sr-only peer" disabled>
+                                        <div class="w-11 h-6 bg-brand-500 rounded-full after:content-[''] after:absolute after:top-[2px] after:left-[24px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5"></div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="pt-4 mt-4 border-t border-slate-200 dark:border-slate-700">
+                                <h4 class="text-sm font-semibold mb-2 text-red-500">Zona de Perigo</h4>
+                                <button id="btn-reset-db" class="w-full bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 py-2 rounded-lg font-medium transition-colors text-sm">
+                                    Restaurar Banco de Dados (Planilha Original)
+                                </button>
+                                <p class="text-xs text-slate-500 mt-2">Isso apagará todas as modificações feitas e restaurará os 22 itens originais da planilha.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, addDoc, getDocs, writeBatch, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Configuração do Firebase fornecida pelo usuário
+        const firebaseConfig = {
+            apiKey: "AIzaSyBRCRThFRIEGYQ8ukI8IzJ78AyqSEyspsc",
+            authDomain: "gestao-de-equipamentos-tic.firebaseapp.com",
+            projectId: "gestao-de-equipamentos-tic",
+            storageBucket: "gestao-de-equipamentos-tic.firebasestorage.app",
+            messagingSenderId: "323362748309",
+            appId: "1:323362748309:web:019905d5f8f5b71014a89c"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // O appId para a estrutura de dados exigida no ambiente do Canvas
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-estoque-app';
+        // Variável global para o ID do usuário após autenticação
+        let currentUserId = null;
+        
+        let inventoryData = [];
+        let filteredData = [];
+        let charts = {}; 
+        let unsubscribeSnapshot = null;
+
+        // Dados originais para restauração
+        const originalData = [
+            { COMPONENTE: "MEMÓRIA NOTEBOOK", MODELO: "DDR 3", ESPECIFICAÇÃO: "4GB", QUANTIDADE: 11, CATEGORIA: "Memória" },
+            { COMPONENTE: "MEMÓRIA NOTEBOOK", MODELO: "DDR 3", ESPECIFICAÇÃO: "8GB", QUANTIDADE: 11, CATEGORIA: "Memória" },
+            { COMPONENTE: "MEMÓRIA NOTEBOOK", MODELO: "DDR 4", ESPECIFICAÇÃO: "4GB", QUANTIDADE: 66, CATEGORIA: "Memória" },
+            { COMPONENTE: "MEMÓRIA NOTEBOOK", MODELO: "DDR 4", ESPECIFICAÇÃO: "8GB", QUANTIDADE: 21, CATEGORIA: "Memória" },
+            { COMPONENTE: "MEMÓRIA NOTEBOOK", MODELO: "DDR 4", ESPECIFICAÇÃO: "16 GB", QUANTIDADE: 3, CATEGORIA: "Memória" },
+            { COMPONENTE: "MEMÓRIA NOTEBOOK", MODELO: "DDR 4", ESPECIFICAÇÃO: "32GB", QUANTIDADE: 0, CATEGORIA: "Memória" },
+            { COMPONENTE: "MEMÓRIA PC", MODELO: "DDR3", ESPECIFICAÇÃO: "8GB", QUANTIDADE: 5, CATEGORIA: "Memória" },
+            { COMPONENTE: "SSD M2", MODELO: "SATA", ESPECIFICAÇÃO: "256 GB", QUANTIDADE: 65, CATEGORIA: "Armazenamento" },
+            { COMPONENTE: "SSD M2", MODELO: "NVME", ESPECIFICAÇÃO: "256 GB", QUANTIDADE: 12, CATEGORIA: "Armazenamento" },
+            { COMPONENTE: "SSD M2", MODELO: "NVME", ESPECIFICAÇÃO: "512 GB", QUANTIDADE: 5, CATEGORIA: "Armazenamento" },
+            { COMPONENTE: "SSD SATA", MODELO: "2.5\"", ESPECIFICAÇÃO: "256 GB", QUANTIDADE: 5, CATEGORIA: "Armazenamento" }, 
+            { COMPONENTE: "SSD SATA", MODELO: "2.5\"", ESPECIFICAÇÃO: "512 GB", QUANTIDADE: 69, CATEGORIA: "Armazenamento" }, 
+            { COMPONENTE: "BATERIA DELL", MODELO: "WDX0R (I7)", ESPECIFICAÇÃO: "42 Wh, 11.4V", QUANTIDADE: 0, CATEGORIA: "Bateria" },
+            { COMPONENTE: "BATERIA DELL", MODELO: "TRHFF", ESPECIFICAÇÃO: "43 Wh, 11.4V", QUANTIDADE: 1, CATEGORIA: "Bateria" },
+            { COMPONENTE: "BATERIA DELL", MODELO: "93FTF", ESPECIFICAÇÃO: "51 Wh, 11.4V", QUANTIDADE: 5, CATEGORIA: "Bateria" },
+            { COMPONENTE: "BATERIA DELL", MODELO: "GJKNX (I5)", ESPECIFICAÇÃO: "68 Wh, 7.6V", QUANTIDADE: 11, CATEGORIA: "Bateria" },
+            { COMPONENTE: "BESTBATTERY", MODELO: "(45N1128 ou 45N1134)", ESPECIFICAÇÃO: "48Wh / (10.8V)", QUANTIDADE: 21, CATEGORIA: "Bateria" },
+            { COMPONENTE: "BATERIA LENOVO", MODELO: "(FRU 45N1773)", ESPECIFICAÇÃO: "24Wh (11.1V)", QUANTIDADE: 1, CATEGORIA: "Bateria" },
+            { COMPONENTE: "HD INTERNO", MODELO: "Genérico", ESPECIFICAÇÃO: "Não especificada", QUANTIDADE: 79, CATEGORIA: "Armazenamento" }, 
+            { COMPONENTE: "HD EXTERNO", MODELO: "SEGATE", ESPECIFICAÇÃO: "2 TB", QUANTIDADE: 6, CATEGORIA: "Armazenamento" },
+            { COMPONENTE: "FONTE LENOVO", MODELO: "TJ-65-200325", ESPECIFICAÇÃO: "65W", QUANTIDADE: 8, CATEGORIA: "Fonte de Alimentação" },
+            { COMPONENTE: "FONTE DELL", MODELO: "LA65NM130/0XK850", ESPECIFICAÇÃO: "65W", QUANTIDADE: 158, CATEGORIA: "Fonte de Alimentação" }
+        ];
+
+        // --- SISTEMA DE LOGIN COM FIREBASE ---
+        const loginForm = document.getElementById('login-form');
+        const loginScreen = document.getElementById('login-screen');
+        const dashboardScreen = document.getElementById('dashboard-screen');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Alterando o botão para loading
+            const btn = loginForm.querySelector('button');
+            const originalBtnText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Autenticando...';
+            btn.disabled = true;
+
+            try {
+                // REGRA 3: Auth Before Queries. Sempre logar anonimamente antes de consultar o banco.
+                // Como não configuramos e-mail e senha no firebase ainda, faremos login anonimo
+                const userCredential = await signInAnonymously(auth);
+                currentUserId = userCredential.user.uid;
+                
+                // Conecta ao banco de dados e escuta as mudanças
+                await setupDatabaseListener();
+
+                // Transição de tela
+                loginScreen.classList.add('hidden');
+                dashboardScreen.classList.remove('hidden');
+                dashboardScreen.classList.add('flex');
+            } catch (error) {
+                console.error("Erro na autenticação:", error);
+                alert("Erro ao conectar no banco de dados. Tente novamente.");
+            } finally {
+                btn.innerHTML = originalBtnText;
+                btn.disabled = false;
+            }
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            if (unsubscribeSnapshot) {
+                unsubscribeSnapshot();
+            }
+            dashboardScreen.classList.add('hidden');
+            dashboardScreen.classList.remove('flex');
+            loginScreen.classList.remove('hidden');
+            document.getElementById('password').value = '';
+            currentUserId = null;
+        });
+
+        // --- STREAMING_CHUNK:Configuração e Listener do Firestore ---
+        async function setupDatabaseListener() {
+            if (!currentUserId) return;
+
+            // REGRA 1: Strict Paths. Usando a rota pública para colaboração.
+            const estoqueRef = collection(db, 'artifacts', appId, 'public', 'data', 'estoque');
+
+            // Verifica se a coleção está vazia. Se estiver, popula com os dados iniciais.
+            const snapshot = await getDocs(estoqueRef);
+            if (snapshot.empty) {
+                console.log("Banco de dados vazio. Semeando dados iniciais...");
+                await seedDatabase(estoqueRef);
+            }
+
+            // Inicia o listener em tempo real
+            unsubscribeSnapshot = onSnapshot(estoqueRef, 
+                (querySnapshot) => {
+                    inventoryData = [];
+                    querySnapshot.forEach((doc) => {
+                        inventoryData.push({ id: doc.id, ...doc.data() });
+                    });
+                    
+                    // Inicializa ou atualiza o dashboard quando os dados chegam
+                    initDashboard();
+                },
+                (error) => {
+                    console.error("Erro ao escutar dados:", error);
+                }
+            );
+        }
+
+        async function seedDatabase(collectionRef) {
+            const batch = writeBatch(db);
+            originalData.forEach((item) => {
+                const newDocRef = doc(collectionRef);
+                batch.set(newDocRef, item);
+            });
+            await batch.commit();
+            console.log("Dados semeados com sucesso!");
+        }
+        
+        document.getElementById('btn-reset-db').addEventListener('click', async () => {
+            if(!currentUserId) return;
+            const btn = document.getElementById('btn-reset-db');
+            btn.innerText = "Restaurando...";
+            btn.disabled = true;
+
+            try {
+                const estoqueRef = collection(db, 'artifacts', appId, 'public', 'data', 'estoque');
+                // Deleta tudo
+                const snapshot = await getDocs(estoqueRef);
+                const batchDelete = writeBatch(db);
+                snapshot.docs.forEach((document) => {
+                    batchDelete.delete(document.ref);
+                });
+                await batchDelete.commit();
+                
+                // Popula novamente
+                await seedDatabase(estoqueRef);
+                closeModal();
+            } catch(e) {
+                console.error(e);
+            } finally {
+                btn.innerText = "Restaurar Banco de Dados (Planilha Original)";
+                btn.disabled = false;
+            }
+        });
+
+        // --- STREAMING_CHUNK:Lógica de Tema (Dark/Light) ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const toggleDarkPref = document.getElementById('toggle-dark-pref');
+        
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            themeIcon.className = isDark ? 'fa-solid fa-sun text-xl' : 'fa-solid fa-moon text-xl';
+            toggleDarkPref.checked = isDark;
+            
+            if(charts.category) { updateChartsTheme(isDark); }
+        }
+        
+        themeToggle.addEventListener('click', toggleTheme);
+        toggleDarkPref.addEventListener('change', toggleTheme);
+
+        // --- STREAMING_CHUNK:Lógica Central do Dashboard (Filtros e Renderização) ---
+        const filterCat = document.getElementById('filter-category');
+        const filterSearch = document.getElementById('filter-search');
+        const btnResetFilters = document.getElementById('reset-filters');
+
+        function initDashboard() {
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const catValue = filterCat.value;
+            const searchValue = filterSearch.value.toLowerCase();
+
+            filteredData = inventoryData.filter(item => {
+                const matchCat = catValue === 'Todos' || item.CATEGORIA === catValue;
+                const matchSearch = item.COMPONENTE.toLowerCase().includes(searchValue) || 
+                                    item.MODELO.toLowerCase().includes(searchValue) ||
+                                    item.ESPECIFICAÇÃO.toLowerCase().includes(searchValue);
+                return matchCat && matchSearch;
+            });
+
+            renderKPIs();
+            renderTable();
+            renderCharts();
+            renderInsights();
+        }
+
+        filterCat.addEventListener('change', applyFilters);
+        filterSearch.addEventListener('input', applyFilters);
+        btnResetFilters.addEventListener('click', () => {
+            filterCat.value = 'Todos';
+            filterSearch.value = '';
+            applyFilters();
+        });
+
+        // --- Renderizar KPIs ---
+        function renderKPIs() {
+            const totalItems = filteredData.reduce((acc, curr) => acc + curr.QUANTIDADE, 0);
+            const itemsZerados = filteredData.filter(item => item.QUANTIDADE === 0).length;
+            
+            const sortedDesc = [...filteredData].sort((a,b) => b.QUANTIDADE - a.QUANTIDADE);
+            let curvaAPercent = 0;
+            if(totalItems > 0 && sortedDesc.length >= 4) {
+                const top4Sum = sortedDesc.slice(0,4).reduce((acc, curr) => acc + curr.QUANTIDADE, 0);
+                curvaAPercent = ((top4Sum / totalItems) * 100).toFixed(1);
+            }
+
+            const catCount = {};
+            filteredData.forEach(item => {
+                catCount[item.CATEGORIA] = (catCount[item.CATEGORIA] || 0) + item.QUANTIDADE;
+            });
+            let maiorCat = "-";
+            let maxVal = 0;
+            for (const [key, val] of Object.entries(catCount)) {
+                if(val > maxVal) { maxVal = val; maiorCat = key; }
+            }
+
+            document.getElementById('kpi-total').innerText = totalItems;
+            document.getElementById('kpi-zerados').innerText = itemsZerados;
+            document.getElementById('kpi-curvaa').innerText = curvaAPercent + '%';
+            document.getElementById('kpi-maiorcat').innerText = maiorCat;
+        }
+
+        // --- Renderizar Tabela ---
+        function renderTable() {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+            document.getElementById('table-count').innerText = `${filteredData.length} registros`;
+
+            filteredData.forEach(item => {
+                const isZero = item.QUANTIDADE === 0;
+                const statusBadge = isZero 
+                    ? '<span class="bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-400 px-2 py-1 rounded text-xs font-semibold">Sem Estoque</span>'
+                    : '<span class="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400 px-2 py-1 rounded text-xs font-semibold">Em Estoque</span>';
+
+                const tr = document.createElement('tr');
+                tr.className = `hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors ${isZero ? 'bg-red-50/50 dark:bg-red-900/10' : ''}`;
+                tr.innerHTML = `
+                    <td class="p-4 border-b border-slate-100 dark:border-slate-700/50">
+                        <span class="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs">${item.CATEGORIA}</span>
+                    </td>
+                    <td class="p-4 font-semibold border-b border-slate-100 dark:border-slate-700/50">${item.COMPONENTE}</td>
+                    <td class="p-4 text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-700/50">${item.MODELO}</td>
+                    <td class="p-4 text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-700/50">${item.ESPECIFICAÇÃO}</td>
+                    <td class="p-4 text-right font-bold ${isZero ? 'text-red-500' : ''} border-b border-slate-100 dark:border-slate-700/50">${item.QUANTIDADE}</td>
+                    <td class="p-4 text-center border-b border-slate-100 dark:border-slate-700/50">${statusBadge}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // --- STREAMING_CHUNK:Integração com Chart.js ---
+        function renderCharts() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#f1f5f9' : '#1e293b';
+            const gridColor = isDark ? '#334155' : '#e2e8f0';
+
+            const catCount = {};
+            filteredData.forEach(item => {
+                catCount[item.CATEGORIA] = (catCount[item.CATEGORIA] || 0) + item.QUANTIDADE;
+            });
+            
+            const catLabels = Object.keys(catCount);
+            const catData = Object.values(catCount);
+            
+            const sortedDesc = [...filteredData].sort((a,b) => b.QUANTIDADE - a.QUANTIDADE).slice(0,5);
+            const topLabels = sortedDesc.map(i => `${i.COMPONENTE} (${i.ESPECIFICAÇÃO})`);
+            const topData = sortedDesc.map(i => i.QUANTIDADE);
+
+            if(charts.category) charts.category.destroy();
+            if(charts.topItems) charts.topItems.destroy();
+
+            const ctxCat = document.getElementById('categoryChart').getContext('2d');
+            charts.category = new Chart(ctxCat, {
+                type: 'doughnut',
+                data: {
+                    labels: catLabels,
+                    datasets: [{
+                        data: catData,
+                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { color: textColor, font: {family: 'Inter'} } }
+                    }
+                }
+            });
+
+            const ctxTop = document.getElementById('topItemsChart').getContext('2d');
+            charts.topItems = new Chart(ctxTop, {
+                type: 'bar',
+                data: {
+                    labels: topLabels,
+                    datasets: [{
+                        label: 'Quantidade em Estoque',
+                        data: topData,
+                        backgroundColor: '#3b82f6',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor } },
+                        x: { grid: { display: false }, ticks: { color: textColor, font: {family: 'Inter'} } }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        function updateChartsTheme(isDark) {
+            if(dashboardScreen.classList.contains('flex')) {
+                renderCharts();
+            }
+        }
+
+        // --- Renderizar Insights Dinâmicos ---
+        function renderInsights() {
+            const container = document.getElementById('insights-container');
+            container.innerHTML = '';
+            
+            const total = filteredData.reduce((acc, curr) => acc + curr.QUANTIDADE, 0);
+            
+            if(total === 0) {
+                container.innerHTML = '<p class="text-slate-500">Nenhum dado encontrado para os filtros atuais.</p>';
+                return;
+            }
+
+            const insights = [];
+
+            const fontesDell = filteredData.find(i => i.COMPONENTE === "FONTE DELL");
+            if(fontesDell && fontesDell.QUANTIDADE > 100) {
+                insights.push(`
+                    <div class="bg-white dark:bg-slate-800 p-3 rounded-lg border border-red-200 dark:border-red-900/50">
+                        <span class="font-semibold text-red-600 dark:text-red-400">🚨 Capital Imobilizado:</span> 
+                        Temos <b>${fontesDell.QUANTIDADE} Fontes Dell</b>. Representam uma fatia enorme do estoque. Recomenda-se suspender compras deste item.
+                    </div>
+                `);
+            }
+
+            const hds = filteredData.find(i => i.COMPONENTE === "HD INTERNO");
+            if(hds && hds.QUANTIDADE > 50) {
+                insights.push(`
+                    <div class="bg-white dark:bg-slate-800 p-3 rounded-lg border border-amber-200 dark:border-amber-900/50">
+                        <span class="font-semibold text-amber-600 dark:text-amber-400">⚠️ Risco de Obsolescência:</span> 
+                        O acúmulo de <b>${hds.QUANTIDADE} HDs Internos</b> mecânicos é crítico. Recomenda-se triagem para descarte seguro ou leilão.
+                    </div>
+                `);
+            }
+
+            const ssds = filteredData.filter(i => i.COMPONENTE.includes('SSD')).reduce((acc, c) => acc + c.QUANTIDADE, 0);
+            if(ssds > 100 && hds) {
+                insights.push(`
+                    <div class="bg-white dark:bg-slate-800 p-3 rounded-lg border border-emerald-200 dark:border-emerald-900/50">
+                        <span class="font-semibold text-emerald-600 dark:text-emerald-400">💡 Ação Proativa:</span> 
+                        Temos <b>${ssds} SSDs</b> disponíveis. É uma ótima oportunidade para criar um cronograma preventivo de troca de HDs por SSDs.
+                    </div>
+                `);
+            }
+
+            const zerados = filteredData.filter(i => i.QUANTIDADE === 0);
+            if(zerados.length > 0) {
+                const nomes = zerados.map(z => z.COMPONENTE + ' ' + z.ESPECIFICAÇÃO).join(', ');
+                insights.push(`
+                    <div class="bg-white dark:bg-slate-800 p-3 rounded-lg border border-red-200 dark:border-red-900/50">
+                        <span class="font-semibold text-red-600 dark:text-red-400">🛒 Ação de Compra:</span> 
+                        Itens críticos zerados: <b>${nomes}</b>. Sugere-se emissão de ordem de compra.
+                    </div>
+                `);
+            }
+
+            if(insights.length === 0) {
+                insights.push('<p class="text-slate-500">Nenhum insight crítico identificado para esta seleção.</p>');
+            }
+
+            container.innerHTML = insights.join('');
+        }
+
+        // --- STREAMING_CHUNK:Lógica do Modal e Ferramentas ---
+        const btnTools = document.getElementById('tools-btn');
+        const modalTools = document.getElementById('tools-modal');
+        const btnCloseTools = document.getElementById('close-tools');
+        const modalContent = document.getElementById('tools-modal-content');
+
+        function openModal() {
+            modalTools.classList.remove('hidden');
+            setTimeout(() => {
+                modalTools.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeModal() {
+            modalTools.classList.add('opacity-0');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modalTools.classList.add('hidden');
+            }, 300);
+        }
+
+        btnTools.addEventListener('click', openModal);
+        btnCloseTools.addEventListener('click', closeModal);
+        modalTools.addEventListener('click', (e) => {
+            if(e.target === modalTools) closeModal();
+        });
+
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => {
+                    b.classList.remove('bg-brand-100', 'text-brand-700', 'dark:bg-brand-900/40', 'dark:text-brand-300', 'active');
+                    b.classList.add('text-slate-600', 'dark:text-slate-400');
+                });
+                tabContents.forEach(c => c.classList.add('hidden'));
+
+                btn.classList.add('bg-brand-100', 'text-brand-700', 'dark:bg-brand-900/40', 'dark:text-brand-300', 'active');
+                btn.classList.remove('text-slate-600', 'dark:text-slate-400');
+                const target = document.getElementById(btn.getAttribute('data-target'));
+                target.classList.remove('hidden');
+            });
+        });
+
+        // Formulário de Adicionar Estoque (Agora salvando no Firebase)
+        const formUpdate = document.getElementById('form-update-stock');
+        formUpdate.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if(!currentUserId) return;
+            
+            const btn = formUpdate.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = "Salvando...";
+            btn.disabled = true;
+
+            const newObj = {
+                CATEGORIA: document.getElementById('form-cat').value,
+                COMPONENTE: document.getElementById('form-comp').value.toUpperCase(),
+                MODELO: document.getElementById('form-mod').value || "N/A",
+                ESPECIFICAÇÃO: document.getElementById('form-spec').value || "N/A",
+                QUANTIDADE: parseInt(document.getElementById('form-qtd').value, 10)
+            };
+
+            try {
+                // Adiciona no Firebase
+                const estoqueRef = collection(db, 'artifacts', appId, 'public', 'data', 'estoque');
+                await addDoc(estoqueRef, newObj);
+                
+                // O onSnapshot lidará com a atualização da tela automaticamente
+                
+                btn.innerText = "Adicionado com Sucesso!";
+                btn.classList.add('bg-brand-500');
+                formUpdate.reset();
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.remove('bg-brand-500');
+                }, 2000);
+            } catch (error) {
+                console.error("Erro ao adicionar:", error);
+                alert("Erro ao adicionar item no banco.");
+                btn.innerText = originalText;
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        // Exportação CSV
+        document.getElementById('btn-export-csv').addEventListener('click', () => {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Categoria;Componente;Modelo;Especificação;Quantidade\n";
+            
+            filteredData.forEach(row => {
+                const arr = [row.CATEGORIA, row.COMPONENTE, row.MODELO, row.ESPECIFICAÇÃO, row.QUANTIDADE];
+                csvContent += arr.join(";") + "\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "relatorio_estoque_ti.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+    </script>
+</body>
+</html>
