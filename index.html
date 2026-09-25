@@ -244,7 +244,7 @@
                         </table>
                     </div>
                     <div class="px-6 py-3 border-t border-gray-100 flex items-center justify-between bg-gray-50">
-                        <span class="text-sm text-gray-500" id="estoque-page-info">Mostrando 0 registros</span>
+                        <span class="text-sm text-gray-500" id="estoque-page-info">Mostrando 0 registos</span>
                         <div class="flex gap-2">
                             <button id="btn-prev-estoque" class="px-3 py-1 border border-gray-300 rounded bg-white text-gray-600 hover:bg-gray-100 text-sm font-medium transition disabled:opacity-50"><i class="fas fa-chevron-left"></i> Anterior</button>
                             <button id="btn-next-estoque" class="px-3 py-1 border border-gray-300 rounded bg-white text-gray-600 hover:bg-gray-100 text-sm font-medium transition disabled:opacity-50">Próxima <i class="fas fa-chevron-right"></i></button>
@@ -263,7 +263,7 @@
                         </div>
                         <div class="relative">
                             <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                            <input type="text" id="search-table-rastreio" placeholder="Filtrar Local, Patrimônio, Série..." class="pl-9 pr-3 py-2 border border-indigo-200 rounded text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm">
+                            <input type="text" id="search-table-rastreio" placeholder="Filtrar Local, Património, Série..." class="pl-9 pr-3 py-2 border border-indigo-200 rounded text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm">
                         </div>
                     </div>
                     <div class="overflow-x-auto min-h-[300px]">
@@ -274,7 +274,7 @@
                                     <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Local Físico</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Marca/Modelo</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Nº de Série</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Nº Patrimônio</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Nº Património</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider text-center">Qtd</th>
                                 </tr>
                             </thead>
@@ -282,7 +282,7 @@
                         </table>
                     </div>
                     <div class="px-6 py-3 border-t border-gray-100 flex items-center justify-between bg-indigo-50/20">
-                        <span class="text-sm text-indigo-600" id="rastreio-page-info">Mostrando 0 registros</span>
+                        <span class="text-sm text-indigo-600" id="rastreio-page-info">Mostrando 0 registos</span>
                         <div class="flex gap-2">
                             <button id="btn-prev-rastreio" class="px-3 py-1 border border-indigo-200 rounded bg-white text-indigo-700 hover:bg-indigo-50 text-sm font-medium transition disabled:opacity-50"><i class="fas fa-chevron-left"></i> Anterior</button>
                             <button id="btn-next-rastreio" class="px-3 py-1 border border-indigo-200 rounded bg-white text-indigo-700 hover:bg-indigo-50 text-sm font-medium transition disabled:opacity-50">Próxima <i class="fas fa-chevron-right"></i></button>
@@ -293,9 +293,7 @@
         </div>
     </div>
 
-    <!-- ========================================================================= -->
-    <!-- MODELO 1: RELATÓRIO OFICIAL GERENCIAL (ANALÍTICO COM GRÁFICOS)            -->
-    <!-- ========================================================================= -->
+    <!-- MODELO 1: RELATÓRIO OFICIAL GERENCIAL -->
     <div id="printable-report" class="hidden font-sans">
         <div class="bg-[#161B33] text-white p-6 flex justify-between items-center print-bg mb-6">
             <div>
@@ -328,9 +326,7 @@
         </div>
     </div>
 
-    <!-- ========================================================================= -->
-    <!-- MODELO 2: IMPRESSÃO SIMPLIFICADA (FOTO DA TABELA COM LOGO FIXA)           -->
-    <!-- ========================================================================= -->
+    <!-- MODELO 2: IMPRESSÃO SIMPLIFICADA (FOTO DA TABELA) -->
     <div id="printable-simple-table" class="hidden">
         <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
             <div style="text-align: left;">
@@ -391,14 +387,14 @@
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
                                     <div><label class="block text-xs font-bold text-slate-700 uppercase text-blue-600">Local Físico *</label><input type="text" id="form-local" class="mt-1 block w-full rounded border-blue-300 border p-2 text-sm bg-white" placeholder="Ex: Armazém A"></div>
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Nº Patrimônio / Série</label><input type="text" id="form-patrimonio-estoque" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Opcional"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Nº Património / Série</label><input type="text" id="form-patrimonio-estoque" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Opcional"></div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
                                     <div><label class="block text-xs font-bold text-slate-700 uppercase text-orange-600" title="Alerta automático abaixo desta quantidade">Estoque Mínimo</label><input type="number" id="form-minimo" class="mt-1 block w-full rounded border-orange-300 border p-2 text-sm" min="1" value="5"></div>
                                     <div><label class="block text-xs font-bold text-slate-700 uppercase text-emerald-600">Qtd a Adicionar *</label><input type="number" id="form-qtd" class="mt-1 block w-full rounded border-emerald-300 border p-2 text-sm" min="1" value="1"></div>
                                 </div>
                             </div>
-                            <button id="btn-save-item" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded hover:bg-blue-700 transition shadow mt-4">Registrar Entrada no Estoque</button>
+                            <button id="btn-save-item" class="w-full bg-blue-600 text-white font-bold py-2.5 px-4 rounded hover:bg-blue-700 transition shadow mt-4">Registar Entrada no Estoque</button>
                         </div>
                         
                         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
@@ -435,11 +431,25 @@
                 <!-- TAB LOCALIDADE / RASTREIO -->
                 <div id="tab-localidade" class="tab-content hidden h-full flex flex-col">
                     <h2 class="text-2xl font-bold text-indigo-900 mb-2"><i class="fas fa-map-marker-alt mr-2 text-indigo-600"></i>Gestão de Localidades e Rastreio</h2>
-                    <p class="text-sm text-slate-500 mb-6 border-b pb-4">Mapeie fisicamente os equipamentos registrando número de série e patrimônio.</p>
+                    <p class="text-sm text-slate-500 mb-6 border-b pb-4">Mapeie fisicamente os equipamentos registando número de série e património.</p>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
-                        <div class="bg-indigo-50/50 p-6 rounded-xl border border-indigo-100 shadow-sm">
-                            <h3 class="font-bold text-indigo-800 mb-4"><i class="fas fa-keyboard mr-2"></i>Cadastro Manual</h3>
-                            <div class="space-y-4">
+                        
+                        <!-- NOVO LAYOUT: Cadastro Manual com Opção de Editar/Mover -->
+                        <div class="bg-indigo-50/50 p-6 rounded-xl border border-indigo-100 shadow-sm flex flex-col">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="font-bold text-indigo-800"><i class="fas fa-keyboard mr-2"></i>Gestão Manual</h3>
+                                <select id="loc-action-type" class="border-indigo-300 rounded text-xs py-1 px-2 focus:ring-indigo-500 bg-white font-bold text-indigo-700 shadow-sm cursor-pointer outline-none">
+                                    <option value="new">Novo Registo</option>
+                                    <option value="edit">Editar / Mover</option>
+                                </select>
+                            </div>
+                            
+                            <select id="loc-edit-select" class="w-full rounded border-orange-300 border p-2 text-sm mb-4 hidden bg-orange-50 font-medium text-orange-900 outline-none">
+                                <option value="">-- Selecione o item para editar --</option>
+                            </select>
+                            <input type="hidden" id="loc-edit-id">
+                            
+                            <div class="space-y-4 flex-1">
                                 <div><label class="block text-xs font-bold text-slate-700 uppercase">Equipamento / Nome</label><input type="text" id="loc-equip" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: Monitor Dell 24"></div>
                                 <div><label class="block text-xs font-bold text-slate-700 uppercase">Local Físico</label><input type="text" id="loc-local" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: Sala TI - Armário 2"></div>
                                 <div class="grid grid-cols-2 gap-3">
@@ -448,11 +458,12 @@
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
                                     <div><label class="block text-xs font-bold text-slate-700 uppercase">Nº de Série</label><input type="text" id="loc-serie" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: SN-987654"></div>
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Nº Patrimônio</label><input type="text" id="loc-patrimonio" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: PRF-123456"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Nº Património</label><input type="text" id="loc-patrimonio" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: PRF-123456"></div>
                                 </div>
-                                <button id="btn-save-loc" class="w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded hover:bg-indigo-700 transition shadow mt-2">Mapear Equipamento</button>
                             </div>
+                            <button id="btn-save-loc" class="w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded hover:bg-indigo-700 transition shadow mt-4">Mapear Equipamento</button>
                         </div>
+                        
                         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                             <h3 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-excel mr-2 text-emerald-600"></i>Importação em Lote (Excel)</h3>
                             <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800"><strong>Colunas exigidas na planilha:</strong><br>EQUIPAMENTO, LOCAL FISICO, QUANTIDADE, MARCA, Nº DE SÉRIE, Nº PATRIMONIO.</div>
@@ -539,7 +550,7 @@
                             </div>
                             <div class="border border-orange-200 rounded-xl p-5 bg-orange-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-orange-800 mb-2"><i class="fas fa-user-minus text-orange-600 mr-2"></i> Gerir Acessos</h3>
-                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">Para evitar ataques, o Firebase bloqueia exclusão via web.<br><br>A exclusão deve ser feita no Console Oficial.</p>
+                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">O Firebase bloqueia exclusão via web.<br><br>A exclusão deve ser feita no Console Oficial.</p>
                                 <a href="https://console.firebase.google.com/project/gestao-de-equipamentos-tic/authentication/users" target="_blank" class="w-full bg-orange-600 text-white font-bold py-2.5 px-2 rounded hover:bg-orange-700 transition text-sm shadow mt-auto flex items-center justify-center text-center"><i class="fas fa-external-link-alt mr-2"></i> Abrir Console</a>
                             </div>
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between">
@@ -587,7 +598,7 @@
 
         Chart.register(ChartDataLabels);
 
-        // ATENÇÃO: As chaves abaixo DEVEM ser substituídas pelas suas chaves válidas do Firebase. 
+        // ATENÇÃO: Substituir pelas chaves válidas do Firebase.
         const firebaseConfig = {
             apiKey: "AIzaSyBRCRThFRIEGYQ8ukI8IzJ78AyqSEyspsc",
             authDomain: "gestao-de-equipamentos-tic.firebaseapp.com",
@@ -698,7 +709,7 @@
         // ================= SISTEMA CORE =================
         function iniciarSistema() {
             onSnapshot(collection(db, "estoque"), (snapshot) => { estoqueLocal = []; snapshot.forEach((doc) => { estoqueLocal.push({ id: doc.id, ...doc.data() }); }); atualizarInterfaceEstoque(); atualizarDatalists(); atualizarSelectSaida(); gerarInsights(); });
-            onSnapshot(collection(db, "localidades"), (snapshot) => { localidadesLocais = []; snapshot.forEach((doc) => { localidadesLocais.push({ id: doc.id, ...doc.data() }); }); atualizarInterfaceRastreio(); });
+            onSnapshot(collection(db, "localidades"), (snapshot) => { localidadesLocais = []; snapshot.forEach((doc) => { localidadesLocais.push({ id: doc.id, ...doc.data() }); }); atualizarInterfaceRastreio(); atualizarSelectEdicaoLocais(); });
             onSnapshot(query(collection(db, "logs"), orderBy("dataHora", "desc"), limit(100)), (snapshot) => {
                 const tbody = document.getElementById('logs-tbody'); 
                 if(tbody) {
@@ -707,7 +718,7 @@
                         const log = docSnap.data(); logsLocal.push(log); let dateStr = "N/A";
                         if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
                         let corAcao = log.tipo === 'ENTRADA' ? 'text-emerald-600' : 'text-orange-600', iconAcao = log.tipo === 'ENTRADA' ? 'fa-arrow-down' : 'fa-arrow-up';
-                        if(log.tipo.includes('LOCAL')) { corAcao = 'text-indigo-600'; iconAcao = 'fa-map-marker-alt'; }
+                        if(log.tipo.includes('LOCAL') || log.tipo.includes('MOVIMENTAÇÃO')) { corAcao = 'text-indigo-600'; iconAcao = 'fa-map-marker-alt'; }
                         let userLogInfo = log.usuario ? `<br><span class="text-xs text-gray-400">Por: ${log.usuario}</span>` : '';
                         tbody.innerHTML += `<tr class="hover:bg-slate-100 transition"><td class="px-4 py-3 whitespace-nowrap text-slate-500 font-medium">${dateStr}</td><td class="px-4 py-3 whitespace-nowrap font-bold ${corAcao}"><i class="fas ${iconAcao} mr-1"></i> ${log.tipo}</td><td class="px-4 py-3 text-slate-800 font-semibold">${log.itemNome}</td><td class="px-4 py-3 font-black text-slate-800">${log.qtd}</td><td class="px-4 py-3 text-slate-500 font-medium">${log.chamado || '-'}${userLogInfo}</td></tr>`;
                     });
@@ -733,7 +744,7 @@
                     tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||'-'}</td><td class="border px-2 py-1">${i.Componente||'-'}</td><td class="border px-2 py-1">${i.Modelo||'-'} / ${i.Especificação||'-'}</td><td class="border px-2 py-1">${i.Local||'-'}</td><td class="border px-2 py-1 font-mono">${i.Série||i.Patrimonio||'-'}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`;
                 });
                 let taxaCritica = estoqueLocal.length > 0 ? (((tZerados + tBaixos) / estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1);
-                parecer.innerHTML = `Extração consolidou <b>${estoqueLocal.length}</b> registros de estoque físico. Emitido por ${userEmail} em ${dataAtual}.`;
+                parecer.innerHTML = `Extração consolidou <b>${estoqueLocal.length}</b> registos de estoque físico. Emitido por ${userEmail} em ${dataAtual}.`;
                 resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. Saúde: ${saude}%. ${tZerados} zerados e ${tBaixos} em risco (Criticidade: ${taxaCritica}%).`;
                 kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`;
                 thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Série/Patr.</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
@@ -751,8 +762,8 @@
                 });
                 parecer.innerHTML = `A extração consolidou <b>${localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${userEmail} em ${dataAtual}.`;
                 resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades, com ${tEquipsUnicos.size} modelos distintos.`;
-                kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros</p><p class="text-2xl font-black text-slate-800">${localidadesLocais.length}</p></div>`;
-                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
+                kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registos</p><p class="text-2xl font-black text-slate-800">${localidadesLocais.length}</p></div>`;
+                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Património</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
                 visualTitle.style.display = 'none'; chartsContainer.style.display = 'none';
             }
             window.print(); setTimeout(() => { document.getElementById('printable-report').classList.remove('active-print'); }, 1000);
@@ -765,11 +776,11 @@
             dateObj.innerText = `Emitido por: ${userEmail} em ${dataAtual} às ${horaAtual}`; tbodyObj.innerHTML = '';
 
             if(tipo === 'estoque') {
-                titleObj.innerText = "Extrato: Inventário Consolidado"; theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente</th><th>Modelo / Espec.</th><th>Local</th><th>Série/Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
+                titleObj.innerText = "Extrato: Inventário Consolidado"; theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente</th><th>Modelo / Espec.</th><th>Local</th><th>Série/Património</th><th style="text-align:center;">Qtd</th></tr>`;
                 let filtrados = estoqueLocal.filter(item => { let matchBusca = !currentSearchText || (item.Componente+item.Modelo+item.Especificação+item.Local).toLowerCase().includes(currentSearchText.toLowerCase()); let matchCat = !currentFilterCat || item.Categoria === currentFilterCat; return matchBusca && matchCat; });
                 filtrados.sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { tbodyObj.innerHTML += `<tr><td>${i.Categoria||'-'}</td><td><b>${i.Componente||'-'}</b></td><td>${i.Modelo||'-'} / ${i.Especificação||'-'}</td><td>${i.Local||'-'}</td><td style="font-family:monospace;">${i.Série||i.Patrimonio||'-'}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`; });
             } else {
-                titleObj.innerText = "Extrato: Rastreamento Físico"; theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
+                titleObj.innerText = "Extrato: Rastreamento Físico"; theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Património</th><th style="text-align:center;">Qtd</th></tr>`;
                 let filtradosRastreio = localidadesLocais.filter(item => { return !currentSearchRastreio || (item.Equipamento+item.Local+item.Serie+item.Patrimonio).toLowerCase().includes(currentSearchRastreio.toLowerCase()); });
                 filtradosRastreio.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => { tbodyObj.innerHTML += `<tr><td><b>${loc.Equipamento||'-'}</b></td><td>${loc.Local||'-'}</td><td>${loc.Marca||'-'}</td><td style="font-family:monospace;">${loc.Serie||'-'}</td><td style="font-family:monospace;">${loc.Patrimonio||'-'}</td><td style="text-align:center; font-weight:bold;">${loc.Quantidade||0}</td></tr>`; });
             }
@@ -803,13 +814,93 @@
             try { await createUserWithEmailAndPassword(auth, email, pass); showToast("Usuário criado!"); document.getElementById('new-user-email').value = ""; document.getElementById('new-user-pass').value = ""; } catch (error) { showToast("Erro: " + error.message, "error"); } btn.innerHTML = '<i class="fas fa-save mr-1"></i> Cadastrar';
         });
 
-        // ================= CADASTROS =================
-        if(document.getElementById('btn-save-loc')) document.getElementById('btn-save-loc').addEventListener('click', async () => {
-            const equip = document.getElementById('loc-equip').value.trim(), local = document.getElementById('loc-local').value.trim(), marca = document.getElementById('loc-marca').value.trim() || 'N/A', serie = document.getElementById('loc-serie').value.trim() || 'N/A', patrim = document.getElementById('loc-patrimonio').value.trim() || 'N/A', qtd = parseInt(document.getElementById('loc-qtd').value);
-            if(!equip || !local || isNaN(qtd) || qtd <= 0) return showToast("Preencha Equipamento, Local e Quantidade.", "error");
-            const btn = document.getElementById('btn-save-loc'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
-            try { await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd }); await registrarLog("MAP_LOCAL", `${equip} (${local})`, qtd, serie); showToast("Mapeado com sucesso!"); ['loc-equip','loc-local','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; } catch (e) { showToast("Erro: " + e.message, "error"); } btn.innerHTML = 'Mapear Equipamento';
-        });
+        // ================= GESTÃO DE LOCALIDADES E EDIÇÃO / MOVIMENTAÇÃO =================
+        function atualizarSelectEdicaoLocais() {
+            const sel = document.getElementById('loc-edit-select');
+            if(!sel) return;
+            sel.innerHTML = '<option value="">-- Selecione o item para editar ou transferir --</option>';
+            [...localidadesLocais].sort((a,b) => (a.Equipamento||'').localeCompare(b.Equipamento||'')).forEach(loc => {
+                sel.innerHTML += `<option value="${loc.id}">${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio}</option>`;
+            });
+        }
+
+        if(document.getElementById('loc-action-type')) {
+            document.getElementById('loc-action-type').addEventListener('change', (e) => {
+                const isEdit = e.target.value === 'edit';
+                const sel = document.getElementById('loc-edit-select');
+                const btn = document.getElementById('btn-save-loc');
+                if(isEdit) {
+                    sel.classList.remove('hidden');
+                    btn.innerText = 'Salvar Alterações';
+                    btn.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded hover:bg-orange-600 transition shadow mt-4';
+                } else {
+                    sel.classList.add('hidden'); sel.value = '';
+                    btn.innerText = 'Mapear Equipamento';
+                    btn.className = 'w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded hover:bg-indigo-700 transition shadow mt-4';
+                    ['loc-equip','loc-local','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(id => document.getElementById(id).value = ''); 
+                    document.getElementById('loc-qtd').value = 1;
+                }
+            });
+        }
+
+        if(document.getElementById('loc-edit-select')) {
+            document.getElementById('loc-edit-select').addEventListener('change', (e) => {
+                const id = e.target.value;
+                if(!id) {
+                    ['loc-equip','loc-local','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(idx => document.getElementById(idx).value = ''); 
+                    document.getElementById('loc-qtd').value = 1; return;
+                }
+                const item = localidadesLocais.find(i => i.id === id);
+                if(item) {
+                    document.getElementById('loc-edit-id').value = item.id;
+                    document.getElementById('loc-equip').value = item.Equipamento || '';
+                    document.getElementById('loc-local').value = item.Local || '';
+                    document.getElementById('loc-marca').value = item.Marca || '';
+                    document.getElementById('loc-qtd').value = item.Quantidade || 1;
+                    document.getElementById('loc-serie').value = item.Serie || '';
+                    document.getElementById('loc-patrimonio').value = item.Patrimonio || '';
+                }
+            });
+        }
+
+        if(document.getElementById('btn-save-loc')) {
+            document.getElementById('btn-save-loc').addEventListener('click', async () => {
+                const actionType = document.getElementById('loc-action-type').value;
+                const editId = document.getElementById('loc-edit-id').value;
+                
+                const equip = document.getElementById('loc-equip').value.trim();
+                const local = document.getElementById('loc-local').value.trim();
+                const marca = document.getElementById('loc-marca').value.trim() || 'N/A';
+                const serie = document.getElementById('loc-serie').value.trim() || 'N/A';
+                const patrim = document.getElementById('loc-patrimonio').value.trim() || 'N/A';
+                const qtd = parseInt(document.getElementById('loc-qtd').value);
+                
+                if(!equip || !local || isNaN(qtd) || qtd <= 0) return showToast("Preencha Equipamento, Local e Quantidade.", "error");
+                
+                const btn = document.getElementById('btn-save-loc'); 
+                const originalText = btn.innerText;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+                
+                try {
+                    if(actionType === 'edit' && editId) {
+                        await updateDoc(doc(db, "localidades", editId), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
+                        await registrarLog("MOVIMENTAÇÃO", `${equip} (Novo: ${local})`, qtd, `Série: ${serie}`);
+                        showToast("Alteração gravada e movimentada com sucesso!");
+                    } else {
+                        await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
+                        await registrarLog("MAP_LOCAL", `${equip} (${local})`, qtd, serie);
+                        showToast("Equipamento mapeado com sucesso!");
+                    }
+                    
+                    ['loc-equip','loc-local','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(id => document.getElementById(id).value = ''); 
+                    document.getElementById('loc-qtd').value = 1;
+                    document.getElementById('loc-action-type').value = 'new';
+                    document.getElementById('loc-action-type').dispatchEvent(new Event('change'));
+
+                } catch (e) { showToast("Erro: " + e.message, "error"); }
+                btn.innerText = originalText;
+            });
+        }
 
         if(document.getElementById('btn-loc-upload')) document.getElementById('btn-loc-upload').addEventListener('click', () => {
             const fileInput = document.getElementById('loc-file-upload'), btn = document.getElementById('btn-loc-upload');
@@ -819,13 +910,14 @@
                 try {
                     const json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let cont = 0;
                     for (let row of json) {
-                        await addDoc(collection(db, "localidades"), { Equipamento: row['EQUIPAMENTO']||row['Equipamento']||'N/A', Local: row['LOCAL FISICO']||row['Local']||'N/A', Marca: row['MARCA']||row['Marca']||'N/A', Serie: row['Nº DE SÉRIE']||row['Série']||'N/A', Patrimonio: row['Nº PATRIMONIO']||row['Patrimônio']||'N/A', Quantidade: parseInt(row['QUANTIDADE']||row['Quantidade']||1) }); cont++;
+                        await addDoc(collection(db, "localidades"), { Equipamento: row['EQUIPAMENTO']||row['Equipamento']||'N/A', Local: row['LOCAL FISICO']||row['Local']||'N/A', Marca: row['MARCA']||row['Marca']||'N/A', Serie: row['Nº DE SÉRIE']||row['Série']||'N/A', Patrimonio: row['Nº PATRIMONIO']||row['Património']||'N/A', Quantidade: parseInt(row['QUANTIDADE']||row['Quantidade']||1) }); cont++;
                     }
                     await registrarLog("MAP_LOCAL", `Upload Excel`, cont, ""); showToast(`Sucesso! ${cont} mapeados.`); fileInput.value = "";
                 } catch (error) { showToast("Erro leitura.", "error"); } btn.innerHTML = 'Iniciar Importação';
             }; reader.readAsArrayBuffer(fileInput.files[0]);
         });
 
+        // ================= CADASTRO ESTOQUE (MANUAL E LOTE) =================
         if(document.getElementById('btn-save-item')) document.getElementById('btn-save-item').addEventListener('click', async () => {
             const cat = document.getElementById('form-cat').value.trim(), comp = document.getElementById('form-comp').value.trim(), mod = document.getElementById('form-mod').value.trim(), esp = document.getElementById('form-esp').value.trim(), local = document.getElementById('form-local').value.trim() || 'N/A', patrim = document.getElementById('form-patrimonio-estoque').value.trim() || 'N/A', qtd = parseInt(document.getElementById('form-qtd').value), minEstoque = parseInt(document.getElementById('form-minimo').value) || 5; let serie = document.getElementById('form-patrimonio-estoque').value.trim() || 'N/A';
             if(!cat || !comp || isNaN(qtd) || qtd <= 0) return showToast("Preencha os campos obrigatórios.", "error");
@@ -834,8 +926,8 @@
             try {
                 if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd, EstoqueMinimo: minEstoque });
                 else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque });
-                await registrarLog("ENTRADA", `${comp} (${esp})`, qtd, local); showToast("Entrada registrada!"); document.getElementById('form-qtd').value = 1; document.getElementById('form-patrimonio-estoque').value = "";
-            } catch (e) { showToast("Erro: " + e.message, "error");} btn.innerHTML = 'Registrar Entrada no Estoque';
+                await registrarLog("ENTRADA", `${comp} (${esp})`, qtd, local); showToast("Entrada registada!"); document.getElementById('form-qtd').value = 1; document.getElementById('form-patrimonio-estoque').value = "";
+            } catch (e) { showToast("Erro: " + e.message, "error");} btn.innerHTML = 'Registar Entrada no Estoque';
         });
 
         if(document.getElementById('btn-estoque-upload')) document.getElementById('btn-estoque-upload').addEventListener('click', () => {
@@ -846,7 +938,7 @@
                 try {
                     const json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let cont = 0;
                     for (let row of json) {
-                        const cat = row['CATEGORIA']||row['Categoria']||'Geral', comp = row['COMPONENTE']||row['Componente']||'Desc', mod = row['MODELO']||row['Modelo']||'N/A', esp = row['ESPECIFICAÇÃO']||row['Especificacao']||'N/A', local = row['LOCAL FISICO']||row['Local']||'N/A', serie = row['SÉRIE']||row['Série']||'N/A', patrim = row['PATRIMÔNIO']||row['Patrimônio']||'N/A', minEst = parseInt(row['ESTOQUE MÍNIMO']||row['Estoque Minimo']||5), qtd = parseInt(row['QUANTIDADE']||row['Quantidade']||1);
+                        const cat = row['CATEGORIA']||row['Categoria']||'Geral', comp = row['COMPONENTE']||row['Componente']||'Desc', mod = row['MODELO']||row['Modelo']||'N/A', esp = row['ESPECIFICAÇÃO']||row['Especificacao']||'N/A', local = row['LOCAL FISICO']||row['Local']||'N/A', serie = row['SÉRIE']||row['Série']||'N/A', patrim = row['PATRIMÔNIO']||row['Património']||'N/A', minEst = parseInt(row['ESTOQUE MÍNIMO']||row['Estoque Minimo']||5), qtd = parseInt(row['QUANTIDADE']||row['Quantidade']||1);
                         if(comp === 'Desc') continue;
                         const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local && (i.Série||'N/A') === serie);
                         if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd, EstoqueMinimo: minEst });
