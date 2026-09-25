@@ -125,7 +125,7 @@
                 </div>
             </div>
 
-            <!-- GRÁFICOS (Agora 3 gráficos: Categoria, Top Itens e Comparativo de Saídas) -->
+            <!-- GRÁFICOS: Layout 3 Colunas -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
                     <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-4">Volume por Categoria</h3>
@@ -165,9 +165,8 @@
                     <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center gap-4">
                         <div class="flex items-center gap-4">
                             <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Inventário Consolidado</h3>
-                            <!-- BOTÃO DE EXPORTAÇÃO ESTOQUE -->
                             <button id="btn-print-estoque-main" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
-                                <i class="fas fa-file-pdf mr-1.5"></i> Exportar PDF
+                                <i class="fas fa-file-pdf mr-1.5"></i> Gerar PDF
                             </button>
                         </div>
                         <div class="relative">
@@ -196,9 +195,8 @@
                     <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center bg-indigo-50/30 gap-4">
                         <div class="flex items-center gap-4">
                             <h3 class="text-sm font-bold text-indigo-800 uppercase tracking-wider"><i class="fas fa-map-pin mr-2"></i>Mapa de Ativos Físicos</h3>
-                            <!-- BOTÃO DE EXPORTAÇÃO RASTREIO -->
                             <button id="btn-print-rastreio-main" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
-                                <i class="fas fa-file-pdf mr-1.5"></i> Exportar PDF
+                                <i class="fas fa-file-pdf mr-1.5"></i> Gerar PDF
                             </button>
                         </div>
                         <div class="relative">
@@ -244,7 +242,6 @@
             <div class="grid grid-cols-4 gap-4 mb-8" id="print-kpis"></div>
             
             <h2 class="text-xl font-bold text-slate-800 mb-3" id="print-visual-title">Análise Visual</h2>
-            <!-- Gráficos no PDF com 3 painéis -->
             <div class="grid grid-cols-3 gap-4 mb-8" id="print-charts-container">
                 <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center">Volume por Categoria</p><img id="print-chart-1" src="" class="w-full border p-2 bg-white"></div>
                 <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center">Equipamentos em Foco</p><img id="print-chart-2" src="" class="w-full border p-2 bg-white"></div>
@@ -273,7 +270,7 @@
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg bg-blue-100 text-blue-800 font-bold transition flex items-center text-sm" data-target="tab-entrada"><i class="fas fa-plus-circle w-6"></i> Entrada Estoque</button></li>
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-saida"><i class="fas fa-minus-circle w-6"></i> Baixa / Saída</button></li>
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-indigo-100 hover:text-indigo-800 font-semibold transition flex items-center text-sm border-l-4 border-transparent hover:border-indigo-500" data-target="tab-localidade"><i class="fas fa-map-marker-alt w-6 text-indigo-500"></i> Locais / Rastreio</button></li>
-                    <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm mt-4" data-target="tab-relatorio"><i class="fas fa-file-csv w-6"></i> Exportação CSV</button></li>
+                    <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm mt-4" data-target="tab-relatorio"><i class="fas fa-file-contract w-6"></i> Exportações / Relatórios</button></li>
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-pref"><i class="fas fa-sliders-h w-6"></i> Preferências</button></li>
                 </ul>
                 <div class="border-t pt-4 mt-auto">
@@ -348,12 +345,24 @@
                     </div>
                 </div>
 
-                <!-- TAB RELATORIOS E EXPORTAÇÕES (CSV) -->
+                <!-- TAB RELATORIOS E EXPORTAÇÕES -->
                 <div id="tab-relatorio" class="tab-content hidden h-full flex flex-col justify-center items-center">
-                    <i class="fas fa-file-csv text-6xl text-slate-300 mb-6"></i>
-                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Exportações em CSV</h2>
-                    <p class="text-slate-500 mb-8 max-w-lg text-center">Os relatórios gerenciais em PDF agora são gerados diretamente na tela principal do sistema (na aba de Estoque ou de Rastreio). Use o botão abaixo apenas se precisar extrair os dados brutos do estoque para uma planilha Excel.</p>
-                    <button id="btn-export-csv" class="bg-emerald-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-emerald-700 transition flex items-center shadow-md"><i class="fas fa-file-excel mr-2 text-xl"></i> Exportar Estoque em Excel (CSV)</button>
+                    <i class="fas fa-file-contract text-6xl text-slate-300 mb-6"></i>
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Exportações e Relatórios Oficiais</h2>
+                    <p class="text-slate-500 mb-8 max-w-lg text-center">Os relatórios em PDF utilizam dados capturados em tempo real, gerando documentos analíticos nos padrões formais de impressão, com selo, assinatura de data/hora e análises visuais incorporadas.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl mb-8">
+                        <div class="border rounded-xl p-6 bg-blue-50 shadow-sm text-center">
+                            <i class="fas fa-boxes text-blue-500 text-3xl mb-3"></i>
+                            <h3 class="font-bold text-slate-800 mb-4">Relatório Consolidado</h3>
+                            <button id="btn-print-estoque" class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700 transition shadow flex justify-center items-center"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF de Estoque</button>
+                        </div>
+                        <div class="border rounded-xl p-6 bg-indigo-50 shadow-sm text-center">
+                            <i class="fas fa-map-marker-alt text-indigo-500 text-3xl mb-3"></i>
+                            <h3 class="font-bold text-slate-800 mb-4">Relatório de Rastreio</h3>
+                            <button id="btn-print-rastreio" class="w-full bg-indigo-600 text-white font-bold py-3 rounded hover:bg-indigo-700 transition shadow flex justify-center items-center"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF de Locais</button>
+                        </div>
+                    </div>
+                    <button id="btn-export-csv" class="text-slate-500 hover:text-slate-800 font-bold transition flex items-center underline"><i class="fas fa-file-csv mr-2"></i> Ou exportar apenas os dados brutos em CSV</button>
                 </div>
 
                 <!-- TAB PREFERÊNCIAS -->
@@ -361,28 +370,9 @@
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Preferências do Sistema</h2>
                     <p class="text-sm text-slate-500 mb-8 border-b pb-4">Personalize a aparência do painel oficial.</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Título do Painel Oficial</label>
-                            <input type="text" id="pref-title" class="block w-full rounded-md border-gray-300 border p-2.5 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Cor Primária (Claro)</label>
-                            <div class="flex items-center">
-                                <input type="color" id="pref-color" class="h-11 w-12 rounded border border-gray-300 cursor-pointer p-0.5">
-                                <input type="text" id="pref-color-text" class="ml-2 block w-full rounded-md border-gray-300 border p-2.5 shadow-sm uppercase font-mono text-sm">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Ícone do Cabeçalho</label>
-                            <select id="pref-icon" class="block w-full rounded-md border-gray-300 border p-2.5 shadow-sm bg-white focus:ring-blue-500 focus:border-blue-500">
-                                <option value="fa-chart-line">Gráfico de Linhas</option>
-                                <option value="fa-boxes">Caixas / Estoque</option>
-                                <option value="fa-server">Servidor</option>
-                                <option value="fa-laptop-code">TI / Computador</option>
-                                <option value="fa-tools">Ferramentas</option>
-                                <option value="fa-shield-alt">Escudo / Segurança</option>
-                            </select>
-                        </div>
+                        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Título do Painel Oficial</label><input type="text" id="pref-title" class="block w-full rounded-md border-gray-300 border p-2.5 shadow-sm focus:ring-blue-500 focus:border-blue-500"></div>
+                        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Cor Primária (Claro)</label><div class="flex items-center"><input type="color" id="pref-color" class="h-11 w-12 rounded border border-gray-300 cursor-pointer p-0.5"><input type="text" id="pref-color-text" class="ml-2 block w-full rounded-md border-gray-300 border p-2.5 shadow-sm uppercase font-mono text-sm"></div></div>
+                        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Ícone do Cabeçalho</label><select id="pref-icon" class="block w-full rounded-md border-gray-300 border p-2.5 shadow-sm bg-white focus:ring-blue-500 focus:border-blue-500"><option value="fa-chart-line">Gráfico de Linhas</option><option value="fa-boxes">Caixas / Estoque</option><option value="fa-server">Servidor</option><option value="fa-laptop-code">TI / Computador</option><option value="fa-tools">Ferramentas</option><option value="fa-shield-alt">Escudo / Segurança</option></select></div>
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-1">Fundo da Tela de Login</label>
                             <div class="flex items-center space-x-2">
@@ -431,8 +421,8 @@
                             </div>
                             <div class="border border-orange-200 rounded-xl p-5 bg-orange-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-orange-800 mb-2"><i class="fas fa-user-minus text-orange-600 mr-2"></i> Gerir Acessos</h3>
-                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">Para evitar ataques ao sistema, o Firebase bloqueia a exclusão de usuários pelo painel web.<br><br>A demissão/exclusão deve ser feita diretamente no seu Console Oficial.</p>
-                                <a href="https://console.firebase.google.com/project/gestao-de-equipamentos-tic/authentication/users" target="_blank" class="w-full bg-orange-600 text-white font-bold py-2.5 px-2 rounded hover:bg-orange-700 transition text-sm shadow mt-auto flex items-center justify-center text-center"><i class="fas fa-external-link-alt mr-2"></i> Abrir Firebase Console</a>
+                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">Para evitar ataques, o Firebase bloqueia a exclusão de usuários pelo painel web.<br><br>A demissão/exclusão deve ser feita diretamente no seu Console Oficial.</p>
+                                <a href="https://console.firebase.google.com/project/gestao-de-equipamentos-tic/authentication/users" target="_blank" class="w-full bg-orange-600 text-white font-bold py-2.5 px-2 rounded hover:bg-orange-700 transition text-sm shadow mt-auto flex items-center justify-center text-center"><i class="fas fa-external-link-alt mr-2"></i> Abrir Console</a>
                             </div>
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between">
                                 <div>
@@ -497,6 +487,10 @@
         let logsLocal = []; 
         let userEmail = "";
         let tempBgBase64 = null; 
+        
+        // DECLARAÇÃO GLOBAL DOS GRÁFICOS (PREVINE ERRO DE REFERÊNCIA)
+        let chartCat = null; 
+        let chartTop = null; 
         let chartComp = null; 
 
         // ================= PREFERÊNCIAS E CUSTOMIZAÇÃO =================
@@ -510,6 +504,7 @@
             document.getElementById('login-title').textContent = title; 
             document.title = title;
             document.getElementById('pref-title').value = title; 
+            document.getElementById('print-title-doc').textContent = "Relatório Geral - " + title;
             
             document.getElementById('navbar-main').style.backgroundColor = color;
             document.querySelectorAll('.btn-primary').forEach(el => el.style.backgroundColor = color);
@@ -698,8 +693,11 @@
             window.print();
         }
 
+        // LIGAÇÃO DOS BOTÕES
         document.getElementById('btn-print-estoque-main').addEventListener('click', () => gerarRelatorioPDF('estoque'));
         document.getElementById('btn-print-rastreio-main').addEventListener('click', () => gerarRelatorioPDF('rastreio'));
+        document.getElementById('btn-print-estoque').addEventListener('click', () => gerarRelatorioPDF('estoque'));
+        document.getElementById('btn-print-rastreio').addEventListener('click', () => gerarRelatorioPDF('rastreio'));
 
         // ================= ABA ADMINISTRADOR =================
         document.getElementById('btn-admin-login').addEventListener('click', () => {
@@ -848,7 +846,7 @@
             } catch(e) {}
         });
 
-        // ================= INSIGHTS MELHORADOS =================
+        // ================= INSIGHTS COM PROTEÇÃO =================
         function gerarInsights() {
             const container = document.getElementById('insights-container'); container.innerHTML = ''; 
             let zerados = [], baixos = [], maiorVolume = null, totalItens = 0, hdCount = 0, ssdCount = 0;
@@ -885,7 +883,7 @@
 
             let techHtml = '';
             if (hdCount > 0 && ssdCount > 0) {
-                techHtml = `<div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-rocket text-blue-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-blue-800 uppercase tracking-wide">Sugestão de Modernização</h4><p class="text-xs text-blue-700 mt-2 leading-relaxed">Existem ${hdCount} HDs antigos e ${ssdCount} SSDs em estoque.</p><p class="text-[11px] text-blue-600 mt-1 font-semibold">Considere Força-Tarefa de upgrade preventivo.</p></div></div>`;
+                techHtml = `<div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-rocket text-blue-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-blue-800 uppercase tracking-wide">Sugestão de Modernização</h4><p class="text-xs text-blue-700 mt-2 leading-relaxed">Existem ${hdCount} HDs antigos e ${ssdCount} SSDs em estoque.</p><p class="text-[11px] text-blue-600 mt-1 font-semibold">Considere Força-Tarefa de upgrade preventivo no parque.</p></div></div>`;
             } else {
                 const numCat = [...new Set(estoqueLocal.map(i => i.Categoria || 'Geral'))].length;
                 techHtml = `<div class="bg-purple-50 border-l-4 border-purple-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-sitemap text-purple-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-purple-800 uppercase tracking-wide">Diversidade de Ativos</h4><p class="text-xs text-purple-700 mt-2 leading-relaxed">Gestão ativa de ${numCat} categorias distintas.</p><p class="text-[11px] text-purple-500 mt-1 font-semibold">Portfólio estruturado e centralizado.</p></div></div>`;
