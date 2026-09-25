@@ -243,11 +243,11 @@
                 <button onclick="document.getElementById('ai-chat-window').classList.add('hidden')" class="text-white hover:text-red-300 transition"><i class="fas fa-times"></i></button>
             </div>
             <div id="ai-chat-body" class="flex-1 p-4 overflow-y-auto bg-slate-50 flex flex-col">
-                <div class="chat-bubble-ai shadow-sm border border-gray-100">Olá! Sou o Assistente Inteligente da SETIC. Analiso o estoque em tempo real. Pode me perguntar coisas como:<br><br>• <i>"Quantos itens temos no total?"</i><br>• <i>"Existem itens zerados?"</i><br>• <i>"Como gerar PDF?"</i></div>
+                <div class="chat-bubble-ai shadow-sm border border-gray-100">Olá! Sou o Assistente Inteligente da SETIC. Analiso o estoque em tempo real. Pode me perguntar coisas como:<br><br>• <i>"Quantos nobreak temos no estoque?"</i><br>• <i>"Qual item tem maior volume?"</i><br>• <i>"Existem itens zerados?"</i><br>• <i>"Como gerar PDF?"</i></div>
             </div>
             <div class="p-3 bg-white border-t border-gray-200">
                 <div class="relative">
-                    <input type="text" id="ai-input" class="w-full bg-gray-100 border-transparent rounded-full py-2.5 pl-4 pr-12 text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all outline-none" placeholder="Pergunte sobre o estoque...">
+                    <input type="text" id="ai-input" class="w-full bg-gray-100 border-transparent rounded-full py-2.5 pl-4 pr-12 text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all outline-none" placeholder="Ex: Quantos monitores temos?">
                     <button id="btn-ai-send" class="absolute right-1 top-1 w-8 h-8 bg-blue-600 text-white rounded-full flex justify-center items-center hover:bg-blue-700 transition"><i class="fas fa-paper-plane text-xs"></i></button>
                 </div>
             </div>
@@ -440,7 +440,7 @@
                         </div>
 
                         <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-                            <!-- EXCLUSÃO EM LOTE (NOVO MOTOR VISUAL) -->
+                            <!-- EXCLUSÃO EM LOTE -->
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between col-span-1 lg:col-span-2">
                                 <div><h3 class="font-bold text-red-800 mb-1"><i class="fas fa-exclamation-triangle text-red-600 mr-2"></i> Zona de Perigo (Exclusão em Lote)</h3></div>
                                 
@@ -472,7 +472,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- FIM EXCLUSÃO LOTE -->
 
                             <div class="border border-blue-200 rounded-xl p-5 bg-blue-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-user-plus text-blue-600 mr-2"></i> Novo Usuário</h3>
@@ -504,6 +503,7 @@
         </div>
     </div>
 
+    <!-- FIREBASE E SCRIPTS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -547,15 +547,74 @@
         }
 
         function processAILogic(msg) {
-            const m = msg.toLowerCase();
-            if(m.includes('ola') || m.includes('oi') || m.includes('bom dia') || m.includes('boa tarde')) return "Olá! Sou o Copilot SETIC. Como posso ajudar na gestão do nosso almoxarifado hoje?";
-            if(m.includes('quantos itens') || (m.includes('total') && m.includes('estoque'))) { let t = 0; estoqueLocal.forEach(i => t += i.Quantidade||0); return `Atualmente, contabilizo <b>${t} unidades</b> consolidadas fisicamente no nosso estoque geral.`; }
-            if(m.includes('quantos equipamentos') || (m.includes('total') && m.includes('rastreio'))) { let t = 0; localidadesLocais.forEach(i => t += i.Quantidade||0); return `Temos um total de <b>${t} equipamentos</b> rastreados e distribuídos pelos locais físicos.`; }
-            if(m.includes('alerta') || m.includes('zerado') || m.includes('critico')) { let alertas = estoqueLocal.filter(i => (i.Quantidade||0) <= (i.EstoqueMinimo||5)); if(alertas.length === 0) return "Ótimas notícias! Não identifiquei nenhum item em nível crítico de estoque no momento."; let resp = `Atenção, identifiquei <b>${alertas.length} item(ns)</b> em estado crítico:<br><br>`; alertas.slice(0, 3).forEach(i => resp += `• ${i.Componente} (Qtd: ${i.Quantidade})<br>`); if(alertas.length > 3) resp += `<i>... e mais ${alertas.length - 3} itens.</i>`; return resp; }
-            if(m.includes('maior') || m.includes('mais temos')) { if(estoqueLocal.length === 0) return "Não há dados no estoque ainda."; let top = estoqueLocal.reduce((prev, current) => (prev.Quantidade > current.Quantidade) ? prev : current); return `O item com maior volume no estoque no momento é <b>${top.Componente}</b>, com ${top.Quantidade} unidades em ${top.Local}.`; }
-            if(m.includes('quantos') && m.length > 8) { let itemBuscado = m.replace('quantos', '').replace('temos', '').replace('?', '').trim(); let achados = estoqueLocal.filter(i => i.Componente.toLowerCase().includes(itemBuscado) || (i.Categoria||'').toLowerCase().includes(itemBuscado)); if(achados.length === 0) return `Não encontrei registro de "${itemBuscado}" no estoque consolidado.`; let totalItem = 0; achados.forEach(i => totalItem += i.Quantidade||0); return `Contabilizo <b>${totalItem} unidades</b> de ${itemBuscado} disponíveis.`; }
-            if(m.includes('como') && m.includes('pdf')) return "Para gerar um relatório oficial em PDF, clique no botão azul 'Exportações / Relatórios' no painel de ferramentas à esquerda, ou use o atalho 'Gerar Relatório' logo acima das tabelas principais.";
-            return "Compreendo, mas tente perguntar coisas diretas como: <i>'Quantos itens temos?'</i>, <i>'Existem itens zerados?'</i> ou <i>'Como gerar um PDF?'</i>.";
+            const mOriginal = msg.trim();
+            const m = mOriginal.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); 
+
+            if(m.includes('ola') || m.includes('oi ') || m === 'oi' || m.includes('bom dia') || m.includes('boa tarde')) {
+                return "Olá! Sou o Copilot SETIC. Como posso ajudar na gestão do nosso almoxarifado hoje?";
+            }
+
+            if(m.includes('como') && m.includes('pdf')) return "Para gerar um relatório em PDF, clique em 'Exportações / Relatórios' no menu de Ferramentas, ou use o botão 'Gerar Relatório' acima das tabelas.";
+            if(m.includes('como') && (m.includes('cadastrar') || m.includes('entrada'))) return "Vá na aba 'Entrada Estoque' para preencher o formulário manual ou importar uma planilha Excel.";
+            if(m.includes('como') && m.includes('baixa')) return "Acesse 'Baixa / Saída'. Use a busca inteligente digitando as primeiras letras do item, informe a quantidade, o chamado e confirme.";
+
+            if(m.includes('maior') || m.includes('mais temos') || m.includes('mais sobra')) {
+                if(estoqueLocal.length === 0) return "Ainda não há dados no estoque.";
+                let top = estoqueLocal.reduce((prev, current) => ((prev.Quantidade||0) > (current.Quantidade||0)) ? prev : current);
+                return `O item com maior volume no estoque é <b>${top.Componente}</b>, com ${top.Quantidade} unidades (${top.Local}).`;
+            }
+
+            if(m.includes('alerta') || m.includes('zerado') || m.includes('critico') || m.includes('faltando')) {
+                let alertas = estoqueLocal.filter(i => (i.Quantidade||0) <= (i.EstoqueMinimo||5));
+                if(alertas.length === 0) return "Excelente! Não identifiquei itens críticos no momento.";
+                let resp = `Identifiquei <b>${alertas.length} item(ns)</b> em estado de alerta:<br><br>`;
+                alertas.slice(0, 4).forEach(i => resp += `• ${i.Componente} (Qtd: ${i.Quantidade})<br>`);
+                if(alertas.length > 4) resp += `<i>... e mais ${alertas.length - 4} itens.</i>`;
+                return resp;
+            }
+
+            if(m.includes('quantos') || m.includes('quantas') || m.includes('temos') || m.includes('quantidade')) {
+                let isTotalGeral = m.replace(/(quantos|quantas|itens|equipamentos|ativos|temos|no total|em|no|estoque|rastreio|mapa|\?|\s)/gi, '').length === 0;
+                if (isTotalGeral && (m.includes('rastreio') || m.includes('mapa'))) {
+                    let t = 0; localidadesLocais.forEach(i => t += i.Quantidade||0);
+                    return `Temos um total de <b>${t} equipamentos</b> rastreados nos locais físicos.`;
+                } else if (isTotalGeral) {
+                    let t = 0; estoqueLocal.forEach(i => t += i.Quantidade||0);
+                    return `Contabilizo <b>${t} unidades</b> consolidadas fisicamente no nosso estoque geral.`;
+                }
+
+                // O cérebro do filtro: Remove palavras inúteis da frase para achar o nome exato do equipamento
+                let itemBuscado = m.replace(/\b(quantos|quantas|temos|de|do|da|no|na|em|o|a|os|as|estoque|rastreio|mapa|almoxarifado|quantidade|qual|sao)\b/gi, '').replace(/\?/g, '').trim();
+
+                if (!itemBuscado || itemBuscado.length < 2) return "Poderia especificar o nome do equipamento que deseja consultar? (Ex: Quantos Switchs temos?)";
+
+                let isRastreio = m.includes('rastreio') || m.includes('mapa');
+                let isEstoque = m.includes('estoque') || m.includes('almoxarifado');
+                if(!isRastreio && !isEstoque) { isEstoque = true; isRastreio = true; } 
+
+                let totalEstoque = 0, totalRastreio = 0;
+
+                estoqueLocal.forEach(i => {
+                    let comp = (i.Componente || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    let cat = (i.Categoria || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    if(comp.includes(itemBuscado) || cat.includes(itemBuscado)) totalEstoque += (i.Quantidade || 0);
+                });
+
+                localidadesLocais.forEach(i => {
+                    let eq = (i.Equipamento || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    let marca = (i.Marca || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    if(eq.includes(itemBuscado) || marca.includes(itemBuscado)) totalRastreio += (i.Quantidade || 0);
+                });
+
+                if (totalEstoque === 0 && totalRastreio === 0) return `Não encontrei nenhum registro de "<b>${itemBuscado}</b>" no sistema.`;
+
+                let resp = `Resultados para "<b>${itemBuscado}</b>":<br>`;
+                if (isEstoque) resp += `• No Estoque: <b>${totalEstoque}</b> und.<br>`;
+                if (isRastreio) resp += `• No Rastreio (Físico): <b>${totalRastreio}</b> und.`;
+                return resp;
+            }
+
+            return "Entendi sua mensagem, mas para consultas de dados tente ser direto: <i>'Quantos nobreak temos no estoque?'</i>, <i>'Existem itens zerados?'</i> ou <i>'Como gerar um PDF?'</i>.";
         }
 
         function handleAIChat() {
@@ -714,7 +773,7 @@
             if(document.getElementById('btn-next-rastreio')) document.getElementById('btn-next-rastreio').disabled = currentPageRastreio === totalPaginas;
         }
 
-        // ================= EXCLUSÃO EM LOTE NO ADMIN (O CÓDIGO CORRIGIDO E BLINDADO) =================
+        // ================= EXCLUSÃO EM LOTE NO ADMIN =================
         if(document.getElementById('btn-admin-login')) document.getElementById('btn-admin-login').addEventListener('click', () => { const input = document.getElementById('admin-pass-input').value; if(btoa(input) === "c2V0aWNhZG1pbg==") { document.getElementById('admin-login-section').classList.add('hidden'); document.getElementById('admin-content-section').classList.remove('hidden'); document.getElementById('admin-error').classList.add('hidden'); document.getElementById('admin-pass-input').value = ""; } else { document.getElementById('admin-error').classList.remove('hidden'); } });
         if(document.getElementById('btn-admin-lock')) document.getElementById('btn-admin-lock').addEventListener('click', () => { document.getElementById('admin-content-section').classList.add('hidden'); document.getElementById('admin-login-section').classList.remove('hidden'); });
         
@@ -768,8 +827,8 @@
                     const btn = document.getElementById('btn-delete-loc-batch'); const originalText = btn.innerHTML;
                     btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...'; btn.disabled = true;
                     try {
-                        for(let id of idsToDelete) await deleteDoc(doc(db, "localidades", id));
-                        showToast(`${idsToDelete.length} item(ns) apagado(s).`);
+                        await Promise.all(idsToDelete.map(id => deleteDoc(doc(db, "localidades", id))));
+                        showToast(`${idsToDelete.length} item(ns) apagado(s) do Rastreio.`);
                         document.getElementById('admin-search-loc').value = ''; document.getElementById('admin-search-loc').dispatchEvent(new Event('input'));
                     } catch (error) { showToast("Erro: " + error.message, "error"); btn.innerHTML = originalText; btn.disabled = false; }
                 }
@@ -826,103 +885,55 @@
                     const btn = document.getElementById('btn-delete-est-batch'); const originalText = btn.innerHTML;
                     btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...'; btn.disabled = true;
                     try {
-                        for(let id of idsToDelete) await deleteDoc(doc(db, "estoque", id));
-                        showToast(`${idsToDelete.length} item(ns) apagado(s).`);
+                        await Promise.all(idsToDelete.map(id => deleteDoc(doc(db, "estoque", id))));
+                        showToast(`${idsToDelete.length} item(ns) apagado(s) do Estoque.`);
                         document.getElementById('admin-search-est').value = ''; document.getElementById('admin-search-est').dispatchEvent(new Event('input'));
                     } catch (error) { showToast("Erro: " + error.message, "error"); btn.innerHTML = originalText; btn.disabled = false; }
                 }
             });
         }
 
-        // ================= FUNÇÕES DOS RELATÓRIOS EM PDF =================
-        function gerarRelatorioAnalitico(tipoRelatorio) {
-            document.getElementById('printable-simple-table').classList.remove('active-print'); document.getElementById('printable-report').classList.add('active-print');
-            const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5);
-            const titleDoc = document.getElementById('print-title-doc'), parecer = document.getElementById('print-parecer'), resumo = document.getElementById('print-resumo'), kpisContainer = document.getElementById('print-kpis'), thead = document.getElementById('print-thead'), tbody = document.getElementById('print-tbody'), chartsContainer = document.getElementById('print-charts-container'), visualTitle = document.getElementById('print-visual-title');
-            
-            if(tipoRelatorio === 'estoque') {
-                titleDoc.textContent = `Relatório Consolidado - ${localStorage.getItem('pref_title') || 'SETIC'}`;
-                let tTotal = 0, tZerados = 0, tBaixos = 0; let categorias = new Set(); tbody.innerHTML = '';
-                [...estoqueLocal].sort((a, b) => { let cmp = (a.Componente || '').localeCompare(b.Componente || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(i => {
-                    tTotal += (i.Quantidade || 0); categorias.add(i.Categoria || 'Geral'); let minEstoque = i.EstoqueMinimo || 5;
-                    if(i.Quantidade === 0) tZerados++; else if(i.Quantidade <= minEstoque) tBaixos++;
-                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||''}</td><td class="border px-2 py-1">${i.Componente||''}</td><td class="border px-2 py-1">${i.Modelo||''} / ${i.Especificação||''}</td><td class="border px-2 py-1">${i.Local||''}</td><td class="border px-2 py-1 font-mono">${i.Série||''}</td><td class="border px-2 py-1 font-mono">${i.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`;
-                });
-                let taxaCritica = estoqueLocal.length > 0 ? (((tZerados + tBaixos) / estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1);
-                parecer.innerHTML = `Extração consolidou <b>${estoqueLocal.length}</b> registos de estoque físico. Emitido por ${userEmail} em ${dataAtual}.`;
-                resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. Saúde: ${saude}%. ${tZerados} zerados e ${tBaixos} em risco (Criticidade: ${taxaCritica}%).`;
-                kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`;
-                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
-                visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid';
-                if(chartComponentesAmpliado) document.getElementById('print-chart-1').src = document.getElementById('chartComponentesAmpliado').toDataURL('image/png');
-                if(chartTopSaidas) document.getElementById('print-chart-2').src = document.getElementById('chartTopSaidas').toDataURL('image/png');
-                if(chartPizzaCategorias) document.getElementById('print-chart-3').src = document.getElementById('chartPizzaCategorias').toDataURL('image/png');
-            } else if (tipoRelatorio === 'rastreio') {
-                titleDoc.textContent = `Relatório de Rastreio - ${localStorage.getItem('pref_title') || 'SETIC'}`;
-                let tLocaisUnicos = new Set(), tVolumeRastreado = 0, tEquipsUnicos = new Set(); tbody.innerHTML = '';
-                [...localidadesLocais].sort((a, b) => { let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(loc => {
-                    tLocaisUnicos.add(loc.Local || 'N/A'); tVolumeRastreado += (loc.Quantidade||0); tEquipsUnicos.add(loc.Equipamento || 'N/A');
-                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento||''}</td><td class="border px-2 py-1">${loc.Local||''}</td><td class="border px-2 py-1">${loc.LocalSipac||''}</td><td class="border px-2 py-1">${loc.Marca||''}</td><td class="border px-2 py-1 font-mono">${loc.Serie||''}</td><td class="border px-2 py-1 font-mono">${loc.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`;
-                });
-                parecer.innerHTML = `A extração consolidou <b>${localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${userEmail} em ${dataAtual}.`;
-                resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades, com ${tEquipsUnicos.size} modelos distintos.`;
-                kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros</p><p class="text-2xl font-black text-slate-800">${localidadesLocais.length}</p></div>`;
-                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Património</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
-                visualTitle.style.display = 'none'; chartsContainer.style.display = 'none';
-            }
-            window.print(); setTimeout(() => { document.getElementById('printable-report').classList.remove('active-print'); }, 1000);
-        }
-
-        function gerarPDFSimples(tipo) {
-            document.getElementById('printable-report').classList.remove('active-print'); document.getElementById('printable-simple-table').classList.add('active-print');
-            const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5);
-            document.getElementById('print-simple-date').innerText = `Emitido por: ${userEmail} em ${dataAtual} às ${horaAtual}`; 
-            const theadObj = document.getElementById('print-simple-thead'), tbodyObj = document.getElementById('print-simple-tbody'); tbodyObj.innerHTML = '';
-
-            if(tipo === 'estoque') {
-                document.getElementById('print-simple-title').innerText = "Extrato: Inventário Consolidado"; 
-                theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente / Espec.</th><th>Local</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
-                let filtrados = estoqueLocal.filter(item => { let matchBusca = true; if (currentSearchText) { const searchTerms = currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !currentFilterCat || item.Categoria === currentFilterCat; return matchBusca && matchCat; });
-                filtrados.sort((a, b) => { let cmp = (a.Componente || '').localeCompare(b.Componente || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(i => { 
-                    tbodyObj.innerHTML += `<tr><td>${i.Categoria||''}</td><td><b>${i.Componente||''}</b><br><span style="font-size:10px; color:#555;">${i.Modelo||''} / ${i.Especificação||''}</span></td><td>${i.Local||''}</td><td style="font-family:monospace;">${i.Série||''}</td><td style="font-family:monospace;">${i.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`; 
-                });
-            } else {
-                document.getElementById('print-simple-title').innerText = "Extrato: Rastreamento Físico"; 
-                theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Local SIPAC</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
-                let filtradosRastreio = localidadesLocais.filter(item => { if (!currentSearchRastreio) return true; const searchTerms = currentSearchRastreio.toLowerCase().split(' '); const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); });
-                filtradosRastreio.sort((a, b) => { let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(loc => { 
-                    tbodyObj.innerHTML += `<tr><td><b>${loc.Equipamento||''}</b></td><td>${loc.Local||''}</td><td>${loc.LocalSipac||''}</td><td>${loc.Marca||''}</td><td style="font-family:monospace;">${loc.Serie||''}</td><td style="font-family:monospace;">${loc.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${loc.Quantidade||0}</td></tr>`; 
-                });
-            }
-            window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
-        }
-
-        if(document.getElementById('btn-print-estoque-main')) document.getElementById('btn-print-estoque-main').addEventListener('click', () => gerarPDFSimples('estoque'));
-        if(document.getElementById('btn-print-rastreio-main')) document.getElementById('btn-print-rastreio-main').addEventListener('click', () => gerarPDFSimples('rastreio'));
-        if(document.getElementById('btn-relatorio-analitico-estoque')) document.getElementById('btn-relatorio-analitico-estoque').addEventListener('click', () => gerarRelatorioAnalitico('estoque'));
-        if(document.getElementById('btn-relatorio-analitico-rastreio')) document.getElementById('btn-relatorio-analitico-rastreio').addEventListener('click', () => gerarRelatorioAnalitico('rastreio'));
-
-        // ================= GESTÃO MANUAL E UPLOADS =================
+        // ================= GESTÃO DE LOCALIDADES E EDIÇÃO / MOVIMENTAÇÃO =================
         function atualizarSelectEdicaoLocais() {
             const dl = document.getElementById('lista-edit-locais'); if(!dl) return; dl.innerHTML = ''; mapEditLocais = {};
-            [...localidadesLocais].sort((a,b) => (a.Equipamento||'').localeCompare(b.Equipamento||'')).forEach(loc => { const text = `${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio || ''} | Série: ${loc.Serie || ''}`; mapEditLocais[text] = loc; });
+            [...localidadesLocais].sort((a,b) => (a.Equipamento||'').localeCompare(b.Equipamento||'')).forEach(loc => {
+                const text = `${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio || ''} | Série: ${loc.Serie || ''}`;
+                mapEditLocais[text] = loc;
+            });
         }
 
         if(document.getElementById('loc-action-type')) {
             document.getElementById('loc-action-type').addEventListener('change', (e) => {
-                const isEdit = e.target.value === 'edit'; const container = document.getElementById('loc-edit-container'); const input = document.getElementById('loc-edit-input'); const btn = document.getElementById('btn-save-loc');
-                if(isEdit) { container.classList.remove('hidden'); btn.innerText = 'Gravar Alterações'; btn.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded hover:bg-orange-600 transition shadow mt-4'; } 
-                else { container.classList.add('hidden'); input.value = ''; btn.innerText = 'Mapear Equipamento'; btn.className = 'w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded hover:bg-indigo-700 transition shadow mt-4'; ['loc-equip','loc-local', 'loc-sipac', 'loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; }
+                const isEdit = e.target.value === 'edit';
+                const container = document.getElementById('loc-edit-container');
+                const input = document.getElementById('loc-edit-input');
+                const btn = document.getElementById('btn-save-loc');
+                if(isEdit) {
+                    container.classList.remove('hidden'); btn.innerText = 'Gravar Alterações'; btn.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded hover:bg-orange-600 transition shadow mt-4';
+                } else {
+                    container.classList.add('hidden'); input.value = ''; btn.innerText = 'Mapear Equipamento'; btn.className = 'w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded hover:bg-indigo-700 transition shadow mt-4';
+                    ['loc-equip','loc-local', 'loc-sipac', 'loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1;
+                }
             });
         }
 
         if(document.getElementById('loc-edit-input')) {
             document.getElementById('loc-edit-input').addEventListener('input', (e) => {
                 const text = e.target.value; const dl = document.getElementById('lista-edit-locais'); dl.innerHTML = ''; 
-                if(text.length >= 3) { const search = text.toLowerCase().split(' '); let count = 0; for(let key in mapEditLocais) { if(search.every(term => key.toLowerCase().includes(term))) { let option = document.createElement('option'); option.value = key; dl.appendChild(option); count++; if(count > 40) break; } } }
+                if(text.length >= 3) {
+                    const search = text.toLowerCase().split(' '); let count = 0;
+                    for(let key in mapEditLocais) {
+                        if(search.every(term => key.toLowerCase().includes(term))) {
+                            let option = document.createElement('option'); option.value = key; dl.appendChild(option); count++; if(count > 40) break;
+                        }
+                    }
+                }
                 const item = mapEditLocais[text];
-                if(item) { document.getElementById('loc-edit-id').value = item.id; document.getElementById('loc-equip').value = item.Equipamento || ''; document.getElementById('loc-local').value = item.Local || ''; document.getElementById('loc-sipac').value = item.LocalSipac || ''; document.getElementById('loc-marca').value = item.Marca || ''; document.getElementById('loc-qtd').value = item.Quantidade || 1; document.getElementById('loc-serie').value = item.Serie || ''; document.getElementById('loc-patrimonio').value = item.Patrimonio || ''; } 
-                else { ['loc-edit-id','loc-equip','loc-local','loc-sipac','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; }
+                if(item) {
+                    document.getElementById('loc-edit-id').value = item.id; document.getElementById('loc-equip').value = item.Equipamento || ''; document.getElementById('loc-local').value = item.Local || ''; document.getElementById('loc-sipac').value = item.LocalSipac || ''; document.getElementById('loc-marca').value = item.Marca || ''; document.getElementById('loc-qtd').value = item.Quantidade || 1; document.getElementById('loc-serie').value = item.Serie || ''; document.getElementById('loc-patrimonio').value = item.Patrimonio || '';
+                } else {
+                    ['loc-edit-id','loc-equip','loc-local','loc-sipac','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1;
+                }
             });
         }
 
@@ -956,9 +967,12 @@
             }; reader.readAsArrayBuffer(fileInput.files[0]);
         });
 
+        // ================= CADASTRO ESTOQUE (MANUAL E LOTE) =================
         function atualizarSelectEdicaoEstoque() {
             const dl = document.getElementById('lista-edit-estoque'); if(!dl) return; dl.innerHTML = ''; mapEditEstoque = {};
-            [...estoqueLocal].sort((a,b) => (a.Componente||'').localeCompare(b.Componente||'')).forEach(item => { const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || ''} | Série: ${item.Série || ''}`; mapEditEstoque[text] = item; });
+            [...estoqueLocal].sort((a,b) => (a.Componente||'').localeCompare(b.Componente||'')).forEach(item => {
+                const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || ''} | Série: ${item.Série || ''}`; mapEditEstoque[text] = item;
+            });
         }
 
         if(document.getElementById('estoque-action-type')) {
@@ -972,10 +986,20 @@
         if(document.getElementById('estoque-edit-input')) {
             document.getElementById('estoque-edit-input').addEventListener('input', (e) => {
                 const text = e.target.value; const dl = document.getElementById('lista-edit-estoque'); dl.innerHTML = ''; 
-                if(text.length >= 3) { const search = text.toLowerCase().split(' '); let count = 0; for(let key in mapEditEstoque) { if(search.every(term => key.toLowerCase().includes(term))) { let option = document.createElement('option'); option.value = key; dl.appendChild(option); count++; if(count > 40) break; } } }
+                if(text.length >= 3) {
+                    const search = text.toLowerCase().split(' '); let count = 0;
+                    for(let key in mapEditEstoque) {
+                        if(search.every(term => key.toLowerCase().includes(term))) {
+                            let option = document.createElement('option'); option.value = key; dl.appendChild(option); count++; if(count > 40) break; 
+                        }
+                    }
+                }
                 const item = mapEditEstoque[text];
-                if(item) { document.getElementById('estoque-edit-id').value = item.id; document.getElementById('form-cat').value = item.Categoria || ''; document.getElementById('form-comp').value = item.Componente || ''; document.getElementById('form-mod').value = item.Modelo || ''; document.getElementById('form-esp').value = item.Especificação || ''; document.getElementById('form-local').value = item.Local || ''; document.getElementById('form-serie-estoque').value = item.Série || ''; document.getElementById('form-patrimonio-estoque').value = item.Patrimonio || ''; document.getElementById('form-qtd').value = item.Quantidade || 1; document.getElementById('form-minimo').value = item.EstoqueMinimo || 5; } 
-                else { ['estoque-edit-id','form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5; }
+                if(item) {
+                    document.getElementById('estoque-edit-id').value = item.id; document.getElementById('form-cat').value = item.Categoria || ''; document.getElementById('form-comp').value = item.Componente || ''; document.getElementById('form-mod').value = item.Modelo || ''; document.getElementById('form-esp').value = item.Especificação || ''; document.getElementById('form-local').value = item.Local || ''; document.getElementById('form-serie-estoque').value = item.Série || ''; document.getElementById('form-patrimonio-estoque').value = item.Patrimonio || ''; document.getElementById('form-qtd').value = item.Quantidade || 1; document.getElementById('form-minimo').value = item.EstoqueMinimo || 5;
+                } else {
+                    ['estoque-edit-id','form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5;
+                }
             });
         }
 
@@ -985,9 +1009,11 @@
             if(!cat || !comp || !local || isNaN(qtd) || qtd <= 0) return showToast("Preencha Categoria, Componente, Local e Quantidade.", "error");
             const btn = document.getElementById('btn-save-item'); const originalText = btn.innerText; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
             try {
-                if(actionType === 'edit' && editId) { await updateDoc(doc(db, "estoque", editId), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque }); await registrarLog("MOVIMENTAÇÃO (ESTOQUE)", `${comp} - ${mod}`, qtd, `Local: ${local}`); showToast("Alteração gravada com sucesso!"); } 
-                else {
-                    const existente = estoqueLocal.find(i => { let matchPatr = patrim && (i.Patrimonio === patrim || i.Série === patrim); let matchSerie = serie && (i.Série === serie || i.Patrimonio === serie); if(matchPatr || matchSerie) return true; return (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'') === local; });
+                if(actionType === 'edit' && editId) {
+                    await updateDoc(doc(db, "estoque", editId), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque });
+                    await registrarLog("MOVIMENTAÇÃO (ESTOQUE)", `${comp} - ${mod}`, qtd, `Local: ${local}`); showToast("Alteração gravada com sucesso!");
+                } else {
+                    const existente = estoqueLocal.find(i => { let matchPatr = (patrim && (i.Patrimonio === patrim || i.Série === patrim)); let matchSerie = (serie && (i.Série === serie || i.Patrimonio === serie)); if(matchPatr || matchSerie) return true; return (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'') === local; });
                     if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd, EstoqueMinimo: minEstoque });
                     else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque });
                     await registrarLog("ENTRADA", `${comp} (${esp})`, qtd, local); showToast("Entrada registada!"); 
@@ -1007,7 +1033,7 @@
                     for (let row of json) {
                         const cat = getVal(row, ['CATEGORIA', 'TIPO', 'GRUPO']) || 'Geral'; const comp = getVal(row, ['COMPONENTE', 'EQUIPAMENTO', 'NOME', 'ITEM']); const mod = getVal(row, ['MODELO', 'MARCA/MODELO', 'MARCA MODELO', 'MARCA']); const esp = getVal(row, ['ESPECIFICAÇÃO', 'ESPECIFICACAO', 'Especificação', 'Especificacao']); const local = getVal(row, ['LOCAL FISICO', 'LOCAL', 'Local', 'LOCAL FÍSICO']); const serie = getVal(row, ['Nº DE SÉRIE', 'N DE SERIE', 'Nº DE SERIE', 'Nº Série', 'N Serie', 'SÉRIE', 'Série', 'SERIE', 'NUMERO DE SERIE']); const patrim = getVal(row, ['Nº PATRIMÔNIO', 'Nº PATRIMONIO', 'N Patrimônio', 'N Patrimonio', 'PATRIMÔNIO', 'PATRIMONIO', 'Patrimônio', 'Patrimonio']); const minEst = parseInt(getVal(row, ['ESTOQUE MÍNIMO', 'ESTOQUE MINIMO', 'Estoque Minimo', 'ESTOQUE MÍNIMO'])) || 5; const qtd = parseInt(getVal(row, ['QUANTIDADE', 'Quantidade', 'QTD', 'Qtd'])) || 1;
                         if(!comp) continue;
-                        const existente = estoqueLocal.find(i => { let matchPatr = patrim && (i.Patrimonio === patrim || i.Série === patrim); let matchSerie = serie && (i.Série === serie || i.Patrimonio === serie); if(matchPatr || matchSerie) return true; return (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'') === local; });
+                        const existente = estoqueLocal.find(i => { let matchPatr = (patrim && (i.Patrimonio === patrim || i.Série === patrim)); let matchSerie = (serie && (i.Série === serie || i.Patrimonio === serie)); if(matchPatr || matchSerie) return true; return (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'') === local; });
                         if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd, EstoqueMinimo: minEst });
                         else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, EstoqueMinimo: minEst, Quantidade: qtd }); cont++;
                     }
@@ -1016,6 +1042,7 @@
             }; reader.readAsArrayBuffer(fileInput.files[0]);
         });
 
+        // ================= ABA SAÍDA (AUTO-COMPLETAR INTELIGENTE) =================
         function atualizarDatalistSaida() {
             const dl = document.getElementById('lista-saida-items'); if(!dl) return; dl.innerHTML = ''; mapItensSaida = {};
             [...estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { const text = `[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||''}) - Qtd: ${i.Quantidade||0}`; mapItensSaida[text] = i; });
@@ -1032,15 +1059,18 @@
             document.getElementById('btn-register-saida').addEventListener('click', async () => {
                 const inputTexto = document.getElementById('saida-item-input').value; const qtdSaida = parseInt(document.getElementById('saida-qtd').value); const chamado = document.getElementById('saida-chamado').value.trim();
                 const itemDB = mapItensSaida[inputTexto];
-                if(!itemDB) return showToast("Equipamento não encontrado.", "error");
+                if(!itemDB) return showToast("Equipamento não encontrado ou seleção inválida. Selecione um item da lista.", "error");
                 if(isNaN(qtdSaida) || qtdSaida <= 0) return showToast("Quantidade inválida.", "error");
                 const btn = document.getElementById('btn-register-saida'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
                 if(qtdSaida > (itemDB.Quantidade||0)) { showToast("Estoque insuficiente para esta saída!", "error"); btn.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa'; return; }
-                try { await updateDoc(doc(db, "estoque", itemDB.id), { Quantidade: (itemDB.Quantidade||0) - qtdSaida }); await registrarLog("SAÍDA", `${itemDB.Componente} (${itemDB.Especificação})`, qtdSaida, chamado); showToast("Baixa processada com sucesso!"); document.getElementById('saida-item-input').value = ""; document.getElementById('saida-qtd').value = 1; document.getElementById('saida-chamado').value = ""; } catch(e) { showToast("Erro ao processar baixa.", "error"); } btn.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa';
+                try { 
+                    await updateDoc(doc(db, "estoque", itemDB.id), { Quantidade: (itemDB.Quantidade||0) - qtdSaida }); await registrarLog("SAÍDA", `${itemDB.Componente} (${itemDB.Especificação})`, qtdSaida, chamado); showToast("Baixa processada com sucesso!"); 
+                    document.getElementById('saida-item-input').value = ""; document.getElementById('saida-qtd').value = 1; document.getElementById('saida-chamado').value = ""; 
+                } catch(e) { showToast("Erro ao processar baixa.", "error"); } btn.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa';
             });
         }
 
-        // ================= COMPORTAMENTO DE NAVEGAÇÃO E BOTOES =================
+        // ================= COMPORTAMENTO DE NAVEGAÇÃO =================
         const tabsBtns = document.querySelectorAll('.tab-btn'), tabContents = document.querySelectorAll('.tab-content');
         tabsBtns.forEach(btn => { 
             btn.addEventListener('click', (e) => { 
@@ -1077,15 +1107,9 @@
             const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); 
         });
 
-        // RENDERIZAÇÃO INICIAL DA TELA COM ANIMAÇÕES
         setTimeout(() => {
             const kpis = document.querySelectorAll('.modern-card');
-            kpis.forEach((kpi, i) => {
-                kpi.style.opacity = '0';
-                kpi.style.transform = 'translateY(10px)';
-                kpi.style.transition = 'all 0.4s ease-out';
-                setTimeout(() => { kpi.style.opacity = '1'; kpi.style.transform = 'translateY(0)'; }, i * 100);
-            });
+            kpis.forEach((kpi, i) => { kpi.style.opacity = '0'; kpi.style.transform = 'translateY(10px)'; kpi.style.transition = 'all 0.4s ease-out'; setTimeout(() => { kpi.style.opacity = '1'; kpi.style.transform = 'translateY(0)'; }, i * 100); });
         }, 300);
     </script>
 </body>
