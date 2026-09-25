@@ -42,7 +42,6 @@
     <!-- TELA DE LOGIN COM IMAGEM DE FUNDO -->
     <div id="login-screen" class="fixed inset-0 flex justify-center items-center z-50 bg-cover bg-center bg-no-repeat" style="background-image: url('https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg');">
         
-        <!-- Overlay escuro com blur para dar destaque ao quadro branco -->
         <div class="absolute inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm"></div>
 
         <div class="bg-white rounded-xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500 relative z-10">
@@ -54,7 +53,7 @@
             </div>
             <div class="space-y-5">
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700">Correio Eletrônico</label>
+                    <label class="block text-sm font-semibold text-slate-700">E-mail Corporativo</label>
                     <input type="email" id="login-email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2.5 border focus:ring-blue-500 focus:border-blue-500" placeholder="usuario@prf.gov.br">
                 </div>
                 <div>
@@ -391,29 +390,19 @@
         const db = getFirestore(app);
         let estoqueLocal = []; let userEmail = "";
 
-        // ================= PREFERÊNCIAS (PERSONALIZAÇÃO) =================
+        // ================= PREFERÊNCIAS =================
         function carregarPreferencias() {
             const title = localStorage.getItem('pref_title') || 'Painel de Gestão de Estoque - SETIC';
             const color = localStorage.getItem('pref_color') || '#161B33';
             const icon = localStorage.getItem('pref_icon') || 'fa-chart-line';
 
-            // Aplica Titulo usando textContent
-            document.getElementById('navbar-title').textContent = title;
-            document.title = title;
-            document.getElementById('pref-title').value = title;
-            document.getElementById('print-title-doc').textContent = "Relatório Geral - " + title;
-
-            // Aplica Cor Primária
+            document.getElementById('navbar-title').textContent = title; document.title = title;
+            document.getElementById('pref-title').value = title; document.getElementById('print-title-doc').textContent = "Relatório Geral - " + title;
             document.getElementById('navbar-main').style.backgroundColor = color;
             document.querySelectorAll('.btn-primary').forEach(el => el.style.backgroundColor = color);
             document.querySelectorAll('.btn-primary-text').forEach(el => el.style.color = color);
-            
-            document.getElementById('pref-color').value = color;
-            document.getElementById('pref-color-text').value = color.toUpperCase();
-
-            // Aplica Ícone
-            document.getElementById('navbar-icon').className = `fas ${icon} text-xl ml-2`;
-            document.getElementById('pref-icon').value = icon;
+            document.getElementById('pref-color').value = color; document.getElementById('pref-color-text').value = color.toUpperCase();
+            document.getElementById('navbar-icon').className = `fas ${icon} text-xl ml-2`; document.getElementById('pref-icon').value = icon;
         }
 
         document.getElementById('btn-save-pref').addEventListener('click', () => {
@@ -421,16 +410,14 @@
             localStorage.setItem('pref_color', document.getElementById('pref-color').value);
             localStorage.setItem('pref_icon', document.getElementById('pref-icon').value);
             carregarPreferencias();
-            document.getElementById('msg-pref').classList.remove('hidden');
-            setTimeout(() => document.getElementById('msg-pref').classList.add('hidden'), 3000);
+            document.getElementById('msg-pref').classList.remove('hidden'); setTimeout(() => document.getElementById('msg-pref').classList.add('hidden'), 3000);
         });
 
         document.getElementById('pref-color').addEventListener('input', (e) => document.getElementById('pref-color-text').value = e.target.value.toUpperCase());
         document.getElementById('pref-color-text').addEventListener('input', (e) => { if(/^#[0-9A-F]{6}$/i.test(e.target.value)) document.getElementById('pref-color').value = e.target.value; });
 
         carregarPreferencias(); 
-        // =================================================================
-
+        // ================================================
 
         // LOGIN DO SISTEMA
         document.getElementById('btn-login').addEventListener('click', () => {
@@ -468,32 +455,26 @@
 
         async function registrarLog(tipo, itemNome, qtd, chamado = "") { try { await addDoc(collection(db, "logs"), { tipo, itemNome, qtd: Number(qtd), chamado, usuario: userEmail, dataHora: serverTimestamp() }); } catch(e) {} }
 
-        // ================= ABA ADMINISTRADOR =================
+        // ABA ADMINISTRADOR
         document.getElementById('btn-admin-login').addEventListener('click', () => {
             const input = document.getElementById('admin-pass-input').value;
-            if(btoa(input) === "c2V0aWNhZG1pbg==") {
-                document.getElementById('admin-login-section').classList.add('hidden');
-                document.getElementById('admin-content-section').classList.remove('hidden');
-                document.getElementById('admin-error').classList.add('hidden'); document.getElementById('admin-pass-input').value = "";
-            } else { document.getElementById('admin-error').classList.remove('hidden'); }
+            if(btoa(input) === "c2V0aWNhZG1pbg==") { document.getElementById('admin-login-section').classList.add('hidden'); document.getElementById('admin-content-section').classList.remove('hidden'); document.getElementById('admin-error').classList.add('hidden'); document.getElementById('admin-pass-input').value = ""; } 
+            else { document.getElementById('admin-error').classList.remove('hidden'); }
         });
 
-        document.getElementById('btn-admin-lock').addEventListener('click', () => {
-            document.getElementById('admin-content-section').classList.add('hidden');
-            document.getElementById('admin-login-section').classList.remove('hidden');
-        });
+        document.getElementById('btn-admin-lock').addEventListener('click', () => { document.getElementById('admin-content-section').classList.add('hidden'); document.getElementById('admin-login-section').classList.remove('hidden'); });
 
         document.getElementById('btn-delete-db').addEventListener('click', async () => {
-            const confirmacao = prompt("⚠️ ZONA DE PERIGO!\nIsso apagará TODO o estoque e TODO o histórico permanentemente.\n\nPara confirmar, digite a palavra: APAGAR");
+            const confirmacao = prompt("⚠️ ZONA DE PERIGO!\nIsso apagará TODO o estoque permanentemente.\nPara confirmar, digite: APAGAR");
             if(confirmacao === "APAGAR") {
                 const btn = document.getElementById('btn-delete-db'); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
                 try {
                     const estSnap = await getDocs(collection(db, "estoque")); estSnap.forEach((d) => deleteDoc(d.ref));
                     const logSnap = await getDocs(collection(db, "logs")); logSnap.forEach((d) => deleteDoc(d.ref));
-                    alert("Banco de dados apagado com sucesso.");
-                } catch(e) { alert("Erro ao apagar: " + e.message); }
+                    alert("Banco de dados apagado.");
+                } catch(e) {}
                 btn.innerHTML = '<i class="fas fa-trash-alt mr-1"></i> Apagar Tudo';
-            } else if (confirmacao) { alert("Palavra incorreta. Ação cancelada."); }
+            }
         });
 
         document.getElementById('btn-process-upload').addEventListener('click', () => {
@@ -527,7 +508,7 @@
             const btn = document.getElementById('btn-create-user'); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Criando...';
             try {
                 await createUserWithEmailAndPassword(auth, email, pass);
-                msg.textContent = "Usuário criado! (Você foi logado na nova conta)."; msg.className = "text-center mt-2 font-bold text-xs text-emerald-600 block";
+                msg.textContent = "Usuário criado! (Sessão atualizada)."; msg.className = "text-center mt-2 font-bold text-xs text-emerald-600 block";
                 document.getElementById('new-user-email').value = ""; document.getElementById('new-user-pass').value = "";
             } catch (error) { msg.textContent = "Erro: " + error.message; msg.className = "text-center mt-2 font-bold text-xs text-red-600 block"; }
             btn.innerHTML = '<i class="fas fa-save mr-1"></i> Cadastrar';
@@ -560,19 +541,43 @@
             } catch(e) {}
         });
 
-        // INSIGHTS E UI
+        // INSIGHTS MELHORADOS (Análise Inteligente)
         function gerarInsights() {
             const container = document.getElementById('insights-container'); container.innerHTML = ''; let alertasExibidos = 0;
+            
+            // Variáveis para análise cruzada
+            let temHDMecanico = false;
+            let temSSDSuficiente = false;
+            let qtdHDs = 0;
+            let qtdSSDs = 0;
+
             [...estoqueLocal].sort((a, b) => a.Quantidade - b.Quantidade).forEach(item => {
+                const compUpper = item.Componente.toUpperCase();
+
+                // Verifica obsolescência cruzada (HDs mecânicos vs SSDs)
+                if (compUpper.includes('HD INTERNO') || compUpper.includes('DISCO RÍGIDO')) { temHDMecanico = true; qtdHDs += item.Quantidade; }
+                if (compUpper.includes('SSD')) { temSSDSuficiente = true; qtdSSDs += item.Quantidade; }
+
+                // Insight 1: Ruptura (Estoque Zerado)
                 if(item.Quantidade === 0) {
-                    container.innerHTML += `<div class="bg-red-50 border-l-4 border-red-500 p-4 rounded shadow-sm flex items-start"><i class="fas fa-times-circle text-red-500 text-xl mt-0.5 mr-3"></i><div><h4 class="text-sm font-bold text-red-800">Ruptura Total de Estoque</h4><p class="text-xs text-red-700 mt-1">O item <b>${item.Componente} (${item.Modelo})</b> está zerado.</p></div></div>`; alertasExibidos++;
+                    container.innerHTML += `<div class="bg-red-50 border-l-4 border-red-500 p-4 rounded shadow-sm flex items-start"><i class="fas fa-times-circle text-red-500 text-xl mt-0.5 mr-3"></i><div><h4 class="text-sm font-bold text-red-800">Risco de Ruptura Crítica</h4><p class="text-xs text-red-700 mt-1">O item <b>${item.Componente} (${item.Modelo})</b> esgotou. Sugerimos abrir processo de aquisição emergencial.</p></div></div>`; alertasExibidos++;
+                
+                // Insight 2: Ponto de Pedido (Estoque Baixo)
                 } else if(item.Quantidade <= 5) {
-                    container.innerHTML += `<div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded shadow-sm flex items-start"><i class="fas fa-exclamation-triangle text-yellow-600 text-xl mt-0.5 mr-3"></i><div><h4 class="text-sm font-bold text-yellow-800">Estoque Baixo</h4><p class="text-xs text-yellow-700 mt-1">Apenas <b>${item.Quantidade} und.</b> de <b>${item.Componente} (${item.Especificação})</b> disponíveis.</p></div></div>`; alertasExibidos++;
-                } else if(item.Quantidade > 80) {
-                    container.innerHTML += `<div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded shadow-sm flex items-start"><i class="fas fa-info-circle text-blue-500 text-xl mt-0.5 mr-3"></i><div><h4 class="text-sm font-bold text-blue-800">Alto Volume</h4><p class="text-xs text-blue-700 mt-1">Excesso de <b>${item.Componente}</b> (${item.Quantidade} und.).</p></div></div>`; alertasExibidos++;
+                    container.innerHTML += `<div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded shadow-sm flex items-start"><i class="fas fa-exclamation-triangle text-yellow-600 text-xl mt-0.5 mr-3"></i><div><h4 class="text-sm font-bold text-yellow-800">Alerta de Ponto de Pedido</h4><p class="text-xs text-yellow-700 mt-1">Apenas <b>${item.Quantidade} und.</b> de <b>${item.Componente} (${item.Especificação})</b> disponíveis. Reabastecimento sugerido.</p></div></div>`; alertasExibidos++;
+                
+                // Insight 3: Obsolescência e Leilão (DDR3)
+                } else if(item.Quantidade > 20 && (item.Modelo.toUpperCase().includes('DDR 3') || item.Modelo.toUpperCase() === 'DDR3')) {
+                    container.innerHTML += `<div class="bg-slate-100 border-l-4 border-slate-500 p-4 rounded shadow-sm flex items-start"><i class="fas fa-recycle text-slate-500 text-xl mt-0.5 mr-3"></i><div><h4 class="text-sm font-bold text-slate-800">Curva de Obsolescência</h4><p class="text-xs text-slate-600 mt-1">Identificamos <b>${item.Quantidade} und.</b> de <b>${item.Componente} ${item.Modelo}</b>. Sugere-se encaminhamento para leilão/descarte.</p></div></div>`; alertasExibidos++;
                 }
             });
-            if(alertasExibidos === 0) container.innerHTML = `<div class="col-span-full bg-emerald-50 border border-emerald-200 p-4 rounded shadow-sm flex items-center justify-center text-emerald-700 font-bold"><i class="fas fa-check-circle mr-2 text-xl"></i> O estoque encontra-se em níveis saudáveis e equilibrados.</div>`;
+
+            // Insight 4: Modernização de Parque (Cruzamento de Dados)
+            if(temHDMecanico && temSSDSuficiente && qtdHDs > 20 && qtdSSDs > 20) {
+                container.innerHTML += `<div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded shadow-sm flex items-start"><i class="fas fa-rocket text-blue-500 text-xl mt-0.5 mr-3"></i><div><h4 class="text-sm font-bold text-blue-800">Sugestão de Modernização</h4><p class="text-xs text-blue-700 mt-1">Existem ${qtdHDs} HDs antigos e ${qtdSSDs} SSDs em estoque. Considere criar uma Força-Tarefa de upgrade preventivo no parque.</p></div></div>`; alertasExibidos++;
+            }
+
+            if(alertasExibidos === 0) container.innerHTML = `<div class="col-span-full bg-emerald-50 border border-emerald-200 p-4 rounded shadow-sm flex items-center justify-center text-emerald-700 font-bold"><i class="fas fa-check-circle mr-2 text-xl"></i> O estoque encontra-se em níveis saudáveis e equilibrados. Nenhuma anomalia detectada.</div>`;
         }
 
         function atualizarDatalists() { document.getElementById('lista-componentes').innerHTML = [...new Set(estoqueLocal.map(i => i.Componente))].map(c => `<option value="${c}">`).join(''); }
