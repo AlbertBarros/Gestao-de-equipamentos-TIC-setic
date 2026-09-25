@@ -68,7 +68,7 @@
         <div class="bg-white rounded-xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500 relative z-10">
             <div class="text-center mb-8">
                 <!-- LOGO BLINDADA -->
-                <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
+                <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
                 <h2 id="login-title" class="text-2xl font-bold text-slate-800">Almoxarifado TIC</h2>
                 <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p>
             </div>
@@ -102,7 +102,7 @@
             <div class="px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center space-x-3">
-                        <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" alt="PRF Logo" class="h-10">
+                        <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" class="h-10">
                         <i id="navbar-icon" class="fas fa-chart-line text-xl ml-2"></i>
                         <span id="navbar-title" class="font-bold text-lg tracking-wide whitespace-nowrap">Painel de Gestão de Estoque - SETIC</span>
                     </div>
@@ -147,7 +147,7 @@
                 </div>
             </div>
 
-            <!-- GRÁFICOS: Layout 3 Colunas -->
+            <!-- GRÁFICOS -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 md:col-span-2">
                     <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center justify-between">
@@ -224,7 +224,7 @@
                             </select>
                             <div class="relative">
                                 <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                                <input type="text" id="search-table-estoque" placeholder="Filtrar registro..." class="pl-9 pr-3 py-2 border border-gray-300 rounded text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                                <input type="text" id="search-table-estoque" placeholder="Filtrar registo..." class="pl-9 pr-3 py-2 border border-gray-300 rounded text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
                             </div>
                         </div>
                     </div>
@@ -302,7 +302,7 @@
                 <p class="text-lg font-bold mt-3 text-white" id="print-title-doc">Relatório Gerencial Analítico - Gestão de Estoque (SETIC)</p>
             </div>
             <!-- LOGO OFICIAL BLINDADA -->
-            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" alt="PRF Logo" class="h-20">
+            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" class="h-20">
         </div>
         <div class="px-6">
             <h2 class="text-xl font-bold text-slate-800">Parecer e Metodologia de Cálculo</h2>
@@ -336,7 +336,7 @@
                 <p style="margin: 2px 0 0 0; font-size: 10px; color: #555; font-family: Arial, sans-serif;" id="print-simple-date"></p>
             </div>
             <!-- LOGO FIXA INSTITUCIONAL BLINDADA -->
-            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" alt="PRF Logo" style="height: 65px;">
+            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" style="height: 65px;">
         </div>
         <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif;">
             <thead id="print-simple-thead"></thead>
@@ -414,18 +414,37 @@
                     <datalist id="lista-componentes"></datalist>
                 </div>
 
-                <!-- TAB SAÍDA -->
-                <div id="tab-saida" class="tab-content hidden">
+                <!-- TAB SAÍDA (ATUALIZADA COM FILTRO DE PESQUISA) -->
+                <div id="tab-saida" class="tab-content hidden h-full flex flex-col">
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Baixa de Material</h2>
-                    <p class="text-sm text-slate-500 mb-8 border-b pb-4">Despacho de componentes para atendimento de incidentes.</p>
-                    <div class="space-y-5 mb-8">
-                        <div><label class="block text-sm font-semibold text-slate-700">Equipamento em Estoque (Por Local)</label><select id="saida-select-item" class="mt-1 block w-full rounded-md border-gray-300 border p-3 bg-white shadow-sm"></select></div>
-                        <div class="grid grid-cols-2 gap-5">
-                            <div><label class="block text-sm font-semibold text-slate-700">Qtd Retirada</label><input type="number" id="saida-qtd" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm" min="1" value="1"></div>
-                            <div><label class="block text-sm font-semibold text-slate-700">Sistema / Chamado (GLPI)</label><input type="text" id="saida-chamado" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm" placeholder="Ex: GLPI-1234"></div>
+                    <p class="text-sm text-slate-500 mb-6 border-b pb-4">Despacho de componentes para atendimento de incidentes.</p>
+                    
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex-1">
+                        <div class="space-y-5 mb-8">
+                            <!-- NOVO CAMPO DE PESQUISA INTELIGENTE -->
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700">Filtro Rápido (Pesquisa de Item)</label>
+                                <div class="relative">
+                                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                                    <input type="text" id="saida-search" class="mt-1 block w-full rounded-md border-gray-300 border py-2.5 pl-10 shadow-sm focus:ring-red-500 focus:border-red-500" placeholder="Digite nome, modelo ou local para encontrar o equipamento rapidamente...">
+                                </div>
+                                <p class="text-xs text-slate-500 mt-1">A lista abaixo será atualizada conforme digita.</p>
+                            </div>
+
+                            <hr class="border-gray-200">
+
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700">Equipamento em Estoque (Selecione o Item Desejado)</label>
+                                <select id="saida-select-item" class="mt-1 block w-full rounded-md border-gray-300 border p-3 bg-white shadow-sm focus:ring-red-500 focus:border-red-500"></select>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-5">
+                                <div><label class="block text-sm font-semibold text-slate-700">Qtd Retirada</label><input type="number" id="saida-qtd" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500" min="1" value="1"></div>
+                                <div><label class="block text-sm font-semibold text-slate-700">Sistema / Chamado (GLPI)</label><input type="text" id="saida-chamado" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500" placeholder="Ex: GLPI-1234"></div>
+                            </div>
                         </div>
+                        <button id="btn-register-saida" class="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-md hover:bg-red-700 transition shadow text-lg"><i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa</button>
                     </div>
-                    <button id="btn-register-saida" class="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-md hover:bg-red-700 transition shadow">Confirmar Baixa</button>
                 </div>
 
                 <!-- TAB LOCALIDADE / RASTREIO -->
@@ -434,7 +453,6 @@
                     <p class="text-sm text-slate-500 mb-6 border-b pb-4">Mapeie fisicamente os equipamentos registando número de série e património.</p>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
                         
-                        <!-- NOVO LAYOUT: Cadastro Manual com Opção de Editar/Mover -->
                         <div class="bg-indigo-50/50 p-6 rounded-xl border border-indigo-100 shadow-sm flex flex-col">
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="font-bold text-indigo-800"><i class="fas fa-keyboard mr-2"></i>Gestão Manual</h3>
@@ -762,7 +780,7 @@
                 });
                 parecer.innerHTML = `A extração consolidou <b>${localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${userEmail} em ${dataAtual}.`;
                 resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades, com ${tEquipsUnicos.size} modelos distintos.`;
-                kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registos</p><p class="text-2xl font-black text-slate-800">${localidadesLocais.length}</p></div>`;
+                kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros</p><p class="text-2xl font-black text-slate-800">${localidadesLocais.length}</p></div>`;
                 thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Património</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
                 visualTitle.style.display = 'none'; chartsContainer.style.display = 'none';
             }
@@ -831,7 +849,7 @@
                 const btn = document.getElementById('btn-save-loc');
                 if(isEdit) {
                     sel.classList.remove('hidden');
-                    btn.innerText = 'Salvar Alterações';
+                    btn.innerText = 'Gravar Alterações';
                     btn.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded hover:bg-orange-600 transition shadow mt-4';
                 } else {
                     sel.classList.add('hidden'); sel.value = '';
@@ -950,13 +968,42 @@
             }; reader.readAsArrayBuffer(fileInput.files[0]);
         });
 
+        // ================= ABA SAÍDA COM FILTRO =================
+        function atualizarSelectSaida(filtroText = '') {
+            const sel = document.getElementById('saida-select-item'); if(!sel) return;
+            sel.innerHTML = '<option value="">-- Selecione o equipamento --</option>';
+            
+            let filtrados = estoqueLocal;
+            if(filtroText) {
+                filtrados = estoqueLocal.filter(i => (i.Categoria + i.Componente + i.Modelo + i.Local + i.Série + i.Patrimonio).toLowerCase().includes(filtroText.toLowerCase()));
+            }
+
+            filtrados.sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { 
+                sel.innerHTML += `<option value="${i.id}">[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||'N/A'}) - (Qtd: ${i.Quantidade||0})</option>`; 
+            });
+        }
+
+        if(document.getElementById('saida-search')) {
+            document.getElementById('saida-search').addEventListener('input', (e) => {
+                atualizarSelectSaida(e.target.value);
+            });
+        }
+
         if(document.getElementById('btn-register-saida')) document.getElementById('btn-register-saida').addEventListener('click', async () => {
             const idItem = document.getElementById('saida-select-item').value, qtdSaida = parseInt(document.getElementById('saida-qtd').value), chamado = document.getElementById('saida-chamado').value.trim();
             if(!idItem || isNaN(qtdSaida) || qtdSaida <= 0) return showToast("Valores inválidos.", "error");
             const btn = document.getElementById('btn-register-saida'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
             const itemDB = estoqueLocal.find(i => i.id === idItem);
             if(qtdSaida > (itemDB.Quantidade||0)) { showToast("Estoque insuficiente!", "error"); btn.innerHTML = 'Confirmar Baixa'; return; }
-            try { await updateDoc(doc(db, "estoque", idItem), { Quantidade: (itemDB.Quantidade||0) - qtdSaida }); await registrarLog("SAÍDA", `${itemDB.Componente} (${itemDB.Especificação})`, qtdSaida, chamado); showToast("Baixa processada!"); document.getElementById('saida-qtd').value = 1; document.getElementById('saida-chamado').value = ""; } catch(e) { showToast("Erro baixa.", "error"); } btn.innerHTML = 'Confirmar Baixa';
+            try { 
+                await updateDoc(doc(db, "estoque", idItem), { Quantidade: (itemDB.Quantidade||0) - qtdSaida }); 
+                await registrarLog("SAÍDA", `${itemDB.Componente} (${itemDB.Especificação})`, qtdSaida, chamado); 
+                showToast("Baixa processada!"); 
+                document.getElementById('saida-qtd').value = 1; 
+                document.getElementById('saida-chamado').value = ""; 
+                if(document.getElementById('saida-search')) document.getElementById('saida-search').value = "";
+                atualizarSelectSaida();
+            } catch(e) { showToast("Erro baixa.", "error"); } btn.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa';
         });
 
         // ================= INSIGHTS E UI =================
@@ -989,12 +1036,6 @@
                 filterCat.innerHTML = '<option value="">Todas as Categorias</option>';
                 categoriasUnicas.forEach(cat => filterCat.innerHTML += `<option value="${cat}">${cat}</option>`);
             }
-        }
-
-        function atualizarSelectSaida() {
-            const sel = document.getElementById('saida-select-item'); if(!sel) return;
-            sel.innerHTML = '<option value="">-- Selecione o equipamento --</option>';
-            [...estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { sel.innerHTML += `<option value="${i.id}">[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||'N/A'}) - (Qtd: ${i.Quantidade||0})</option>`; });
         }
         
         function atualizarInterfaceEstoque() {
