@@ -46,7 +46,6 @@
         <div class="absolute inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm"></div>
         <div class="bg-white rounded-xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500 relative z-10">
             <div class="text-center mb-8">
-                <!-- LOGO -->
                 <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
                 <h2 id="login-title" class="text-2xl font-bold text-slate-800">Almoxarifado TIC</h2>
                 <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p>
@@ -67,7 +66,6 @@
                     <i class="fas fa-sign-in-alt mr-2"></i> Autenticar
                 </button>
             </div>
-            <!-- MENSAGENS DO SISTEMA -->
             <div id="login-msg-container" class="mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm hidden">
                 <p id="login-msg-text"></p>
             </div>
@@ -127,15 +125,19 @@
                 </div>
             </div>
 
-            <!-- GRÁFICOS -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-6">Volume por Categoria</h3>
+            <!-- GRÁFICOS: Agora com 3 colunas para incluir a comparação de Saídas -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+                    <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-4">Volume por Categoria</h3>
                     <canvas id="chartCategoria"></canvas>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-6">Top 5 Equipamentos em Estoque</h3>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+                    <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-4">Top 5 Equipamentos</h3>
                     <canvas id="chartTopItems"></canvas>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+                    <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-4">Movimentação: Saídas vs Estoque</h3>
+                    <canvas id="chartComparativo"></canvas>
                 </div>
             </div>
 
@@ -160,8 +162,14 @@
 
                 <!-- CONTEÚDO: TABELA ESTOQUE -->
                 <div id="view-estoque-content">
-                    <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-                        <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Inventário Consolidado</h3>
+                    <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center gap-4">
+                        <div class="flex items-center gap-4">
+                            <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Inventário Consolidado</h3>
+                            <!-- NOVO BOTÃO DE EXPORTAÇÃO ESTOQUE -->
+                            <button id="btn-print-estoque-main" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
+                                <i class="fas fa-file-pdf mr-1.5"></i> Exportar PDF
+                            </button>
+                        </div>
                         <div class="relative">
                             <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
                             <input type="text" id="search-table-estoque" placeholder="Filtrar registro..." class="pl-9 pr-3 py-2 border border-gray-300 rounded text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
@@ -185,8 +193,14 @@
 
                 <!-- CONTEÚDO: TABELA RASTREAMENTO -->
                 <div id="view-rastreio-content" class="hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-indigo-50/30">
-                        <h3 class="text-sm font-bold text-indigo-800 uppercase tracking-wider"><i class="fas fa-map-pin mr-2"></i>Mapa de Ativos Físicos</h3>
+                    <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center bg-indigo-50/30 gap-4">
+                        <div class="flex items-center gap-4">
+                            <h3 class="text-sm font-bold text-indigo-800 uppercase tracking-wider"><i class="fas fa-map-pin mr-2"></i>Mapa de Ativos Físicos</h3>
+                            <!-- NOVO BOTÃO DE EXPORTAÇÃO RASTREIO -->
+                            <button id="btn-print-rastreio-main" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
+                                <i class="fas fa-file-pdf mr-1.5"></i> Exportar PDF
+                            </button>
+                        </div>
                         <div class="relative">
                             <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
                             <input type="text" id="search-table-rastreio" placeholder="Filtrar Local, Patrimônio, Série..." class="pl-9 pr-3 py-2 border border-indigo-200 rounded text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm">
@@ -228,11 +242,15 @@
             <h2 class="text-xl font-bold text-slate-800">Resumo Executivo</h2>
             <p class="text-sm text-slate-700 mt-1 mb-6 leading-relaxed" id="print-resumo"></p>
             <div class="grid grid-cols-4 gap-4 mb-8" id="print-kpis"></div>
+            
             <h2 class="text-xl font-bold text-slate-800 mb-3" id="print-visual-title">Análise Visual</h2>
-            <div class="grid grid-cols-2 gap-6 mb-8" id="print-charts-container">
-                <div><p class="text-xs font-bold text-slate-500 mb-1 uppercase text-center">Volume por Categoria</p><img id="print-chart-1" src="" class="w-full border p-2"></div>
-                <div><p class="text-xs font-bold text-slate-500 mb-1 uppercase text-center">Equipamentos em Foco</p><img id="print-chart-2" src="" class="w-full border p-2"></div>
+            <!-- Gráficos no PDF agora suportam os 3 painéis -->
+            <div class="grid grid-cols-3 gap-4 mb-8" id="print-charts-container">
+                <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center">Volume por Categoria</p><img id="print-chart-1" src="" class="w-full border p-2 bg-white"></div>
+                <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center">Equipamentos em Foco</p><img id="print-chart-2" src="" class="w-full border p-2 bg-white"></div>
+                <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center">Movimentação vs Estoque</p><img id="print-chart-3" src="" class="w-full border p-2 bg-white"></div>
             </div>
+            
             <h2 class="text-xl font-bold text-slate-800 mb-3">Detalhamento Analítico</h2>
             <table class="w-full text-left text-sm border-collapse">
                 <thead id="print-thead"></thead>
@@ -255,7 +273,7 @@
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg bg-blue-100 text-blue-800 font-bold transition flex items-center text-sm" data-target="tab-entrada"><i class="fas fa-plus-circle w-6"></i> Entrada Estoque</button></li>
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-saida"><i class="fas fa-minus-circle w-6"></i> Baixa / Saída</button></li>
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-indigo-100 hover:text-indigo-800 font-semibold transition flex items-center text-sm border-l-4 border-transparent hover:border-indigo-500" data-target="tab-localidade"><i class="fas fa-map-marker-alt w-6 text-indigo-500"></i> Locais / Rastreio</button></li>
-                    <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm mt-4" data-target="tab-relatorio"><i class="fas fa-file-pdf w-6"></i> Exportações</button></li>
+                    <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm mt-4" data-target="tab-relatorio"><i class="fas fa-file-pdf w-6"></i> Exportações CSV</button></li>
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-pref"><i class="fas fa-sliders-h w-6"></i> Preferências</button></li>
                 </ul>
                 <div class="border-t pt-4 mt-auto">
@@ -332,22 +350,10 @@
 
                 <!-- TAB RELATORIOS E EXPORTAÇÕES -->
                 <div id="tab-relatorio" class="tab-content hidden h-full flex flex-col justify-center items-center">
-                    <i class="fas fa-file-contract text-6xl text-slate-300 mb-6"></i>
-                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Exportações e Relatórios Oficiais</h2>
-                    <p class="text-slate-500 mb-8 max-w-lg text-center">Os relatórios em PDF utilizam dados capturados em tempo real, gerando documentos analíticos nos padrões formais de impressão, com selo, assinatura de data/hora e análises visuais incorporadas.</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl mb-8">
-                        <div class="border rounded-xl p-6 bg-blue-50 shadow-sm text-center">
-                            <i class="fas fa-boxes text-blue-500 text-3xl mb-3"></i>
-                            <h3 class="font-bold text-slate-800 mb-4">Relatório Consolidado</h3>
-                            <button id="btn-print-estoque" class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700 transition shadow flex justify-center items-center"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF de Estoque</button>
-                        </div>
-                        <div class="border rounded-xl p-6 bg-indigo-50 shadow-sm text-center">
-                            <i class="fas fa-map-marker-alt text-indigo-500 text-3xl mb-3"></i>
-                            <h3 class="font-bold text-slate-800 mb-4">Relatório de Rastreio</h3>
-                            <button id="btn-print-rastreio" class="w-full bg-indigo-600 text-white font-bold py-3 rounded hover:bg-indigo-700 transition shadow flex justify-center items-center"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF de Locais</button>
-                        </div>
-                    </div>
-                    <button id="btn-export-csv" class="text-slate-500 hover:text-slate-800 font-bold transition flex items-center underline"><i class="fas fa-file-csv mr-2"></i> Ou exportar apenas os dados brutos em CSV</button>
+                    <i class="fas fa-file-csv text-6xl text-slate-300 mb-6"></i>
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Exportações em CSV</h2>
+                    <p class="text-slate-500 mb-8 max-w-lg text-center">Os relatórios gerenciais em PDF agora são gerados diretamente na tela principal do sistema (na aba de Estoque ou de Rastreio). Use o botão abaixo apenas se precisar extrair os dados brutos do estoque para uma planilha Excel.</p>
+                    <button id="btn-export-csv" class="bg-emerald-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-emerald-700 transition flex items-center shadow-md"><i class="fas fa-file-excel mr-2 text-xl"></i> Exportar Estoque em Excel (CSV)</button>
                 </div>
 
                 <!-- TAB PREFERÊNCIAS -->
@@ -355,28 +361,9 @@
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Preferências do Sistema</h2>
                     <p class="text-sm text-slate-500 mb-8 border-b pb-4">Personalize a aparência do painel oficial.</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Título do Painel Oficial</label>
-                            <input type="text" id="pref-title" class="block w-full rounded-md border-gray-300 border p-2.5 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Cor Primária (Claro)</label>
-                            <div class="flex items-center">
-                                <input type="color" id="pref-color" class="h-11 w-12 rounded border border-gray-300 cursor-pointer p-0.5">
-                                <input type="text" id="pref-color-text" class="ml-2 block w-full rounded-md border-gray-300 border p-2.5 shadow-sm uppercase font-mono text-sm">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Ícone do Cabeçalho</label>
-                            <select id="pref-icon" class="block w-full rounded-md border-gray-300 border p-2.5 shadow-sm bg-white focus:ring-blue-500 focus:border-blue-500">
-                                <option value="fa-chart-line">Gráfico de Linhas</option>
-                                <option value="fa-boxes">Caixas / Estoque</option>
-                                <option value="fa-server">Servidor</option>
-                                <option value="fa-laptop-code">TI / Computador</option>
-                                <option value="fa-tools">Ferramentas</option>
-                                <option value="fa-shield-alt">Escudo / Segurança</option>
-                            </select>
-                        </div>
+                        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Título do Painel Oficial</label><input type="text" id="pref-title" class="block w-full rounded-md border-gray-300 border p-2.5 shadow-sm focus:ring-blue-500 focus:border-blue-500"></div>
+                        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Cor Primária (Claro)</label><div class="flex items-center"><input type="color" id="pref-color" class="h-11 w-12 rounded border border-gray-300 cursor-pointer p-0.5"><input type="text" id="pref-color-text" class="ml-2 block w-full rounded-md border-gray-300 border p-2.5 shadow-sm uppercase font-mono text-sm"></div></div>
+                        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Ícone do Cabeçalho</label><select id="pref-icon" class="block w-full rounded-md border-gray-300 border p-2.5 shadow-sm bg-white focus:ring-blue-500 focus:border-blue-500"><option value="fa-chart-line">Gráfico de Linhas</option><option value="fa-boxes">Caixas / Estoque</option><option value="fa-server">Servidor</option><option value="fa-laptop-code">TI / Computador</option><option value="fa-tools">Ferramentas</option><option value="fa-shield-alt">Escudo / Segurança</option></select></div>
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-1">Fundo da Tela de Login</label>
                             <div class="flex items-center space-x-2">
@@ -408,7 +395,6 @@
                         </div>
 
                         <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-                            <!-- Importar Planilha -->
                             <div class="border rounded-xl p-5 bg-slate-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-slate-800 mb-2"><i class="fas fa-file-excel text-emerald-600 mr-2"></i> Alimentar Base</h3>
                                 <p class="text-[11px] text-slate-500 mb-3">Carregue arquivo .xlsx estruturado.</p>
@@ -416,8 +402,6 @@
                                 <button id="btn-process-upload" class="btn-primary w-full bg-[#161B33] text-white font-bold py-2 px-2 rounded hover:opacity-90 transition text-sm mt-auto"><i class="fas fa-cloud-upload-alt mr-1"></i> Processar</button>
                                 <p id="msg-upload" class="text-center mt-2 font-bold text-xs hidden"></p>
                             </div>
-
-                            <!-- Criar Usuário -->
                             <div class="border border-blue-200 rounded-xl p-5 bg-blue-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-user-plus text-blue-600 mr-2"></i> Novo Usuário</h3>
                                 <p class="text-[11px] text-blue-600 mb-2">Atenção: Cadastrar um novo logará você nele.</p>
@@ -426,20 +410,11 @@
                                 <button id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 px-2 rounded hover:bg-blue-700 transition text-sm shadow mt-auto"><i class="fas fa-save mr-1"></i> Cadastrar</button>
                                 <p id="msg-create-user" class="text-center mt-2 font-bold text-xs hidden"></p>
                             </div>
-
-                            <!-- Excluir Usuário (Botão para o Firebase Console) -->
                             <div class="border border-orange-200 rounded-xl p-5 bg-orange-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-orange-800 mb-2"><i class="fas fa-user-minus text-orange-600 mr-2"></i> Gerir Acessos</h3>
-                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">
-                                    Para evitar ataques ao sistema, o Firebase bloqueia a exclusão de usuários pelo painel web.<br><br>
-                                    A demissão/exclusão deve ser feita diretamente no seu Console Oficial.
-                                </p>
-                                <a href="https://console.firebase.google.com/project/gestao-de-equipamentos-tic/authentication/users" target="_blank" class="w-full bg-orange-600 text-white font-bold py-2.5 px-2 rounded hover:bg-orange-700 transition text-sm shadow mt-auto flex items-center justify-center text-center">
-                                    <i class="fas fa-external-link-alt mr-2"></i> Abrir Firebase Console
-                                </a>
+                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">Para evitar ataques ao sistema, o Firebase bloqueia a exclusão de usuários pelo painel web.<br><br>A demissão/exclusão deve ser feita diretamente no seu Console Oficial.</p>
+                                <a href="https://console.firebase.google.com/project/gestao-de-equipamentos-tic/authentication/users" target="_blank" class="w-full bg-orange-600 text-white font-bold py-2.5 px-2 rounded hover:bg-orange-700 transition text-sm shadow mt-auto flex items-center justify-center text-center"><i class="fas fa-external-link-alt mr-2"></i> Abrir Firebase Console</a>
                             </div>
-
-                            <!-- Zona de Perigo -->
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between">
                                 <div>
                                     <h3 class="font-bold text-red-800 mb-1"><i class="fas fa-exclamation-triangle text-red-600 mr-2"></i> Zona de Perigo</h3>
@@ -452,7 +427,6 @@
                             </div>
                         </div>
 
-                        <!-- Auditoria (Logs) -->
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="font-bold text-slate-800"><i class="fas fa-history text-blue-600 mr-2"></i> Auditoria de Movimentações (Logs)</h3>
                             <button id="btn-export-logs-pdf" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition"><i class="fas fa-file-pdf mr-1"></i> Exportar Logs PDF</button>
@@ -504,6 +478,7 @@
         let logsLocal = []; 
         let userEmail = "";
         let tempBgBase64 = null; 
+        let chartComp = null; // Variável Global do Novo Gráfico
 
         // ================= PREFERÊNCIAS E CUSTOMIZAÇÃO =================
         function carregarPreferencias() {
@@ -512,12 +487,10 @@
             const icon = localStorage.getItem('pref_icon') || 'fa-chart-line';
             const bgImage = localStorage.getItem('pref_bg') || "https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg";
 
-            // Sincronizando o ID correto (print-title-doc)
             document.getElementById('navbar-title').textContent = title; 
             document.getElementById('login-title').textContent = title; 
             document.title = title;
             document.getElementById('pref-title').value = title; 
-            document.getElementById('print-title-doc').textContent = "Relatório Geral - " + title;
             
             document.getElementById('navbar-main').style.backgroundColor = color;
             document.querySelectorAll('.btn-primary').forEach(el => el.style.backgroundColor = color);
@@ -619,7 +592,7 @@
         function iniciarSistema() {
             onSnapshot(collection(db, "estoque"), (snapshot) => {
                 estoqueLocal = []; snapshot.forEach((doc) => { estoqueLocal.push({ id: doc.id, ...doc.data() }); });
-                atualizarInterfaceEstoque(); atualizarDatalists(); atualizarSelectSaida(); prepararRelatorioImpressao(); gerarInsights();
+                atualizarInterfaceEstoque(); atualizarDatalists(); atualizarSelectSaida(); gerarInsights();
             });
             onSnapshot(collection(db, "localidades"), (snapshot) => {
                 localidadesLocais = []; snapshot.forEach((doc) => { localidadesLocais.push({ id: doc.id, ...doc.data() }); });
@@ -636,24 +609,27 @@
                     let userLogInfo = log.usuario ? `<br><span class="text-xs text-gray-400">Por: ${log.usuario}</span>` : '';
                     tbody.innerHTML += `<tr class="hover:bg-slate-100 transition"><td class="px-4 py-3 whitespace-nowrap text-slate-500 font-medium">${dateStr}</td><td class="px-4 py-3 whitespace-nowrap font-bold ${corAcao}"><i class="fas ${iconAcao} mr-1"></i> ${log.tipo}</td><td class="px-4 py-3 text-slate-800 font-semibold">${log.itemNome}</td><td class="px-4 py-3 font-black text-slate-800">${log.qtd}</td><td class="px-4 py-3 text-slate-500 font-medium">${log.chamado || '-'}${userLogInfo}</td></tr>`;
                 });
+                atualizarInterfaceEstoque(); // Atualiza gráfico de saídas sempre que houver log novo
             });
         }
 
         async function registrarLog(tipo, itemNome, qtd, chamado = "") { try { await addDoc(collection(db, "logs"), { tipo, itemNome, qtd: Number(qtd), chamado, usuario: userEmail, dataHora: serverTimestamp() }); } catch(e) {} }
 
-        // ================= GERAÇÃO DE RELATÓRIO PDF =================
+        // ================= GERAÇÃO DE RELATÓRIO PDF (BOTÕES NO CABEÇALHO) =================
         function gerarRelatorioPDF(tipoRelatorio) {
             const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5);
             const titleDoc = document.getElementById('print-title-doc'), parecer = document.getElementById('print-parecer'), resumo = document.getElementById('print-resumo'), kpisContainer = document.getElementById('print-kpis'), thead = document.getElementById('print-thead'), tbody = document.getElementById('print-tbody'), chartsContainer = document.getElementById('print-charts-container'), visualTitle = document.getElementById('print-visual-title');
             document.getElementById('print-date').innerText = `Documento eletrônico gerado por: ${userEmail} em ${dataAtual} às ${horaAtual}.`;
 
             if(tipoRelatorio === 'estoque') {
-                titleDoc.textContent = "Relatório Gerencial Analítico - Estoque Consolidado";
+                const titleBase = localStorage.getItem('pref_title') || 'Painel de Gestão de Estoque - SETIC';
+                titleDoc.textContent = `Relatório Consolidado - ${titleBase}`;
+                
                 let tTotal = 0, tZerados = 0, tBaixos = 0; let categorias = new Set(); tbody.innerHTML = '';
-                [...estoqueLocal].sort((a,b) => a.Categoria.localeCompare(b.Categoria)).forEach(i => {
-                    tTotal += i.Quantidade; categorias.add(i.Categoria);
+                [...estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => {
+                    tTotal += (i.Quantidade || 0); categorias.add(i.Categoria || 'Geral');
                     if(i.Quantidade === 0) tZerados++; else if(i.Quantidade <= 5) tBaixos++;
-                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria}</td><td class="border px-2 py-1">${i.Componente}</td><td class="border px-2 py-1">${i.Modelo} / ${i.Especificação}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade}</td></tr>`;
+                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||'-'}</td><td class="border px-2 py-1">${i.Componente||'-'}</td><td class="border px-2 py-1">${i.Modelo||'-'} / ${i.Especificação||'-'}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`;
                 });
                 let taxaCritica = estoqueLocal.length > 0 ? (((tZerados + tBaixos) / estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1);
 
@@ -672,16 +648,21 @@
                 `;
 
                 thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
+                
+                // Injeta as 3 fotos dos gráficos
                 visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid';
                 document.getElementById('print-chart-1').src = document.getElementById('chartCategoria').toDataURL('image/png');
                 document.getElementById('print-chart-2').src = document.getElementById('chartTopItems').toDataURL('image/png');
+                document.getElementById('print-chart-3').src = document.getElementById('chartComparativo').toDataURL('image/png');
 
             } else if (tipoRelatorio === 'rastreio') {
-                titleDoc.textContent = "Relatório Gerencial Analítico - Rastreamento de Ativos";
+                const titleBase = localStorage.getItem('pref_title') || 'Painel de Gestão de Estoque - SETIC';
+                titleDoc.textContent = `Relatório de Rastreio - ${titleBase}`;
+                
                 let tLocaisUnicos = new Set(), tVolumeRastreado = 0, tEquipsUnicos = new Set(); tbody.innerHTML = '';
-                [...localidadesLocais].sort((a,b) => a.Local.localeCompare(b.Local)).forEach(loc => {
-                    tLocaisUnicos.add(loc.Local); tVolumeRastreado += loc.Quantidade; tEquipsUnicos.add(loc.Equipamento);
-                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento}</td><td class="border px-2 py-1">${loc.Local}</td><td class="border px-2 py-1 font-mono text-[10px]">${loc.Serie}</td><td class="border px-2 py-1 font-mono text-[10px]">${loc.Patrimonio}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade}</td></tr>`;
+                [...localidadesLocais].sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
+                    tLocaisUnicos.add(loc.Local || 'N/A'); tVolumeRastreado += (loc.Quantidade||0); tEquipsUnicos.add(loc.Equipamento || 'N/A');
+                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento||'-'}</td><td class="border px-2 py-1">${loc.Local||'-'}</td><td class="border px-2 py-1 font-mono text-[10px]">${loc.Serie||'-'}</td><td class="border px-2 py-1 font-mono text-[10px]">${loc.Patrimonio||'-'}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`;
                 });
 
                 parecer.innerHTML = `A presente extração consolidou um universo de <b>${localidadesLocais.length}</b> linhas de rastreabilidade de ativos implantados fisicamente. Documento processado sob os filtros de totalidade espacial.`;
@@ -700,6 +681,10 @@
             window.print();
         }
 
+        // LIGAÇÃO DOS NOVOS BOTÕES NAS TABELAS PRINCIPAIS
+        document.getElementById('btn-print-estoque-main').addEventListener('click', () => gerarRelatorioPDF('estoque'));
+        document.getElementById('btn-print-rastreio-main').addEventListener('click', () => gerarRelatorioPDF('rastreio'));
+        // Liga os do menu lateral também caso clique lá
         document.getElementById('btn-print-estoque').addEventListener('click', () => gerarRelatorioPDF('estoque'));
         document.getElementById('btn-print-rastreio').addEventListener('click', () => gerarRelatorioPDF('rastreio'));
 
@@ -760,8 +745,8 @@
                     for (let row of json) {
                         const cat = row['Categoria']||'Geral', comp = row['Componente']||'Desc', mod = row['Modelo']||'N/A', esp = row['Especificação']||row['Especificacao']||'N/A', qtd = parseInt(row['Quantidade']||1);
                         if(comp === 'Desc') continue;
-                        const existente = estoqueLocal.find(i => i.Componente === comp && i.Modelo === mod && i.Especificação === esp);
-                        if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: existente.Quantidade + qtd });
+                        const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp);
+                        if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd });
                         else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Quantidade: qtd });
                         cont++;
                     }
@@ -821,8 +806,8 @@
 
         function atualizarInterfaceRastreio() {
             const tbody = document.getElementById('rastreio-tbody'); tbody.innerHTML = '';
-            [...localidadesLocais].sort((a,b) => a.Local.localeCompare(b.Local)).forEach(loc => {
-                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade}</td></tr>`;
+            [...localidadesLocais].sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
+                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||'-'}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
             });
         }
 
@@ -830,9 +815,9 @@
         document.getElementById('btn-save-item').addEventListener('click', async () => {
             const cat = document.getElementById('form-cat').value.trim(), comp = document.getElementById('form-comp').value.trim(), mod = document.getElementById('form-mod').value.trim(), esp = document.getElementById('form-esp').value.trim(), qtd = parseInt(document.getElementById('form-qtd').value);
             if(!cat || !comp || isNaN(qtd) || qtd <= 0) return alert("Preencha os campos obrigatórios.");
-            const existente = estoqueLocal.find(i => i.Componente === comp && i.Modelo === mod && i.Especificação === esp);
+            const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp);
             try {
-                if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: existente.Quantidade + qtd });
+                if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd });
                 else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Quantidade: qtd });
                 await registrarLog("ENTRADA", `${comp} - ${mod} (${esp})`, qtd, "");
                 document.getElementById('msg-entrada').classList.remove('hidden'); setTimeout(() => document.getElementById('msg-entrada').classList.add('hidden'), 3000); document.getElementById('form-qtd').value = 1;
@@ -843,84 +828,139 @@
             const idItem = document.getElementById('saida-select-item').value, qtdSaida = parseInt(document.getElementById('saida-qtd').value), chamado = document.getElementById('saida-chamado').value.trim(), msgObj = document.getElementById('msg-saida');
             if(!idItem || isNaN(qtdSaida) || qtdSaida <= 0) return alert("Valores inválidos.");
             const itemDB = estoqueLocal.find(i => i.id === idItem);
-            if(qtdSaida > itemDB.Quantidade) { msgObj.textContent = "Estoque insuficiente!"; msgObj.className = "text-center mt-3 font-bold text-red-600 block"; return; }
+            if(qtdSaida > (itemDB.Quantidade||0)) { msgObj.textContent = "Estoque insuficiente!"; msgObj.className = "text-center mt-3 font-bold text-red-600 block"; return; }
             try {
-                await updateDoc(doc(db, "estoque", idItem), { Quantidade: itemDB.Quantidade - qtdSaida });
+                await updateDoc(doc(db, "estoque", idItem), { Quantidade: (itemDB.Quantidade||0) - qtdSaida });
                 await registrarLog("SAÍDA", `${itemDB.Componente} - ${itemDB.Modelo} (${itemDB.Especificação})`, qtdSaida, chamado);
                 msgObj.textContent = "Baixa processada!"; msgObj.className = "text-center mt-3 font-bold text-emerald-600 block"; document.getElementById('saida-qtd').value = 1; document.getElementById('saida-chamado').value = ""; setTimeout(() => msgObj.classList.add('hidden'), 3000);
             } catch(e) {}
         });
 
-        // INSIGHTS MELHORADOS
+        // ================= INSIGHTS COM PROTEÇÃO =================
         function gerarInsights() {
-            const container = document.getElementById('insights-container'); container.innerHTML = ''; let alertasExibidos = 0;
+            const container = document.getElementById('insights-container'); container.innerHTML = ''; 
             let zerados = [], baixos = [], maiorVolume = null, totalItens = 0, hdCount = 0, ssdCount = 0;
 
+            if (!estoqueLocal || estoqueLocal.length === 0) {
+                container.innerHTML = `<div class="col-span-3 bg-gray-50 border-l-4 border-gray-400 p-4 rounded-xl shadow-sm text-gray-500 font-medium flex items-center"><i class="fas fa-info-circle mr-2 text-xl"></i> Sem dados no estoque.</div>`;
+                return;
+            }
+
             estoqueLocal.forEach(item => {
-                totalItens += item.Quantidade;
-                if (item.Quantidade === 0) zerados.push(item); else if (item.Quantidade <= 5) baixos.push(item);
-                const compUpper = item.Componente.toUpperCase();
-                if (compUpper.includes('HD INTERNO') || compUpper.includes('DISCO RÍGIDO')) hdCount += item.Quantidade;
-                if (compUpper.includes('SSD')) ssdCount += item.Quantidade;
-                if (!maiorVolume || item.Quantidade > maiorVolume.Quantidade) maiorVolume = item;
+                const qtd = item.Quantidade || 0; totalItens += qtd;
+                if (qtd === 0) zerados.push(item); else if (qtd <= 5) baixos.push(item);
+                const compUpper = (item.Componente || '').toUpperCase();
+                if (compUpper.includes('HD INTERNO') || compUpper.includes('DISCO RÍGIDO') || compUpper.includes('HD ')) hdCount += qtd;
+                if (compUpper.includes('SSD')) ssdCount += qtd;
+                if (!maiorVolume || qtd > maiorVolume.Quantidade) maiorVolume = item;
             });
 
             let alertHtml = '';
             if (zerados.length > 0 || baixos.length > 0) {
                 let desc = '';
                 if (zerados.length > 0) desc += `<span class="text-red-600 font-bold">${zerados.length} itens esgotados.</span> `;
-                if (baixos.length > 0) desc += ` ${baixos.length} itens em nível crítico (≤5). `;
-                let exemplos = [...zerados, ...baixos].slice(0, 2).map(i => i.Componente).join(', ');
-                alertHtml = `<div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-xl shadow-sm flex items-start hover:shadow-md transition"><i class="fas fa-exclamation-triangle text-red-500 text-2xl mt-1 mr-3"></i><div><h4 class="text-sm font-bold text-red-800">Reposição Prioritária</h4><p class="text-xs text-red-700 mt-1">${desc}</p><p class="text-xs text-red-600 mt-1 italic">Ex: ${exemplos}...</p></div></div>`;
-            } else { alertHtml = `<div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-xl shadow-sm flex items-start hover:shadow-md transition"><i class="fas fa-check-circle text-emerald-500 text-2xl mt-1 mr-3"></i><div><h4 class="text-sm font-bold text-emerald-800">Estoque Saudável</h4><p class="text-xs text-emerald-700 mt-1">Nenhum equipamento em nível crítico de ruptura no momento.</p></div></div>`; }
+                if (baixos.length > 0) desc += `<span class="text-orange-600 font-bold">${baixos.length} itens em alerta (≤5).</span>`;
+                let exemplos = [...zerados, ...baixos].slice(0, 2).map(i => i.Componente || 'Item').join(', ');
+                alertHtml = `<div class="bg-red-50 border-l-4 border-red-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-exclamation-triangle text-red-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-red-800 uppercase tracking-wide">Reposição Prioritária</h4><p class="text-xs text-red-700 mt-2 leading-relaxed">${desc}</p><p class="text-[11px] text-red-500 mt-1 font-semibold">Ex: ${exemplos}...</p></div></div>`;
+            } else { alertHtml = `<div class="bg-emerald-50 border-l-4 border-emerald-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-check-circle text-emerald-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wide">Estoque Saudável</h4><p class="text-xs text-emerald-700 mt-2 leading-relaxed">Nenhum equipamento em nível crítico ou zerado no momento.</p></div></div>`; }
 
             let acumuloHtml = '';
             if (maiorVolume && maiorVolume.Quantidade > 0) {
-                let pct = ((maiorVolume.Quantidade / totalItens) * 100).toFixed(1), corBg = maiorVolume.Quantidade > 80 ? 'bg-yellow-50 border-yellow-500' : 'bg-blue-50 border-blue-500', corTexto = maiorVolume.Quantidade > 80 ? 'text-yellow-800' : 'text-blue-800', corDesc = maiorVolume.Quantidade > 80 ? 'text-yellow-700' : 'text-blue-700', icon = maiorVolume.Quantidade > 80 ? 'fa-boxes text-yellow-500' : 'fa-chart-pie text-blue-500';
-                acumuloHtml = `<div class="${corBg} border-l-4 p-4 rounded-xl shadow-sm flex items-start hover:shadow-md transition"><i class="fas ${icon} text-2xl mt-1 mr-3"></i><div><h4 class="text-sm font-bold ${corTexto}">Concentração de Volume</h4><p class="text-xs ${corDesc} mt-1"><b>${maiorVolume.Componente}</b> possui ${maiorVolume.Quantidade} und.</p><p class="text-xs ${corDesc} mt-1 opacity-80">Representa ${pct}% do volume físico total.</p></div></div>`;
-            } else { acumuloHtml = `<div class="bg-gray-50 border-l-4 border-gray-300 p-4 rounded-xl shadow-sm flex items-start"></div>`; }
+                let pct = totalItens > 0 ? ((maiorVolume.Quantidade / totalItens) * 100).toFixed(1) : 0;
+                let corBg = maiorVolume.Quantidade > 80 ? 'bg-yellow-50 border-yellow-500' : 'bg-blue-50 border-blue-500', corTexto = maiorVolume.Quantidade > 80 ? 'text-yellow-800' : 'text-blue-800', corDesc = maiorVolume.Quantidade > 80 ? 'text-yellow-700' : 'text-blue-700', icon = maiorVolume.Quantidade > 80 ? 'fa-boxes text-yellow-500' : 'fa-chart-pie text-blue-500';
+                acumuloHtml = `<div class="${corBg} border-l-4 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas ${icon} text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold ${corTexto} uppercase tracking-wide">Concentração de Volume</h4><p class="text-xs ${corDesc} mt-2 leading-relaxed"><b>${maiorVolume.Componente || 'Item'}</b> possui ${maiorVolume.Quantidade} und.</p><p class="text-[11px] ${corDesc} mt-1 font-semibold opacity-80">Representa ${pct}% do volume físico total.</p></div></div>`;
+            } else { acumuloHtml = `<div class="bg-gray-50 border-l-4 border-gray-300 p-5 rounded-xl shadow-sm flex items-start"><p class="text-xs text-gray-500 mt-2">Sem dados de volume.</p></div>`; }
 
             let techHtml = '';
-            if (hdCount > 0 && ssdCount > 0 && hdCount > 10) {
-                techHtml = `<div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-xl shadow-sm flex items-start hover:shadow-md transition"><i class="fas fa-rocket text-indigo-500 text-2xl mt-1 mr-3"></i><div><h4 class="text-sm font-bold text-indigo-800">Sugestão de Modernização</h4><p class="text-xs text-indigo-700 mt-1">Existem ${hdCount} HDs e ${ssdCount} SSDs. Recomendamos força-tarefa de upgrade preventivo.</p></div></div>`;
+            if (hdCount > 0 && ssdCount > 0) {
+                techHtml = `<div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-rocket text-blue-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-blue-800 uppercase tracking-wide">Sugestão de Modernização</h4><p class="text-xs text-blue-700 mt-2 leading-relaxed">Existem ${hdCount} HDs antigos e ${ssdCount} SSDs em estoque.</p><p class="text-[11px] text-blue-600 mt-1 font-semibold">Considere Força-Tarefa de upgrade preventivo no parque.</p></div></div>`;
             } else {
-                const numCat = [...new Set(estoqueLocal.map(i => i.Categoria))].length;
-                techHtml = `<div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-xl shadow-sm flex items-start hover:shadow-md transition"><i class="fas fa-sitemap text-purple-500 text-2xl mt-1 mr-3"></i><div><h4 class="text-sm font-bold text-purple-800">Diversidade de Ativos</h4><p class="text-xs text-purple-700 mt-1">Gestão ativa de ${numCat} macro-categorias diferentes.</p></div></div>`;
+                const numCat = [...new Set(estoqueLocal.map(i => i.Categoria || 'Geral'))].length;
+                techHtml = `<div class="bg-purple-50 border-l-4 border-purple-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-sitemap text-purple-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-purple-800 uppercase tracking-wide">Diversidade de Ativos</h4><p class="text-xs text-purple-700 mt-2 leading-relaxed">Gestão ativa de ${numCat} categorias distintas.</p><p class="text-[11px] text-purple-500 mt-1 font-semibold">Portfólio estruturado e centralizado.</p></div></div>`;
             }
             container.innerHTML = alertHtml + acumuloHtml + techHtml;
         }
 
-        function atualizarDatalists() { document.getElementById('lista-componentes').innerHTML = [...new Set(estoqueLocal.map(i => i.Componente))].map(c => `<option value="${c}">`).join(''); }
+        function atualizarDatalists() { document.getElementById('lista-componentes').innerHTML = [...new Set(estoqueLocal.map(i => i.Componente||''))].map(c => `<option value="${c}">`).join(''); }
         function atualizarSelectSaida() {
             const sel = document.getElementById('saida-select-item'); sel.innerHTML = '<option value="">-- Selecione o equipamento --</option>';
-            [...estoqueLocal].sort((a,b) => a.Categoria.localeCompare(b.Categoria)).forEach(i => { sel.innerHTML += `<option value="${i.id}">[${i.Categoria}] ${i.Componente} ${i.Modelo} - (Qtd: ${i.Quantidade})</option>`; });
+            [...estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { sel.innerHTML += `<option value="${i.id}">[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} - (Qtd: ${i.Quantidade||0})</option>`; });
         }
         
         function atualizarInterfaceEstoque() {
             const tbody = document.getElementById('inventory-tbody'); tbody.innerHTML = '';
             let tTotal = 0, tArmaz = 0, tEnergia = 0, tZerado = 0; const mapCat = {};
             estoqueLocal.forEach(item => {
-                tTotal += item.Quantidade;
-                if(item.Categoria === 'Armazenamento') tArmaz += item.Quantidade; if(item.Categoria === 'Fonte de Alimentação' || item.Categoria === 'Bateria') tEnergia += item.Quantidade; if(item.Quantidade === 0) tZerado++;
-                mapCat[item.Categoria] = (mapCat[item.Categoria] || 0) + item.Quantidade;
-                let badge = item.Quantidade === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' : item.Quantidade <= 5 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>' : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${item.Categoria}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente}</td><td class="px-6 py-4 text-sm text-slate-500">${item.Modelo} / ${item.Especificação}</td><td class="px-6 py-4 text-sm font-black text-slate-800">${item.Quantidade}</td><td class="px-6 py-4">${badge}</td></tr>`;
+                const cat = item.Categoria || 'Sem Categoria'; const qtd = item.Quantidade || 0;
+                tTotal += qtd;
+                if(cat === 'Armazenamento') tArmaz += qtd; if(cat === 'Fonte de Alimentação' || cat === 'Bateria') tEnergia += qtd; if(qtd === 0) tZerado++;
+                mapCat[cat] = (mapCat[cat] || 0) + qtd;
+                let badge = qtd === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' : qtd <= 5 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>' : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
+                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${cat}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${item.Modelo||'-'} / ${item.Especificação||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
             });
             document.getElementById('kpi-total').innerText = tTotal; document.getElementById('kpi-armazenamento').innerText = tArmaz; document.getElementById('kpi-energia').innerText = tEnergia; document.getElementById('kpi-zerado').innerText = tZerado;
-            renderChartsUIUX(mapCat, estoqueLocal);
+            renderChartsUIUX(mapCat, estoqueLocal, logsLocal);
         }
 
-        let chartCat = null, chartTop = null;
-        function renderChartsUIUX(mapCat, dados) {
-            if(chartCat) chartCat.destroy(); if(chartTop) chartTop.destroy();
-            const catLabels = Object.keys(mapCat).sort((a,b) => mapCat[b] - mapCat[a]), catData = catLabels.map(k => mapCat[k]), catColors = ['#4F46E5', '#3B82F6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
-            chartCat = new Chart(document.getElementById('chartCategoria'), { type: 'bar', data: { labels: catLabels, datasets: [{ data: catData, backgroundColor: catColors, borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start', offset: 10 }, tooltip: { backgroundColor: '#1E293B', titleFont: { size: 14 }, bodyFont: { size: 13, weight: 'bold' }, padding: 10, cornerRadius: 4 } }, scales: { x: { display: false, grid: { display: false } }, y: { grid: { display: false }, ticks: { font: { weight: 'bold' } } } } } });
-            const topItems = [...dados].sort((a, b) => b.Quantidade - a.Quantidade).slice(0, 5);
+        // ================= NOVO GRÁFICO (COMPARATIVO SAÍDAS X ESTOQUE) =================
+        function renderChartsUIUX(mapCat, dados, logs) {
+            if(chartCat) chartCat.destroy(); if(chartTop) chartTop.destroy(); if(chartComp) chartComp.destroy();
+            
             const primColor = localStorage.getItem('pref_color') || '#161B33';
-            chartTop = new Chart(document.getElementById('chartTopItems'), { type: 'bar', data: { labels: topItems.map(i => i.Componente.substring(0, 15)), datasets: [{ data: topItems.map(i => i.Quantidade), backgroundColor: primColor, borderRadius: 4 }] }, options: { responsive: true, plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start', offset: 10 }, tooltip: { backgroundColor: '#1E293B', padding: 10, cornerRadius: 4 } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold' } } } } } });
+            
+            // Gráfico 1: Categorias
+            const catLabels = Object.keys(mapCat).sort((a,b) => mapCat[b] - mapCat[a]), catData = catLabels.map(k => mapCat[k]), catColors = ['#4F46E5', '#3B82F6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
+            chartCat = new Chart(document.getElementById('chartCategoria'), { type: 'bar', data: { labels: catLabels, datasets: [{ data: catData, backgroundColor: catColors, borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start', offset: 10 } }, scales: { x: { display: false, grid: { display: false } }, y: { grid: { display: false }, ticks: { font: { weight: 'bold' } } } } } });
+            
+            // Gráfico 2: Top Itens
+            const topItems = [...dados].sort((a, b) => (b.Quantidade||0) - (a.Quantidade||0)).slice(0, 5);
+            chartTop = new Chart(document.getElementById('chartTopItems'), { type: 'bar', data: { labels: topItems.map(i => (i.Componente||'').substring(0, 15)), datasets: [{ data: topItems.map(i => i.Quantidade||0), backgroundColor: primColor, borderRadius: 4 }] }, options: { responsive: true, plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start', offset: 10 } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold' } } } } } });
+
+            // Gráfico 3: Movimentação (Saídas Acumuladas vs Estoque Restante)
+            const saidasMap = {};
+            logs.forEach(log => {
+                if (log.tipo === 'SAÍDA' && log.itemNome) {
+                    saidasMap[log.itemNome] = (saidasMap[log.itemNome] || 0) + (log.qtd || 0);
+                }
+            });
+
+            // Pega os 5 que mais saíram
+            const topSaidas = Object.keys(saidasMap).sort((a,b) => saidasMap[b] - saidasMap[a]).slice(0, 5);
+            const labelsComp = []; const dataSaidas = []; const dataEstoque = [];
+            
+            topSaidas.forEach(nome => {
+                const itemMatch = dados.find(i => `${i.Componente} - ${i.Modelo} (${i.Especificação})` === nome);
+                let shortName = nome.split(' - ')[0];
+                if(shortName.length > 12) shortName = shortName.substring(0, 12) + '..';
+                
+                labelsComp.push(shortName);
+                dataSaidas.push(saidasMap[nome]);
+                dataEstoque.push(itemMatch ? itemMatch.Quantidade : 0);
+            });
+
+            if(labelsComp.length === 0) { labelsComp.push('Sem Saídas'); dataSaidas.push(0); dataEstoque.push(0); }
+
+            chartComp = new Chart(document.getElementById('chartComparativo'), {
+                type: 'bar',
+                data: {
+                    labels: labelsComp,
+                    datasets: [
+                        { label: 'Saídas (Acumulado)', data: dataSaidas, backgroundColor: '#EF4444', borderRadius: 4 },
+                        { label: 'Estoque Restante', data: dataEstoque, backgroundColor: primColor, borderRadius: 4 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: true, position: 'bottom', labels: {color: '#64748b', font: {size: 10, weight: 'bold'}} },
+                        datalabels: { color: 'white', font: { weight: 'bold', size: 9 }, anchor: 'end', align: 'start', offset: 4 }
+                    },
+                    scales: { x: { display: false, grid: { display: false } }, y: { display: false, grid: { display: false } } }
+                }
+            });
         }
 
-        // COMPORTAMENTO DA PÁGINA E NAVEGAÇÃO
+        // ================= COMPORTAMENTO DE ABAS =================
         document.getElementById('btn-theme').addEventListener('click', () => document.body.classList.toggle('dark'));
         const modal = document.getElementById('tools-modal'); document.getElementById('btn-tools').addEventListener('click', () => modal.classList.remove('hidden')); document.querySelectorAll('.close-modal').forEach(b => b.addEventListener('click', () => modal.classList.add('hidden')));
         
@@ -953,7 +993,7 @@
 
         document.getElementById('search-table-estoque').addEventListener('input', e => { const term = e.target.value.toLowerCase(), rows = document.getElementById('inventory-tbody').getElementsByTagName('tr'); for(let row of rows) row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; });
         document.getElementById('search-table-rastreio').addEventListener('input', e => { const term = e.target.value.toLowerCase(), rows = document.getElementById('rastreio-tbody').getElementsByTagName('tr'); for(let row of rows) row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; });
-        document.getElementById('btn-export-csv').addEventListener('click', () => { let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Quantidade\n"; estoqueLocal.forEach(r => csv += `"${r.Categoria}","${r.Componente}","${r.Modelo}","${r.Especificação}","${r.Quantidade}"\n`); const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); });
+        document.getElementById('btn-export-csv').addEventListener('click', () => { let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Quantidade\n"; estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Quantidade||0}"\n`); const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); });
     </script>
 </body>
 </html>
