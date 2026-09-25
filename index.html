@@ -224,7 +224,7 @@
                             </select>
                             <div class="relative">
                                 <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                                <input type="text" id="search-table-estoque" placeholder="Filtrar registo..." class="pl-9 pr-3 py-2 border border-gray-300 rounded text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                                <input type="text" id="search-table-estoque" placeholder="Filtrar registro..." class="pl-9 pr-3 py-2 border border-gray-300 rounded text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
                             </div>
                         </div>
                     </div>
@@ -272,9 +272,9 @@
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Equipamento</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Local Físico</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider text-indigo-600">Local SIPAC</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Marca/Modelo</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Nº de Série</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Nº Património</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Série/Patrimônio</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider text-center">Qtd</th>
                                 </tr>
                             </thead>
@@ -414,29 +414,25 @@
                     <datalist id="lista-componentes"></datalist>
                 </div>
 
-                <!-- TAB SAÍDA (ATUALIZADA COM FILTRO DE PESQUISA) -->
+                <!-- TAB SAÍDA (ATUALIZADA COM DATALIST AUTOMÁTICO) -->
                 <div id="tab-saida" class="tab-content hidden h-full flex flex-col">
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Baixa de Material</h2>
-                    <p class="text-sm text-slate-500 mb-6 border-b pb-4">Despacho de componentes para atendimento de incidentes.</p>
+                    <p class="text-sm text-slate-500 mb-8 border-b pb-4">Despacho de componentes para atendimento de incidentes.</p>
                     
                     <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex-1">
                         <div class="space-y-5 mb-8">
-                            <!-- NOVO CAMPO DE PESQUISA INTELIGENTE -->
+                            <!-- NOVO CAMPO: PESQUISA COM LISTA SUSPENSA -->
                             <div>
-                                <label class="block text-sm font-semibold text-slate-700">Filtro Rápido (Pesquisa de Item)</label>
+                                <label class="block text-sm font-semibold text-slate-700">Pesquisar Equipamento (Digite as primeiras letras...)</label>
                                 <div class="relative">
-                                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                                    <input type="text" id="saida-search" class="mt-1 block w-full rounded-md border-gray-300 border py-2.5 pl-10 shadow-sm focus:ring-red-500 focus:border-red-500" placeholder="Digite nome, modelo ou local para encontrar o equipamento rapidamente...">
+                                    <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
+                                    <!-- O 'list' aciona a lista suspensa nativa do HTML5 -->
+                                    <input list="lista-saida-items" id="saida-item-input" class="mt-1 block w-full rounded-md border-gray-300 border py-3 pl-10 shadow-sm focus:ring-red-500 focus:border-red-500 text-sm font-medium" placeholder="Ex: Memória, SSD, Monitor...">
+                                    <datalist id="lista-saida-items"></datalist>
                                 </div>
-                                <p class="text-xs text-slate-500 mt-1">A lista abaixo será atualizada conforme digita.</p>
                             </div>
 
                             <hr class="border-gray-200">
-
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700">Equipamento em Estoque (Selecione o Item Desejado)</label>
-                                <select id="saida-select-item" class="mt-1 block w-full rounded-md border-gray-300 border p-3 bg-white shadow-sm focus:ring-red-500 focus:border-red-500"></select>
-                            </div>
                             
                             <div class="grid grid-cols-2 gap-5">
                                 <div><label class="block text-sm font-semibold text-slate-700">Qtd Retirada</label><input type="number" id="saida-qtd" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500" min="1" value="1"></div>
@@ -468,11 +464,14 @@
                             <input type="hidden" id="loc-edit-id">
                             
                             <div class="space-y-4 flex-1">
-                                <div><label class="block text-xs font-bold text-slate-700 uppercase">Equipamento / Nome</label><input type="text" id="loc-equip" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: Monitor Dell 24"></div>
-                                <div><label class="block text-xs font-bold text-slate-700 uppercase">Local Físico</label><input type="text" id="loc-local" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: Sala TI - Armário 2"></div>
+                                <div><label class="block text-xs font-bold text-slate-700 uppercase">Equipamento / Nome *</label><input type="text" id="loc-equip" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: Monitor Dell 24"></div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Local Físico *</label><input type="text" id="loc-local" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: Sala TI"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 uppercase text-indigo-600">Local SIPAC</label><input type="text" id="loc-sipac" class="mt-1 block w-full rounded border-indigo-300 border p-2 text-sm bg-white" placeholder="Ex: Almoxarifado Principal"></div>
+                                </div>
                                 <div class="grid grid-cols-2 gap-3">
                                     <div><label class="block text-xs font-bold text-slate-700 uppercase">Marca / Modelo</label><input type="text" id="loc-marca" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: Dell P2419H"></div>
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Quantidade</label><input type="number" id="loc-qtd" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" min="1" value="1"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Quantidade *</label><input type="number" id="loc-qtd" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" min="1" value="1"></div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
                                     <div><label class="block text-xs font-bold text-slate-700 uppercase">Nº de Série</label><input type="text" id="loc-serie" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: SN-987654"></div>
@@ -484,7 +483,7 @@
                         
                         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                             <h3 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-excel mr-2 text-emerald-600"></i>Importação em Lote (Excel)</h3>
-                            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800"><strong>Colunas exigidas na planilha:</strong><br>EQUIPAMENTO, LOCAL FISICO, QUANTIDADE, MARCA, Nº DE SÉRIE, Nº PATRIMONIO.</div>
+                            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800"><strong>Colunas exigidas na planilha:</strong><br>EQUIPAMENTO, LOCAL FISICO, LOCAL SIPAC, QUANTIDADE, MARCA, Nº DE SÉRIE, Nº PATRIMONIO.</div>
                             <div class="flex-1 flex flex-col justify-center items-center border-2 border-dashed border-slate-300 rounded-lg p-6 hover:bg-slate-100 transition">
                                 <i class="fas fa-cloud-upload-alt text-4xl text-slate-400 mb-3"></i>
                                 <input type="file" id="loc-file-upload" accept=".xlsx, .xls, .csv" class="block w-full max-w-xs text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:font-bold file:bg-indigo-50 file:text-indigo-700 cursor-pointer">
@@ -643,6 +642,9 @@
         let currentPageRastreio = 1;
         let currentSearchRastreio = '';
         
+        // NOVO: Dicionário para auxiliar na baixa de material
+        let mapItensSaida = {}; 
+        
         let chartComponentesAmpliado = null; 
         let chartTopSaidas = null; 
         let chartPizzaCategorias = null; 
@@ -726,7 +728,7 @@
 
         // ================= SISTEMA CORE =================
         function iniciarSistema() {
-            onSnapshot(collection(db, "estoque"), (snapshot) => { estoqueLocal = []; snapshot.forEach((doc) => { estoqueLocal.push({ id: doc.id, ...doc.data() }); }); atualizarInterfaceEstoque(); atualizarDatalists(); atualizarSelectSaida(); gerarInsights(); });
+            onSnapshot(collection(db, "estoque"), (snapshot) => { estoqueLocal = []; snapshot.forEach((doc) => { estoqueLocal.push({ id: doc.id, ...doc.data() }); }); atualizarInterfaceEstoque(); atualizarDatalists(); atualizarDatalistSaida(); gerarInsights(); });
             onSnapshot(collection(db, "localidades"), (snapshot) => { localidadesLocais = []; snapshot.forEach((doc) => { localidadesLocais.push({ id: doc.id, ...doc.data() }); }); atualizarInterfaceRastreio(); atualizarSelectEdicaoLocais(); });
             onSnapshot(query(collection(db, "logs"), orderBy("dataHora", "desc"), limit(100)), (snapshot) => {
                 const tbody = document.getElementById('logs-tbody'); 
@@ -776,12 +778,12 @@
                 let tLocaisUnicos = new Set(), tVolumeRastreado = 0, tEquipsUnicos = new Set(); tbody.innerHTML = '';
                 [...localidadesLocais].sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
                     tLocaisUnicos.add(loc.Local || 'N/A'); tVolumeRastreado += (loc.Quantidade||0); tEquipsUnicos.add(loc.Equipamento || 'N/A');
-                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento||'-'}</td><td class="border px-2 py-1">${loc.Local||'-'}</td><td class="border px-2 py-1">${loc.Marca||'-'}</td><td class="border px-2 py-1 font-mono">${loc.Serie||'-'}</td><td class="border px-2 py-1 font-mono">${loc.Patrimonio||'-'}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`;
+                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento||'-'}</td><td class="border px-2 py-1">${loc.Local||'-'}</td><td class="border px-2 py-1">${loc.LocalSipac||'-'}</td><td class="border px-2 py-1">${loc.Marca||'-'}</td><td class="border px-2 py-1 font-mono">${loc.Serie||'-'}</td><td class="border px-2 py-1 font-mono">${loc.Patrimonio||'-'}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`;
                 });
                 parecer.innerHTML = `A extração consolidou <b>${localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${userEmail} em ${dataAtual}.`;
                 resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades, com ${tEquipsUnicos.size} modelos distintos.`;
                 kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros</p><p class="text-2xl font-black text-slate-800">${localidadesLocais.length}</p></div>`;
-                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Património</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
+                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Património</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
                 visualTitle.style.display = 'none'; chartsContainer.style.display = 'none';
             }
             window.print(); setTimeout(() => { document.getElementById('printable-report').classList.remove('active-print'); }, 1000);
@@ -798,9 +800,9 @@
                 let filtrados = estoqueLocal.filter(item => { let matchBusca = !currentSearchText || (item.Componente+item.Modelo+item.Especificação+item.Local).toLowerCase().includes(currentSearchText.toLowerCase()); let matchCat = !currentFilterCat || item.Categoria === currentFilterCat; return matchBusca && matchCat; });
                 filtrados.sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { tbodyObj.innerHTML += `<tr><td>${i.Categoria||'-'}</td><td><b>${i.Componente||'-'}</b></td><td>${i.Modelo||'-'} / ${i.Especificação||'-'}</td><td>${i.Local||'-'}</td><td style="font-family:monospace;">${i.Série||i.Patrimonio||'-'}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`; });
             } else {
-                titleObj.innerText = "Extrato: Rastreamento Físico"; theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Património</th><th style="text-align:center;">Qtd</th></tr>`;
-                let filtradosRastreio = localidadesLocais.filter(item => { return !currentSearchRastreio || (item.Equipamento+item.Local+item.Serie+item.Patrimonio).toLowerCase().includes(currentSearchRastreio.toLowerCase()); });
-                filtradosRastreio.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => { tbodyObj.innerHTML += `<tr><td><b>${loc.Equipamento||'-'}</b></td><td>${loc.Local||'-'}</td><td>${loc.Marca||'-'}</td><td style="font-family:monospace;">${loc.Serie||'-'}</td><td style="font-family:monospace;">${loc.Patrimonio||'-'}</td><td style="text-align:center; font-weight:bold;">${loc.Quantidade||0}</td></tr>`; });
+                titleObj.innerText = "Extrato: Rastreamento Físico"; theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Local SIPAC</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Património</th><th style="text-align:center;">Qtd</th></tr>`;
+                let filtradosRastreio = localidadesLocais.filter(item => { return !currentSearchRastreio || (item.Equipamento+item.Local+item.LocalSipac+item.Serie+item.Patrimonio).toLowerCase().includes(currentSearchRastreio.toLowerCase()); });
+                filtradosRastreio.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => { tbodyObj.innerHTML += `<tr><td><b>${loc.Equipamento||'-'}</b></td><td>${loc.Local||'-'}</td><td>${loc.LocalSipac||'-'}</td><td>${loc.Marca||'-'}</td><td style="font-family:monospace;">${loc.Serie||'-'}</td><td style="font-family:monospace;">${loc.Patrimonio||'-'}</td><td style="text-align:center; font-weight:bold;">${loc.Quantidade||0}</td></tr>`; });
             }
             window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
         }
@@ -855,7 +857,7 @@
                     sel.classList.add('hidden'); sel.value = '';
                     btn.innerText = 'Mapear Equipamento';
                     btn.className = 'w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded hover:bg-indigo-700 transition shadow mt-4';
-                    ['loc-equip','loc-local','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(id => document.getElementById(id).value = ''); 
+                    ['loc-equip','loc-local', 'loc-sipac', 'loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(id => document.getElementById(id).value = ''); 
                     document.getElementById('loc-qtd').value = 1;
                 }
             });
@@ -865,7 +867,7 @@
             document.getElementById('loc-edit-select').addEventListener('change', (e) => {
                 const id = e.target.value;
                 if(!id) {
-                    ['loc-equip','loc-local','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(idx => document.getElementById(idx).value = ''); 
+                    ['loc-equip','loc-local', 'loc-sipac','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(idx => document.getElementById(idx).value = ''); 
                     document.getElementById('loc-qtd').value = 1; return;
                 }
                 const item = localidadesLocais.find(i => i.id === id);
@@ -873,6 +875,7 @@
                     document.getElementById('loc-edit-id').value = item.id;
                     document.getElementById('loc-equip').value = item.Equipamento || '';
                     document.getElementById('loc-local').value = item.Local || '';
+                    document.getElementById('loc-sipac').value = item.LocalSipac || '';
                     document.getElementById('loc-marca').value = item.Marca || '';
                     document.getElementById('loc-qtd').value = item.Quantidade || 1;
                     document.getElementById('loc-serie').value = item.Serie || '';
@@ -888,12 +891,13 @@
                 
                 const equip = document.getElementById('loc-equip').value.trim();
                 const local = document.getElementById('loc-local').value.trim();
+                const sipac = document.getElementById('loc-sipac').value.trim() || 'N/A';
                 const marca = document.getElementById('loc-marca').value.trim() || 'N/A';
                 const serie = document.getElementById('loc-serie').value.trim() || 'N/A';
                 const patrim = document.getElementById('loc-patrimonio').value.trim() || 'N/A';
                 const qtd = parseInt(document.getElementById('loc-qtd').value);
                 
-                if(!equip || !local || isNaN(qtd) || qtd <= 0) return showToast("Preencha Equipamento, Local e Quantidade.", "error");
+                if(!equip || !local || isNaN(qtd) || qtd <= 0) return showToast("Preencha Equipamento, Local Físico e Quantidade.", "error");
                 
                 const btn = document.getElementById('btn-save-loc'); 
                 const originalText = btn.innerText;
@@ -901,16 +905,16 @@
                 
                 try {
                     if(actionType === 'edit' && editId) {
-                        await updateDoc(doc(db, "localidades", editId), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
-                        await registrarLog("MOVIMENTAÇÃO", `${equip} (Novo: ${local})`, qtd, `Série: ${serie}`);
+                        await updateDoc(doc(db, "localidades", editId), { Equipamento: equip, Local: local, LocalSipac: sipac, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
+                        await registrarLog("MOVIMENTAÇÃO", `${equip} (Novo: ${local})`, qtd, `SIPAC: ${sipac} | Série: ${serie}`);
                         showToast("Alteração gravada e movimentada com sucesso!");
                     } else {
-                        await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
-                        await registrarLog("MAP_LOCAL", `${equip} (${local})`, qtd, serie);
+                        await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, LocalSipac: sipac, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
+                        await registrarLog("MAP_LOCAL", `${equip} (${local})`, qtd, `SIPAC: ${sipac} | Série: ${serie}`);
                         showToast("Equipamento mapeado com sucesso!");
                     }
                     
-                    ['loc-equip','loc-local','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(id => document.getElementById(id).value = ''); 
+                    ['loc-equip','loc-local', 'loc-sipac','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(id => document.getElementById(id).value = ''); 
                     document.getElementById('loc-qtd').value = 1;
                     document.getElementById('loc-action-type').value = 'new';
                     document.getElementById('loc-action-type').dispatchEvent(new Event('change'));
@@ -928,9 +932,10 @@
                 try {
                     const json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let cont = 0;
                     for (let row of json) {
-                        await addDoc(collection(db, "localidades"), { Equipamento: row['EQUIPAMENTO']||row['Equipamento']||'N/A', Local: row['LOCAL FISICO']||row['Local']||'N/A', Marca: row['MARCA']||row['Marca']||'N/A', Serie: row['Nº DE SÉRIE']||row['Série']||'N/A', Patrimonio: row['Nº PATRIMONIO']||row['Património']||'N/A', Quantidade: parseInt(row['QUANTIDADE']||row['Quantidade']||1) }); cont++;
+                        const sipac = row['LOCAL SIPAC'] || row['Local SIPAC'] || row['Local Sipac'] || row['LOCAL_SIPAC'] || 'N/A';
+                        await addDoc(collection(db, "localidades"), { Equipamento: row['EQUIPAMENTO']||row['Equipamento']||'N/A', Local: row['LOCAL FISICO']||row['Local Físico']||row['Local']||'N/A', LocalSipac: sipac, Marca: row['MARCA']||row['Marca']||'N/A', Serie: row['Nº DE SÉRIE']||row['N Serie']||row['Série']||'N/A', Patrimonio: row['Nº PATRIMONIO']||row['Patrimônio']||row['Patrimonio']||'N/A', Quantidade: parseInt(row['QUANTIDADE']||row['Quantidade']||1) }); cont++;
                     }
-                    await registrarLog("MAP_LOCAL", `Upload Excel`, cont, ""); showToast(`Sucesso! ${cont} mapeados.`); fileInput.value = "";
+                    await registrarLog("MAP_LOCAL", `Upload Excel`, cont, ""); showToast(`Sucesso! ${cont} locais mapeados.`); fileInput.value = "";
                 } catch (error) { showToast("Erro leitura.", "error"); } btn.innerHTML = 'Iniciar Importação';
             }; reader.readAsArrayBuffer(fileInput.files[0]);
         });
@@ -968,43 +973,52 @@
             }; reader.readAsArrayBuffer(fileInput.files[0]);
         });
 
-        // ================= ABA SAÍDA COM FILTRO =================
-        function atualizarSelectSaida(filtroText = '') {
-            const sel = document.getElementById('saida-select-item'); if(!sel) return;
-            sel.innerHTML = '<option value="">-- Selecione o equipamento --</option>';
-            
-            let filtrados = estoqueLocal;
-            if(filtroText) {
-                filtrados = estoqueLocal.filter(i => (i.Categoria + i.Componente + i.Modelo + i.Local + i.Série + i.Patrimonio).toLowerCase().includes(filtroText.toLowerCase()));
-            }
-
-            filtrados.sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { 
-                sel.innerHTML += `<option value="${i.id}">[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||'N/A'}) - (Qtd: ${i.Quantidade||0})</option>`; 
+        // ================= ABA SAÍDA (AUTO-COMPLETAR) =================
+        function atualizarDatalistSaida() {
+            const dl = document.getElementById('lista-saida-items'); 
+            if(!dl) return;
+            dl.innerHTML = '';
+            mapItensSaida = {};
+            [...estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { 
+                const text = `[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||'N/A'}) - Qtd: ${i.Quantidade||0}`;
+                mapItensSaida[text] = i;
+                dl.innerHTML += `<option value="${text}"></option>`; 
             });
         }
 
-        if(document.getElementById('saida-search')) {
-            document.getElementById('saida-search').addEventListener('input', (e) => {
-                atualizarSelectSaida(e.target.value);
+        if(document.getElementById('btn-register-saida')) {
+            document.getElementById('btn-register-saida').addEventListener('click', async () => {
+                const inputTexto = document.getElementById('saida-item-input').value;
+                const qtdSaida = parseInt(document.getElementById('saida-qtd').value);
+                const chamado = document.getElementById('saida-chamado').value.trim();
+                
+                const itemDB = mapItensSaida[inputTexto];
+                
+                if(!itemDB) return showToast("Equipamento não encontrado ou seleção inválida. Selecione um item da lista.", "error");
+                if(isNaN(qtdSaida) || qtdSaida <= 0) return showToast("Quantidade inválida.", "error");
+                
+                const btn = document.getElementById('btn-register-saida'); 
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+                
+                if(qtdSaida > (itemDB.Quantidade||0)) { 
+                    showToast("Estoque insuficiente para esta saída!", "error"); 
+                    btn.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa'; 
+                    return; 
+                }
+                
+                try { 
+                    await updateDoc(doc(db, "estoque", itemDB.id), { Quantidade: (itemDB.Quantidade||0) - qtdSaida }); 
+                    await registrarLog("SAÍDA", `${itemDB.Componente} (${itemDB.Especificação})`, qtdSaida, chamado); 
+                    showToast("Baixa processada com sucesso!"); 
+                    
+                    document.getElementById('saida-item-input').value = "";
+                    document.getElementById('saida-qtd').value = 1; 
+                    document.getElementById('saida-chamado').value = ""; 
+                } catch(e) { showToast("Erro ao processar baixa.", "error"); } 
+                
+                btn.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa';
             });
         }
-
-        if(document.getElementById('btn-register-saida')) document.getElementById('btn-register-saida').addEventListener('click', async () => {
-            const idItem = document.getElementById('saida-select-item').value, qtdSaida = parseInt(document.getElementById('saida-qtd').value), chamado = document.getElementById('saida-chamado').value.trim();
-            if(!idItem || isNaN(qtdSaida) || qtdSaida <= 0) return showToast("Valores inválidos.", "error");
-            const btn = document.getElementById('btn-register-saida'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-            const itemDB = estoqueLocal.find(i => i.id === idItem);
-            if(qtdSaida > (itemDB.Quantidade||0)) { showToast("Estoque insuficiente!", "error"); btn.innerHTML = 'Confirmar Baixa'; return; }
-            try { 
-                await updateDoc(doc(db, "estoque", idItem), { Quantidade: (itemDB.Quantidade||0) - qtdSaida }); 
-                await registrarLog("SAÍDA", `${itemDB.Componente} (${itemDB.Especificação})`, qtdSaida, chamado); 
-                showToast("Baixa processada!"); 
-                document.getElementById('saida-qtd').value = 1; 
-                document.getElementById('saida-chamado').value = ""; 
-                if(document.getElementById('saida-search')) document.getElementById('saida-search').value = "";
-                atualizarSelectSaida();
-            } catch(e) { showToast("Erro baixa.", "error"); } btn.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa';
-        });
 
         // ================= INSIGHTS E UI =================
         function gerarInsights() {
@@ -1076,14 +1090,14 @@
 
         function atualizarInterfaceRastreio() {
             const tbody = document.getElementById('rastreio-tbody'); if(!tbody) return;
-            let filtrados = localidadesLocais.filter(item => { return !currentSearchRastreio || (item.Equipamento+item.Local+item.Marca+item.Serie+item.Patrimonio).toLowerCase().includes(currentSearchRastreio.toLowerCase()); });
+            let filtrados = localidadesLocais.filter(item => { return !currentSearchRastreio || (item.Equipamento+item.Local+item.LocalSipac+item.Marca+item.Serie+item.Patrimonio).toLowerCase().includes(currentSearchRastreio.toLowerCase()); });
             const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1;
             if(currentPageRastreio > totalPaginas) currentPageRastreio = totalPaginas;
             const inicio = (currentPageRastreio - 1) * itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
 
             tbody.innerHTML = '';
             dadosPagina.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
-                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||'-'}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
+                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||'-'}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.LocalSipac||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
             });
 
             if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length}`;
