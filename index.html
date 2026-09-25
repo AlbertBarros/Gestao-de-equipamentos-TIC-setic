@@ -235,7 +235,8 @@
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Categoria</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Componente / Espec.</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider text-blue-600">Local</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Série/Patrimônio</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nº Série</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nº Patrimônio</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider text-center">Quantidade</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
                                 </tr>
@@ -263,7 +264,7 @@
                         </div>
                         <div class="relative">
                             <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                            <input type="text" id="search-table-rastreio" placeholder="Pesquisar Local, Patrimônio, Série..." class="pl-9 pr-3 py-2 border border-indigo-200 rounded text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm">
+                            <input type="text" id="search-table-rastreio" placeholder="Pesquisar Nome, Local, Série..." class="pl-9 pr-3 py-2 border border-indigo-200 rounded text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm">
                         </div>
                     </div>
                     <div class="overflow-x-auto min-h-[300px]">
@@ -274,7 +275,8 @@
                                     <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Local Físico</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider text-indigo-600">Local SIPAC</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Marca/Modelo</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Série/Patrimônio</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Nº de Série</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Nº Patrimônio</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider text-center">Qtd</th>
                                 </tr>
                             </thead>
@@ -301,6 +303,7 @@
                 <p class="text-sm mt-1 text-slate-300">Polícia Rodoviária Federal - Diretoria de Tecnologia da Informação e Comunicação (DTIC)</p>
                 <p class="text-lg font-bold mt-3 text-white" id="print-title-doc">Relatório Gerencial Analítico - Gestão de Estoque (SETIC)</p>
             </div>
+            <!-- LOGO OFICIAL BLINDADA -->
             <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" class="h-20">
         </div>
         <div class="px-6">
@@ -334,6 +337,7 @@
                 <p style="margin: 0; font-size: 12px; font-weight: bold; font-family: Arial, sans-serif;" id="print-simple-title">Extrato de Ativos</p>
                 <p style="margin: 2px 0 0 0; font-size: 10px; color: #555; font-family: Arial, sans-serif;" id="print-simple-date"></p>
             </div>
+            <!-- LOGO FIXA INSTITUCIONAL BLINDADA -->
             <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" style="height: 65px;">
         </div>
         <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif;">
@@ -381,7 +385,6 @@
                                 </select>
                             </div>
                             
-                            <!-- PESQUISA INTELIGENTE ESTOQUE -->
                             <div id="estoque-edit-container" class="relative hidden mb-4">
                                 <i class="fas fa-search absolute left-3 top-3 text-orange-500"></i>
                                 <input list="lista-edit-estoque" id="estoque-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500" placeholder="Pesquise Equipamento, Marca, Série ou Patr...">
@@ -415,7 +418,7 @@
                         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                             <h3 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-excel mr-2 text-emerald-600"></i>Importação em Lote (Excel/CSV)</h3>
                             <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800">
-                                <strong>Colunas flexíveis:</strong> O sistema lê variações como MARCA, MARCA/MODELO, Nº DE SÉRIE, SÉRIE, PATRIMÔNIO. <br><b>Células em branco agora ficarão perfeitamente em branco no sistema (Fim do N/A forçado).</b>
+                                <strong>Colunas flexíveis:</strong> O sistema lê variações de cabeçalho. <br><b>Células em branco ou "N/A" na planilha ficarão em branco no sistema de forma transparente.</b>
                             </div>
                             <div class="flex-1 flex flex-col justify-center items-center border-2 border-dashed border-slate-300 rounded-lg p-6 hover:bg-slate-100 transition">
                                 <i class="fas fa-cloud-upload-alt text-4xl text-slate-400 mb-3"></i>
@@ -435,12 +438,11 @@
                     
                     <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex-1">
                         <div class="space-y-5 mb-8">
-                            <!-- PESQUISA INTELIGENTE SAÍDA -->
                             <div>
                                 <label class="block text-sm font-semibold text-slate-700">Pesquisar Equipamento (Digite Nome, Modelo, Local, Série ou Patr...)</label>
                                 <div class="relative">
                                     <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
-                                    <input list="lista-saida-items" id="saida-item-input" class="mt-1 block w-full rounded-md border-gray-300 border py-3 pl-10 shadow-sm focus:ring-red-500 focus:border-red-500 text-sm font-medium" placeholder="Comece a digitar para ver as sugestões...">
+                                    <input list="lista-saida-items" id="saida-item-input" class="mt-1 block w-full rounded-md border-gray-300 border py-3 pl-10 shadow-sm focus:ring-red-500 focus:border-red-500 text-sm font-medium" placeholder="Comece a digitar (ex: Monitor, SSD)...">
                                     <datalist id="lista-saida-items"></datalist>
                                 </div>
                             </div>
@@ -471,7 +473,6 @@
                                 </select>
                             </div>
                             
-                            <!-- PESQUISA INTELIGENTE LOCAIS -->
                             <div id="loc-edit-container" class="relative hidden mb-4">
                                 <i class="fas fa-search absolute left-3 top-3 text-orange-500"></i>
                                 <input list="lista-edit-locais" id="loc-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500" placeholder="Pesquise Equipamento, Local, Série ou Patr...">
@@ -500,7 +501,7 @@
                         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                             <h3 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-excel mr-2 text-emerald-600"></i>Importação em Lote (Excel)</h3>
                             <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800">
-                                <strong>Colunas flexíveis:</strong> O sistema procura por MARCA, MODELO, Nº DE SÉRIE, PATRIMÔNIO, LOCAL SIPAC. Células vazias ou contendo "N/A" na sua planilha ficarão perfeitamente em branco no sistema.
+                                <strong>Colunas flexíveis:</strong> O sistema procura por MARCA, MODELO, Nº DE SÉRIE, PATRIMÔNIO. <br><b>Células vazias ou "N/A" na planilha ficarão puramente em branco no sistema.</b>
                             </div>
                             <div class="flex-1 flex flex-col justify-center items-center border-2 border-dashed border-slate-300 rounded-lg p-6 hover:bg-slate-100 transition">
                                 <i class="fas fa-cloud-upload-alt text-4xl text-slate-400 mb-3"></i>
@@ -511,7 +512,7 @@
                     </div>
                 </div>
 
-                <!-- TAB RELATORIOS -->
+                <!-- TAB RELATORIOS E EXPORTAÇÕES OFICIAIS -->
                 <div id="tab-relatorio" class="tab-content hidden h-full flex flex-col justify-center items-center">
                     <i class="fas fa-file-contract text-6xl text-slate-300 mb-6"></i>
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Exportações e Relatórios Oficiais</h2>
@@ -570,22 +571,51 @@
                         </div>
 
                         <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-                            <!-- EXCLUSÃO CIRÚRGICA DE DADOS (NOVO MOTOR) -->
+                            
+                            <!-- NOVA ZONA DE PERIGO (MÚLTIPLA SELEÇÃO DE EXCLUSÃO EM LOTE) -->
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between col-span-1 lg:col-span-2">
                                 <div>
-                                    <h3 class="font-bold text-red-800 mb-1"><i class="fas fa-exclamation-triangle text-red-600 mr-2"></i> Zona de Perigo (Exclusão Cirúrgica)</h3>
-                                    <p class="text-[11px] text-red-600 mb-3">Apague itens específicos. Ação irreversível.</p>
+                                    <h3 class="font-bold text-red-800 mb-1"><i class="fas fa-exclamation-triangle text-red-600 mr-2"></i> Zona de Perigo (Exclusão em Lote)</h3>
+                                    <p class="text-[11px] text-red-600 mb-3">Pesquise, selecione os itens desejados e apague. Ação irreversível.</p>
                                 </div>
-                                <div class="space-y-3 mt-auto">
-                                    <div class="relative">
-                                        <input list="admin-del-loc-list" id="admin-del-loc-input" class="w-full text-[11px] p-2 border border-orange-300 rounded mb-1 focus:ring-orange-500 focus:outline-none pr-8" placeholder="🔍 Rastreio: digite nome, local, série para buscar e apagar...">
-                                        <datalist id="admin-del-loc-list"></datalist>
-                                        <button id="btn-delete-loc" class="w-full bg-orange-600 text-white font-bold py-2 px-2 rounded hover:bg-orange-700 transition text-[11px] shadow flex items-center justify-center"><i class="fas fa-eraser mr-1"></i> Apagar do Rastreio</button>
+                                
+                                <div class="space-y-4 mt-auto">
+                                    <!-- BLOCO RASTREIO -->
+                                    <div class="bg-white p-3 border border-orange-200 rounded shadow-sm">
+                                        <label class="block text-[11px] font-bold text-orange-800 mb-1">Apagar do Rastreio (Mapa Físico)</label>
+                                        <div class="relative mb-2">
+                                            <i class="fas fa-search absolute left-2 top-2 text-orange-400 text-xs"></i>
+                                            <input type="text" id="admin-search-loc" class="w-full text-[11px] p-1.5 pl-7 border border-orange-300 rounded focus:ring-orange-500 focus:outline-none" placeholder="Digite equipamento, local, série...">
+                                        </div>
+                                        
+                                        <div id="admin-loc-list-container" class="hidden flex-col gap-1 max-h-32 overflow-y-auto bg-gray-50 border border-gray-200 rounded p-2 mb-2 text-[10px]">
+                                            <div class="flex items-center gap-2 mb-1 pb-1 border-b border-gray-300">
+                                                <input type="checkbox" id="admin-loc-select-all" class="rounded border-gray-400 cursor-pointer">
+                                                <label for="admin-loc-select-all" class="font-bold text-slate-700 cursor-pointer">Selecionar Todos da Busca</label>
+                                            </div>
+                                            <div id="admin-loc-items" class="flex flex-col gap-1"></div>
+                                        </div>
+                                        
+                                        <button id="btn-delete-loc-batch" class="w-full bg-orange-600 text-white font-bold py-1.5 px-2 rounded hover:bg-orange-700 transition text-[11px] shadow flex items-center justify-center disabled:opacity-50" disabled><i class="fas fa-eraser mr-1"></i> Apagar Selecionados (0)</button>
                                     </div>
-                                    <div class="relative border-t border-red-200 pt-3">
-                                        <input list="admin-del-est-list" id="admin-del-est-input" class="w-full text-[11px] p-2 border border-red-300 rounded mb-1 focus:ring-red-500 focus:outline-none pr-8" placeholder="🔍 Estoque: digite componente, modelo, série para buscar e apagar...">
-                                        <datalist id="admin-del-est-list"></datalist>
-                                        <button id="btn-delete-estoque" class="w-full bg-red-600 text-white font-bold py-2 px-2 rounded hover:bg-red-700 transition text-[11px] shadow flex items-center justify-center"><i class="fas fa-trash-alt mr-1"></i> Apagar do Estoque</button>
+
+                                    <!-- BLOCO ESTOQUE -->
+                                    <div class="bg-white p-3 border border-red-200 rounded shadow-sm">
+                                        <label class="block text-[11px] font-bold text-red-800 mb-1">Apagar do Estoque Consolidado</label>
+                                        <div class="relative mb-2">
+                                            <i class="fas fa-search absolute left-2 top-2 text-red-400 text-xs"></i>
+                                            <input type="text" id="admin-search-est" class="w-full text-[11px] p-1.5 pl-7 border border-red-300 rounded focus:ring-red-500 focus:outline-none" placeholder="Digite componente, modelo, série...">
+                                        </div>
+                                        
+                                        <div id="admin-est-list-container" class="hidden flex-col gap-1 max-h-32 overflow-y-auto bg-gray-50 border border-gray-200 rounded p-2 mb-2 text-[10px]">
+                                            <div class="flex items-center gap-2 mb-1 pb-1 border-b border-gray-300">
+                                                <input type="checkbox" id="admin-est-select-all" class="rounded border-gray-400 cursor-pointer">
+                                                <label for="admin-est-select-all" class="font-bold text-slate-700 cursor-pointer">Selecionar Todos da Busca</label>
+                                            </div>
+                                            <div id="admin-est-items" class="flex flex-col gap-1"></div>
+                                        </div>
+                                        
+                                        <button id="btn-delete-est-batch" class="w-full bg-red-600 text-white font-bold py-1.5 px-2 rounded hover:bg-red-700 transition text-[11px] shadow flex items-center justify-center disabled:opacity-50" disabled><i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)</button>
                                     </div>
                                 </div>
                             </div>
@@ -637,6 +667,7 @@
 
         Chart.register(ChartDataLabels);
 
+        // ATENÇÃO: Substituir pelas chaves válidas do Firebase.
         const firebaseConfig = {
             apiKey: "AIzaSyBRCRThFRIEGYQ8ukI8IzJ78AyqSEyspsc",
             authDomain: "gestao-de-equipamentos-tic.firebaseapp.com",
@@ -666,9 +697,6 @@
         let mapItensSaida = {}; 
         let mapEditLocais = {};
         let mapEditEstoque = {};
-        
-        let mapAdminDelLoc = {};
-        let mapAdminDelEst = {};
         
         let chartComponentesAmpliado = null; 
         let chartTopSaidas = null; 
@@ -809,17 +837,13 @@
                     tTotal += (i.Quantidade || 0); categorias.add(i.Categoria || 'Geral'); let minEstoque = i.EstoqueMinimo || 5;
                     if(i.Quantidade === 0) tZerados++; else if(i.Quantidade <= minEstoque) tBaixos++;
                     
-                    let strS = i.Série ? `S: ${i.Série}` : '';
-                    let strP = i.Patrimonio ? `P: ${i.Patrimonio}` : '';
-                    let separator = (strS && strP) ? '<br>' : '';
-                    
-                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||''}</td><td class="border px-2 py-1">${i.Componente||''}</td><td class="border px-2 py-1">${i.Modelo||''} / ${i.Especificação||''}</td><td class="border px-2 py-1">${i.Local||''}</td><td class="border px-2 py-1 font-mono">${strS}${separator}${strP}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`;
+                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||''}</td><td class="border px-2 py-1">${i.Componente||''}</td><td class="border px-2 py-1">${i.Modelo||''} / ${i.Especificação||''}</td><td class="border px-2 py-1">${i.Local||''}</td><td class="border px-2 py-1 font-mono">${i.Série||''}</td><td class="border px-2 py-1 font-mono">${i.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`;
                 });
                 let taxaCritica = estoqueLocal.length > 0 ? (((tZerados + tBaixos) / estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1);
                 parecer.innerHTML = `Extração consolidou <b>${estoqueLocal.length}</b> registos de estoque físico. Emitido por ${userEmail} em ${dataAtual}.`;
                 resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. Saúde: ${saude}%. ${tZerados} zerados e ${tBaixos} em risco (Criticidade: ${taxaCritica}%).`;
                 kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`;
-                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Série/Patr.</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
+                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
                 visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid';
                 if(chartComponentesAmpliado) document.getElementById('print-chart-1').src = document.getElementById('chartComponentesAmpliado').toDataURL('image/png');
                 if(chartTopSaidas) document.getElementById('print-chart-2').src = document.getElementById('chartTopSaidas').toDataURL('image/png');
@@ -831,16 +855,12 @@
                 [...localidadesLocais].sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
                     tLocaisUnicos.add(loc.Local || 'N/A'); tVolumeRastreado += (loc.Quantidade||0); tEquipsUnicos.add(loc.Equipamento || 'N/A');
                     
-                    let strS = loc.Serie ? `S: ${loc.Serie}` : '';
-                    let strP = loc.Patrimonio ? `P: ${loc.Patrimonio}` : '';
-                    let separator = (strS && strP) ? '<br>' : '';
-                    
-                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento||''}</td><td class="border px-2 py-1">${loc.Local||''}</td><td class="border px-2 py-1">${loc.LocalSipac||''}</td><td class="border px-2 py-1">${loc.Marca||''}</td><td class="border px-2 py-1 font-mono">${strS}${separator}${strP}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`;
+                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento||''}</td><td class="border px-2 py-1">${loc.Local||''}</td><td class="border px-2 py-1">${loc.LocalSipac||''}</td><td class="border px-2 py-1">${loc.Marca||''}</td><td class="border px-2 py-1 font-mono">${loc.Serie||''}</td><td class="border px-2 py-1 font-mono">${loc.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`;
                 });
                 parecer.innerHTML = `A extração consolidou <b>${localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${userEmail} em ${dataAtual}.`;
                 resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades, com ${tEquipsUnicos.size} modelos distintos.`;
                 kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros</p><p class="text-2xl font-black text-slate-800">${localidadesLocais.length}</p></div>`;
-                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Série/Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
+                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
                 visualTitle.style.display = 'none'; chartsContainer.style.display = 'none';
             }
             window.print(); setTimeout(() => { document.getElementById('printable-report').classList.remove('active-print'); }, 1000);
@@ -893,88 +913,122 @@
         if(document.getElementById('btn-relatorio-analitico-estoque')) document.getElementById('btn-relatorio-analitico-estoque').addEventListener('click', () => gerarRelatorioAnalitico('estoque'));
         if(document.getElementById('btn-relatorio-analitico-rastreio')) document.getElementById('btn-relatorio-analitico-rastreio').addEventListener('click', () => gerarRelatorioAnalitico('rastreio'));
 
-        // ================= ABA ADMIN (EXCLUSÃO CIRÚRGICA) =================
+        // ================= ABA ADMIN (EXCLUSÃO EM LOTE) =================
         if(document.getElementById('btn-admin-login')) document.getElementById('btn-admin-login').addEventListener('click', () => { const input = document.getElementById('admin-pass-input').value; if(btoa(input) === "c2V0aWNhZG1pbg==") { document.getElementById('admin-login-section').classList.add('hidden'); document.getElementById('admin-content-section').classList.remove('hidden'); document.getElementById('admin-error').classList.add('hidden'); document.getElementById('admin-pass-input').value = ""; } else { document.getElementById('admin-error').classList.remove('hidden'); } });
         if(document.getElementById('btn-admin-lock')) document.getElementById('btn-admin-lock').addEventListener('click', () => { document.getElementById('admin-content-section').classList.add('hidden'); document.getElementById('admin-login-section').classList.remove('hidden'); });
         
-        if(document.getElementById('admin-del-loc-input')) {
-            document.getElementById('admin-del-loc-input').addEventListener('input', (e) => {
-                const text = e.target.value;
-                const dl = document.getElementById('admin-del-loc-list');
-                dl.innerHTML = ''; 
-                if(text.length >= 3) {
-                    const search = text.toLowerCase().split(' ');
-                    let count = 0;
+        let currentFilteredLocsForDelete = [];
+        if (document.getElementById('admin-search-loc')) {
+            document.getElementById('admin-search-loc').addEventListener('input', (e) => {
+                const text = e.target.value.toLowerCase().trim();
+                const container = document.getElementById('admin-loc-list-container');
+                const itemsDiv = document.getElementById('admin-loc-items');
+                const btn = document.getElementById('btn-delete-loc-batch');
+                const selectAllCb = document.getElementById('admin-loc-select-all');
+                
+                itemsDiv.innerHTML = ''; currentFilteredLocsForDelete = []; selectAllCb.checked = false;
+                btn.disabled = true; btn.innerHTML = `<i class="fas fa-eraser mr-1"></i> Apagar Selecionados (0)`;
+                
+                if (text.length >= 3) {
+                    const searchTerms = text.split(' ');
                     localidadesLocais.forEach(item => {
-                        let display = `[RASTREIO] ${item.Equipamento} | Loc: ${item.Local} | Patr: ${item.Patrimonio||'Vazio'} | Série: ${item.Serie||'Vazio'}`;
-                        if(search.every(term => display.toLowerCase().includes(term))) {
-                            mapAdminDelLoc[display] = item.id;
-                            let option = document.createElement('option');
-                            option.value = display;
-                            dl.appendChild(option);
-                            count++;
-                            if(count > 40) return;
+                        let display = `[RASTREIO] ${item.Equipamento} | Loc: ${item.Local} | Patr: ${item.Patrimonio||''} | Série: ${item.Serie||''}`;
+                        if (searchTerms.every(term => display.toLowerCase().includes(term))) {
+                            currentFilteredLocsForDelete.push(item.id);
+                            const div = document.createElement('div');
+                            div.className = "flex items-start gap-2 border-b border-gray-200 pb-1";
+                            div.innerHTML = `<input type="checkbox" class="cb-del-loc mt-0.5 rounded border-gray-400 cursor-pointer" value="${item.id}"> <label class="text-slate-600 leading-tight">${display}</label>`;
+                            itemsDiv.appendChild(div);
                         }
                     });
+                    
+                    if (currentFilteredLocsForDelete.length > 0) { container.classList.remove('hidden'); container.classList.add('flex'); } 
+                    else { container.classList.remove('flex'); container.classList.add('hidden'); }
+                    document.querySelectorAll('.cb-del-loc').forEach(cb => { cb.addEventListener('change', updateDelLocBtn); });
+                } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+            });
+        }
+
+        function updateDelLocBtn() {
+            const checked = document.querySelectorAll('.cb-del-loc:checked').length;
+            const btn = document.getElementById('btn-delete-loc-batch');
+            document.getElementById('admin-loc-select-all').checked = (checked === document.querySelectorAll('.cb-del-loc').length && checked > 0);
+            if (checked > 0) { btn.disabled = false; btn.innerHTML = `<i class="fas fa-eraser mr-1"></i> Apagar Selecionados (${checked})`; } 
+            else { btn.disabled = true; btn.innerHTML = `<i class="fas fa-eraser mr-1"></i> Apagar Selecionados (0)`; }
+        }
+
+        if (document.getElementById('admin-loc-select-all')) document.getElementById('admin-loc-select-all').addEventListener('change', (e) => { document.querySelectorAll('.cb-del-loc').forEach(cb => { cb.checked = e.target.checked; }); updateDelLocBtn(); });
+
+        if (document.getElementById('btn-delete-loc-batch')) {
+            document.getElementById('btn-delete-loc-batch').addEventListener('click', async () => {
+                const idsToDelete = Array.from(document.querySelectorAll('.cb-del-loc:checked')).map(cb => cb.value);
+                if (idsToDelete.length === 0) return;
+                if (confirm(`Atenção! Vai apagar ${idsToDelete.length} item(ns) do Rastreio.\nAção irreversível. Confirmar?`)) {
+                    const btn = document.getElementById('btn-delete-loc-batch'); const originalText = btn.innerHTML;
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...'; btn.disabled = true;
+                    try {
+                        await Promise.all(idsToDelete.map(id => deleteDoc(doc(db, "localidades", id))));
+                        showToast(`${idsToDelete.length} item(ns) apagado(s) do Rastreio.`);
+                        document.getElementById('admin-search-loc').value = ''; document.getElementById('admin-search-loc').dispatchEvent(new Event('input'));
+                    } catch (error) { showToast("Erro: " + error.message, "error"); btn.innerHTML = originalText; btn.disabled = false; }
                 }
             });
         }
 
-        if(document.getElementById('admin-del-est-input')) {
-            document.getElementById('admin-del-est-input').addEventListener('input', (e) => {
-                const text = e.target.value;
-                const dl = document.getElementById('admin-del-est-list');
-                dl.innerHTML = ''; 
-                if(text.length >= 3) {
-                    const search = text.toLowerCase().split(' ');
-                    let count = 0;
+        let currentFilteredEstForDelete = [];
+        if (document.getElementById('admin-search-est')) {
+            document.getElementById('admin-search-est').addEventListener('input', (e) => {
+                const text = e.target.value.toLowerCase().trim();
+                const container = document.getElementById('admin-est-list-container');
+                const itemsDiv = document.getElementById('admin-est-items');
+                const btn = document.getElementById('btn-delete-est-batch');
+                const selectAllCb = document.getElementById('admin-est-select-all');
+                
+                itemsDiv.innerHTML = ''; currentFilteredEstForDelete = []; selectAllCb.checked = false;
+                btn.disabled = true; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)`;
+                
+                if (text.length >= 3) {
+                    const searchTerms = text.split(' ');
                     estoqueLocal.forEach(item => {
-                        let display = `[ESTOQUE] ${item.Componente} | Loc: ${item.Local} | Patr: ${item.Patrimonio||'Vazio'} | Série: ${item.Série||'Vazio'}`;
-                        if(search.every(term => display.toLowerCase().includes(term))) {
-                            mapAdminDelEst[display] = item.id;
-                            let option = document.createElement('option');
-                            option.value = display;
-                            dl.appendChild(option);
-                            count++;
-                            if(count > 40) return;
+                        let display = `[ESTOQUE] ${item.Componente} | Loc: ${item.Local} | Patr: ${item.Patrimonio||''} | Série: ${item.Série||''}`;
+                        if (searchTerms.every(term => display.toLowerCase().includes(term))) {
+                            currentFilteredEstForDelete.push(item.id);
+                            const div = document.createElement('div');
+                            div.className = "flex items-start gap-2 border-b border-gray-200 pb-1";
+                            div.innerHTML = `<input type="checkbox" class="cb-del-est mt-0.5 rounded border-gray-400 cursor-pointer" value="${item.id}"> <label class="text-slate-600 leading-tight">${display}</label>`;
+                            itemsDiv.appendChild(div);
                         }
                     });
-                }
+                    
+                    if (currentFilteredEstForDelete.length > 0) { container.classList.remove('hidden'); container.classList.add('flex'); } 
+                    else { container.classList.remove('flex'); container.classList.add('hidden'); }
+                    document.querySelectorAll('.cb-del-est').forEach(cb => { cb.addEventListener('change', updateDelEstBtn); });
+                } else { container.classList.remove('flex'); container.classList.add('hidden'); }
             });
         }
 
-        if(document.getElementById('btn-delete-loc')) {
-            document.getElementById('btn-delete-loc').addEventListener('click', async () => {
-                const inputVal = document.getElementById('admin-del-loc-input').value;
-                const idToDelete = mapAdminDelLoc[inputVal];
-                if(!idToDelete) return showToast("Item não encontrado. Selecione na lista.", "error");
-                
-                if(confirm("Deseja apagar permanentemente este item do Rastreio? Esta ação é irreversível.")) {
-                    const btn = document.getElementById('btn-delete-loc'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...';
-                    try { 
-                        await deleteDoc(doc(db, "localidades", idToDelete)); 
-                        showToast("Item apagado da base Rastreio."); 
-                        document.getElementById('admin-del-loc-input').value = '';
-                    } catch(e) { showToast("Erro: " + e.message, "error"); }
-                    btn.innerHTML = originalText;
-                }
-            });
+        function updateDelEstBtn() {
+            const checked = document.querySelectorAll('.cb-del-est:checked').length;
+            const btn = document.getElementById('btn-delete-est-batch');
+            document.getElementById('admin-est-select-all').checked = (checked === document.querySelectorAll('.cb-del-est').length && checked > 0);
+            if (checked > 0) { btn.disabled = false; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (${checked})`; } 
+            else { btn.disabled = true; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)`; }
         }
 
-        if(document.getElementById('btn-delete-estoque')) {
-            document.getElementById('btn-delete-estoque').addEventListener('click', async () => {
-                const inputVal = document.getElementById('admin-del-est-input').value;
-                const idToDelete = mapAdminDelEst[inputVal];
-                if(!idToDelete) return showToast("Item não encontrado. Selecione na lista.", "error");
-                
-                if(confirm("Deseja apagar permanentemente este item do Estoque Consolidado? Esta ação é irreversível.")) {
-                    const btn = document.getElementById('btn-delete-estoque'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...';
-                    try { 
-                        await deleteDoc(doc(db, "estoque", idToDelete)); 
-                        showToast("Item apagado da base Estoque."); 
-                        document.getElementById('admin-del-est-input').value = '';
-                    } catch(e) { showToast("Erro: " + e.message, "error"); }
-                    btn.innerHTML = originalText;
+        if (document.getElementById('admin-est-select-all')) document.getElementById('admin-est-select-all').addEventListener('change', (e) => { document.querySelectorAll('.cb-del-est').forEach(cb => { cb.checked = e.target.checked; }); updateDelEstBtn(); });
+
+        if (document.getElementById('btn-delete-est-batch')) {
+            document.getElementById('btn-delete-est-batch').addEventListener('click', async () => {
+                const idsToDelete = Array.from(document.querySelectorAll('.cb-del-est:checked')).map(cb => cb.value);
+                if (idsToDelete.length === 0) return;
+                if (confirm(`Atenção! Vai apagar ${idsToDelete.length} item(ns) do Estoque.\nAção irreversível. Confirmar?`)) {
+                    const btn = document.getElementById('btn-delete-est-batch'); const originalText = btn.innerHTML;
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...'; btn.disabled = true;
+                    try {
+                        await Promise.all(idsToDelete.map(id => deleteDoc(doc(db, "estoque", id))));
+                        showToast(`${idsToDelete.length} item(ns) apagado(s) do Estoque.`);
+                        document.getElementById('admin-search-est').value = ''; document.getElementById('admin-search-est').dispatchEvent(new Event('input'));
+                    } catch (error) { showToast("Erro: " + error.message, "error"); btn.innerHTML = originalText; btn.disabled = false; }
                 }
             });
         }
@@ -1002,7 +1056,7 @@
             dl.innerHTML = '';
             mapEditLocais = {};
             [...localidadesLocais].sort((a,b) => (a.Equipamento||'').localeCompare(b.Equipamento||'')).forEach(loc => {
-                const text = `${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio || 'Vazio'} | Série: ${loc.Serie || 'Vazio'}`;
+                const text = `${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio || ''} | Série: ${loc.Serie || ''}`;
                 mapEditLocais[text] = loc;
             });
         }
@@ -1112,15 +1166,14 @@
                 try {
                     const json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let cont = 0;
                     for (let row of json) {
-                        const sipac = getVal(row, ['LOCAL SIPAC', 'SIPAC']);
-                        const serie = getVal(row, ['N DE SERIE', 'SERIE', 'NUMERO DE SERIE', 'NSERIE', 'SN', 'Nº DE SÉRIE']);
-                        const patrim = getVal(row, ['N PATRIMONIO', 'PATRIMONIO', 'TOMBAMENTO', 'NPATRIMONIO', 'Nº PATRIMÔNIO']);
-                        const equip = getVal(row, ['EQUIPAMENTO', 'NOME', 'ITEM', 'COMPONENTE']);
-                        const local = getVal(row, ['LOCAL FISICO', 'LOCAL', 'SALA', 'LOCALIZACAO', 'LOCAL FÍSICO']);
-                        const marca = getVal(row, ['MARCA', 'MODELO', 'MARCA MODELO', 'MARCA/MODELO']);
-                        const qtd = parseInt(getVal(row, ['QUANTIDADE', 'QTD'])) || 1;
+                        const sipac = getVal(row, ['LOCAL SIPAC', 'Local SIPAC', 'Local Sipac', 'LOCAL_SIPAC']);
+                        const serie = getVal(row, ['Nº DE SÉRIE', 'N DE SERIE', 'Nº DE SERIE', 'Nº Série', 'N Serie', 'SÉRIE', 'Série', 'SERIE', 'NUMERO DE SERIE']);
+                        const patrim = getVal(row, ['Nº PATRIMÔNIO', 'Nº PATRIMONIO', 'N Patrimônio', 'N Patrimonio', 'PATRIMÔNIO', 'PATRIMONIO', 'Patrimônio', 'Patrimonio']);
+                        const equip = getVal(row, ['EQUIPAMENTO', 'Equipamento', 'Nome']);
+                        const local = getVal(row, ['LOCAL FISICO', 'Local Físico', 'LOCAL FÍSICO', 'Local']);
+                        const marca = getVal(row, ['MARCA/MODELO', 'Marca/Modelo', 'MARCA', 'Marca', 'MODELO', 'Modelo']);
                         
-                        await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, LocalSipac: sipac, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd }); cont++;
+                        await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, LocalSipac: sipac, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: parseInt(row['QUANTIDADE']||row['Quantidade']||1) }); cont++;
                     }
                     await registrarLog("MAP_LOCAL", `Upload Excel`, cont, ""); showToast(`Sucesso! ${cont} locais mapeados.`); fileInput.value = "";
                 } catch (error) { showToast("Erro leitura.", "error"); } btn.innerHTML = 'Iniciar Importação';
@@ -1134,7 +1187,7 @@
             dl.innerHTML = '';
             mapEditEstoque = {};
             [...estoqueLocal].sort((a,b) => (a.Componente||'').localeCompare(b.Componente||'')).forEach(item => {
-                const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || 'Vazio'} | Série: ${item.Série || 'Vazio'}`;
+                const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || ''} | Série: ${item.Série || ''}`;
                 mapEditEstoque[text] = item;
             });
         }
@@ -1226,8 +1279,8 @@
                     showToast("Alteração gravada com sucesso!");
                 } else {
                     const existente = estoqueLocal.find(i => {
-                        let matchPatr = patrim && (i.Patrimonio === patrim || i.Série === patrim);
-                        let matchSerie = serie && (i.Série === serie || i.Patrimonio === serie);
+                        let matchPatr = (patrim && (i.Patrimonio === patrim || i.Série === patrim));
+                        let matchSerie = (serie && (i.Série === serie || i.Patrimonio === serie));
                         if(matchPatr || matchSerie) return true;
                         return (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'') === local;
                     });
@@ -1259,12 +1312,12 @@
                         const cat = getVal(row, ['CATEGORIA', 'TIPO', 'GRUPO']) || 'Geral';
                         const comp = getVal(row, ['COMPONENTE', 'EQUIPAMENTO', 'NOME', 'ITEM']);
                         const mod = getVal(row, ['MODELO', 'MARCA/MODELO', 'MARCA MODELO', 'MARCA']);
-                        const esp = getVal(row, ['ESPECIFICACAO', 'DESCRIÇÃO', 'DETALHES', 'CONFIGURACAO', 'ESPECIFICAÇÃO']);
-                        const local = getVal(row, ['LOCAL FISICO', 'LOCAL', 'LOCALIZACAO', 'LOCAL FÍSICO']);
-                        const serie = getVal(row, ['N DE SERIE', 'SERIE', 'NUMERO DE SERIE', 'Nº DE SÉRIE', 'SÉRIE']);
-                        const patrim = getVal(row, ['N PATRIMONIO', 'PATRIMONIO', 'TOMBAMENTO', 'Nº PATRIMÔNIO', 'PATRIMÔNIO']);
-                        const minEst = parseInt(getVal(row, ['ESTOQUE MINIMO', 'MINIMO', 'ALERTA', 'ESTOQUE MÍNIMO'])) || 5;
-                        const qtd = parseInt(getVal(row, ['QUANTIDADE', 'QTD'])) || 1;
+                        const esp = getVal(row, ['ESPECIFICAÇÃO', 'ESPECIFICACAO', 'Especificação', 'Especificacao']);
+                        const local = getVal(row, ['LOCAL FISICO', 'LOCAL', 'Local', 'LOCAL FÍSICO']);
+                        const serie = getVal(row, ['Nº DE SÉRIE', 'N DE SERIE', 'Nº DE SERIE', 'Nº Série', 'N Serie', 'SÉRIE', 'Série', 'SERIE', 'NUMERO DE SERIE']);
+                        const patrim = getVal(row, ['Nº PATRIMÔNIO', 'Nº PATRIMONIO', 'N Patrimônio', 'N Patrimonio', 'PATRIMÔNIO', 'PATRIMONIO', 'Patrimônio', 'Patrimonio']);
+                        const minEst = parseInt(getVal(row, ['ESTOQUE MÍNIMO', 'ESTOQUE MINIMO', 'Estoque Minimo', 'ESTOQUE MÍNIMO'])) || 5;
+                        const qtd = parseInt(getVal(row, ['QUANTIDADE', 'Quantidade', 'QTD', 'Qtd'])) || 1;
                         
                         if(!comp) continue;
                         
@@ -1284,7 +1337,7 @@
             }; reader.readAsArrayBuffer(fileInput.files[0]);
         });
 
-        // ================= ABA SAÍDA (AUTO-COMPLETAR INTELIGENTE) =================
+        // ================= ABA SAÍDA =================
         function atualizarDatalistSaida() {
             const dl = document.getElementById('lista-saida-items'); 
             if(!dl) return;
@@ -1417,12 +1470,12 @@
                 const qtd = item.Quantidade || 0; const minEstoque = item.EstoqueMinimo || 5;
                 let badge = qtd === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' : qtd <= minEstoque ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>' : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
                 
-                let badgesPatr = [];
-                if(item.Série) badgesPatr.push(`<span class="text-xs bg-gray-100 rounded px-1 border border-gray-200">S: ${item.Série}</span>`);
-                if(item.Patrimonio) badgesPatr.push(`<span class="text-xs bg-gray-100 rounded px-1 border border-gray-200">P: ${item.Patrimonio}</span>`);
-                let strPatr = badgesPatr.length > 0 ? `<div class="flex flex-col gap-1">${badgesPatr.join('')}</div>` : '-';
-                
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${item.Categoria||''}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente||''}<br><span class="text-xs font-normal text-slate-500">${item.Modelo||''} / ${item.Especificação||''}</span></td><td class="px-6 py-4 text-sm text-blue-600">${item.Local||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600 text-center">${strPatr}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
+                let strS = item.Série ? `Série: ${item.Série}` : '';
+                let strP = item.Patrimonio ? `Patr: ${item.Patrimonio}` : '';
+                let separator = (strS && strP) ? '<br>' : '';
+                let cellSP = (strS || strP) ? `${strS}${separator}${strP}` : '-';
+
+                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${item.Categoria||''}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente||''}<br><span class="text-xs font-normal text-slate-500">${item.Modelo||''} / ${item.Especificação||''}</span></td><td class="px-6 py-4 text-sm text-blue-600">${item.Local||''}</td><td class="px-6 py-4 text-xs font-mono text-slate-500 leading-tight">${cellSP}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
             });
 
             if(document.getElementById('estoque-page-info')) document.getElementById('estoque-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
@@ -1448,12 +1501,12 @@
 
             tbody.innerHTML = '';
             dadosPagina.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
-                let badgesPatr = [];
-                if(loc.Serie) badgesPatr.push(`<span class="text-xs bg-indigo-50 rounded px-1 border border-indigo-100">S: ${loc.Serie}</span>`);
-                if(loc.Patrimonio) badgesPatr.push(`<span class="text-xs bg-indigo-50 rounded px-1 border border-indigo-100">P: ${loc.Patrimonio}</span>`);
-                let strPatr = badgesPatr.length > 0 ? `<div class="flex flex-col gap-1">${badgesPatr.join('')}</div>` : '-';
+                let strS = loc.Serie ? `Série: ${loc.Serie}` : '';
+                let strP = loc.Patrimonio ? `Patr: ${loc.Patrimonio}` : '';
+                let separator = (strS && strP) ? '<br>' : '';
+                let cellSP = (strS || strP) ? `${strS}${separator}${strP}` : '-';
                 
-                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||''}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.LocalSipac||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600 text-center">${strPatr}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
+                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||''}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.LocalSipac||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||''}</td><td class="px-6 py-4 text-xs font-mono text-slate-600 leading-tight">${cellSP}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
             });
 
             if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
