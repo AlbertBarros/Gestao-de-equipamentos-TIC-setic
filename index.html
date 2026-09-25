@@ -67,8 +67,8 @@
         <div class="absolute inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm"></div>
         <div class="bg-white rounded-xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500 relative z-10">
             <div class="text-center mb-8">
-                <!-- LOGO CORRIGIDA E BLINDADA -->
-                <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
+                <!-- LOGO BLINDADA -->
+                <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
                 <h2 id="login-title" class="text-2xl font-bold text-slate-800">Almoxarifado TIC</h2>
                 <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p>
             </div>
@@ -88,6 +88,9 @@
                     <i class="fas fa-sign-in-alt mr-2"></i> Autenticar
                 </button>
             </div>
+            <div id="login-msg-container" class="mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm hidden">
+                <p id="login-msg-text"></p>
+            </div>
         </div>
     </div>
 
@@ -99,8 +102,7 @@
             <div class="px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center space-x-3">
-                        <!-- LOGO CORRIGIDA E BLINDADA -->
-                        <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" class="h-10">
+                        <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" alt="PRF Logo" class="h-10">
                         <i id="navbar-icon" class="fas fa-chart-line text-xl ml-2"></i>
                         <span id="navbar-title" class="font-bold text-lg tracking-wide whitespace-nowrap">Painel de Gestão de Estoque - SETIC</span>
                     </div>
@@ -301,8 +303,8 @@
                 <p class="text-sm mt-1 text-slate-300">Polícia Rodoviária Federal - Diretoria de Tecnologia da Informação e Comunicação (DTIC)</p>
                 <p class="text-lg font-bold mt-3 text-white" id="print-title-doc">Relatório Gerencial Analítico - Gestão de Estoque (SETIC)</p>
             </div>
-            <!-- LOGO CORRIGIDA E BLINDADA -->
-            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" class="h-20">
+            <!-- LOGO OFICIAL BLINDADA -->
+            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" alt="PRF Logo" class="h-20">
         </div>
         <div class="px-6">
             <h2 class="text-xl font-bold text-slate-800">Parecer e Metodologia de Cálculo</h2>
@@ -327,7 +329,7 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- MODELO 2: IMPRESSÃO SIMPLIFICADA (FOTO DA TABELA)                         -->
+    <!-- MODELO 2: IMPRESSÃO SIMPLIFICADA (FOTO DA TABELA COM LOGO FIXA)           -->
     <!-- ========================================================================= -->
     <div id="printable-simple-table" class="hidden">
         <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
@@ -337,8 +339,8 @@
                 <p style="margin: 0; font-size: 12px; font-weight: bold; font-family: Arial, sans-serif;" id="print-simple-title">Extrato de Ativos</p>
                 <p style="margin: 2px 0 0 0; font-size: 10px; color: #555; font-family: Arial, sans-serif;" id="print-simple-date"></p>
             </div>
-            <!-- LOGO CORRIGIDA E BLINDADA -->
-            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" style="height: 65px;">
+            <!-- LOGO FIXA INSTITUCIONAL BLINDADA -->
+            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" alt="PRF Logo" style="height: 65px;">
         </div>
         <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif;">
             <thead id="print-simple-thead"></thead>
@@ -537,7 +539,7 @@
                             </div>
                             <div class="border border-orange-200 rounded-xl p-5 bg-orange-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-orange-800 mb-2"><i class="fas fa-user-minus text-orange-600 mr-2"></i> Gerir Acessos</h3>
-                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">O Firebase bloqueia exclusão via web.<br><br>A exclusão deve ser feita no Console Oficial.</p>
+                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">Para evitar ataques, o Firebase bloqueia exclusão via web.<br><br>A exclusão deve ser feita no Console Oficial.</p>
                                 <a href="https://console.firebase.google.com/project/gestao-de-equipamentos-tic/authentication/users" target="_blank" class="w-full bg-orange-600 text-white font-bold py-2.5 px-2 rounded hover:bg-orange-700 transition text-sm shadow mt-auto flex items-center justify-center text-center"><i class="fas fa-external-link-alt mr-2"></i> Abrir Console</a>
                             </div>
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between">
@@ -586,7 +588,6 @@
         Chart.register(ChartDataLabels);
 
         // ATENÇÃO: As chaves abaixo DEVEM ser substituídas pelas suas chaves válidas do Firebase. 
-        // Sem a sua API KEY válida, o erro 400 continuará aparecendo e o login não funcionará.
         const firebaseConfig = {
             apiKey: "AIzaSyBRCRThFRIEGYQ8ukI8IzJ78AyqSEyspsc",
             authDomain: "gestao-de-equipamentos-tic.firebaseapp.com",
@@ -606,42 +607,32 @@
         let userEmail = "";
         let tempBgBase64 = null; 
         
-        // VARIÁVEIS DE CONTROLE DE PAGINAÇÃO E FILTROS
         let currentPageEstoque = 1;
         const itemsPerPage = 10;
         let currentFilterCat = '';
         let currentSearchText = '';
-
         let currentPageRastreio = 1;
         let currentSearchRastreio = '';
         
-        // DECLARAÇÃO GLOBAL DOS GRÁFICOS
         let chartComponentesAmpliado = null; 
         let chartTopSaidas = null; 
         let chartPizzaCategorias = null; 
 
-        // ================= NOTIFICAÇÕES TOAST (UX MELHORADA) =================
+        // ================= NOTIFICAÇÕES =================
         function showToast(msg, type = 'success') {
             const container = document.getElementById('toast-container');
             if(!container) return;
             const toast = document.createElement('div');
             const colorClass = type === 'success' ? 'bg-emerald-500' : (type === 'error' ? 'bg-red-500' : 'bg-blue-500');
             const iconClass = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-times-circle' : 'fa-info-circle');
-            
             toast.className = `${colorClass} text-white px-4 py-3 rounded shadow-lg flex items-center gap-3 transform transition-transform duration-300 translate-x-full`;
             toast.innerHTML = `<i class="fas ${iconClass} text-lg"></i><span class="text-sm font-bold">${msg}</span>`;
-            
             container.appendChild(toast);
-            
             setTimeout(() => toast.classList.remove('translate-x-full'), 10);
-            
-            setTimeout(() => {
-                toast.classList.add('translate-x-full');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            setTimeout(() => { toast.classList.add('translate-x-full'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
-        // ================= PREFERÊNCIAS E CUSTOMIZAÇÃO =================
+        // ================= PREFERÊNCIAS =================
         function carregarPreferencias() {
             const title = localStorage.getItem('pref_title') || 'Painel de Gestão de Estoque - SETIC';
             const color = localStorage.getItem('pref_color') || '#161B33';
@@ -653,7 +644,6 @@
             document.title = title;
             if(document.getElementById('pref-title')) document.getElementById('pref-title').value = title; 
             if(document.getElementById('print-title-doc')) document.getElementById('print-title-doc').textContent = "Relatório Geral - " + title;
-            
             if(document.getElementById('navbar-main')) document.getElementById('navbar-main').style.backgroundColor = color;
             document.querySelectorAll('.btn-primary').forEach(el => el.style.backgroundColor = color);
             document.querySelectorAll('.btn-primary-text').forEach(el => el.style.color = color);
@@ -664,257 +654,126 @@
             if(document.getElementById('login-screen')) document.getElementById('login-screen').style.backgroundImage = `url('${bgImage}')`;
         }
 
-        if(document.getElementById('pref-bg-upload')) {
-            document.getElementById('pref-bg-upload').addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(event) { tempBgBase64 = event.target.result; };
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-
-        if(document.getElementById('btn-clear-bg')) {
-            document.getElementById('btn-clear-bg').addEventListener('click', () => {
-                localStorage.removeItem('pref_bg'); tempBgBase64 = null; document.getElementById('pref-bg-upload').value = ''; carregarPreferencias();
-                showToast("Imagem restaurada com sucesso!");
-            });
-        }
-
-        if(document.getElementById('btn-save-pref')) {
-            document.getElementById('btn-save-pref').addEventListener('click', () => {
-                localStorage.setItem('pref_title', document.getElementById('pref-title').value);
-                localStorage.setItem('pref_color', document.getElementById('pref-color').value);
-                localStorage.setItem('pref_icon', document.getElementById('pref-icon').value);
-                if(tempBgBase64) { try { localStorage.setItem('pref_bg', tempBgBase64); } catch(e) { showToast("A imagem é muito grande.", "error"); return; } }
-                carregarPreferencias(); 
-                showToast("Preferências salvas com sucesso!");
-            });
-        }
-
-        if(document.getElementById('pref-color')) {
-            document.getElementById('pref-color').addEventListener('input', (e) => document.getElementById('pref-color-text').value = e.target.value.toUpperCase());
-        }
-        if(document.getElementById('pref-color-text')) {
-            document.getElementById('pref-color-text').addEventListener('input', (e) => { if(/^#[0-9A-F]{6}$/i.test(e.target.value)) document.getElementById('pref-color').value = e.target.value; });
-        }
-
+        if(document.getElementById('pref-bg-upload')) document.getElementById('pref-bg-upload').addEventListener('change', function(e) { const file = e.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = function(event) { tempBgBase64 = event.target.result; }; reader.readAsDataURL(file); } });
+        if(document.getElementById('btn-clear-bg')) document.getElementById('btn-clear-bg').addEventListener('click', () => { localStorage.removeItem('pref_bg'); tempBgBase64 = null; document.getElementById('pref-bg-upload').value = ''; carregarPreferencias(); showToast("Imagem restaurada com sucesso!"); });
+        if(document.getElementById('btn-save-pref')) document.getElementById('btn-save-pref').addEventListener('click', () => { localStorage.setItem('pref_title', document.getElementById('pref-title').value); localStorage.setItem('pref_color', document.getElementById('pref-color').value); localStorage.setItem('pref_icon', document.getElementById('pref-icon').value); if(tempBgBase64) { try { localStorage.setItem('pref_bg', tempBgBase64); } catch(e) { showToast("A imagem é muito grande.", "error"); return; } } carregarPreferencias(); showToast("Preferências salvas com sucesso!"); });
+        if(document.getElementById('pref-color')) document.getElementById('pref-color').addEventListener('input', (e) => document.getElementById('pref-color-text').value = e.target.value.toUpperCase());
+        if(document.getElementById('pref-color-text')) document.getElementById('pref-color-text').addEventListener('input', (e) => { if(/^#[0-9A-F]{6}$/i.test(e.target.value)) document.getElementById('pref-color').value = e.target.value; });
+        
         carregarPreferencias(); 
 
-        // ================= LOGIN BLINDADO =================
+        // ================= LOGIN =================
         function showLoginMessage(msg, isError = true) {
             const container = document.getElementById('login-msg-container');
             const textObj = document.getElementById('login-msg-text');
-            if(container && textObj) {
-                textObj.innerText = msg;
-                container.classList.remove('hidden');
-                if(isError) {
-                    container.className = "mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm block bg-red-50 border-red-500 text-red-700";
-                } else {
-                    container.className = "mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm block bg-emerald-50 border-emerald-500 text-emerald-700";
-                }
-            }
+            if(container && textObj) { textObj.innerText = msg; container.classList.remove('hidden'); container.className = isError ? "mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm block bg-red-50 border-red-500 text-red-700" : "mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm block bg-emerald-50 border-emerald-500 text-emerald-700"; }
         }
 
         if(document.getElementById('btn-forgot-password')) {
             document.getElementById('btn-forgot-password').addEventListener('click', () => {
                 const email = document.getElementById('login-email').value.trim();
-                if (!email) return showLoginMessage("Por favor, digite seu e-mail corporativo no campo acima para recuperar a senha.", true);
-                sendPasswordResetEmail(auth, email)
-                    .then(() => showLoginMessage(`E-mail de redefinição enviado para: ${email}. Verifique sua caixa de entrada.`, false))
-                    .catch((error) => {
-                        let msg = "Erro: E-mail não encontrado ou falha de conexão.";
-                        if(error.code === 'auth/invalid-api-key') msg = "ERRO: Chave API do Firebase inválida. Atualize o código fonte.";
-                        showLoginMessage(msg, true);
-                    });
+                if (!email) return showLoginMessage("Digite seu e-mail para recuperar a senha.", true);
+                sendPasswordResetEmail(auth, email).then(() => showLoginMessage(`E-mail enviado para: ${email}`, false)).catch((error) => showLoginMessage("Erro: Verifique a API ou e-mail.", true));
             });
         }
 
         function fazerLogin() {
-            const email = document.getElementById('login-email').value.trim(); 
-            const pass = document.getElementById('login-password').value;
-            const btn = document.getElementById('btn-login');
-            
-            if(!email || !pass) return showLoginMessage("Preencha e-mail e senha para autenticar.", true);
+            const email = document.getElementById('login-email').value.trim(); const pass = document.getElementById('login-password').value; const btn = document.getElementById('btn-login');
+            if(!email || !pass) return showLoginMessage("Preencha e-mail e senha.", true);
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Autenticando...';
-            
-            signInWithEmailAndPassword(auth, email, pass).catch((error) => {
-                let msg = "Credenciais inválidas ou acesso não autorizado.";
-                if(error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') msg = "Usuário não encontrado. Verifique o e-mail e a senha.";
-                else if(error.code === 'auth/wrong-password') msg = "Senha incorreta. Tente novamente ou recupere a senha.";
-                else if(error.code === 'auth/invalid-api-key') msg = "ERRO CRÍTICO (400): Chave API Firebase inválida.";
-                showLoginMessage(msg, true);
-                btn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Autenticar';
-            });
+            signInWithEmailAndPassword(auth, email, pass).catch((error) => { showLoginMessage("Usuário/Senha incorretos ou erro de API.", true); btn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Autenticar'; });
         }
 
         if(document.getElementById('btn-login')) document.getElementById('btn-login').addEventListener('click', fazerLogin);
         if(document.getElementById('login-password')) document.getElementById('login-password').addEventListener('keypress', (e) => { if (e.key === 'Enter') fazerLogin(); });
         if(document.getElementById('login-email')) document.getElementById('login-email').addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('login-password').focus(); });
-
         if(document.getElementById('btn-logout')) document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
         
         onAuthStateChanged(auth, (user) => {
             if (user) { 
-                userEmail = user.email; 
-                document.getElementById('login-screen').classList.add('hidden'); 
-                document.getElementById('main-system').classList.remove('hidden'); 
-                document.getElementById('login-email').value = ''; document.getElementById('login-password').value = '';
-                if(document.getElementById('login-msg-container')) document.getElementById('login-msg-container').classList.add('hidden');
-                iniciarSistema(); 
-            } else { 
-                document.getElementById('login-screen').classList.remove('hidden'); 
-                document.getElementById('main-system').classList.add('hidden'); 
-            }
+                userEmail = user.email; document.getElementById('login-screen').classList.add('hidden'); document.getElementById('main-system').classList.remove('hidden'); document.getElementById('login-email').value = ''; document.getElementById('login-password').value = ''; if(document.getElementById('login-msg-container')) document.getElementById('login-msg-container').classList.add('hidden'); iniciarSistema(); 
+            } else { document.getElementById('login-screen').classList.remove('hidden'); document.getElementById('main-system').classList.add('hidden'); }
         });
 
         // ================= SISTEMA CORE =================
         function iniciarSistema() {
-            onSnapshot(collection(db, "estoque"), (snapshot) => {
-                estoqueLocal = []; snapshot.forEach((doc) => { estoqueLocal.push({ id: doc.id, ...doc.data() }); });
-                atualizarInterfaceEstoque(); atualizarDatalists(); atualizarSelectSaida(); gerarInsights();
-            });
-            onSnapshot(collection(db, "localidades"), (snapshot) => {
-                localidadesLocais = []; snapshot.forEach((doc) => { localidadesLocais.push({ id: doc.id, ...doc.data() }); });
-                atualizarInterfaceRastreio();
-            });
+            onSnapshot(collection(db, "estoque"), (snapshot) => { estoqueLocal = []; snapshot.forEach((doc) => { estoqueLocal.push({ id: doc.id, ...doc.data() }); }); atualizarInterfaceEstoque(); atualizarDatalists(); atualizarSelectSaida(); gerarInsights(); });
+            onSnapshot(collection(db, "localidades"), (snapshot) => { localidadesLocais = []; snapshot.forEach((doc) => { localidadesLocais.push({ id: doc.id, ...doc.data() }); }); atualizarInterfaceRastreio(); });
             onSnapshot(query(collection(db, "logs"), orderBy("dataHora", "desc"), limit(100)), (snapshot) => {
                 const tbody = document.getElementById('logs-tbody'); 
                 if(tbody) {
                     tbody.innerHTML = ''; logsLocal = []; 
                     snapshot.forEach((docSnap) => {
-                        const log = docSnap.data(); logsLocal.push(log); 
-                        let dateStr = "N/A";
+                        const log = docSnap.data(); logsLocal.push(log); let dateStr = "N/A";
                         if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
                         let corAcao = log.tipo === 'ENTRADA' ? 'text-emerald-600' : 'text-orange-600', iconAcao = log.tipo === 'ENTRADA' ? 'fa-arrow-down' : 'fa-arrow-up';
                         if(log.tipo.includes('LOCAL')) { corAcao = 'text-indigo-600'; iconAcao = 'fa-map-marker-alt'; }
                         let userLogInfo = log.usuario ? `<br><span class="text-xs text-gray-400">Por: ${log.usuario}</span>` : '';
                         tbody.innerHTML += `<tr class="hover:bg-slate-100 transition"><td class="px-4 py-3 whitespace-nowrap text-slate-500 font-medium">${dateStr}</td><td class="px-4 py-3 whitespace-nowrap font-bold ${corAcao}"><i class="fas ${iconAcao} mr-1"></i> ${log.tipo}</td><td class="px-4 py-3 text-slate-800 font-semibold">${log.itemNome}</td><td class="px-4 py-3 font-black text-slate-800">${log.qtd}</td><td class="px-4 py-3 text-slate-500 font-medium">${log.chamado || '-'}${userLogInfo}</td></tr>`;
                     });
-                    atualizarInterfaceEstoque(); // Atualiza gráfico de saídas
+                    atualizarInterfaceEstoque(); 
                 }
             });
         }
 
         async function registrarLog(tipo, itemNome, qtd, chamado = "") { try { await addDoc(collection(db, "logs"), { tipo, itemNome, qtd: Number(qtd), chamado, usuario: userEmail, dataHora: serverTimestamp() }); } catch(e) {} }
 
-        // ================= GERAÇÃO DE RELATÓRIO ANALÍTICO =================
+        // ================= GERAÇÃO DE RELATÓRIO =================
         function gerarRelatorioAnalitico(tipoRelatorio) {
-            document.getElementById('printable-simple-table').classList.remove('active-print');
-            document.getElementById('printable-report').classList.add('active-print');
-
+            document.getElementById('printable-simple-table').classList.remove('active-print'); document.getElementById('printable-report').classList.add('active-print');
             const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5);
             const titleDoc = document.getElementById('print-title-doc'), parecer = document.getElementById('print-parecer'), resumo = document.getElementById('print-resumo'), kpisContainer = document.getElementById('print-kpis'), thead = document.getElementById('print-thead'), tbody = document.getElementById('print-tbody'), chartsContainer = document.getElementById('print-charts-container'), visualTitle = document.getElementById('print-visual-title');
             
             if(tipoRelatorio === 'estoque') {
-                const titleBase = localStorage.getItem('pref_title') || 'Painel de Gestão de Estoque - SETIC';
-                titleDoc.textContent = `Relatório Consolidado - ${titleBase}`;
-                
+                titleDoc.textContent = `Relatório Consolidado - ${localStorage.getItem('pref_title') || 'SETIC'}`;
                 let tTotal = 0, tZerados = 0, tBaixos = 0; let categorias = new Set(); tbody.innerHTML = '';
                 [...estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => {
-                    tTotal += (i.Quantidade || 0); categorias.add(i.Categoria || 'Geral');
-                    let minEstoque = i.EstoqueMinimo || 5;
+                    tTotal += (i.Quantidade || 0); categorias.add(i.Categoria || 'Geral'); let minEstoque = i.EstoqueMinimo || 5;
                     if(i.Quantidade === 0) tZerados++; else if(i.Quantidade <= minEstoque) tBaixos++;
                     tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||'-'}</td><td class="border px-2 py-1">${i.Componente||'-'}</td><td class="border px-2 py-1">${i.Modelo||'-'} / ${i.Especificação||'-'}</td><td class="border px-2 py-1">${i.Local||'-'}</td><td class="border px-2 py-1 font-mono">${i.Série||i.Patrimonio||'-'}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`;
                 });
                 let taxaCritica = estoqueLocal.length > 0 ? (((tZerados + tBaixos) / estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1);
-
-                parecer.innerHTML = `A presente extração consolidou um universo de <b>${estoqueLocal.length}</b> registros de componentes cadastrados na base de estoque físico. Emitido por ${userEmail} em ${dataAtual} às ${horaAtual}.`;
-                resumo.innerHTML = `O período aponta um volume total de <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. A eficiência de saúde do estoque registou a marca de ${saude}%. Foram identificados ${tZerados} itens zerados e ${tBaixos} em risco (alerta), representando uma taxa de criticidade de ${taxaCritica}%.`;
-
-                kpisContainer.innerHTML = `
-                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total Físico</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div>
-                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias Macro</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div>
-                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade de Itens</p><p class="text-2xl font-black text-slate-800">${estoqueLocal.length}</p></div>
-                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde do Estoque</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>
-                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Taxa de Criticidade</p><p class="text-2xl font-black text-slate-800">${taxaCritica}%</p></div>
-                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Em Alerta</p><p class="text-2xl font-black text-orange-500">${tBaixos}</p></div>
-                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Rupturas (Qtd 0)</p><p class="text-2xl font-black text-red-600">${tZerados}</p></div>
-                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Status Sistêmico</p><p class="text-2xl font-black text-blue-600">ATIVO</p></div>
-                `;
-
+                parecer.innerHTML = `Extração consolidou <b>${estoqueLocal.length}</b> registros de estoque físico. Emitido por ${userEmail} em ${dataAtual}.`;
+                resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. Saúde: ${saude}%. ${tZerados} zerados e ${tBaixos} em risco (Criticidade: ${taxaCritica}%).`;
+                kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`;
                 thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Série/Patr.</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
-                
                 visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid';
                 if(chartComponentesAmpliado) document.getElementById('print-chart-1').src = document.getElementById('chartComponentesAmpliado').toDataURL('image/png');
                 if(chartTopSaidas) document.getElementById('print-chart-2').src = document.getElementById('chartTopSaidas').toDataURL('image/png');
                 if(chartPizzaCategorias) document.getElementById('print-chart-3').src = document.getElementById('chartPizzaCategorias').toDataURL('image/png');
 
             } else if (tipoRelatorio === 'rastreio') {
-                const titleBase = localStorage.getItem('pref_title') || 'Painel de Gestão de Estoque - SETIC';
-                titleDoc.textContent = `Relatório de Rastreio - ${titleBase}`;
-                
+                titleDoc.textContent = `Relatório de Rastreio - ${localStorage.getItem('pref_title') || 'SETIC'}`;
                 let tLocaisUnicos = new Set(), tVolumeRastreado = 0, tEquipsUnicos = new Set(); tbody.innerHTML = '';
                 [...localidadesLocais].sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
                     tLocaisUnicos.add(loc.Local || 'N/A'); tVolumeRastreado += (loc.Quantidade||0); tEquipsUnicos.add(loc.Equipamento || 'N/A');
                     tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento||'-'}</td><td class="border px-2 py-1">${loc.Local||'-'}</td><td class="border px-2 py-1">${loc.Marca||'-'}</td><td class="border px-2 py-1 font-mono">${loc.Serie||'-'}</td><td class="border px-2 py-1 font-mono">${loc.Patrimonio||'-'}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`;
                 });
-
-                parecer.innerHTML = `A presente extração consolidou um universo de <b>${localidadesLocais.length}</b> linhas de rastreabilidade de ativos implantados fisicamente. Emitido por ${userEmail} em ${dataAtual} às ${horaAtual}.`;
-                resumo.innerHTML = `O mapeamento físico localizou <b>${tVolumeRastreado}</b> ativos operacionais distribuídos em <b>${tLocaisUnicos.size}</b> localidades, suportando ${tEquipsUnicos.size} modelos variados de equipamentos. A auditoria indica integridade no rastreio listado abaixo.`;
-
-                kpisContainer.innerHTML = `
-                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div>
-                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div>
-                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equip. Distintos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div>
-                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros Lógicos</p><p class="text-2xl font-black text-slate-800">${localidadesLocais.length}</p></div>
-                `;
-
+                parecer.innerHTML = `A extração consolidou <b>${localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${userEmail} em ${dataAtual}.`;
+                resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades, com ${tEquipsUnicos.size} modelos distintos.`;
+                kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros</p><p class="text-2xl font-black text-slate-800">${localidadesLocais.length}</p></div>`;
                 thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
                 visualTitle.style.display = 'none'; chartsContainer.style.display = 'none';
             }
-            
-            window.print();
-            
-            // Restaura
-            setTimeout(() => { document.getElementById('printable-report').classList.remove('active-print'); }, 1000);
+            window.print(); setTimeout(() => { document.getElementById('printable-report').classList.remove('active-print'); }, 1000);
         }
 
-        // ================= GERAÇÃO DE PDF SIMPLIFICADO (FOTO DA TABELA) =================
         function gerarPDFSimples(tipo) {
-            document.getElementById('printable-report').classList.remove('active-print');
-            document.getElementById('printable-simple-table').classList.add('active-print');
-
-            const dataAtual = new Date().toLocaleDateString('pt-BR');
-            const horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5);
-            const titleObj = document.getElementById('print-simple-title');
-            const dateObj = document.getElementById('print-simple-date');
-            const theadObj = document.getElementById('print-simple-thead');
-            const tbodyObj = document.getElementById('print-simple-tbody');
-
-            dateObj.innerText = `Emitido por: ${userEmail} em ${dataAtual} às ${horaAtual}`;
-            tbodyObj.innerHTML = '';
+            document.getElementById('printable-report').classList.remove('active-print'); document.getElementById('printable-simple-table').classList.add('active-print');
+            const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5);
+            const titleObj = document.getElementById('print-simple-title'), dateObj = document.getElementById('print-simple-date'), theadObj = document.getElementById('print-simple-thead'), tbodyObj = document.getElementById('print-simple-tbody');
+            dateObj.innerText = `Emitido por: ${userEmail} em ${dataAtual} às ${horaAtual}`; tbodyObj.innerHTML = '';
 
             if(tipo === 'estoque') {
-                titleObj.innerText = "Extrato: Inventário Consolidado de Estoque";
-                theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente</th><th>Modelo / Espec.</th><th>Local</th><th>Série/Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
-                
-                // Usando os dados filtrados pela busca e paginação atual
-                let filtrados = estoqueLocal.filter(item => {
-                    let matchBusca = !currentSearchText || (item.Componente+item.Modelo+item.Especificação+item.Local).toLowerCase().includes(currentSearchText.toLowerCase());
-                    let matchCat = !currentFilterCat || item.Categoria === currentFilterCat;
-                    return matchBusca && matchCat;
-                });
-
-                filtrados.sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => {
-                    tbodyObj.innerHTML += `<tr><td>${i.Categoria||'-'}</td><td><b>${i.Componente||'-'}</b></td><td>${i.Modelo||'-'} / ${i.Especificação||'-'}</td><td>${i.Local||'-'}</td><td style="font-family:monospace;">${i.Série||i.Patrimonio||'-'}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`;
-                });
+                titleObj.innerText = "Extrato: Inventário Consolidado"; theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente</th><th>Modelo / Espec.</th><th>Local</th><th>Série/Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
+                let filtrados = estoqueLocal.filter(item => { let matchBusca = !currentSearchText || (item.Componente+item.Modelo+item.Especificação+item.Local).toLowerCase().includes(currentSearchText.toLowerCase()); let matchCat = !currentFilterCat || item.Categoria === currentFilterCat; return matchBusca && matchCat; });
+                filtrados.sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { tbodyObj.innerHTML += `<tr><td>${i.Categoria||'-'}</td><td><b>${i.Componente||'-'}</b></td><td>${i.Modelo||'-'} / ${i.Especificação||'-'}</td><td>${i.Local||'-'}</td><td style="font-family:monospace;">${i.Série||i.Patrimonio||'-'}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`; });
             } else {
-                titleObj.innerText = "Extrato: Rastreamento de Ativos (Mapa Físico)";
-                theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
-                
-                let filtradosRastreio = localidadesLocais.filter(item => {
-                    return !currentSearchRastreio || (item.Equipamento+item.Local+item.Serie+item.Patrimonio).toLowerCase().includes(currentSearchRastreio.toLowerCase());
-                });
-
-                filtradosRastreio.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
-                    tbodyObj.innerHTML += `<tr><td><b>${loc.Equipamento||'-'}</b></td><td>${loc.Local||'-'}</td><td>${loc.Marca||'-'}</td><td style="font-family:monospace;">${loc.Serie||'-'}</td><td style="font-family:monospace;">${loc.Patrimonio||'-'}</td><td style="text-align:center; font-weight:bold;">${loc.Quantidade||0}</td></tr>`;
-                });
+                titleObj.innerText = "Extrato: Rastreamento Físico"; theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
+                let filtradosRastreio = localidadesLocais.filter(item => { return !currentSearchRastreio || (item.Equipamento+item.Local+item.Serie+item.Patrimonio).toLowerCase().includes(currentSearchRastreio.toLowerCase()); });
+                filtradosRastreio.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => { tbodyObj.innerHTML += `<tr><td><b>${loc.Equipamento||'-'}</b></td><td>${loc.Local||'-'}</td><td>${loc.Marca||'-'}</td><td style="font-family:monospace;">${loc.Serie||'-'}</td><td style="font-family:monospace;">${loc.Patrimonio||'-'}</td><td style="text-align:center; font-weight:bold;">${loc.Quantidade||0}</td></tr>`; });
             }
-
-            window.print();
-            setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
+            window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
         }
 
         if(document.getElementById('btn-print-estoque-main')) document.getElementById('btn-print-estoque-main').addEventListener('click', () => gerarPDFSimples('estoque'));
@@ -922,298 +781,116 @@
         if(document.getElementById('btn-relatorio-analitico-estoque')) document.getElementById('btn-relatorio-analitico-estoque').addEventListener('click', () => gerarRelatorioAnalitico('estoque'));
         if(document.getElementById('btn-relatorio-analitico-rastreio')) document.getElementById('btn-relatorio-analitico-rastreio').addEventListener('click', () => gerarRelatorioAnalitico('rastreio'));
 
-        // ================= ABA ADMINISTRADOR =================
-        if(document.getElementById('btn-admin-login')) {
-            document.getElementById('btn-admin-login').addEventListener('click', () => {
-                const input = document.getElementById('admin-pass-input').value;
-                if(btoa(input) === "c2V0aWNhZG1pbg==") { document.getElementById('admin-login-section').classList.add('hidden'); document.getElementById('admin-content-section').classList.remove('hidden'); document.getElementById('admin-error').classList.add('hidden'); document.getElementById('admin-pass-input').value = ""; } 
-                else { document.getElementById('admin-error').classList.remove('hidden'); }
-            });
-        }
+        // ================= ABA ADMIN =================
+        if(document.getElementById('btn-admin-login')) document.getElementById('btn-admin-login').addEventListener('click', () => { const input = document.getElementById('admin-pass-input').value; if(btoa(input) === "c2V0aWNhZG1pbg==") { document.getElementById('admin-login-section').classList.add('hidden'); document.getElementById('admin-content-section').classList.remove('hidden'); document.getElementById('admin-error').classList.add('hidden'); document.getElementById('admin-pass-input').value = ""; } else { document.getElementById('admin-error').classList.remove('hidden'); } });
+        if(document.getElementById('btn-admin-lock')) document.getElementById('btn-admin-lock').addEventListener('click', () => { document.getElementById('admin-content-section').classList.add('hidden'); document.getElementById('admin-login-section').classList.remove('hidden'); });
+        if(document.getElementById('btn-delete-loc')) document.getElementById('btn-delete-loc').addEventListener('click', async () => { if(confirm("Deseja realmente apagar toda a base de Rastreamento de Ativos? Esta ação é irreversível.")) { const btn = document.getElementById('btn-delete-loc'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...'; try { const locSnap = await getDocs(collection(db, "localidades")); locSnap.forEach((d) => deleteDoc(d.ref)); showToast("Base apagada."); } catch(e) {} btn.innerHTML = originalText; } });
+        if(document.getElementById('btn-delete-estoque')) document.getElementById('btn-delete-estoque').addEventListener('click', async () => { if(prompt("⚠️ ZONA DE PERIGO!\nIsso apagará TODO o Estoque Consolidado.\nPara confirmar, digite: APAGAR") === "APAGAR") { const btn = document.getElementById('btn-delete-estoque'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...'; try { const estSnap = await getDocs(collection(db, "estoque")); estSnap.forEach((d) => deleteDoc(d.ref)); showToast("Estoque apagado."); } catch(e) {} btn.innerHTML = originalText; } });
+        
+        if(document.getElementById('btn-export-logs-pdf')) document.getElementById('btn-export-logs-pdf').addEventListener('click', () => {
+            document.getElementById('printable-report').classList.remove('active-print'); document.getElementById('printable-simple-table').classList.add('active-print');
+            document.getElementById('print-simple-title').innerText = "Auditoria de Movimentações"; document.getElementById('print-simple-date').innerText = `Gerado por: ${userEmail} em ${new Date().toLocaleDateString('pt-BR')}`;
+            document.getElementById('print-simple-thead').innerHTML = `<tr><th>Data/Hora</th><th>Ação</th><th>Item</th><th style="text-align:center;">Qtd</th><th>Usuário / Ref.</th></tr>`;
+            const tb = document.getElementById('print-simple-tbody'); tb.innerHTML = '';
+            logsLocal.forEach(log => { let dateStr = log.dataHora ? log.dataHora.toDate().toLocaleDateString('pt-BR') + ' ' + log.dataHora.toDate().toLocaleTimeString('pt-BR').substring(0,5) : "N/A"; tb.innerHTML += `<tr><td>${dateStr}</td><td><b>${log.tipo}</b></td><td>${log.itemNome}</td><td style="text-align:center;">${log.qtd}</td><td>${(log.chamado||'') + (log.usuario ? ` (${log.usuario})` : '')}</td></tr>`; });
+            window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
+        });
 
-        if(document.getElementById('btn-admin-lock')) {
-            document.getElementById('btn-admin-lock').addEventListener('click', () => { document.getElementById('admin-content-section').classList.add('hidden'); document.getElementById('admin-login-section').classList.remove('hidden'); });
-        }
+        if(document.getElementById('btn-create-user')) document.getElementById('btn-create-user').addEventListener('click', async () => {
+            const email = document.getElementById('new-user-email').value.trim(), pass = document.getElementById('new-user-pass').value.trim();
+            if(!email || pass.length < 6) return showToast("Erro: Mínimo 6 chars.", "error");
+            const btn = document.getElementById('btn-create-user'); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Criando...';
+            try { await createUserWithEmailAndPassword(auth, email, pass); showToast("Usuário criado!"); document.getElementById('new-user-email').value = ""; document.getElementById('new-user-pass').value = ""; } catch (error) { showToast("Erro: " + error.message, "error"); } btn.innerHTML = '<i class="fas fa-save mr-1"></i> Cadastrar';
+        });
 
-        if(document.getElementById('btn-delete-loc')) {
-            document.getElementById('btn-delete-loc').addEventListener('click', async () => {
-                if(confirm("Deseja realmente apagar toda a base de Rastreamento de Ativos? Esta ação é irreversível.")) {
-                    const btn = document.getElementById('btn-delete-loc'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
-                    try { const locSnap = await getDocs(collection(db, "localidades")); locSnap.forEach((d) => deleteDoc(d.ref)); showToast("Base de rastreamento apagada."); } catch(e) {}
-                    btn.innerHTML = originalText;
-                }
-            });
-        }
+        // ================= CADASTROS =================
+        if(document.getElementById('btn-save-loc')) document.getElementById('btn-save-loc').addEventListener('click', async () => {
+            const equip = document.getElementById('loc-equip').value.trim(), local = document.getElementById('loc-local').value.trim(), marca = document.getElementById('loc-marca').value.trim() || 'N/A', serie = document.getElementById('loc-serie').value.trim() || 'N/A', patrim = document.getElementById('loc-patrimonio').value.trim() || 'N/A', qtd = parseInt(document.getElementById('loc-qtd').value);
+            if(!equip || !local || isNaN(qtd) || qtd <= 0) return showToast("Preencha Equipamento, Local e Quantidade.", "error");
+            const btn = document.getElementById('btn-save-loc'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+            try { await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd }); await registrarLog("MAP_LOCAL", `${equip} (${local})`, qtd, serie); showToast("Mapeado com sucesso!"); ['loc-equip','loc-local','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; } catch (e) { showToast("Erro: " + e.message, "error"); } btn.innerHTML = 'Mapear Equipamento';
+        });
 
-        if(document.getElementById('btn-delete-estoque')) {
-            document.getElementById('btn-delete-estoque').addEventListener('click', async () => {
-                const confirmacao = prompt("⚠️ ZONA DE PERIGO!\nIsso apagará TODO o Estoque Consolidado.\nPara confirmar, digite: APAGAR");
-                if(confirmacao === "APAGAR") {
-                    const btn = document.getElementById('btn-delete-estoque'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
-                    try { const estSnap = await getDocs(collection(db, "estoque")); estSnap.forEach((d) => deleteDoc(d.ref)); showToast("Estoque apagado com sucesso."); } catch(e) {}
-                    btn.innerHTML = originalText;
-                }
-            });
-        }
-
-        if(document.getElementById('btn-export-logs-pdf')) {
-            document.getElementById('btn-export-logs-pdf').addEventListener('click', () => {
-                document.getElementById('printable-report').classList.remove('active-print');
-                document.getElementById('printable-simple-table').classList.add('active-print');
-
-                const titleObj = document.getElementById('print-simple-title');
-                const dateObj = document.getElementById('print-simple-date');
-                const theadObj = document.getElementById('print-simple-thead');
-                const tbodyObj = document.getElementById('print-simple-tbody');
-
-                titleObj.innerText = "Extrato de Auditoria de Movimentações (Logs)";
-                dateObj.innerText = `Gerado por: ${userEmail} em ${new Date().toLocaleDateString('pt-BR')}`;
-                theadObj.innerHTML = `<tr><th>Data/Hora</th><th>Ação</th><th>Item</th><th style="text-align:center;">Qtd</th><th>Usuário / Ref.</th></tr>`;
-                tbodyObj.innerHTML = '';
-
-                logsLocal.forEach(log => {
-                    let dateStr = "N/A"; if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
-                    let fullRef = (log.chamado||'') + (log.usuario ? ` (${log.usuario})` : '');
-                    tbodyObj.innerHTML += `<tr><td>${dateStr}</td><td><b>${log.tipo}</b></td><td>${log.itemNome}</td><td style="text-align:center;">${log.qtd}</td><td>${fullRef}</td></tr>`;
-                });
-                window.print();
-                setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
-            });
-        }
-
-        if(document.getElementById('btn-process-upload')) {
-            document.getElementById('btn-process-upload').addEventListener('click', () => {
-                const fileInput = document.getElementById('file-upload'), btn = document.getElementById('btn-process-upload');
-                if (!fileInput.files.length) return showToast("Selecione um arquivo Excel.", "error");
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Aguarde...';
-                const reader = new FileReader();
-                reader.onload = async (e) => {
-                    try {
-                        const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' }), json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-                        let cont = 0;
-                        for (let row of json) {
-                            const cat = row['Categoria']||'Geral', comp = row['Componente']||'Desc', mod = row['Modelo']||'N/A', esp = row['Especificação']||row['Especificacao']||'N/A', qtd = parseInt(row['Quantidade']||1);
-                            if(comp === 'Desc') continue;
-                            const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp);
-                            if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd });
-                            else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Quantidade: qtd });
-                            cont++;
-                        }
-                        await registrarLog("ENTRADA", `Importação Lote Excel (Admin)`, cont, "");
-                        showToast(`Sucesso! ${cont} registros importados.`); fileInput.value = "";
-                    } catch (error) { showToast("Erro na leitura do arquivo.", "error"); }
-                    btn.innerHTML = '<i class="fas fa-cloud-upload-alt mr-1"></i> Processar';
-                };
-                reader.readAsArrayBuffer(fileInput.files[0]);
-            });
-        }
-
-        if(document.getElementById('btn-create-user')) {
-            document.getElementById('btn-create-user').addEventListener('click', async () => {
-                const email = document.getElementById('new-user-email').value.trim(), pass = document.getElementById('new-user-pass').value.trim();
-                if(!email || pass.length < 6) { showToast("Erro: Mínimo 6 caracteres.", "error"); return; }
-                const btn = document.getElementById('btn-create-user'); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Criando...';
+        if(document.getElementById('btn-loc-upload')) document.getElementById('btn-loc-upload').addEventListener('click', () => {
+            const fileInput = document.getElementById('loc-file-upload'), btn = document.getElementById('btn-loc-upload');
+            if (!fileInput.files.length) return showToast("Selecione planilha.", "error"); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mapeando...'; 
+            const reader = new FileReader();
+            reader.onload = async (e) => {
                 try {
-                    await createUserWithEmailAndPassword(auth, email, pass);
-                    showToast("Usuário criado! (Sessão atualizada).");
-                    document.getElementById('new-user-email').value = ""; document.getElementById('new-user-pass').value = "";
-                } catch (error) { showToast("Erro: " + error.message, "error"); }
-                btn.innerHTML = '<i class="fas fa-save mr-1"></i> Cadastrar';
-            });
-        }
+                    const json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let cont = 0;
+                    for (let row of json) {
+                        await addDoc(collection(db, "localidades"), { Equipamento: row['EQUIPAMENTO']||row['Equipamento']||'N/A', Local: row['LOCAL FISICO']||row['Local']||'N/A', Marca: row['MARCA']||row['Marca']||'N/A', Serie: row['Nº DE SÉRIE']||row['Série']||'N/A', Patrimonio: row['Nº PATRIMONIO']||row['Patrimônio']||'N/A', Quantidade: parseInt(row['QUANTIDADE']||row['Quantidade']||1) }); cont++;
+                    }
+                    await registrarLog("MAP_LOCAL", `Upload Excel`, cont, ""); showToast(`Sucesso! ${cont} mapeados.`); fileInput.value = "";
+                } catch (error) { showToast("Erro leitura.", "error"); } btn.innerHTML = 'Iniciar Importação';
+            }; reader.readAsArrayBuffer(fileInput.files[0]);
+        });
 
-        // ================= MÓDULO: RASTREIO E LOCALIDADES =================
-        if(document.getElementById('btn-save-loc')) {
-            document.getElementById('btn-save-loc').addEventListener('click', async () => {
-                const equip = document.getElementById('loc-equip').value.trim(), local = document.getElementById('loc-local').value.trim(), marca = document.getElementById('loc-marca').value.trim() || 'N/A', serie = document.getElementById('loc-serie').value.trim() || 'N/A', patrim = document.getElementById('loc-patrimonio').value.trim() || 'N/A', qtd = parseInt(document.getElementById('loc-qtd').value);
-                if(!equip || !local || isNaN(qtd) || qtd <= 0) return showToast("Preencha Equipamento, Local e Quantidade.", "error");
-                const btn = document.getElementById('btn-save-loc'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+        if(document.getElementById('btn-save-item')) document.getElementById('btn-save-item').addEventListener('click', async () => {
+            const cat = document.getElementById('form-cat').value.trim(), comp = document.getElementById('form-comp').value.trim(), mod = document.getElementById('form-mod').value.trim(), esp = document.getElementById('form-esp').value.trim(), local = document.getElementById('form-local').value.trim() || 'N/A', patrim = document.getElementById('form-patrimonio-estoque').value.trim() || 'N/A', qtd = parseInt(document.getElementById('form-qtd').value), minEstoque = parseInt(document.getElementById('form-minimo').value) || 5; let serie = document.getElementById('form-patrimonio-estoque').value.trim() || 'N/A';
+            if(!cat || !comp || isNaN(qtd) || qtd <= 0) return showToast("Preencha os campos obrigatórios.", "error");
+            const btn = document.getElementById('btn-save-item'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registrando...';
+            const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local && (i.Série||'N/A') === serie);
+            try {
+                if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd, EstoqueMinimo: minEstoque });
+                else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque });
+                await registrarLog("ENTRADA", `${comp} (${esp})`, qtd, local); showToast("Entrada registrada!"); document.getElementById('form-qtd').value = 1; document.getElementById('form-patrimonio-estoque').value = "";
+            } catch (e) { showToast("Erro: " + e.message, "error");} btn.innerHTML = 'Registrar Entrada no Estoque';
+        });
+
+        if(document.getElementById('btn-estoque-upload')) document.getElementById('btn-estoque-upload').addEventListener('click', () => {
+            const fileInput = document.getElementById('estoque-file-upload'), btn = document.getElementById('btn-estoque-upload');
+            if (!fileInput.files.length) return showToast("Selecione Excel.", "error"); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Importando...';
+            const reader = new FileReader();
+            reader.onload = async (e) => {
                 try {
-                    await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
-                    await registrarLog("MAP_LOCAL", `${equip} (Local: ${local})`, qtd, `Série: ${serie}`);
-                    showToast("Equipamento mapeado com sucesso!");
-                    ['loc-equip','loc-local','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1;
-                } catch (e) { showToast("Erro ao mapear: " + e.message, "error"); }
-                btn.innerHTML = 'Mapear Equipamento';
-            });
-        }
+                    const json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let cont = 0;
+                    for (let row of json) {
+                        const cat = row['CATEGORIA']||row['Categoria']||'Geral', comp = row['COMPONENTE']||row['Componente']||'Desc', mod = row['MODELO']||row['Modelo']||'N/A', esp = row['ESPECIFICAÇÃO']||row['Especificacao']||'N/A', local = row['LOCAL FISICO']||row['Local']||'N/A', serie = row['SÉRIE']||row['Série']||'N/A', patrim = row['PATRIMÔNIO']||row['Patrimônio']||'N/A', minEst = parseInt(row['ESTOQUE MÍNIMO']||row['Estoque Minimo']||5), qtd = parseInt(row['QUANTIDADE']||row['Quantidade']||1);
+                        if(comp === 'Desc') continue;
+                        const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local && (i.Série||'N/A') === serie);
+                        if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd, EstoqueMinimo: minEst });
+                        else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, EstoqueMinimo: minEst, Quantidade: qtd });
+                        cont++;
+                    }
+                    await registrarLog("ENTRADA", `Upload Lote`, cont, ""); showToast(`Sucesso! ${cont} importados.`); fileInput.value = "";
+                } catch (error) { showToast("Erro leitura.", "error"); } btn.innerHTML = 'Processar Planilha de Estoque';
+            }; reader.readAsArrayBuffer(fileInput.files[0]);
+        });
 
-        if(document.getElementById('btn-loc-upload')) {
-            document.getElementById('btn-loc-upload').addEventListener('click', () => {
-                const fileInput = document.getElementById('loc-file-upload'), btn = document.getElementById('btn-loc-upload');
-                if (!fileInput.files.length) return showToast("Selecione um arquivo Excel.", "error");
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mapeando...'; 
-                const reader = new FileReader();
-                reader.onload = async (e) => {
-                    try {
-                        const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' }), json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-                        let cont = 0;
-                        for (let row of json) {
-                            const equip = row['EQUIPAMENTO'] || row['Equipamento'] || row['Nome'] || 'Equipamento Indefinido', local = row['LOCAL FISICO'] || row['Local Físico'] || row['Local'] || 'N/A', marca = row['MARCA'] || row['Marca'] || 'N/A', serie = row['Nº DE SÉRIE'] || row['N Serie'] || row['Série'] || 'N/A', patrim = row['Nº PATRIMONIO'] || row['Patrimônio'] || row['Patrimonio'] || 'N/A', qtd = parseInt(row['QUANTIDADE'] || row['Quantidade'] || row['Qtd'] || 1);
-                            await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
-                            cont++;
-                        }
-                        await registrarLog("MAP_LOCAL", `Importação em Lote (Excel)`, cont, "");
-                        showToast(`Sucesso! ${cont} locais mapeados.`); fileInput.value = "";
-                    } catch (error) { showToast("Erro na leitura.", "error"); }
-                    btn.innerHTML = 'Iniciar Importação';
-                };
-                reader.readAsArrayBuffer(fileInput.files[0]);
-            });
-        }
+        if(document.getElementById('btn-register-saida')) document.getElementById('btn-register-saida').addEventListener('click', async () => {
+            const idItem = document.getElementById('saida-select-item').value, qtdSaida = parseInt(document.getElementById('saida-qtd').value), chamado = document.getElementById('saida-chamado').value.trim();
+            if(!idItem || isNaN(qtdSaida) || qtdSaida <= 0) return showToast("Valores inválidos.", "error");
+            const btn = document.getElementById('btn-register-saida'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+            const itemDB = estoqueLocal.find(i => i.id === idItem);
+            if(qtdSaida > (itemDB.Quantidade||0)) { showToast("Estoque insuficiente!", "error"); btn.innerHTML = 'Confirmar Baixa'; return; }
+            try { await updateDoc(doc(db, "estoque", idItem), { Quantidade: (itemDB.Quantidade||0) - qtdSaida }); await registrarLog("SAÍDA", `${itemDB.Componente} (${itemDB.Especificação})`, qtdSaida, chamado); showToast("Baixa processada!"); document.getElementById('saida-qtd').value = 1; document.getElementById('saida-chamado').value = ""; } catch(e) { showToast("Erro baixa.", "error"); } btn.innerHTML = 'Confirmar Baixa';
+        });
 
-        function atualizarInterfaceRastreio() {
-            const tbody = document.getElementById('rastreio-tbody'); 
-            if(!tbody) return;
-
-            let filtrados = localidadesLocais.filter(item => {
-                return !currentSearchRastreio || (item.Equipamento+item.Local+item.Marca+item.Serie+item.Patrimonio).toLowerCase().includes(currentSearchRastreio.toLowerCase());
-            });
-
-            // Paginação Rastreio
-            const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1;
-            if(currentPageRastreio > totalPaginas) currentPageRastreio = totalPaginas;
-            const inicio = (currentPageRastreio - 1) * itemsPerPage;
-            const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
-
-            tbody.innerHTML = '';
-            dadosPagina.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
-                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||'-'}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
-            });
-
-            if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
-            if(document.getElementById('btn-prev-rastreio')) document.getElementById('btn-prev-rastreio').disabled = currentPageRastreio === 1;
-            if(document.getElementById('btn-next-rastreio')) document.getElementById('btn-next-rastreio').disabled = currentPageRastreio === totalPaginas;
-        }
-
-        // ================= CADASTRO ESTOQUE (MANUAL E LOTE) =================
-        if(document.getElementById('btn-save-item')) {
-            document.getElementById('btn-save-item').addEventListener('click', async () => {
-                const cat = document.getElementById('form-cat').value.trim(), comp = document.getElementById('form-comp').value.trim(), mod = document.getElementById('form-mod').value.trim(), esp = document.getElementById('form-esp').value.trim(), local = document.getElementById('form-local').value.trim() || 'N/A', patrim = document.getElementById('form-patrimonio-estoque').value.trim() || 'N/A', qtd = parseInt(document.getElementById('form-qtd').value), minEstoque = parseInt(document.getElementById('form-minimo').value) || 5;
-                let serie = document.getElementById('form-patrimonio-estoque').value.trim() || 'N/A'; // Reutilizando campo para Série/Patrimônio
-                
-                if(!cat || !comp || isNaN(qtd) || qtd <= 0) return showToast("Preencha os campos obrigatórios.", "error");
-                const btn = document.getElementById('btn-save-item'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registrando...';
-                
-                const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local && (i.Série||'N/A') === serie);
-                try {
-                    if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd, EstoqueMinimo: minEstoque });
-                    else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque });
-                    await registrarLog("ENTRADA", `${comp} - ${mod} (${esp})`, qtd, `Local: ${local}`);
-                    showToast("Entrada registrada com sucesso!"); 
-                    document.getElementById('form-qtd').value = 1; document.getElementById('form-patrimonio-estoque').value = "";
-                } catch (e) { showToast("Erro: " + e.message, "error");}
-                btn.innerHTML = 'Registrar Entrada no Estoque';
-            });
-        }
-
-        if(document.getElementById('btn-estoque-upload')) {
-            document.getElementById('btn-estoque-upload').addEventListener('click', () => {
-                const fileInput = document.getElementById('estoque-file-upload'), btn = document.getElementById('btn-estoque-upload');
-                if (!fileInput.files.length) return showToast("Selecione um arquivo Excel ou CSV.", "error");
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Importando...';
-                const reader = new FileReader();
-                reader.onload = async (e) => {
-                    try {
-                        const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
-                        const json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-                        let cont = 0;
-                        for (let row of json) {
-                            const cat = row['CATEGORIA'] || row['Categoria'] || 'Geral';
-                            const comp = row['COMPONENTE'] || row['Componente'] || 'Desc';
-                            const mod = row['MODELO'] || row['Modelo'] || 'N/A';
-                            const esp = row['ESPECIFICAÇÃO'] || row['ESPECIFICACAO'] || row['Especificação'] || 'N/A';
-                            const local = row['LOCAL FISICO'] || row['LOCAL'] || row['Local'] || 'N/A';
-                            const serie = row['SÉRIE'] || row['Série'] || row['SERIE'] || 'N/A';
-                            const patrim = row['PATRIMÔNIO'] || row['PATRIMONIO'] || row['Patrimônio'] || row['Patrimonio'] || 'N/A';
-                            const minEst = parseInt(row['ESTOQUE MÍNIMO'] || row['ESTOQUE MINIMO'] || row['Estoque Minimo'] || 5);
-                            const qtd = parseInt(row['QUANTIDADE'] || row['Quantidade'] || row['Qtd'] || 1);
-                            
-                            if(comp === 'Desc') continue;
-                            
-                            const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local && (i.Série||'N/A') === serie);
-                            if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd, EstoqueMinimo: minEst });
-                            else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, EstoqueMinimo: minEst, Quantidade: qtd });
-                            cont++;
-                        }
-                        await registrarLog("ENTRADA", `Importação Lote Estoque (Excel)`, cont, "");
-                        showToast(`Sucesso! ${cont} registros de estoque importados.`); fileInput.value = "";
-                    } catch (error) { showToast("Erro na leitura do arquivo.", "error"); }
-                    btn.innerHTML = 'Processar Planilha de Estoque';
-                };
-                reader.readAsArrayBuffer(fileInput.files[0]);
-            });
-        }
-
-        if(document.getElementById('btn-register-saida')) {
-            document.getElementById('btn-register-saida').addEventListener('click', async () => {
-                const idItem = document.getElementById('saida-select-item').value, qtdSaida = parseInt(document.getElementById('saida-qtd').value), chamado = document.getElementById('saida-chamado').value.trim();
-                if(!idItem || isNaN(qtdSaida) || qtdSaida <= 0) return showToast("Valores inválidos.", "error");
-                const btn = document.getElementById('btn-register-saida'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-                
-                const itemDB = estoqueLocal.find(i => i.id === idItem);
-                if(qtdSaida > (itemDB.Quantidade||0)) { showToast("Estoque insuficiente!", "error"); btn.innerHTML = 'Confirmar Baixa'; return; }
-                try {
-                    await updateDoc(doc(db, "estoque", idItem), { Quantidade: (itemDB.Quantidade||0) - qtdSaida });
-                    await registrarLog("SAÍDA", `${itemDB.Componente} - ${itemDB.Modelo} (${itemDB.Especificação})`, qtdSaida, chamado);
-                    showToast("Baixa processada com sucesso!"); document.getElementById('saida-qtd').value = 1; document.getElementById('saida-chamado').value = ""; 
-                } catch(e) { showToast("Erro ao processar baixa.", "error"); }
-                btn.innerHTML = 'Confirmar Baixa';
-            });
-        }
-
-        // ================= INSIGHTS COM PROTEÇÃO =================
+        // ================= INSIGHTS E UI =================
         function gerarInsights() {
-            const container = document.getElementById('insights-container'); 
-            if(!container) return;
-            container.innerHTML = ''; 
+            const container = document.getElementById('insights-container'); if(!container) return; container.innerHTML = ''; 
             let zerados = [], baixos = [], maiorVolume = null, totalItens = 0, hdCount = 0, ssdCount = 0;
-
-            if (!estoqueLocal || estoqueLocal.length === 0) {
-                container.innerHTML = `<div class="col-span-3 bg-gray-50 border-l-4 border-gray-400 p-4 rounded-xl shadow-sm text-gray-500 font-medium flex items-center"><i class="fas fa-info-circle mr-2 text-xl"></i> Sem dados no estoque.</div>`;
-                return;
-            }
-
+            if (!estoqueLocal || estoqueLocal.length === 0) { container.innerHTML = `<div class="col-span-3 bg-gray-50 border-l-4 border-gray-400 p-4 rounded-xl shadow-sm text-gray-500 font-medium flex items-center"><i class="fas fa-info-circle mr-2 text-xl"></i> Sem dados no estoque.</div>`; return; }
             estoqueLocal.forEach(item => {
-                const qtd = item.Quantidade || 0; totalItens += qtd;
-                const minEstoque = item.EstoqueMinimo || 5;
-                
+                const qtd = item.Quantidade || 0; totalItens += qtd; const minEstoque = item.EstoqueMinimo || 5;
                 if (qtd === 0) zerados.push(item); else if (qtd <= minEstoque) baixos.push(item);
-                const compUpper = (item.Componente || '').toUpperCase();
-                if (compUpper.includes('HD INTERNO') || compUpper.includes('DISCO RÍGIDO') || compUpper.includes('HD ')) hdCount += qtd;
-                if (compUpper.includes('SSD')) ssdCount += qtd;
+                const compUpper = (item.Componente || '').toUpperCase(); if (compUpper.includes('HD INTERNO') || compUpper.includes('HD ')) hdCount += qtd; if (compUpper.includes('SSD')) ssdCount += qtd;
                 if (!maiorVolume || qtd > maiorVolume.Quantidade) maiorVolume = item;
             });
-
             let alertHtml = '';
             if (zerados.length > 0 || baixos.length > 0) {
-                let desc = '';
-                if (zerados.length > 0) desc += `<span class="text-red-600 font-bold">${zerados.length} itens esgotados.</span> `;
-                if (baixos.length > 0) desc += `<span class="text-orange-600 font-bold">${baixos.length} itens em alerta.</span>`;
-                let exemplos = [...zerados, ...baixos].slice(0, 2).map(i => i.Componente || 'Item').join(', ');
-                alertHtml = `<div class="bg-red-50 border-l-4 border-red-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-exclamation-triangle text-red-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-red-800 uppercase tracking-wide">Reposição Prioritária</h4><p class="text-xs text-red-700 mt-2 leading-relaxed">${desc}</p><p class="text-[11px] text-red-500 mt-1 font-semibold">Ex: ${exemplos}...</p></div></div>`;
-            } else { alertHtml = `<div class="bg-emerald-50 border-l-4 border-emerald-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-check-circle text-emerald-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wide">Estoque Saudável</h4><p class="text-xs text-emerald-700 mt-2 leading-relaxed">Nenhum equipamento em nível crítico ou zerado no momento.</p></div></div>`; }
-
-            let acumuloHtml = '';
-            if (maiorVolume && maiorVolume.Quantidade > 0) {
-                let pct = totalItens > 0 ? ((maiorVolume.Quantidade / totalItens) * 100).toFixed(1) : 0;
-                let corBg = maiorVolume.Quantidade > 80 ? 'bg-yellow-50 border-yellow-500' : 'bg-blue-50 border-blue-500', corTexto = maiorVolume.Quantidade > 80 ? 'text-yellow-800' : 'text-blue-800', corDesc = maiorVolume.Quantidade > 80 ? 'text-yellow-700' : 'text-blue-700', icon = maiorVolume.Quantidade > 80 ? 'fa-boxes text-yellow-500' : 'fa-chart-pie text-blue-500';
-                acumuloHtml = `<div class="${corBg} border-l-4 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas ${icon} text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold ${corTexto} uppercase tracking-wide">Concentração de Volume</h4><p class="text-xs ${corDesc} mt-2 leading-relaxed"><b>${maiorVolume.Componente || 'Item'}</b> possui ${maiorVolume.Quantidade} und.</p><p class="text-[11px] ${corDesc} mt-1 font-semibold opacity-80">Representa ${pct}% do volume físico total.</p></div></div>`;
-            } else { acumuloHtml = `<div class="bg-gray-50 border-l-4 border-gray-300 p-5 rounded-xl shadow-sm flex items-start"><p class="text-xs text-gray-500 mt-2">Sem dados de volume.</p></div>`; }
-
-            let techHtml = '';
-            if (hdCount > 0 && ssdCount > 0) {
-                techHtml = `<div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-rocket text-blue-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-blue-800 uppercase tracking-wide">Sugestão de Modernização</h4><p class="text-xs text-blue-700 mt-2 leading-relaxed">Existem ${hdCount} HDs antigos e ${ssdCount} SSDs em estoque.</p><p class="text-[11px] text-blue-600 mt-1 font-semibold">Considere criar Força-Tarefa de upgrade preventivo no parque.</p></div></div>`;
-            } else {
-                const numCat = [...new Set(estoqueLocal.map(i => i.Categoria || 'Geral'))].length;
-                techHtml = `<div class="bg-purple-50 border-l-4 border-purple-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-sitemap text-purple-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-purple-800 uppercase tracking-wide">Diversidade de Ativos</h4><p class="text-xs text-purple-700 mt-2 leading-relaxed">Gestão ativa de ${numCat} categorias distintas.</p><p class="text-[11px] text-purple-500 mt-1 font-semibold">Portfólio estruturado e centralizado.</p></div></div>`;
-            }
+                let desc = ''; if (zerados.length > 0) desc += `<span class="text-red-600 font-bold">${zerados.length} itens esgotados.</span> `; if (baixos.length > 0) desc += `<span class="text-orange-600 font-bold">${baixos.length} em alerta.</span>`;
+                alertHtml = `<div class="bg-red-50 border-l-4 border-red-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-exclamation-triangle text-red-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-red-800 uppercase tracking-wide">Reposição Prioritária</h4><p class="text-xs text-red-700 mt-2">${desc}</p></div></div>`;
+            } else { alertHtml = `<div class="bg-emerald-50 border-l-4 border-emerald-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-check-circle text-emerald-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wide">Estoque Saudável</h4><p class="text-xs text-emerald-700 mt-2">Nenhum equipamento em nível crítico.</p></div></div>`; }
+            
+            let acumuloHtml = `<div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-boxes text-blue-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-blue-800 uppercase tracking-wide">Concentração</h4><p class="text-xs text-blue-700 mt-2"><b>${maiorVolume ? maiorVolume.Componente : 'Item'}</b> possui o maior volume.</p></div></div>`;
+            let techHtml = `<div class="bg-purple-50 border-l-4 border-purple-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-sitemap text-purple-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-purple-800 uppercase tracking-wide">Diversidade</h4><p class="text-xs text-purple-700 mt-2">Gestão de ${[...new Set(estoqueLocal.map(i => i.Categoria || 'Geral'))].length} categorias.</p></div></div>`;
             container.innerHTML = alertHtml + acumuloHtml + techHtml;
         }
 
         function atualizarDatalists() { 
             if(document.getElementById('lista-componentes')) document.getElementById('lista-componentes').innerHTML = [...new Set(estoqueLocal.map(i => i.Componente||''))].map(c => `<option value="${c}">`).join(''); 
-            
             const filterCat = document.getElementById('filter-cat-estoque');
             if(filterCat) {
                 const categoriasUnicas = [...new Set(estoqueLocal.map(i => i.Categoria || 'Sem Categoria'))].sort();
@@ -1223,22 +900,17 @@
         }
 
         function atualizarSelectSaida() {
-            const sel = document.getElementById('saida-select-item'); 
-            if(!sel) return;
+            const sel = document.getElementById('saida-select-item'); if(!sel) return;
             sel.innerHTML = '<option value="">-- Selecione o equipamento --</option>';
             [...estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { sel.innerHTML += `<option value="${i.id}">[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||'N/A'}) - (Qtd: ${i.Quantidade||0})</option>`; });
         }
         
         function atualizarInterfaceEstoque() {
-            const tbody = document.getElementById('inventory-tbody'); 
-            if(!tbody) return;
-            
+            const tbody = document.getElementById('inventory-tbody'); if(!tbody) return;
             let tTotal = 0, tArmaz = 0, tEnergia = 0, tZerado = 0; const mapCat = {};
-            
             estoqueLocal.forEach(item => {
                 const cat = item.Categoria || 'Sem Categoria'; const qtd = item.Quantidade || 0;
-                tTotal += qtd;
-                if(cat === 'Armazenamento') tArmaz += qtd; if(cat === 'Fonte de Alimentação' || cat === 'Bateria') tEnergia += qtd; if(qtd === 0) tZerado++;
+                tTotal += qtd; if(cat === 'Armazenamento') tArmaz += qtd; if(cat === 'Fonte de Alimentação' || cat === 'Bateria') tEnergia += qtd; if(qtd === 0) tZerado++;
                 mapCat[cat] = (mapCat[cat] || 0) + qtd;
             });
             if(document.getElementById('kpi-total')) document.getElementById('kpi-total').innerText = tTotal; 
@@ -1251,21 +923,18 @@
                 let matchCat = !currentFilterCat || (item.Categoria || 'Sem Categoria') === currentFilterCat;
                 return matchBusca && matchCat;
             });
-
             const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1;
             if(currentPageEstoque > totalPaginas) currentPageEstoque = totalPaginas;
-            const inicio = (currentPageEstoque - 1) * itemsPerPage;
-            const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
+            const inicio = (currentPageEstoque - 1) * itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
 
             tbody.innerHTML = '';
             dadosPagina.forEach(item => {
-                const qtd = item.Quantidade || 0;
-                const minEstoque = item.EstoqueMinimo || 5;
+                const qtd = item.Quantidade || 0; const minEstoque = item.EstoqueMinimo || 5;
                 let badge = qtd === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' : qtd <= minEstoque ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>' : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
                 tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${item.Categoria||'Sem Categoria'}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente||'-'}<br><span class="text-xs font-normal text-slate-500">${item.Modelo||''} / ${item.Especificação||''}</span></td><td class="px-6 py-4 text-sm text-blue-600">${item.Local||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${item.Série||item.Patrimonio||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
             });
 
-            if(document.getElementById('estoque-page-info')) document.getElementById('estoque-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
+            if(document.getElementById('estoque-page-info')) document.getElementById('estoque-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length}`;
             if(document.getElementById('btn-prev-estoque')) document.getElementById('btn-prev-estoque').disabled = currentPageEstoque === 1;
             if(document.getElementById('btn-next-estoque')) document.getElementById('btn-next-estoque').disabled = currentPageEstoque === totalPaginas;
 
@@ -1273,24 +942,18 @@
         }
 
         function atualizarInterfaceRastreio() {
-            const tbody = document.getElementById('rastreio-tbody'); 
-            if(!tbody) return;
-
-            let filtrados = localidadesLocais.filter(item => {
-                return !currentSearchRastreio || (item.Equipamento+item.Local+item.Marca+item.Serie+item.Patrimonio).toLowerCase().includes(currentSearchRastreio.toLowerCase());
-            });
-
+            const tbody = document.getElementById('rastreio-tbody'); if(!tbody) return;
+            let filtrados = localidadesLocais.filter(item => { return !currentSearchRastreio || (item.Equipamento+item.Local+item.Marca+item.Serie+item.Patrimonio).toLowerCase().includes(currentSearchRastreio.toLowerCase()); });
             const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1;
             if(currentPageRastreio > totalPaginas) currentPageRastreio = totalPaginas;
-            const inicio = (currentPageRastreio - 1) * itemsPerPage;
-            const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
+            const inicio = (currentPageRastreio - 1) * itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
 
             tbody.innerHTML = '';
             dadosPagina.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
                 tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||'-'}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
             });
 
-            if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
+            if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length}`;
             if(document.getElementById('btn-prev-rastreio')) document.getElementById('btn-prev-rastreio').disabled = currentPageRastreio === 1;
             if(document.getElementById('btn-next-rastreio')) document.getElementById('btn-next-rastreio').disabled = currentPageRastreio === totalPaginas;
         }
@@ -1306,23 +969,13 @@
             const topItensEstoque = [...dados].sort((a, b) => (b.Quantidade||0) - (a.Quantidade||0)).slice(0, 8);
             if(document.getElementById('chartComponentesAmpliado')) {
                 chartComponentesAmpliado = new Chart(document.getElementById('chartComponentesAmpliado'), {
-                    type: 'bar',
-                    data: {
-                        labels: topItensEstoque.map(i => (i.Componente || '').substring(0, 18)),
-                        datasets: [{ data: topItensEstoque.map(i => i.Quantidade || 0), backgroundColor: primColor, borderRadius: 6 }]
-                    },
-                    options: {
-                        responsive: true, maintainAspectRatio: false,
-                        plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold', size: 11 }, anchor: 'end', align: 'start', offset: 8 } },
-                        scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 } } } }
-                    }
+                    type: 'bar', data: { labels: topItensEstoque.map(i => (i.Componente || '').substring(0, 18)), datasets: [{ data: topItensEstoque.map(i => i.Quantidade || 0), backgroundColor: primColor, borderRadius: 6 }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold', size: 11 }, anchor: 'end', align: 'start', offset: 8 } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 } } } } }
                 });
             }
 
             const saidasMap = {};
-            logs.forEach(log => {
-                if (log.tipo === 'SAÍDA' && log.itemNome) { saidasMap[log.itemNome] = (saidasMap[log.itemNome] || 0) + (log.qtd || 0); }
-            });
+            logs.forEach(log => { if (log.tipo === 'SAÍDA' && log.itemNome) { saidasMap[log.itemNome] = (saidasMap[log.itemNome] || 0) + (log.qtd || 0); } });
             const topSaidasKeys = Object.keys(saidasMap).sort((a,b) => saidasMap[b] - saidasMap[a]).slice(0, 5);
             const saidasLabels = topSaidasKeys.map(k => k.split(' - ')[0].substring(0, 12));
             const saidasValues = topSaidasKeys.map(k => saidasMap[k]);
@@ -1330,42 +983,22 @@
 
             if(document.getElementById('chartTopSaidas')) {
                 chartTopSaidas = new Chart(document.getElementById('chartTopSaidas'), {
-                    type: 'bar',
-                    data: {
-                        labels: saidasLabels,
-                        datasets: [{ data: saidasValues, backgroundColor: '#EF4444', borderRadius: 6 }]
-                    },
-                    options: {
-                        responsive: true, maintainAspectRatio: false,
-                        plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold', size: 11 }, anchor: 'end', align: 'start', offset: 8 } },
-                        scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 } } } }
-                    }
+                    type: 'bar', data: { labels: saidasLabels, datasets: [{ data: saidasValues, backgroundColor: '#EF4444', borderRadius: 6 }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold', size: 11 }, anchor: 'end', align: 'start', offset: 8 } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 } } } } }
                 });
             }
 
-            const catLabels = Object.keys(mapCat);
-            const catData = catLabels.map(k => mapCat[k]);
-            const coresVibrantes = ['#4F46E5', '#EC4899', '#10B981', '#F59E0B', '#3B82F6', '#8B5CF6', '#EF4444', '#06B6D4'];
+            const catLabels = Object.keys(mapCat); const catData = catLabels.map(k => mapCat[k]); const coresVibrantes = ['#4F46E5', '#EC4899', '#10B981', '#F59E0B', '#3B82F6', '#8B5CF6', '#EF4444', '#06B6D4'];
 
             if(document.getElementById('chartPizzaCategorias')) {
                 chartPizzaCategorias = new Chart(document.getElementById('chartPizzaCategorias'), {
-                    type: 'doughnut',
-                    data: {
-                        labels: catLabels.length > 0 ? catLabels : ['Sem Dados'],
-                        datasets: [{ data: catData.length > 0 ? catData : [1], backgroundColor: coresVibrantes, borderWidth: 2, borderColor: '#ffffff' }]
-                    },
-                    options: {
-                        responsive: true, maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: true, position: 'bottom', labels: { boxWidth: 12, font: { size: 10, weight: 'bold' } } },
-                            datalabels: { color: '#ffffff', font: { weight: 'bold', size: 10 } }
-                        }
-                    }
+                    type: 'doughnut', data: { labels: catLabels.length > 0 ? catLabels : ['Sem Dados'], datasets: [{ data: catData.length > 0 ? catData : [1], backgroundColor: coresVibrantes, borderWidth: 2, borderColor: '#ffffff' }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 12, font: { size: 10, weight: 'bold' } } }, datalabels: { color: '#ffffff', font: { weight: 'bold', size: 10 } } } }
                 });
             }
         }
 
-        // ================= COMPORTAMENTO DE ABAS E EVENTOS DE MENU =================
+        // ================= COMPORTAMENTO DE NAVEGAÇÃO =================
         if(document.getElementById('btn-theme')) document.getElementById('btn-theme').addEventListener('click', () => document.body.classList.toggle('dark'));
         const modal = document.getElementById('tools-modal'); 
         if(document.getElementById('btn-tools')) document.getElementById('btn-tools').addEventListener('click', () => modal.classList.remove('hidden')); 
@@ -1376,66 +1009,31 @@
             btn.addEventListener('click', (e) => { 
                 tabsBtns.forEach(b => { b.classList.remove('bg-blue-100', 'text-blue-800', 'bg-purple-100', 'text-purple-800', 'bg-indigo-100', 'text-indigo-800', 'border-indigo-500'); b.classList.add('text-slate-600', 'border-transparent'); }); 
                 e.currentTarget.classList.remove('text-slate-600', 'border-transparent'); 
-                
                 const target = e.currentTarget.getAttribute('data-target');
                 if(target === 'tab-admin') e.currentTarget.classList.add('bg-purple-100', 'text-purple-800');
                 else if(target === 'tab-localidade') e.currentTarget.classList.add('bg-indigo-100', 'text-indigo-800', 'border-indigo-500');
                 else e.currentTarget.classList.add('bg-blue-100', 'text-blue-800');
-                
                 tabContents.forEach(tc => tc.classList.add('hidden')); 
                 if(document.getElementById(target)) document.getElementById(target).classList.remove('hidden'); 
             }); 
         });
 
-        if(document.getElementById('view-estoque-btn')) {
-            document.getElementById('view-estoque-btn').addEventListener('click', (e) => {
-                e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600');
-                const otherBtn = document.getElementById('view-rastreio-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500');
-                document.getElementById('view-estoque-content').classList.remove('hidden'); document.getElementById('view-rastreio-content').classList.add('hidden');
-            });
-        }
+        if(document.getElementById('view-estoque-btn')) document.getElementById('view-estoque-btn').addEventListener('click', (e) => { e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600'); const otherBtn = document.getElementById('view-rastreio-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500'); document.getElementById('view-estoque-content').classList.remove('hidden'); document.getElementById('view-rastreio-content').classList.add('hidden'); });
+        if(document.getElementById('view-rastreio-btn')) document.getElementById('view-rastreio-btn').addEventListener('click', (e) => { e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600'); const otherBtn = document.getElementById('view-estoque-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500'); document.getElementById('view-rastreio-content').classList.remove('hidden'); document.getElementById('view-estoque-content').classList.add('hidden'); });
 
-        if(document.getElementById('view-rastreio-btn')) {
-            document.getElementById('view-rastreio-btn').addEventListener('click', (e) => {
-                e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600');
-                const otherBtn = document.getElementById('view-estoque-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500');
-                document.getElementById('view-rastreio-content').classList.remove('hidden'); document.getElementById('view-estoque-content').classList.add('hidden');
-            });
-        }
-
-        // Eventos de Busca e Filtros Dinâmicos
-        if(document.getElementById('search-table-estoque')) {
-            document.getElementById('search-table-estoque').addEventListener('input', e => { 
-                currentSearchText = e.target.value; currentPageEstoque = 1; atualizarInterfaceEstoque(); 
-            });
-        }
-        if(document.getElementById('filter-cat-estoque')) {
-            document.getElementById('filter-cat-estoque').addEventListener('change', e => { 
-                currentFilterCat = e.target.value; currentPageEstoque = 1; atualizarInterfaceEstoque(); 
-            });
-        }
-        if(document.getElementById('search-table-rastreio')) {
-            document.getElementById('search-table-rastreio').addEventListener('input', e => { 
-                currentSearchRastreio = e.target.value; currentPageRastreio = 1; atualizarInterfaceRastreio(); 
-            });
-        }
-
-        // Eventos Paginação Estoque
+        if(document.getElementById('search-table-estoque')) document.getElementById('search-table-estoque').addEventListener('input', e => { currentSearchText = e.target.value; currentPageEstoque = 1; atualizarInterfaceEstoque(); });
+        if(document.getElementById('filter-cat-estoque')) document.getElementById('filter-cat-estoque').addEventListener('change', e => { currentFilterCat = e.target.value; currentPageEstoque = 1; atualizarInterfaceEstoque(); });
+        if(document.getElementById('search-table-rastreio')) document.getElementById('search-table-rastreio').addEventListener('input', e => { currentSearchRastreio = e.target.value; currentPageRastreio = 1; atualizarInterfaceRastreio(); });
         if(document.getElementById('btn-prev-estoque')) document.getElementById('btn-prev-estoque').addEventListener('click', () => { if(currentPageEstoque > 1) { currentPageEstoque--; atualizarInterfaceEstoque(); } });
         if(document.getElementById('btn-next-estoque')) document.getElementById('btn-next-estoque').addEventListener('click', () => { currentPageEstoque++; atualizarInterfaceEstoque(); });
-
-        // Eventos Paginação Rastreio
         if(document.getElementById('btn-prev-rastreio')) document.getElementById('btn-prev-rastreio').addEventListener('click', () => { if(currentPageRastreio > 1) { currentPageRastreio--; atualizarInterfaceRastreio(); } });
         if(document.getElementById('btn-next-rastreio')) document.getElementById('btn-next-rastreio').addEventListener('click', () => { currentPageRastreio++; atualizarInterfaceRastreio(); });
 
-        
-        if(document.getElementById('btn-export-csv')) {
-            document.getElementById('btn-export-csv').addEventListener('click', () => { 
-                let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Local,Patrimonio,Quantidade\n"; 
-                estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Local||'N/A'}","${r.Patrimonio||'N/A'}","${r.Quantidade||0}"\n`); 
-                const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); 
-            });
-        }
+        if(document.getElementById('btn-export-csv')) document.getElementById('btn-export-csv').addEventListener('click', () => { 
+            let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Local,Patrimonio,Quantidade\n"; 
+            estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Local||'N/A'}","${r.Patrimonio||'N/A'}","${r.Quantidade||0}"\n`); 
+            const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); 
+        });
     </script>
 </body>
 </html>
