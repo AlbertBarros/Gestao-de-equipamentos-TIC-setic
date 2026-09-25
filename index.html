@@ -133,13 +133,13 @@
                 </div>
             </div>
 
-            <!-- MOTOR DE INSIGHTS E ALERTAS -->
+            <!-- MOTOR DE INSIGHTS E ALERTAS (ATUALIZADO) -->
             <div class="mb-8">
                 <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center">
                     <i class="fas fa-robot text-blue-500 mr-2 text-lg"></i> Análise Inteligente de Estoque
                 </h3>
-                <div id="insights-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Os cards de alerta serão injetados aqui via JavaScript -->
+                <div id="insights-container" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <!-- Injetado via JavaScript -->
                 </div>
             </div>
 
@@ -541,43 +541,110 @@
             } catch(e) {}
         });
 
-        // INSIGHTS MELHORADOS (Análise Inteligente)
+        // ================= INSIGHTS MELHORADOS =================
         function gerarInsights() {
-            const container = document.getElementById('insights-container'); container.innerHTML = ''; let alertasExibidos = 0;
+            const container = document.getElementById('insights-container'); 
+            container.innerHTML = ''; 
             
-            // Variáveis para análise cruzada
-            let temHDMecanico = false;
-            let temSSDSuficiente = false;
-            let qtdHDs = 0;
-            let qtdSSDs = 0;
+            let zerados = [];
+            let baixos = [];
+            let maiorVolume = null;
+            let totalItens = 0;
+            let hdCount = 0;
+            let ssdCount = 0;
 
-            [...estoqueLocal].sort((a, b) => a.Quantidade - b.Quantidade).forEach(item => {
+            // Extração de dados
+            estoqueLocal.forEach(item => {
+                totalItens += item.Quantidade;
+                if (item.Quantidade === 0) zerados.push(item);
+                else if (item.Quantidade <= 5) baixos.push(item);
+                
                 const compUpper = item.Componente.toUpperCase();
+                if (compUpper.includes('HD INTERNO') || compUpper.includes('DISCO RÍGIDO')) hdCount += item.Quantidade;
+                if (compUpper.includes('SSD')) ssdCount += item.Quantidade;
 
-                // Verifica obsolescência cruzada (HDs mecânicos vs SSDs)
-                if (compUpper.includes('HD INTERNO') || compUpper.includes('DISCO RÍGIDO')) { temHDMecanico = true; qtdHDs += item.Quantidade; }
-                if (compUpper.includes('SSD')) { temSSDSuficiente = true; qtdSSDs += item.Quantidade; }
-
-                // Insight 1: Ruptura (Estoque Zerado)
-                if(item.Quantidade === 0) {
-                    container.innerHTML += `<div class="bg-red-50 border-l-4 border-red-500 p-4 rounded shadow-sm flex items-start"><i class="fas fa-times-circle text-red-500 text-xl mt-0.5 mr-3"></i><div><h4 class="text-sm font-bold text-red-800">Risco de Ruptura Crítica</h4><p class="text-xs text-red-700 mt-1">O item <b>${item.Componente} (${item.Modelo})</b> esgotou. Sugerimos abrir processo de aquisição emergencial.</p></div></div>`; alertasExibidos++;
-                
-                // Insight 2: Ponto de Pedido (Estoque Baixo)
-                } else if(item.Quantidade <= 5) {
-                    container.innerHTML += `<div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded shadow-sm flex items-start"><i class="fas fa-exclamation-triangle text-yellow-600 text-xl mt-0.5 mr-3"></i><div><h4 class="text-sm font-bold text-yellow-800">Alerta de Ponto de Pedido</h4><p class="text-xs text-yellow-700 mt-1">Apenas <b>${item.Quantidade} und.</b> de <b>${item.Componente} (${item.Especificação})</b> disponíveis. Reabastecimento sugerido.</p></div></div>`; alertasExibidos++;
-                
-                // Insight 3: Obsolescência e Leilão (DDR3)
-                } else if(item.Quantidade > 20 && (item.Modelo.toUpperCase().includes('DDR 3') || item.Modelo.toUpperCase() === 'DDR3')) {
-                    container.innerHTML += `<div class="bg-slate-100 border-l-4 border-slate-500 p-4 rounded shadow-sm flex items-start"><i class="fas fa-recycle text-slate-500 text-xl mt-0.5 mr-3"></i><div><h4 class="text-sm font-bold text-slate-800">Curva de Obsolescência</h4><p class="text-xs text-slate-600 mt-1">Identificamos <b>${item.Quantidade} und.</b> de <b>${item.Componente} ${item.Modelo}</b>. Sugere-se encaminhamento para leilão/descarte.</p></div></div>`; alertasExibidos++;
+                if (!maiorVolume || item.Quantidade > maiorVolume.Quantidade) {
+                    maiorVolume = item;
                 }
             });
 
-            // Insight 4: Modernização de Parque (Cruzamento de Dados)
-            if(temHDMecanico && temSSDSuficiente && qtdHDs > 20 && qtdSSDs > 20) {
-                container.innerHTML += `<div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded shadow-sm flex items-start"><i class="fas fa-rocket text-blue-500 text-xl mt-0.5 mr-3"></i><div><h4 class="text-sm font-bold text-blue-800">Sugestão de Modernização</h4><p class="text-xs text-blue-700 mt-1">Existem ${qtdHDs} HDs antigos e ${qtdSSDs} SSDs em estoque. Considere criar uma Força-Tarefa de upgrade preventivo no parque.</p></div></div>`; alertasExibidos++;
+            // Card 1: Reposição e Alertas Críticos (Combina Zerados e Baixos)
+            let alertHtml = '';
+            if (zerados.length > 0 || baixos.length > 0) {
+                let desc = '';
+                if (zerados.length > 0) desc += `<span class="text-red-600 font-bold">${zerados.length} itens esgotados.</span> `;
+                if (baixos.length > 0) desc += ` ${baixos.length} itens em nível crítico (≤5). `;
+                
+                let exemplos = [...zerados, ...baixos].slice(0, 2).map(i => i.Componente).join(', ');
+                
+                alertHtml = `
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-xl shadow-sm flex items-start hover:shadow-md transition">
+                    <i class="fas fa-exclamation-triangle text-red-500 text-2xl mt-1 mr-3"></i>
+                    <div>
+                        <h4 class="text-sm font-bold text-red-800">Reposição Prioritária</h4>
+                        <p class="text-xs text-red-700 mt-1">${desc}</p>
+                        <p class="text-xs text-red-600 mt-1 italic">Itens afetados: ${exemplos}...</p>
+                    </div>
+                </div>`;
+            } else {
+                 alertHtml = `
+                <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-xl shadow-sm flex items-start hover:shadow-md transition">
+                    <i class="fas fa-check-circle text-emerald-500 text-2xl mt-1 mr-3"></i>
+                    <div>
+                        <h4 class="text-sm font-bold text-emerald-800">Estoque Saudável</h4>
+                        <p class="text-xs text-emerald-700 mt-1">Nenhum equipamento em nível crítico de ruptura no momento.</p>
+                    </div>
+                </div>`;
             }
 
-            if(alertasExibidos === 0) container.innerHTML = `<div class="col-span-full bg-emerald-50 border border-emerald-200 p-4 rounded shadow-sm flex items-center justify-center text-emerald-700 font-bold"><i class="fas fa-check-circle mr-2 text-xl"></i> O estoque encontra-se em níveis saudáveis e equilibrados. Nenhuma anomalia detectada.</div>`;
+            // Card 2: Análise de Acúmulo e Capital
+            let acumuloHtml = '';
+            if (maiorVolume && maiorVolume.Quantidade > 0) {
+                let pct = ((maiorVolume.Quantidade / totalItens) * 100).toFixed(1);
+                let corBg = maiorVolume.Quantidade > 80 ? 'bg-yellow-50 border-yellow-500' : 'bg-blue-50 border-blue-500';
+                let corTexto = maiorVolume.Quantidade > 80 ? 'text-yellow-800' : 'text-blue-800';
+                let corDesc = maiorVolume.Quantidade > 80 ? 'text-yellow-700' : 'text-blue-700';
+                let icon = maiorVolume.Quantidade > 80 ? 'fa-boxes text-yellow-500' : 'fa-chart-pie text-blue-500';
+
+                acumuloHtml = `
+                <div class="${corBg} border-l-4 p-4 rounded-xl shadow-sm flex items-start hover:shadow-md transition">
+                    <i class="fas ${icon} text-2xl mt-1 mr-3"></i>
+                    <div>
+                        <h4 class="text-sm font-bold ${corTexto}">Concentração de Volume</h4>
+                        <p class="text-xs ${corDesc} mt-1"><b>${maiorVolume.Componente}</b> possui ${maiorVolume.Quantidade} unidades.</p>
+                        <p class="text-xs ${corDesc} mt-1 opacity-80">Representa ${pct}% do volume físico total da TI.</p>
+                    </div>
+                </div>`;
+            } else {
+                 acumuloHtml = `<div class="bg-gray-50 border-l-4 border-gray-300 p-4 rounded-xl shadow-sm flex items-start"></div>`;
+            }
+
+            // Card 3: Indicador Tecnológico (Modernização ou Diversidade)
+            let techHtml = '';
+            if (hdCount > 0 && ssdCount > 0 && hdCount > 10) {
+                techHtml = `
+                <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-xl shadow-sm flex items-start hover:shadow-md transition">
+                    <i class="fas fa-rocket text-indigo-500 text-2xl mt-1 mr-3"></i>
+                    <div>
+                        <h4 class="text-sm font-bold text-indigo-800">Sugestão de Modernização</h4>
+                        <p class="text-xs text-indigo-700 mt-1">Existem ${hdCount} HDs e ${ssdCount} SSDs em estoque.</p>
+                        <p class="text-xs text-indigo-600 mt-1 italic">Recomendamos força-tarefa de upgrade preventivo.</p>
+                    </div>
+                </div>`;
+            } else {
+                const numCategorias = [...new Set(estoqueLocal.map(i => i.Categoria))].length;
+                techHtml = `
+                <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-xl shadow-sm flex items-start hover:shadow-md transition">
+                    <i class="fas fa-sitemap text-purple-500 text-2xl mt-1 mr-3"></i>
+                    <div>
+                        <h4 class="text-sm font-bold text-purple-800">Diversidade de Ativos</h4>
+                        <p class="text-xs text-purple-700 mt-1">O almoxarifado gerencia ${numCategorias} macro-categorias.</p>
+                        <p class="text-xs text-purple-600 mt-1 italic">Portfólio centralizado e estruturado.</p>
+                    </div>
+                </div>`;
+            }
+
+            container.innerHTML = alertHtml + acumuloHtml + techHtml;
         }
 
         function atualizarDatalists() { document.getElementById('lista-componentes').innerHTML = [...new Set(estoqueLocal.map(i => i.Componente))].map(c => `<option value="${c}">`).join(''); }
