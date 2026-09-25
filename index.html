@@ -38,14 +38,14 @@
 
         /* Layout 1: Relatório Gerencial (Retrato) */
         @media print {
-            #printable-report.active-print { display: block !important; position: absolute; left:0; top:0; width: 100%; }
+            #printable-report.active-print { display: block !important; position: absolute; left:0; top:0; width: 100%; background: white; color: black; z-index: 9999; }
             #printable-report.active-print th { background-color: #f8fafc !important; color: black !important; }
             #printable-report.active-print { page: portrait; }
         }
 
         /* Layout 2: Extrato Simplificado (Paisagem) */
         @media print {
-            #printable-simple-table.active-print { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 20px; background: white; color: black; }
+            #printable-simple-table.active-print { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 20px; background: white; color: black; z-index: 9999; }
             #printable-simple-table.active-print th { background-color: #161B33 !important; color: white !important; }
             #printable-simple-table.active-print { page: landscape; }
         }
@@ -58,8 +58,8 @@
         <div class="absolute inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm"></div>
         <div class="bg-white rounded-xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500 relative z-10">
             <div class="text-center mb-8">
-                <!-- LOGO BLINDADA (Thumbnail Oficial Wikimedia) -->
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png/320px-Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
+                <!-- LOGO BLINDADA (GitHub Original + Fallback) -->
+                <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
                 <h2 id="login-title" class="text-2xl font-bold text-slate-800">Almoxarifado TIC</h2>
                 <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p>
             </div>
@@ -93,8 +93,8 @@
             <div class="px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center space-x-3">
-                        <!-- LOGO NAVBAR -->
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png/320px-Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-10">
+                        <!-- LOGO NAVBAR BLINDADA -->
+                        <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" class="h-10">
                         <i id="navbar-icon" class="fas fa-chart-line text-xl ml-2"></i>
                         <span id="navbar-title" class="font-bold text-lg tracking-wide whitespace-nowrap">Painel de Gestão de Estoque - SETIC</span>
                     </div>
@@ -162,6 +162,7 @@
                     </h3>
                     <div class="h-64 flex justify-center items-center"><canvas id="chartPizzaCategorias"></canvas></div>
                 </div>
+                
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 flex flex-col justify-between">
                     <div>
                         <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3"><i class="fas fa-shield-alt text-yellow-600 mr-2"></i> Conformidade SETIC</h3>
@@ -171,6 +172,7 @@
                         <span class="text-xs font-bold text-slate-600">Sincronização Nuvem Ativa</span>
                     </div>
                 </div>
+
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 flex flex-col justify-between">
                     <div>
                         <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3"><i class="fas fa-bolt text-emerald-600 mr-2"></i> Acesso Rápido</h3>
@@ -204,8 +206,8 @@
                     <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center gap-4">
                         <div class="flex items-center gap-4">
                             <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Inventário Consolidado</h3>
-                            <!-- BOTÃO FOTO DA TABELA -->
-                            <button id="btn-print-estoque-simples" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
+                            <!-- BOTÃO FOTO DA TABELA ESTOQUE -->
+                            <button id="btn-print-estoque-main" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
                                 <i class="fas fa-print mr-1.5"></i> Gerar PDF
                             </button>
                         </div>
@@ -237,8 +239,8 @@
                     <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center bg-indigo-50/30 gap-4">
                         <div class="flex items-center gap-4">
                             <h3 class="text-sm font-bold text-indigo-800 uppercase tracking-wider"><i class="fas fa-map-pin mr-2"></i>Mapa de Ativos Físicos</h3>
-                            <!-- BOTÃO FOTO DA TABELA -->
-                            <button id="btn-print-rastreio-simples" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
+                            <!-- BOTÃO FOTO DA TABELA RASTREIO -->
+                            <button id="btn-print-rastreio-main" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
                                 <i class="fas fa-print mr-1.5"></i> Gerar PDF
                             </button>
                         </div>
@@ -277,8 +279,8 @@
                 <p class="text-sm mt-1 text-slate-300">Polícia Rodoviária Federal - Diretoria de Tecnologia da Informação e Comunicação (DTIC)</p>
                 <p class="text-lg font-bold mt-3 text-white" id="print-title-doc">Relatório Gerencial Analítico - Gestão de Estoque (SETIC)</p>
             </div>
-            <!-- LOGO OFICIAL -->
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png/320px-Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-20">
+            <!-- LOGO OFICIAL BLINDADA -->
+            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" class="h-20">
         </div>
         <div class="px-6">
             <h2 class="text-xl font-bold text-slate-800">Parecer e Metodologia de Cálculo</h2>
@@ -313,8 +315,8 @@
                 <p style="margin: 0; font-size: 12px; font-weight: bold; font-family: Arial, sans-serif;" id="print-simple-title">Extrato de Ativos</p>
                 <p style="margin: 2px 0 0 0; font-size: 10px; color: #555; font-family: Arial, sans-serif;" id="print-simple-date"></p>
             </div>
-            <!-- LOGO FIXA INSTITUCIONAL -->
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png/320px-Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" style="height: 65px;">
+            <!-- LOGO FIXA INSTITUCIONAL BLINDADA -->
+            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" style="height: 65px;">
         </div>
         <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif;">
             <thead id="print-simple-thead"></thead>
@@ -353,6 +355,7 @@
                 <div id="tab-entrada" class="tab-content h-full flex flex-col">
                     <h2 class="text-2xl font-bold text-blue-900 mb-2"><i class="fas fa-boxes mr-2 text-blue-600"></i>Entrada de Ativos (Estoque Geral)</h2>
                     <p class="text-sm text-slate-500 mb-6 border-b pb-4">Adicione estoque manualmente ou importe em lote por planilha.</p>
+                    
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
                         <div class="bg-blue-50/50 p-6 rounded-xl border border-blue-100 shadow-sm">
                             <h3 class="font-bold text-blue-800 mb-4"><i class="fas fa-keyboard mr-2"></i>Cadastro Manual</h3>
@@ -374,9 +377,10 @@
                                 <p id="msg-entrada" class="text-blue-600 text-center mt-2 font-bold text-sm hidden"><i class="fas fa-check-circle"></i> Entrada registada com sucesso!</p>
                             </div>
                         </div>
+                        
                         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                             <h3 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-excel mr-2 text-emerald-600"></i>Importação em Lote (Excel/CSV)</h3>
-                            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800"><strong>Colunas exigidas:</strong> CATEGORIA, COMPONENTE, MODELO, ESPECIFICAÇÃO, LOCAL, PATRIMÔNIO, QUANTIDADE.</div>
+                            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800"><strong>Colunas exigidas na planilha:</strong><br>CATEGORIA, COMPONENTE, MODELO, ESPECIFICAÇÃO, LOCAL, PATRIMÔNIO (Opcional), QUANTIDADE.</div>
                             <div class="flex-1 flex flex-col justify-center items-center border-2 border-dashed border-slate-300 rounded-lg p-6 hover:bg-slate-100 transition">
                                 <i class="fas fa-cloud-upload-alt text-4xl text-slate-400 mb-3"></i>
                                 <input type="file" id="estoque-file-upload" accept=".xlsx, .xls, .csv" class="block w-full max-w-xs text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:font-bold file:bg-blue-50 file:text-blue-700 cursor-pointer">
@@ -439,7 +443,7 @@
                     </div>
                 </div>
 
-                <!-- TAB RELATORIOS E EXPORTAÇÕES OFICIAIS (RESTAURADO) -->
+                <!-- TAB RELATORIOS E EXPORTAÇÕES OFICIAIS -->
                 <div id="tab-relatorio" class="tab-content hidden h-full flex flex-col justify-center items-center">
                     <i class="fas fa-file-contract text-6xl text-slate-300 mb-6"></i>
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Exportações e Relatórios Oficiais</h2>
@@ -516,7 +520,7 @@
                             </div>
                             <div class="border border-orange-200 rounded-xl p-5 bg-orange-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-orange-800 mb-2"><i class="fas fa-user-minus text-orange-600 mr-2"></i> Gerir Acessos</h3>
-                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">Para evitar ataques, o Firebase bloqueia a exclusão via web.<br><br>A exclusão deve ser feita diretamente no seu Console Oficial.</p>
+                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">Para evitar ataques, o Firebase bloqueia exclusão via web.<br><br>A exclusão definitiva deve ser feita no Console Oficial.</p>
                                 <a href="https://console.firebase.google.com/project/gestao-de-equipamentos-tic/authentication/users" target="_blank" class="w-full bg-orange-600 text-white font-bold py-2.5 px-2 rounded hover:bg-orange-700 transition text-sm shadow mt-auto flex items-center justify-center text-center"><i class="fas fa-external-link-alt mr-2"></i> Abrir Console</a>
                             </div>
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between">
@@ -564,8 +568,8 @@
 
         Chart.register(ChartDataLabels);
 
-        // ATENÇÃO: As chaves abaixo devem ser as suas chaves válidas do Firebase. 
-        // Sem a sua API KEY válida, o erro 400 continuará.
+        // ATENÇÃO: As chaves abaixo DEVEM ser substituídas pelas suas chaves válidas do Firebase. 
+        // Sem a sua API KEY válida, o erro 400 continuará aparecendo e o login não funcionará.
         const firebaseConfig = {
             apiKey: "AIzaSyBRCRThFRIEGYQ8ukI8IzJ78AyqSEyspsc",
             authDomain: "gestao-de-equipamentos-tic.firebaseapp.com",
@@ -585,7 +589,7 @@
         let userEmail = "";
         let tempBgBase64 = null; 
         
-        // DECLARAÇÃO GLOBAL DOS GRÁFICOS
+        // DECLARAÇÃO GLOBAL DOS GRÁFICOS (BLINDAGEM)
         let chartComponentesAmpliado = null; 
         let chartTopSaidas = null; 
         let chartPizzaCategorias = null; 
@@ -597,46 +601,56 @@
             const icon = localStorage.getItem('pref_icon') || 'fa-chart-line';
             const bgImage = localStorage.getItem('pref_bg') || "https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg";
 
-            document.getElementById('navbar-title').textContent = title; 
-            document.getElementById('login-title').textContent = title; 
+            if(document.getElementById('navbar-title')) document.getElementById('navbar-title').textContent = title; 
+            if(document.getElementById('login-title')) document.getElementById('login-title').textContent = title; 
             document.title = title;
-            document.getElementById('pref-title').value = title; 
-            document.getElementById('print-title-doc').textContent = "Relatório Geral - " + title;
+            if(document.getElementById('pref-title')) document.getElementById('pref-title').value = title; 
+            if(document.getElementById('print-title-doc')) document.getElementById('print-title-doc').textContent = "Relatório Geral - " + title;
             
-            document.getElementById('navbar-main').style.backgroundColor = color;
+            if(document.getElementById('navbar-main')) document.getElementById('navbar-main').style.backgroundColor = color;
             document.querySelectorAll('.btn-primary').forEach(el => el.style.backgroundColor = color);
             document.querySelectorAll('.btn-primary-text').forEach(el => el.style.color = color);
-            document.getElementById('pref-color').value = color; 
-            document.getElementById('pref-color-text').value = color.toUpperCase();
-            document.getElementById('navbar-icon').className = `fas ${icon} text-xl ml-2`; 
-            document.getElementById('pref-icon').value = icon;
-            document.getElementById('login-screen').style.backgroundImage = `url('${bgImage}')`;
+            if(document.getElementById('pref-color')) document.getElementById('pref-color').value = color; 
+            if(document.getElementById('pref-color-text')) document.getElementById('pref-color-text').value = color.toUpperCase();
+            if(document.getElementById('navbar-icon')) document.getElementById('navbar-icon').className = `fas ${icon} text-xl ml-2`; 
+            if(document.getElementById('pref-icon')) document.getElementById('pref-icon').value = icon;
+            if(document.getElementById('login-screen')) document.getElementById('login-screen').style.backgroundImage = `url('${bgImage}')`;
         }
 
-        document.getElementById('pref-bg-upload').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) { tempBgBase64 = event.target.result; };
-                reader.readAsDataURL(file);
-            }
-        });
+        if(document.getElementById('pref-bg-upload')) {
+            document.getElementById('pref-bg-upload').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) { tempBgBase64 = event.target.result; };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
 
-        document.getElementById('btn-clear-bg').addEventListener('click', () => {
-            localStorage.removeItem('pref_bg'); tempBgBase64 = null; document.getElementById('pref-bg-upload').value = ''; carregarPreferencias();
-            alert("Imagem de fundo restaurada para o padrão da PRF!");
-        });
+        if(document.getElementById('btn-clear-bg')) {
+            document.getElementById('btn-clear-bg').addEventListener('click', () => {
+                localStorage.removeItem('pref_bg'); tempBgBase64 = null; document.getElementById('pref-bg-upload').value = ''; carregarPreferencias();
+                alert("Imagem de fundo restaurada para o padrão da PRF!");
+            });
+        }
 
-        document.getElementById('btn-save-pref').addEventListener('click', () => {
-            localStorage.setItem('pref_title', document.getElementById('pref-title').value);
-            localStorage.setItem('pref_color', document.getElementById('pref-color').value);
-            localStorage.setItem('pref_icon', document.getElementById('pref-icon').value);
-            if(tempBgBase64) { try { localStorage.setItem('pref_bg', tempBgBase64); } catch(e) { alert("A imagem é muito grande para ser salva na memória (limite: 2MB)."); } }
-            carregarPreferencias(); document.getElementById('msg-pref').classList.remove('hidden'); setTimeout(() => document.getElementById('msg-pref').classList.add('hidden'), 3000);
-        });
+        if(document.getElementById('btn-save-pref')) {
+            document.getElementById('btn-save-pref').addEventListener('click', () => {
+                localStorage.setItem('pref_title', document.getElementById('pref-title').value);
+                localStorage.setItem('pref_color', document.getElementById('pref-color').value);
+                localStorage.setItem('pref_icon', document.getElementById('pref-icon').value);
+                if(tempBgBase64) { try { localStorage.setItem('pref_bg', tempBgBase64); } catch(e) { alert("A imagem é muito grande para ser salva na memória (limite: 2MB)."); } }
+                carregarPreferencias(); document.getElementById('msg-pref').classList.remove('hidden'); setTimeout(() => document.getElementById('msg-pref').classList.add('hidden'), 3000);
+            });
+        }
 
-        document.getElementById('pref-color').addEventListener('input', (e) => document.getElementById('pref-color-text').value = e.target.value.toUpperCase());
-        document.getElementById('pref-color-text').addEventListener('input', (e) => { if(/^#[0-9A-F]{6}$/i.test(e.target.value)) document.getElementById('pref-color').value = e.target.value; });
+        if(document.getElementById('pref-color')) {
+            document.getElementById('pref-color').addEventListener('input', (e) => document.getElementById('pref-color-text').value = e.target.value.toUpperCase());
+        }
+        if(document.getElementById('pref-color-text')) {
+            document.getElementById('pref-color-text').addEventListener('input', (e) => { if(/^#[0-9A-F]{6}$/i.test(e.target.value)) document.getElementById('pref-color').value = e.target.value; });
+        }
 
         carregarPreferencias(); 
 
@@ -644,26 +658,30 @@
         function showLoginMessage(msg, isError = true) {
             const container = document.getElementById('login-msg-container');
             const textObj = document.getElementById('login-msg-text');
-            textObj.innerText = msg;
-            container.classList.remove('hidden');
-            if(isError) {
-                container.className = "mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm block bg-red-50 border-red-500 text-red-700";
-            } else {
-                container.className = "mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm block bg-emerald-50 border-emerald-500 text-emerald-700";
+            if(container && textObj) {
+                textObj.innerText = msg;
+                container.classList.remove('hidden');
+                if(isError) {
+                    container.className = "mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm block bg-red-50 border-red-500 text-red-700";
+                } else {
+                    container.className = "mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm block bg-emerald-50 border-emerald-500 text-emerald-700";
+                }
             }
         }
 
-        document.getElementById('btn-forgot-password').addEventListener('click', () => {
-            const email = document.getElementById('login-email').value.trim();
-            if (!email) return showLoginMessage("Por favor, digite seu e-mail corporativo no campo acima para recuperar a senha.", true);
-            sendPasswordResetEmail(auth, email)
-                .then(() => showLoginMessage(`E-mail de redefinição enviado para: ${email}. Verifique sua caixa de entrada.`, false))
-                .catch((error) => {
-                    let msg = "Erro: E-mail não encontrado ou falha de conexão.";
-                    if(error.code === 'auth/invalid-api-key') msg = "ERRO: Chave API do Firebase inválida. Atualize o código fonte.";
-                    showLoginMessage(msg, true);
-                });
-        });
+        if(document.getElementById('btn-forgot-password')) {
+            document.getElementById('btn-forgot-password').addEventListener('click', () => {
+                const email = document.getElementById('login-email').value.trim();
+                if (!email) return showLoginMessage("Por favor, digite seu e-mail corporativo no campo acima para recuperar a senha.", true);
+                sendPasswordResetEmail(auth, email)
+                    .then(() => showLoginMessage(`E-mail de redefinição enviado para: ${email}. Verifique sua caixa de entrada.`, false))
+                    .catch((error) => {
+                        let msg = "Erro: E-mail não encontrado ou falha de conexão.";
+                        if(error.code === 'auth/invalid-api-key') msg = "ERRO: Chave API do Firebase inválida. Atualize o código fonte.";
+                        showLoginMessage(msg, true);
+                    });
+            });
+        }
 
         function fazerLogin() {
             const email = document.getElementById('login-email').value.trim(); 
@@ -683,11 +701,11 @@
             });
         }
 
-        document.getElementById('btn-login').addEventListener('click', fazerLogin);
-        document.getElementById('login-password').addEventListener('keypress', (e) => { if (e.key === 'Enter') fazerLogin(); });
-        document.getElementById('login-email').addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('login-password').focus(); });
+        if(document.getElementById('btn-login')) document.getElementById('btn-login').addEventListener('click', fazerLogin);
+        if(document.getElementById('login-password')) document.getElementById('login-password').addEventListener('keypress', (e) => { if (e.key === 'Enter') fazerLogin(); });
+        if(document.getElementById('login-email')) document.getElementById('login-email').addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('login-password').focus(); });
 
-        document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+        if(document.getElementById('btn-logout')) document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
         
         onAuthStateChanged(auth, (user) => {
             if (user) { 
@@ -838,195 +856,219 @@
             setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
         }
 
-        // LIGAÇÃO DOS BOTÕES
-        document.getElementById('btn-print-estoque-main').addEventListener('click', () => gerarPDFSimples('estoque'));
-        document.getElementById('btn-print-rastreio-main').addEventListener('click', () => gerarPDFSimples('rastreio'));
-        document.getElementById('btn-relatorio-analitico-estoque').addEventListener('click', () => gerarRelatorioAnalitico('estoque'));
-        document.getElementById('btn-relatorio-analitico-rastreio').addEventListener('click', () => gerarRelatorioAnalitico('rastreio'));
+        // LIGAÇÃO DOS BOTÕES BLINDADOS COM IFs PARA EVITAR TRAVAMENTOS
+        if(document.getElementById('btn-print-estoque-main')) document.getElementById('btn-print-estoque-main').addEventListener('click', () => gerarPDFSimples('estoque'));
+        if(document.getElementById('btn-print-rastreio-main')) document.getElementById('btn-print-rastreio-main').addEventListener('click', () => gerarPDFSimples('rastreio'));
+        if(document.getElementById('btn-relatorio-analitico-estoque')) document.getElementById('btn-relatorio-analitico-estoque').addEventListener('click', () => gerarRelatorioAnalitico('estoque'));
+        if(document.getElementById('btn-relatorio-analitico-rastreio')) document.getElementById('btn-relatorio-analitico-rastreio').addEventListener('click', () => gerarRelatorioAnalitico('rastreio'));
 
         // ================= ABA ADMINISTRADOR =================
-        document.getElementById('btn-admin-login').addEventListener('click', () => {
-            const input = document.getElementById('admin-pass-input').value;
-            if(btoa(input) === "c2V0aWNhZG1pbg==") { document.getElementById('admin-login-section').classList.add('hidden'); document.getElementById('admin-content-section').classList.remove('hidden'); document.getElementById('admin-error').classList.add('hidden'); document.getElementById('admin-pass-input').value = ""; } 
-            else { document.getElementById('admin-error').classList.remove('hidden'); }
-        });
-
-        document.getElementById('btn-admin-lock').addEventListener('click', () => { document.getElementById('admin-content-section').classList.add('hidden'); document.getElementById('admin-login-section').classList.remove('hidden'); });
-
-        document.getElementById('btn-delete-loc').addEventListener('click', async () => {
-            if(confirm("Deseja realmente apagar toda a base de Rastreamento de Ativos? Esta ação é irreversível.")) {
-                const btn = document.getElementById('btn-delete-loc'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
-                try { const locSnap = await getDocs(collection(db, "localidades")); locSnap.forEach((d) => deleteDoc(d.ref)); alert("Base de rastreamento apagada."); } catch(e) {}
-                btn.innerHTML = originalText;
-            }
-        });
-
-        document.getElementById('btn-delete-estoque').addEventListener('click', async () => {
-            const confirmacao = prompt("⚠️ ZONA DE PERIGO!\nIsso apagará TODO o Estoque Consolidado.\nPara confirmar, digite: APAGAR");
-            if(confirmacao === "APAGAR") {
-                const btn = document.getElementById('btn-delete-estoque'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
-                try { const estSnap = await getDocs(collection(db, "estoque")); estSnap.forEach((d) => deleteDoc(d.ref)); alert("Estoque apagado com sucesso."); } catch(e) {}
-                btn.innerHTML = originalText;
-            }
-        });
-
-        document.getElementById('btn-export-logs-pdf').addEventListener('click', () => {
-            document.getElementById('printable-report').classList.remove('active-print');
-            document.getElementById('printable-simple-table').classList.add('active-print');
-
-            const titleObj = document.getElementById('print-simple-title');
-            const dateObj = document.getElementById('print-simple-date');
-            const theadObj = document.getElementById('print-simple-thead');
-            const tbodyObj = document.getElementById('print-simple-tbody');
-
-            titleObj.innerText = "Extrato de Auditoria de Movimentações (Logs)";
-            dateObj.innerText = `Gerado por: ${userEmail} em ${new Date().toLocaleDateString('pt-BR')}`;
-            theadObj.innerHTML = `<tr><th>Data/Hora</th><th>Ação</th><th>Item</th><th style="text-align:center;">Qtd</th><th>Usuário / Ref.</th></tr>`;
-            tbodyObj.innerHTML = '';
-
-            logsLocal.forEach(log => {
-                let dateStr = "N/A"; if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
-                let fullRef = (log.chamado||'') + (log.usuario ? ` (${log.usuario})` : '');
-                tbodyObj.innerHTML += `<tr><td>${dateStr}</td><td><b>${log.tipo}</b></td><td>${log.itemNome}</td><td style="text-align:center;">${log.qtd}</td><td>${fullRef}</td></tr>`;
+        if(document.getElementById('btn-admin-login')) {
+            document.getElementById('btn-admin-login').addEventListener('click', () => {
+                const input = document.getElementById('admin-pass-input').value;
+                if(btoa(input) === "c2V0aWNhZG1pbg==") { document.getElementById('admin-login-section').classList.add('hidden'); document.getElementById('admin-content-section').classList.remove('hidden'); document.getElementById('admin-error').classList.add('hidden'); document.getElementById('admin-pass-input').value = ""; } 
+                else { document.getElementById('admin-error').classList.remove('hidden'); }
             });
-            window.print();
-            setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
-        });
+        }
 
-        document.getElementById('btn-process-upload').addEventListener('click', () => {
-            const fileInput = document.getElementById('file-upload'), msgLabel = document.getElementById('msg-upload'), btn = document.getElementById('btn-process-upload');
-            if (!fileInput.files.length) return alert("Selecione um arquivo Excel.");
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Aguarde...'; msgLabel.classList.add('hidden');
-            const reader = new FileReader();
-            reader.onload = async (e) => {
+        if(document.getElementById('btn-admin-lock')) {
+            document.getElementById('btn-admin-lock').addEventListener('click', () => { document.getElementById('admin-content-section').classList.add('hidden'); document.getElementById('admin-login-section').classList.remove('hidden'); });
+        }
+
+        if(document.getElementById('btn-delete-loc')) {
+            document.getElementById('btn-delete-loc').addEventListener('click', async () => {
+                if(confirm("Deseja realmente apagar toda a base de Rastreamento de Ativos? Esta ação é irreversível.")) {
+                    const btn = document.getElementById('btn-delete-loc'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
+                    try { const locSnap = await getDocs(collection(db, "localidades")); locSnap.forEach((d) => deleteDoc(d.ref)); alert("Base de rastreamento apagada."); } catch(e) {}
+                    btn.innerHTML = originalText;
+                }
+            });
+        }
+
+        if(document.getElementById('btn-delete-estoque')) {
+            document.getElementById('btn-delete-estoque').addEventListener('click', async () => {
+                const confirmacao = prompt("⚠️ ZONA DE PERIGO!\nIsso apagará TODO o Estoque Consolidado.\nPara confirmar, digite: APAGAR");
+                if(confirmacao === "APAGAR") {
+                    const btn = document.getElementById('btn-delete-estoque'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
+                    try { const estSnap = await getDocs(collection(db, "estoque")); estSnap.forEach((d) => deleteDoc(d.ref)); alert("Estoque apagado com sucesso."); } catch(e) {}
+                    btn.innerHTML = originalText;
+                }
+            });
+        }
+
+        if(document.getElementById('btn-export-logs-pdf')) {
+            document.getElementById('btn-export-logs-pdf').addEventListener('click', () => {
+                document.getElementById('printable-report').classList.remove('active-print');
+                document.getElementById('printable-simple-table').classList.add('active-print');
+
+                const titleObj = document.getElementById('print-simple-title');
+                const dateObj = document.getElementById('print-simple-date');
+                const theadObj = document.getElementById('print-simple-thead');
+                const tbodyObj = document.getElementById('print-simple-tbody');
+
+                titleObj.innerText = "Extrato de Auditoria de Movimentações (Logs)";
+                dateObj.innerText = `Gerado por: ${userEmail} em ${new Date().toLocaleDateString('pt-BR')}`;
+                theadObj.innerHTML = `<tr><th>Data/Hora</th><th>Ação</th><th>Item</th><th style="text-align:center;">Qtd</th><th>Usuário / Ref.</th></tr>`;
+                tbodyObj.innerHTML = '';
+
+                logsLocal.forEach(log => {
+                    let dateStr = "N/A"; if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
+                    let fullRef = (log.chamado||'') + (log.usuario ? ` (${log.usuario})` : '');
+                    tbodyObj.innerHTML += `<tr><td>${dateStr}</td><td><b>${log.tipo}</b></td><td>${log.itemNome}</td><td style="text-align:center;">${log.qtd}</td><td>${fullRef}</td></tr>`;
+                });
+                window.print();
+                setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
+            });
+        }
+
+        if(document.getElementById('btn-process-upload')) {
+            document.getElementById('btn-process-upload').addEventListener('click', () => {
+                const fileInput = document.getElementById('file-upload'), msgLabel = document.getElementById('msg-upload'), btn = document.getElementById('btn-process-upload');
+                if (!fileInput.files.length) return alert("Selecione um arquivo Excel.");
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Aguarde...'; msgLabel.classList.add('hidden');
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    try {
+                        const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' }), json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                        let cont = 0;
+                        for (let row of json) {
+                            const cat = row['Categoria']||'Geral', comp = row['Componente']||'Desc', mod = row['Modelo']||'N/A', esp = row['Especificação']||row['Especificacao']||'N/A', qtd = parseInt(row['Quantidade']||1);
+                            if(comp === 'Desc') continue;
+                            const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp);
+                            if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd });
+                            else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Quantidade: qtd });
+                            cont++;
+                        }
+                        await registrarLog("ENTRADA", `Importação Lote Excel (Admin)`, cont, "");
+                        msgLabel.textContent = `Sucesso! ${cont} registros importados.`; msgLabel.className = "text-center mt-2 font-bold text-xs text-emerald-600 block"; fileInput.value = "";
+                    } catch (error) { msgLabel.textContent = "Erro na leitura."; msgLabel.className = "text-center mt-2 font-bold text-xs text-red-600 block"; }
+                    btn.innerHTML = '<i class="fas fa-cloud-upload-alt mr-1"></i> Processar';
+                };
+                reader.readAsArrayBuffer(fileInput.files[0]);
+            });
+        }
+
+        if(document.getElementById('btn-create-user')) {
+            document.getElementById('btn-create-user').addEventListener('click', async () => {
+                const email = document.getElementById('new-user-email').value.trim(), pass = document.getElementById('new-user-pass').value.trim(), msg = document.getElementById('msg-create-user');
+                if(!email || pass.length < 6) { msg.textContent = "Erro: Mínimo 6 caracteres."; msg.className = "text-center mt-2 font-bold text-xs text-red-600 block"; return; }
+                const btn = document.getElementById('btn-create-user'); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Criando...';
                 try {
-                    const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' }), json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-                    let cont = 0;
-                    for (let row of json) {
-                        const cat = row['Categoria']||'Geral', comp = row['Componente']||'Desc', mod = row['Modelo']||'N/A', esp = row['Especificação']||row['Especificacao']||'N/A', qtd = parseInt(row['Quantidade']||1);
-                        if(comp === 'Desc') continue;
-                        const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp);
-                        if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd });
-                        else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Quantidade: qtd });
-                        cont++;
-                    }
-                    await registrarLog("ENTRADA", `Importação Lote Excel (Admin)`, cont, "");
-                    msgLabel.textContent = `Sucesso! ${cont} registros importados.`; msgLabel.className = "text-center mt-2 font-bold text-xs text-emerald-600 block"; fileInput.value = "";
-                } catch (error) { msgLabel.textContent = "Erro na leitura."; msgLabel.className = "text-center mt-2 font-bold text-xs text-red-600 block"; }
-                btn.innerHTML = '<i class="fas fa-cloud-upload-alt mr-1"></i> Processar';
-            };
-            reader.readAsArrayBuffer(fileInput.files[0]);
-        });
-
-        document.getElementById('btn-create-user').addEventListener('click', async () => {
-            const email = document.getElementById('new-user-email').value.trim(), pass = document.getElementById('new-user-pass').value.trim(), msg = document.getElementById('msg-create-user');
-            if(!email || pass.length < 6) { msg.textContent = "Erro: Mínimo 6 caracteres."; msg.className = "text-center mt-2 font-bold text-xs text-red-600 block"; return; }
-            const btn = document.getElementById('btn-create-user'); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Criando...';
-            try {
-                await createUserWithEmailAndPassword(auth, email, pass);
-                msg.textContent = "Usuário criado! (Sessão atualizada)."; msg.className = "text-center mt-2 font-bold text-xs text-emerald-600 block";
-                document.getElementById('new-user-email').value = ""; document.getElementById('new-user-pass').value = "";
-            } catch (error) { msg.textContent = "Erro: " + error.message; msg.className = "text-center mt-2 font-bold text-xs text-red-600 block"; }
-            btn.innerHTML = '<i class="fas fa-save mr-1"></i> Cadastrar';
-        });
-
-        // ================= CADASTRO ESTOQUE (MANUAL E LOTE) =================
-        document.getElementById('btn-save-item').addEventListener('click', async () => {
-            const cat = document.getElementById('form-cat').value.trim(), comp = document.getElementById('form-comp').value.trim(), mod = document.getElementById('form-mod').value.trim(), esp = document.getElementById('form-esp').value.trim(), local = document.getElementById('form-local').value.trim() || 'N/A', patrim = document.getElementById('form-patrimonio-estoque').value.trim() || 'N/A', qtd = parseInt(document.getElementById('form-qtd').value);
-            if(!cat || !comp || isNaN(qtd) || qtd <= 0) return alert("Preencha os campos obrigatórios.");
-            const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local && (i.Patrimonio||'N/A') === patrim);
-            try {
-                if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd });
-                else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Patrimonio: patrim, Quantidade: qtd });
-                await registrarLog("ENTRADA", `${comp} - ${mod} (${esp})`, qtd, `Local: ${local}`);
-                document.getElementById('msg-entrada').classList.remove('hidden'); setTimeout(() => document.getElementById('msg-entrada').classList.add('hidden'), 3000); document.getElementById('form-qtd').value = 1;
-            } catch (e) {}
-        });
-
-        document.getElementById('btn-estoque-upload').addEventListener('click', () => {
-            const fileInput = document.getElementById('estoque-file-upload'), msgLabel = document.getElementById('msg-estoque-upload'), btn = document.getElementById('btn-estoque-upload');
-            if (!fileInput.files.length) return alert("Selecione um arquivo Excel ou CSV.");
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Importando...'; msgLabel.classList.add('hidden');
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                try {
-                    const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
-                    const json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-                    let cont = 0;
-                    for (let row of json) {
-                        const cat = row['CATEGORIA'] || row['Categoria'] || 'Geral';
-                        const comp = row['COMPONENTE'] || row['Componente'] || 'Desc';
-                        const mod = row['MODELO'] || row['Modelo'] || 'N/A';
-                        const esp = row['ESPECIFICAÇÃO'] || row['ESPECIFICACAO'] || row['Especificação'] || 'N/A';
-                        const local = row['LOCAL FISICO'] || row['LOCAL'] || row['Local'] || 'N/A';
-                        const patrim = row['PATRIMÔNIO'] || row['PATRIMONIO'] || row['Patrimônio'] || row['Patrimonio'] || 'N/A';
-                        const qtd = parseInt(row['QUANTIDADE'] || row['Quantidade'] || row['Qtd'] || 1);
-                        
-                        if(comp === 'Desc') continue;
-                        
-                        const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local && (i.Patrimonio||'N/A') === patrim);
-                        if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd });
-                        else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Patrimonio: patrim, Quantidade: qtd });
-                        cont++;
-                    }
-                    await registrarLog("ENTRADA", `Importação Lote Estoque (Excel)`, cont, "");
-                    msgLabel.textContent = `Sucesso! ${cont} registros importados.`; msgLabel.className = "text-center mt-2 font-bold text-sm text-emerald-600 block"; fileInput.value = "";
-                } catch (error) { msgLabel.textContent = "Erro na leitura do arquivo."; msgLabel.className = "text-center mt-2 font-bold text-sm text-red-600 block"; }
-                btn.innerHTML = 'Processar Planilha de Estoque';
-            };
-            reader.readAsArrayBuffer(fileInput.files[0]);
-        });
-
-        document.getElementById('btn-register-saida').addEventListener('click', async () => {
-            const idItem = document.getElementById('saida-select-item').value, qtdSaida = parseInt(document.getElementById('saida-qtd').value), chamado = document.getElementById('saida-chamado').value.trim(), msgObj = document.getElementById('msg-saida');
-            if(!idItem || isNaN(qtdSaida) || qtdSaida <= 0) return alert("Valores inválidos.");
-            const itemDB = estoqueLocal.find(i => i.id === idItem);
-            if(qtdSaida > (itemDB.Quantidade||0)) { msgObj.textContent = "Estoque insuficiente!"; msgObj.className = "text-center mt-3 font-bold text-red-600 block"; return; }
-            try {
-                await updateDoc(doc(db, "estoque", idItem), { Quantidade: (itemDB.Quantidade||0) - qtdSaida });
-                await registrarLog("SAÍDA", `${itemDB.Componente} - ${itemDB.Modelo} (${itemDB.Especificação})`, qtdSaida, chamado);
-                msgObj.textContent = "Baixa processada!"; msgObj.className = "text-center mt-3 font-bold text-emerald-600 block"; document.getElementById('saida-qtd').value = 1; document.getElementById('saida-chamado').value = ""; setTimeout(() => msgObj.classList.add('hidden'), 3000);
-            } catch(e) {}
-        });
+                    await createUserWithEmailAndPassword(auth, email, pass);
+                    msg.textContent = "Usuário criado! (Sessão atualizada)."; msg.className = "text-center mt-2 font-bold text-xs text-emerald-600 block";
+                    document.getElementById('new-user-email').value = ""; document.getElementById('new-user-pass').value = "";
+                } catch (error) { msg.textContent = "Erro: " + error.message; msg.className = "text-center mt-2 font-bold text-xs text-red-600 block"; }
+                btn.innerHTML = '<i class="fas fa-save mr-1"></i> Cadastrar';
+            });
+        }
 
         // ================= MÓDULO: RASTREIO E LOCALIDADES =================
-        document.getElementById('btn-save-loc').addEventListener('click', async () => {
-            const equip = document.getElementById('loc-equip').value.trim(), local = document.getElementById('loc-local').value.trim(), marca = document.getElementById('loc-marca').value.trim() || 'N/A', serie = document.getElementById('loc-serie').value.trim() || 'N/A', patrim = document.getElementById('loc-patrimonio').value.trim() || 'N/A', qtd = parseInt(document.getElementById('loc-qtd').value);
-            if(!equip || !local || isNaN(qtd) || qtd <= 0) return alert("Preencha Nome do Equipamento, Local e Quantidade corretamente.");
-            try {
-                await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
-                await registrarLog("MAP_LOCAL", `${equip} (Local: ${local})`, qtd, `Série: ${serie}`);
-                document.getElementById('msg-loc-manual').classList.remove('hidden'); setTimeout(() => document.getElementById('msg-loc-manual').classList.add('hidden'), 3000);
-                ['loc-equip','loc-local','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1;
-            } catch (e) { alert("Erro ao mapear: " + e.message); }
-        });
-
-        document.getElementById('btn-loc-upload').addEventListener('click', () => {
-            const fileInput = document.getElementById('loc-file-upload'), msgLabel = document.getElementById('msg-loc-upload'), btn = document.getElementById('btn-loc-upload');
-            if (!fileInput.files.length) return alert("Selecione um arquivo Excel.");
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mapeando...'; msgLabel.classList.add('hidden');
-            const reader = new FileReader();
-            reader.onload = async (e) => {
+        if(document.getElementById('btn-save-loc')) {
+            document.getElementById('btn-save-loc').addEventListener('click', async () => {
+                const equip = document.getElementById('loc-equip').value.trim(), local = document.getElementById('loc-local').value.trim(), marca = document.getElementById('loc-marca').value.trim() || 'N/A', serie = document.getElementById('loc-serie').value.trim() || 'N/A', patrim = document.getElementById('loc-patrimonio').value.trim() || 'N/A', qtd = parseInt(document.getElementById('loc-qtd').value);
+                if(!equip || !local || isNaN(qtd) || qtd <= 0) return alert("Preencha Nome do Equipamento, Local e Quantidade corretamente.");
                 try {
-                    const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' }), json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-                    let cont = 0;
-                    for (let row of json) {
-                        const equip = row['EQUIPAMENTO'] || row['Equipamento'] || row['Nome'] || 'Equipamento Indefinido', local = row['LOCAL FISICO'] || row['Local Físico'] || row['Local'] || 'N/A', marca = row['MARCA'] || row['Marca'] || 'N/A', serie = row['Nº DE SÉRIE'] || row['N Serie'] || row['Série'] || 'N/A', patrim = row['Nº PATRIMONIO'] || row['Patrimônio'] || row['Patrimonio'] || 'N/A', qtd = parseInt(row['QUANTIDADE'] || row['Quantidade'] || row['Qtd'] || 1);
-                        await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
-                        cont++;
-                    }
-                    await registrarLog("MAP_LOCAL", `Importação em Lote (Excel)`, cont, "");
-                    msgLabel.textContent = `Sucesso! ${cont} locais mapeados.`; msgLabel.className = "text-center mt-2 font-bold text-sm text-emerald-600 block"; fileInput.value = "";
-                } catch (error) { msgLabel.textContent = "Erro na leitura."; msgLabel.className = "text-center mt-2 font-bold text-sm text-red-600 block"; }
-                btn.innerHTML = 'Iniciar Importação';
-            };
-            reader.readAsArrayBuffer(fileInput.files[0]);
-        });
+                    await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
+                    await registrarLog("MAP_LOCAL", `${equip} (Local: ${local})`, qtd, `Série: ${serie}`);
+                    document.getElementById('msg-loc-manual').classList.remove('hidden'); setTimeout(() => document.getElementById('msg-loc-manual').classList.add('hidden'), 3000);
+                    ['loc-equip','loc-local','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1;
+                } catch (e) { alert("Erro ao mapear: " + e.message); }
+            });
+        }
+
+        if(document.getElementById('btn-loc-upload')) {
+            document.getElementById('btn-loc-upload').addEventListener('click', () => {
+                const fileInput = document.getElementById('loc-file-upload'), msgLabel = document.getElementById('msg-loc-upload'), btn = document.getElementById('btn-loc-upload');
+                if (!fileInput.files.length) return alert("Selecione um arquivo Excel.");
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mapeando...'; msgLabel.classList.add('hidden');
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    try {
+                        const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' }), json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                        let cont = 0;
+                        for (let row of json) {
+                            const equip = row['EQUIPAMENTO'] || row['Equipamento'] || row['Nome'] || 'Equipamento Indefinido', local = row['LOCAL FISICO'] || row['Local Físico'] || row['Local'] || 'N/A', marca = row['MARCA'] || row['Marca'] || 'N/A', serie = row['Nº DE SÉRIE'] || row['N Serie'] || row['Série'] || 'N/A', patrim = row['Nº PATRIMONIO'] || row['Patrimônio'] || row['Patrimonio'] || 'N/A', qtd = parseInt(row['QUANTIDADE'] || row['Quantidade'] || row['Qtd'] || 1);
+                            await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
+                            cont++;
+                        }
+                        await registrarLog("MAP_LOCAL", `Importação em Lote (Excel)`, cont, "");
+                        msgLabel.textContent = `Sucesso! ${cont} locais mapeados.`; msgLabel.className = "text-center mt-2 font-bold text-sm text-emerald-600 block"; fileInput.value = "";
+                    } catch (error) { msgLabel.textContent = "Erro na leitura."; msgLabel.className = "text-center mt-2 font-bold text-sm text-red-600 block"; }
+                    btn.innerHTML = 'Iniciar Importação';
+                };
+                reader.readAsArrayBuffer(fileInput.files[0]);
+            });
+        }
 
         function atualizarInterfaceRastreio() {
             const tbody = document.getElementById('rastreio-tbody'); tbody.innerHTML = '';
             [...localidadesLocais].sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
                 tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||'-'}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
+            });
+        }
+
+        // ================= CADASTRO ESTOQUE (MANUAL E LOTE) =================
+        if(document.getElementById('btn-save-item')) {
+            document.getElementById('btn-save-item').addEventListener('click', async () => {
+                const cat = document.getElementById('form-cat').value.trim(), comp = document.getElementById('form-comp').value.trim(), mod = document.getElementById('form-mod').value.trim(), esp = document.getElementById('form-esp').value.trim(), local = document.getElementById('form-local').value.trim() || 'N/A', patrim = document.getElementById('form-patrimonio-estoque').value.trim() || 'N/A', qtd = parseInt(document.getElementById('form-qtd').value);
+                if(!cat || !comp || isNaN(qtd) || qtd <= 0) return alert("Preencha os campos obrigatórios.");
+                const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local && (i.Patrimonio||'N/A') === patrim);
+                try {
+                    if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd });
+                    else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Patrimonio: patrim, Quantidade: qtd });
+                    await registrarLog("ENTRADA", `${comp} - ${mod} (${esp})`, qtd, `Local: ${local}`);
+                    document.getElementById('msg-entrada').classList.remove('hidden'); setTimeout(() => document.getElementById('msg-entrada').classList.add('hidden'), 3000); document.getElementById('form-qtd').value = 1;
+                } catch (e) {}
+            });
+        }
+
+        if(document.getElementById('btn-estoque-upload')) {
+            document.getElementById('btn-estoque-upload').addEventListener('click', () => {
+                const fileInput = document.getElementById('estoque-file-upload'), msgLabel = document.getElementById('msg-estoque-upload'), btn = document.getElementById('btn-estoque-upload');
+                if (!fileInput.files.length) return alert("Selecione um arquivo Excel ou CSV.");
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Importando...'; msgLabel.classList.add('hidden');
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    try {
+                        const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+                        const json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                        let cont = 0;
+                        for (let row of json) {
+                            const cat = row['CATEGORIA'] || row['Categoria'] || 'Geral';
+                            const comp = row['COMPONENTE'] || row['Componente'] || 'Desc';
+                            const mod = row['MODELO'] || row['Modelo'] || 'N/A';
+                            const esp = row['ESPECIFICAÇÃO'] || row['ESPECIFICACAO'] || row['Especificação'] || 'N/A';
+                            const local = row['LOCAL FISICO'] || row['LOCAL'] || row['Local'] || 'N/A';
+                            const patrim = row['PATRIMÔNIO'] || row['PATRIMONIO'] || row['Patrimônio'] || row['Patrimonio'] || 'N/A';
+                            const qtd = parseInt(row['QUANTIDADE'] || row['Quantidade'] || row['Qtd'] || 1);
+                            
+                            if(comp === 'Desc') continue;
+                            
+                            const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local && (i.Patrimonio||'N/A') === patrim);
+                            if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd });
+                            else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Patrimonio: patrim, Quantidade: qtd });
+                            cont++;
+                        }
+                        await registrarLog("ENTRADA", `Importação Lote Estoque (Excel)`, cont, "");
+                        msgLabel.textContent = `Sucesso! ${cont} registros importados.`; msgLabel.className = "text-center mt-2 font-bold text-sm text-emerald-600 block"; fileInput.value = "";
+                    } catch (error) { msgLabel.textContent = "Erro na leitura do arquivo."; msgLabel.className = "text-center mt-2 font-bold text-sm text-red-600 block"; }
+                    btn.innerHTML = 'Processar Planilha de Estoque';
+                };
+                reader.readAsArrayBuffer(fileInput.files[0]);
+            });
+        }
+
+        if(document.getElementById('btn-register-saida')) {
+            document.getElementById('btn-register-saida').addEventListener('click', async () => {
+                const idItem = document.getElementById('saida-select-item').value, qtdSaida = parseInt(document.getElementById('saida-qtd').value), chamado = document.getElementById('saida-chamado').value.trim(), msgObj = document.getElementById('msg-saida');
+                if(!idItem || isNaN(qtdSaida) || qtdSaida <= 0) return alert("Valores inválidos.");
+                const itemDB = estoqueLocal.find(i => i.id === idItem);
+                if(qtdSaida > (itemDB.Quantidade||0)) { msgObj.textContent = "Estoque insuficiente!"; msgObj.className = "text-center mt-3 font-bold text-red-600 block"; return; }
+                try {
+                    await updateDoc(doc(db, "estoque", idItem), { Quantidade: (itemDB.Quantidade||0) - qtdSaida });
+                    await registrarLog("SAÍDA", `${itemDB.Componente} - ${itemDB.Modelo} (${itemDB.Especificação})`, qtdSaida, chamado);
+                    msgObj.textContent = "Baixa processada!"; msgObj.className = "text-center mt-3 font-bold text-emerald-600 block"; document.getElementById('saida-qtd').value = 1; document.getElementById('saida-chamado').value = ""; setTimeout(() => msgObj.classList.add('hidden'), 3000);
+                } catch(e) {}
             });
         }
 
@@ -1067,7 +1109,7 @@
 
             let techHtml = '';
             if (hdCount > 0 && ssdCount > 0) {
-                techHtml = `<div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-rocket text-blue-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-blue-800 uppercase tracking-wide">Sugestão de Modernização</h4><p class="text-xs text-blue-700 mt-2 leading-relaxed">Existem ${hdCount} HDs antigos e ${ssdCount} SSDs em estoque.</p><p class="text-[11px] text-blue-600 mt-1 font-semibold">Considere Força-Tarefa de upgrade preventivo.</p></div></div>`;
+                techHtml = `<div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-rocket text-blue-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-blue-800 uppercase tracking-wide">Sugestão de Modernização</h4><p class="text-xs text-blue-700 mt-2 leading-relaxed">Existem ${hdCount} HDs antigos e ${ssdCount} SSDs em estoque.</p><p class="text-[11px] text-blue-600 mt-1 font-semibold">Considere Força-Tarefa de upgrade preventivo no parque.</p></div></div>`;
             } else {
                 const numCat = [...new Set(estoqueLocal.map(i => i.Categoria || 'Geral'))].length;
                 techHtml = `<div class="bg-purple-50 border-l-4 border-purple-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-sitemap text-purple-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-purple-800 uppercase tracking-wide">Diversidade de Ativos</h4><p class="text-xs text-purple-700 mt-2 leading-relaxed">Gestão ativa de ${numCat} categorias distintas.</p><p class="text-[11px] text-purple-500 mt-1 font-semibold">Portfólio estruturado e centralizado.</p></div></div>`;
@@ -1104,7 +1146,6 @@
             
             const primColor = localStorage.getItem('pref_color') || '#161B33';
 
-            // 1. Gráfico Ampliado de Componentes
             const topItensEstoque = [...dados].sort((a, b) => (b.Quantidade||0) - (a.Quantidade||0)).slice(0, 8);
             if(document.getElementById('chartComponentesAmpliado')) {
                 chartComponentesAmpliado = new Chart(document.getElementById('chartComponentesAmpliado'), {
@@ -1121,7 +1162,6 @@
                 });
             }
 
-            // 2. Gráfico Top 5 Saídas
             const saidasMap = {};
             logs.forEach(log => {
                 if (log.tipo === 'SAÍDA' && log.itemNome) { saidasMap[log.itemNome] = (saidasMap[log.itemNome] || 0) + (log.qtd || 0); }
@@ -1146,7 +1186,6 @@
                 });
             }
 
-            // 3. Gráfico Pizza Categorias
             const catLabels = Object.keys(mapCat);
             const catData = catLabels.map(k => mapCat[k]);
             const coresVibrantes = ['#4F46E5', '#EC4899', '#10B981', '#F59E0B', '#3B82F6', '#8B5CF6', '#EF4444', '#06B6D4'];
@@ -1169,9 +1208,11 @@
             }
         }
 
-        // ================= COMPORTAMENTO DE ABAS =================
-        document.getElementById('btn-theme').addEventListener('click', () => document.body.classList.toggle('dark'));
-        const modal = document.getElementById('tools-modal'); document.getElementById('btn-tools').addEventListener('click', () => modal.classList.remove('hidden')); document.querySelectorAll('.close-modal').forEach(b => b.addEventListener('click', () => modal.classList.add('hidden')));
+        // ================= COMPORTAMENTO DE ABAS E EVENTOS DE MENU =================
+        if(document.getElementById('btn-theme')) document.getElementById('btn-theme').addEventListener('click', () => document.body.classList.toggle('dark'));
+        const modal = document.getElementById('tools-modal'); 
+        if(document.getElementById('btn-tools')) document.getElementById('btn-tools').addEventListener('click', () => modal.classList.remove('hidden')); 
+        document.querySelectorAll('.close-modal').forEach(b => b.addEventListener('click', () => modal.classList.add('hidden')));
         
         const tabsBtns = document.querySelectorAll('.tab-btn'), tabContents = document.querySelectorAll('.tab-content');
         tabsBtns.forEach(btn => { 
@@ -1184,30 +1225,37 @@
                 else if(target === 'tab-localidade') e.currentTarget.classList.add('bg-indigo-100', 'text-indigo-800', 'border-indigo-500');
                 else e.currentTarget.classList.add('bg-blue-100', 'text-blue-800');
                 
-                tabContents.forEach(tc => tc.classList.add('hidden')); document.getElementById(target).classList.remove('hidden'); 
+                tabContents.forEach(tc => tc.classList.add('hidden')); 
+                if(document.getElementById(target)) document.getElementById(target).classList.remove('hidden'); 
             }); 
         });
 
-        document.getElementById('view-estoque-btn').addEventListener('click', (e) => {
-            e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600');
-            const otherBtn = document.getElementById('view-rastreio-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500');
-            document.getElementById('view-estoque-content').classList.remove('hidden'); document.getElementById('view-rastreio-content').classList.add('hidden');
-        });
+        if(document.getElementById('view-estoque-btn')) {
+            document.getElementById('view-estoque-btn').addEventListener('click', (e) => {
+                e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600');
+                const otherBtn = document.getElementById('view-rastreio-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500');
+                document.getElementById('view-estoque-content').classList.remove('hidden'); document.getElementById('view-rastreio-content').classList.add('hidden');
+            });
+        }
 
-        document.getElementById('view-rastreio-btn').addEventListener('click', (e) => {
-            e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600');
-            const otherBtn = document.getElementById('view-estoque-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500');
-            document.getElementById('view-rastreio-content').classList.remove('hidden'); document.getElementById('view-estoque-content').classList.add('hidden');
-        });
+        if(document.getElementById('view-rastreio-btn')) {
+            document.getElementById('view-rastreio-btn').addEventListener('click', (e) => {
+                e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600');
+                const otherBtn = document.getElementById('view-estoque-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500');
+                document.getElementById('view-rastreio-content').classList.remove('hidden'); document.getElementById('view-estoque-content').classList.add('hidden');
+            });
+        }
 
-        document.getElementById('search-table-estoque').addEventListener('input', e => { const term = e.target.value.toLowerCase(), rows = document.getElementById('inventory-tbody').getElementsByTagName('tr'); for(let row of rows) row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; });
-        document.getElementById('search-table-rastreio').addEventListener('input', e => { const term = e.target.value.toLowerCase(), rows = document.getElementById('rastreio-tbody').getElementsByTagName('tr'); for(let row of rows) row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; });
+        if(document.getElementById('search-table-estoque')) document.getElementById('search-table-estoque').addEventListener('input', e => { const term = e.target.value.toLowerCase(), rows = document.getElementById('inventory-tbody').getElementsByTagName('tr'); for(let row of rows) row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; });
+        if(document.getElementById('search-table-rastreio')) document.getElementById('search-table-rastreio').addEventListener('input', e => { const term = e.target.value.toLowerCase(), rows = document.getElementById('rastreio-tbody').getElementsByTagName('tr'); for(let row of rows) row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; });
         
-        document.getElementById('btn-export-csv').addEventListener('click', () => { 
-            let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Local,Patrimonio,Quantidade\n"; 
-            estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Local||'N/A'}","${r.Patrimonio||'N/A'}","${r.Quantidade||0}"\n`); 
-            const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); 
-        });
+        if(document.getElementById('btn-export-csv')) {
+            document.getElementById('btn-export-csv').addEventListener('click', () => { 
+                let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Local,Patrimonio,Quantidade\n"; 
+                estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Local||'N/A'}","${r.Patrimonio||'N/A'}","${r.Quantidade||0}"\n`); 
+                const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); 
+            });
+        }
     </script>
 </body>
 </html>
