@@ -28,7 +28,7 @@
         /* Estilos Restritos para Impressão Global */
         @media print {
             body { background-color: white; }
-            #login-screen, #main-system, #tools-modal { display: none !important; }
+            #login-screen, #main-system, #tools-modal, #toast-container { display: none !important; }
             .print-bg { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             .no-print { display: none !important; }
             table { border-collapse: collapse; width: 100%; font-size: 10pt;}
@@ -49,17 +49,25 @@
             #printable-simple-table.active-print th { background-color: #161B33 !important; color: white !important; }
             #printable-simple-table.active-print { page: landscape; }
         }
+
+        /* Animação Toast */
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+        .toast-enter { animation: slideIn 0.3s ease-out forwards; }
+        .toast-exit { animation: slideOut 0.3s ease-in forwards; }
     </style>
 </head>
 <body class="transition-colors duration-200">
+
+    <!-- Container de Notificações (Toasts) -->
+    <div id="toast-container" class="fixed top-5 right-5 z-[9999] flex flex-col gap-3 pointer-events-none"></div>
 
     <!-- TELA DE LOGIN -->
     <div id="login-screen" class="fixed inset-0 flex justify-center items-center z-50 bg-cover bg-center bg-no-repeat" style="background-image: url('https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg'); transition: background-image 0.5s ease;">
         <div class="absolute inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm"></div>
         <div class="bg-white rounded-xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500 relative z-10">
             <div class="text-center mb-8">
-                <!-- LOGO BLINDADA (GitHub Original + Fallback) -->
-                <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png/320px-Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
                 <h2 id="login-title" class="text-2xl font-bold text-slate-800">Almoxarifado TIC</h2>
                 <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p>
             </div>
@@ -75,12 +83,9 @@
                         <button id="btn-forgot-password" class="text-xs text-blue-600 hover:text-blue-800 hover:underline transition font-medium">Esqueci minha senha</button>
                     </div>
                 </div>
-                <button id="btn-login" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:opacity-90 transition shadow-lg mt-2">
+                <button id="btn-login" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:opacity-90 transition shadow-lg mt-2 pointer-events-auto">
                     <i class="fas fa-sign-in-alt mr-2"></i> Autenticar
                 </button>
-            </div>
-            <div id="login-msg-container" class="mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm hidden">
-                <p id="login-msg-text"></p>
             </div>
         </div>
     </div>
@@ -93,8 +98,7 @@
             <div class="px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center space-x-3">
-                        <!-- LOGO NAVBAR BLINDADA -->
-                        <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" class="h-10">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png/320px-Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-10">
                         <i id="navbar-icon" class="fas fa-chart-line text-xl ml-2"></i>
                         <span id="navbar-title" class="font-bold text-lg tracking-wide whitespace-nowrap">Painel de Gestão de Estoque - SETIC</span>
                     </div>
@@ -206,31 +210,43 @@
                     <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center gap-4">
                         <div class="flex items-center gap-4">
                             <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Inventário Consolidado</h3>
-                            <!-- BOTÃO FOTO DA TABELA ESTOQUE -->
                             <button id="btn-print-estoque-main" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
                                 <i class="fas fa-print mr-1.5"></i> Gerar PDF
                             </button>
                         </div>
-                        <div class="relative">
-                            <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                            <input type="text" id="search-table-estoque" placeholder="Filtrar registro..." class="pl-9 pr-3 py-2 border border-gray-300 rounded text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                        <!-- Filtros Avançados -->
+                        <div class="flex items-center gap-3">
+                            <select id="filter-cat-estoque" class="border border-gray-300 rounded text-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                                <option value="">Todas as Categorias</option>
+                            </select>
+                            <div class="relative">
+                                <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                                <input type="text" id="search-table-estoque" placeholder="Filtrar registro..." class="pl-9 pr-3 py-2 border border-gray-300 rounded text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                            </div>
                         </div>
                     </div>
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto min-h-[300px]">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Categoria</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Componente</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Modelo / Espec.</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Componente / Espec.</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider text-blue-600">Local</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Patrimônio</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Quantidade</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nº Série</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider text-center">Quantidade</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
                                 </tr>
                             </thead>
                             <tbody id="inventory-tbody" class="bg-white divide-y divide-gray-200"></tbody>
                         </table>
+                    </div>
+                    <!-- Paginação Estoque -->
+                    <div class="px-6 py-3 border-t border-gray-100 flex items-center justify-between bg-gray-50">
+                        <span class="text-sm text-gray-500" id="estoque-page-info">Mostrando 0 registros</span>
+                        <div class="flex gap-2">
+                            <button id="btn-prev-estoque" class="px-3 py-1 border border-gray-300 rounded bg-white text-gray-600 hover:bg-gray-100 text-sm font-medium transition disabled:opacity-50"><i class="fas fa-chevron-left"></i> Anterior</button>
+                            <button id="btn-next-estoque" class="px-3 py-1 border border-gray-300 rounded bg-white text-gray-600 hover:bg-gray-100 text-sm font-medium transition disabled:opacity-50">Próxima <i class="fas fa-chevron-right"></i></button>
+                        </div>
                     </div>
                 </div>
 
@@ -239,7 +255,6 @@
                     <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center bg-indigo-50/30 gap-4">
                         <div class="flex items-center gap-4">
                             <h3 class="text-sm font-bold text-indigo-800 uppercase tracking-wider"><i class="fas fa-map-pin mr-2"></i>Mapa de Ativos Físicos</h3>
-                            <!-- BOTÃO FOTO DA TABELA RASTREIO -->
                             <button id="btn-print-rastreio-main" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
                                 <i class="fas fa-print mr-1.5"></i> Gerar PDF
                             </button>
@@ -249,7 +264,7 @@
                             <input type="text" id="search-table-rastreio" placeholder="Filtrar Local, Patrimônio, Série..." class="pl-9 pr-3 py-2 border border-indigo-200 rounded text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm">
                         </div>
                     </div>
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto min-h-[300px]">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-indigo-50/50">
                                 <tr>
@@ -263,6 +278,14 @@
                             </thead>
                             <tbody id="rastreio-tbody" class="bg-white divide-y divide-gray-200"></tbody>
                         </table>
+                    </div>
+                    <!-- Paginação Rastreio -->
+                    <div class="px-6 py-3 border-t border-gray-100 flex items-center justify-between bg-indigo-50/20">
+                        <span class="text-sm text-indigo-600" id="rastreio-page-info">Mostrando 0 registros</span>
+                        <div class="flex gap-2">
+                            <button id="btn-prev-rastreio" class="px-3 py-1 border border-indigo-200 rounded bg-white text-indigo-700 hover:bg-indigo-50 text-sm font-medium transition disabled:opacity-50"><i class="fas fa-chevron-left"></i> Anterior</button>
+                            <button id="btn-next-rastreio" class="px-3 py-1 border border-indigo-200 rounded bg-white text-indigo-700 hover:bg-indigo-50 text-sm font-medium transition disabled:opacity-50">Próxima <i class="fas fa-chevron-right"></i></button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -279,8 +302,7 @@
                 <p class="text-sm mt-1 text-slate-300">Polícia Rodoviária Federal - Diretoria de Tecnologia da Informação e Comunicação (DTIC)</p>
                 <p class="text-lg font-bold mt-3 text-white" id="print-title-doc">Relatório Gerencial Analítico - Gestão de Estoque (SETIC)</p>
             </div>
-            <!-- LOGO OFICIAL BLINDADA -->
-            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" class="h-20">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png/320px-Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-20">
         </div>
         <div class="px-6">
             <h2 class="text-xl font-bold text-slate-800">Parecer e Metodologia de Cálculo</h2>
@@ -315,8 +337,7 @@
                 <p style="margin: 0; font-size: 12px; font-weight: bold; font-family: Arial, sans-serif;" id="print-simple-title">Extrato de Ativos</p>
                 <p style="margin: 2px 0 0 0; font-size: 10px; color: #555; font-family: Arial, sans-serif;" id="print-simple-date"></p>
             </div>
-            <!-- LOGO FIXA INSTITUCIONAL BLINDADA -->
-            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" style="height: 65px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png/320px-Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" style="height: 65px;">
         </div>
         <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif;">
             <thead id="print-simple-thead"></thead>
@@ -338,10 +359,7 @@
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg bg-blue-100 text-blue-800 font-bold transition flex items-center text-sm" data-target="tab-entrada"><i class="fas fa-plus-circle w-6"></i> Entrada Estoque</button></li>
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-saida"><i class="fas fa-minus-circle w-6"></i> Baixa / Saída</button></li>
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-indigo-100 hover:text-indigo-800 font-semibold transition flex items-center text-sm border-l-4 border-transparent hover:border-indigo-500" data-target="tab-localidade"><i class="fas fa-map-marker-alt w-6 text-indigo-500"></i> Locais / Rastreio</button></li>
-                    
-                    <!-- ABA RESTAURADA: RELATÓRIOS OFICIAIS -->
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm mt-4" data-target="tab-relatorio"><i class="fas fa-file-contract w-6"></i> Exportações / Relatórios</button></li>
-                    
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-pref"><i class="fas fa-sliders-h w-6"></i> Preferências</button></li>
                 </ul>
                 <div class="border-t pt-4 mt-auto">
@@ -349,44 +367,48 @@
                 </div>
             </div>
 
-            <div class="flex-1 p-8 overflow-y-auto bg-white">
+            <div class="flex-1 p-8 overflow-y-auto bg-white relative">
                 
                 <!-- TAB ENTRADA -->
                 <div id="tab-entrada" class="tab-content h-full flex flex-col">
-                    <h2 class="text-2xl font-bold text-blue-900 mb-2"><i class="fas fa-boxes mr-2 text-blue-600"></i>Entrada de Ativos (Estoque Geral)</h2>
-                    <p class="text-sm text-slate-500 mb-6 border-b pb-4">Adicione estoque manualmente ou importe em lote por planilha.</p>
+                    <h2 class="text-2xl font-bold text-blue-900 mb-2"><i class="fas fa-boxes mr-2 text-blue-600"></i>Entrada de Ativos (Estoque)</h2>
+                    <p class="text-sm text-slate-500 mb-6 border-b pb-4">Adicione estoque manualmente com informações de rastreio ou importe em lote por planilha.</p>
                     
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
-                        <div class="bg-blue-50/50 p-6 rounded-xl border border-blue-100 shadow-sm">
+                        <div class="bg-blue-50/50 p-6 rounded-xl border border-blue-100 shadow-sm flex flex-col">
                             <h3 class="font-bold text-blue-800 mb-4"><i class="fas fa-keyboard mr-2"></i>Cadastro Manual</h3>
-                            <div class="space-y-4">
+                            <div class="space-y-4 flex-1">
                                 <div class="grid grid-cols-2 gap-3">
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Categoria Macro</label><input list="lista-categorias" id="form-cat" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div>
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Componente</label><input list="lista-componentes" id="form-comp" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Categoria Macro *</label><input list="lista-categorias" id="form-cat" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Componente *</label><input list="lista-componentes" id="form-comp" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Modelo</label><input type="text" id="form-mod" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Modelo / Marca</label><input type="text" id="form-mod" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div>
                                     <div><label class="block text-xs font-bold text-slate-700 uppercase">Especificação</label><input type="text" id="form-esp" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div>
                                 </div>
-                                <div class="grid grid-cols-3 gap-3">
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase text-blue-600">Local Físico</label><input type="text" id="form-local" class="mt-1 block w-full rounded border-blue-300 border p-2 text-sm bg-white" placeholder="Ex: Armazém A"></div>
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Nº Patrimônio</label><input type="text" id="form-patrimonio-estoque" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Opcional"></div>
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Quantidade</label><input type="number" id="form-qtd" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" min="1" value="1"></div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div><label class="block text-xs font-bold text-slate-700 uppercase text-blue-600">Local Físico *</label><input type="text" id="form-local" class="mt-1 block w-full rounded border-blue-300 border p-2 text-sm bg-white" placeholder="Ex: Armazém A"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Nº Patrimônio / Série</label><input type="text" id="form-patrimonio-estoque" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Opcional"></div>
                                 </div>
-                                <button id="btn-save-item" class="w-full bg-blue-600 text-white font-bold py-2.5 px-4 rounded hover:bg-blue-700 transition shadow mt-2">Registrar Entrada no Estoque</button>
-                                <p id="msg-entrada" class="text-blue-600 text-center mt-2 font-bold text-sm hidden"><i class="fas fa-check-circle"></i> Entrada registada com sucesso!</p>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div><label class="block text-xs font-bold text-slate-700 uppercase text-orange-600" title="Alerta automático abaixo desta quantidade">Estoque Mínimo</label><input type="number" id="form-minimo" class="mt-1 block w-full rounded border-orange-300 border p-2 text-sm" min="1" value="5"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 uppercase text-emerald-600">Qtd a Adicionar *</label><input type="number" id="form-qtd" class="mt-1 block w-full rounded border-emerald-300 border p-2 text-sm" min="1" value="1"></div>
+                                </div>
                             </div>
+                            <button id="btn-save-item" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded hover:bg-blue-700 transition shadow mt-4">Registrar Entrada no Estoque</button>
                         </div>
                         
                         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                             <h3 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-excel mr-2 text-emerald-600"></i>Importação em Lote (Excel/CSV)</h3>
-                            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800"><strong>Colunas exigidas na planilha:</strong><br>CATEGORIA, COMPONENTE, MODELO, ESPECIFICAÇÃO, LOCAL, PATRIMÔNIO (Opcional), QUANTIDADE.</div>
+                            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800">
+                                <strong>Colunas exigidas na planilha:</strong><br>
+                                CATEGORIA, COMPONENTE, MODELO, ESPECIFICAÇÃO, LOCAL, SÉRIE, ESTOQUE_MIN, QUANTIDADE.
+                            </div>
                             <div class="flex-1 flex flex-col justify-center items-center border-2 border-dashed border-slate-300 rounded-lg p-6 hover:bg-slate-100 transition">
                                 <i class="fas fa-cloud-upload-alt text-4xl text-slate-400 mb-3"></i>
                                 <input type="file" id="estoque-file-upload" accept=".xlsx, .xls, .csv" class="block w-full max-w-xs text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:font-bold file:bg-blue-50 file:text-blue-700 cursor-pointer">
                             </div>
-                            <button id="btn-estoque-upload" class="w-full bg-slate-800 text-white font-bold py-2.5 px-4 rounded hover:bg-slate-700 transition shadow mt-4">Processar Planilha de Estoque</button>
-                            <p id="msg-estoque-upload" class="text-center mt-2 font-bold text-sm hidden"></p>
+                            <button id="btn-estoque-upload" class="w-full bg-slate-800 text-white font-bold py-3 px-4 rounded hover:bg-slate-700 transition shadow mt-4">Processar Planilha de Estoque</button>
                         </div>
                     </div>
                     <datalist id="lista-categorias"><option value="Armazenamento"><option value="Memória"><option value="Fonte de Alimentação"><option value="Bateria"><option value="Periféricos"></datalist>
@@ -405,7 +427,6 @@
                         </div>
                     </div>
                     <button id="btn-register-saida" class="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-md hover:bg-red-700 transition shadow">Confirmar Baixa</button>
-                    <p id="msg-saida" class="text-center mt-3 font-bold hidden"></p>
                 </div>
 
                 <!-- TAB LOCALIDADE / RASTREIO -->
@@ -427,7 +448,6 @@
                                     <div><label class="block text-xs font-bold text-slate-700 uppercase">Nº Patrimônio</label><input type="text" id="loc-patrimonio" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: PRF-123456"></div>
                                 </div>
                                 <button id="btn-save-loc" class="w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded hover:bg-indigo-700 transition shadow mt-2">Mapear Equipamento</button>
-                                <p id="msg-loc-manual" class="text-indigo-600 text-center mt-2 font-bold text-sm hidden">Mapeado com sucesso!</p>
                             </div>
                         </div>
                         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
@@ -438,7 +458,6 @@
                                 <input type="file" id="loc-file-upload" accept=".xlsx, .xls, .csv" class="block w-full max-w-xs text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:font-bold file:bg-indigo-50 file:text-indigo-700 cursor-pointer">
                             </div>
                             <button id="btn-loc-upload" class="w-full bg-slate-800 text-white font-bold py-2.5 px-4 rounded hover:bg-slate-700 transition shadow mt-4">Iniciar Importação</button>
-                            <p id="msg-loc-upload" class="text-center mt-2 font-bold text-sm hidden"></p>
                         </div>
                     </div>
                 </div>
@@ -482,7 +501,6 @@
                         </div>
                     </div>
                     <button id="btn-save-pref" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:opacity-90 transition shadow mt-4"><i class="fas fa-save mr-2"></i> Salvar Preferências</button>
-                    <p id="msg-pref" class="text-emerald-600 text-center mt-4 font-bold hidden"><i class="fas fa-check-circle"></i> Personalização aplicada com sucesso!</p>
                 </div>
 
                 <!-- TAB ADMINISTRADOR -->
@@ -493,7 +511,6 @@
                         <p class="text-sm text-slate-500 mb-6">Área restrita. Ferramentas sensíveis do banco de dados.</p>
                         <input type="password" id="admin-pass-input" class="rounded-md border-gray-300 border p-3 w-64 mb-4 text-center tracking-widest" placeholder="••••••••">
                         <button id="btn-admin-login" class="btn-primary bg-[#161B33] text-white font-bold py-3 px-8 rounded-md hover:opacity-90 transition shadow-lg"><i class="fas fa-unlock-alt mr-2"></i> Desbloquear</button>
-                        <p id="admin-error" class="text-red-600 font-bold text-sm mt-3 hidden">Senha Incorreta.</p>
                     </div>
 
                     <div id="admin-content-section" class="hidden h-full flex flex-col">
@@ -508,19 +525,17 @@
                                 <p class="text-[11px] text-slate-500 mb-3">Carregue arquivo .xlsx estruturado.</p>
                                 <input type="file" id="file-upload" accept=".xlsx, .xls, .csv" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-blue-50 file:text-blue-700 cursor-pointer mb-2">
                                 <button id="btn-process-upload" class="btn-primary w-full bg-[#161B33] text-white font-bold py-2 px-2 rounded hover:opacity-90 transition text-sm mt-auto"><i class="fas fa-cloud-upload-alt mr-1"></i> Processar</button>
-                                <p id="msg-upload" class="text-center mt-2 font-bold text-xs hidden"></p>
                             </div>
                             <div class="border border-blue-200 rounded-xl p-5 bg-blue-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-user-plus text-blue-600 mr-2"></i> Novo Usuário</h3>
-                                <p class="text-[11px] text-blue-600 mb-2">Atenção: Cadastrar um novo logará você nele.</p>
+                                <p class="text-[11px] text-blue-600 mb-2">Atenção: Cadastrar logará você nele.</p>
                                 <input type="email" id="new-user-email" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="E-mail corporativo">
                                 <input type="password" id="new-user-pass" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="Senha (mín. 6 chars)">
                                 <button id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 px-2 rounded hover:bg-blue-700 transition text-sm shadow mt-auto"><i class="fas fa-save mr-1"></i> Cadastrar</button>
-                                <p id="msg-create-user" class="text-center mt-2 font-bold text-xs hidden"></p>
                             </div>
                             <div class="border border-orange-200 rounded-xl p-5 bg-orange-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-orange-800 mb-2"><i class="fas fa-user-minus text-orange-600 mr-2"></i> Gerir Acessos</h3>
-                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">Para evitar ataques, o Firebase bloqueia exclusão via web.<br><br>A exclusão definitiva deve ser feita no Console Oficial.</p>
+                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">O Firebase bloqueia exclusão via web.<br><br>A exclusão deve ser feita no Console Oficial.</p>
                                 <a href="https://console.firebase.google.com/project/gestao-de-equipamentos-tic/authentication/users" target="_blank" class="w-full bg-orange-600 text-white font-bold py-2.5 px-2 rounded hover:bg-orange-700 transition text-sm shadow mt-auto flex items-center justify-center text-center"><i class="fas fa-external-link-alt mr-2"></i> Abrir Console</a>
                             </div>
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between">
@@ -589,10 +604,42 @@
         let userEmail = "";
         let tempBgBase64 = null; 
         
-        // DECLARAÇÃO GLOBAL DOS GRÁFICOS (BLINDAGEM)
+        // VARIÁVEIS DE CONTROLE DE PAGINAÇÃO E FILTROS
+        let currentPageEstoque = 1;
+        const itemsPerPage = 10;
+        let currentFilterCat = '';
+        let currentSearchText = '';
+
+        let currentPageRastreio = 1;
+        let currentSearchRastreio = '';
+        
+        // VARIÁVEIS GLOBAIS DOS GRÁFICOS (BLINDAGEM)
         let chartComponentesAmpliado = null; 
         let chartTopSaidas = null; 
         let chartPizzaCategorias = null; 
+
+        // ================= NOTIFICAÇÕES TOAST (UX MELHORADA) =================
+        function showToast(msg, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if(!container) return;
+            const toast = document.createElement('div');
+            const colorClass = type === 'success' ? 'bg-emerald-500' : (type === 'error' ? 'bg-red-500' : 'bg-blue-500');
+            const iconClass = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-times-circle' : 'fa-info-circle');
+            
+            toast.className = `${colorClass} text-white px-4 py-3 rounded shadow-lg flex items-center gap-3 transform transition-transform duration-300 translate-x-full`;
+            toast.innerHTML = `<i class="fas ${iconClass} text-lg"></i><span class="text-sm font-bold">${msg}</span>`;
+            
+            container.appendChild(toast);
+            
+            // Trigger animation
+            setTimeout(() => toast.classList.remove('translate-x-full'), 10);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
 
         // ================= PREFERÊNCIAS E CUSTOMIZAÇÃO =================
         function carregarPreferencias() {
@@ -631,7 +678,7 @@
         if(document.getElementById('btn-clear-bg')) {
             document.getElementById('btn-clear-bg').addEventListener('click', () => {
                 localStorage.removeItem('pref_bg'); tempBgBase64 = null; document.getElementById('pref-bg-upload').value = ''; carregarPreferencias();
-                alert("Imagem de fundo restaurada para o padrão da PRF!");
+                showToast("Imagem restaurada com sucesso!");
             });
         }
 
@@ -640,8 +687,9 @@
                 localStorage.setItem('pref_title', document.getElementById('pref-title').value);
                 localStorage.setItem('pref_color', document.getElementById('pref-color').value);
                 localStorage.setItem('pref_icon', document.getElementById('pref-icon').value);
-                if(tempBgBase64) { try { localStorage.setItem('pref_bg', tempBgBase64); } catch(e) { alert("A imagem é muito grande para ser salva na memória (limite: 2MB)."); } }
-                carregarPreferencias(); document.getElementById('msg-pref').classList.remove('hidden'); setTimeout(() => document.getElementById('msg-pref').classList.add('hidden'), 3000);
+                if(tempBgBase64) { try { localStorage.setItem('pref_bg', tempBgBase64); } catch(e) { showToast("A imagem é muito grande.", "error"); return; } }
+                carregarPreferencias(); 
+                showToast("Preferências salvas com sucesso!");
             });
         }
 
@@ -654,7 +702,7 @@
 
         carregarPreferencias(); 
 
-        // ================= SISTEMA DE MENSAGENS E LOGIN BLINDADO =================
+        // ================= LOGIN BLINDADO =================
         function showLoginMessage(msg, isError = true) {
             const container = document.getElementById('login-msg-container');
             const textObj = document.getElementById('login-msg-text');
@@ -674,9 +722,9 @@
                 const email = document.getElementById('login-email').value.trim();
                 if (!email) return showLoginMessage("Por favor, digite seu e-mail corporativo no campo acima para recuperar a senha.", true);
                 sendPasswordResetEmail(auth, email)
-                    .then(() => showLoginMessage(`E-mail de redefinição enviado para: ${email}. Verifique sua caixa de entrada.`, false))
+                    .then(() => showLoginMessage(`E-mail de redefinição enviado para: ${email}.`, false))
                     .catch((error) => {
-                        let msg = "Erro: E-mail não encontrado ou falha de conexão.";
+                        let msg = "Erro: E-mail não encontrado.";
                         if(error.code === 'auth/invalid-api-key') msg = "ERRO: Chave API do Firebase inválida. Atualize o código fonte.";
                         showLoginMessage(msg, true);
                     });
@@ -694,8 +742,8 @@
             signInWithEmailAndPassword(auth, email, pass).catch((error) => {
                 let msg = "Credenciais inválidas ou acesso não autorizado.";
                 if(error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') msg = "Usuário não encontrado. Verifique o e-mail e a senha.";
-                else if(error.code === 'auth/wrong-password') msg = "Senha incorreta. Tente novamente ou recupere a senha.";
-                else if(error.code === 'auth/invalid-api-key') msg = "ERRO CRÍTICO (400): Chave de API do Firebase foi bloqueada ou é inválida. Acesse o Console do Firebase e gere uma nova.";
+                else if(error.code === 'auth/wrong-password') msg = "Senha incorreta. Tente novamente.";
+                else if(error.code === 'auth/invalid-api-key') msg = "ERRO CRÍTICO (400): Chave API Firebase inválida.";
                 showLoginMessage(msg, true);
                 btn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Autenticar';
             });
@@ -713,7 +761,7 @@
                 document.getElementById('login-screen').classList.add('hidden'); 
                 document.getElementById('main-system').classList.remove('hidden'); 
                 document.getElementById('login-email').value = ''; document.getElementById('login-password').value = '';
-                document.getElementById('login-msg-container').classList.add('hidden');
+                if(document.getElementById('login-msg-container')) document.getElementById('login-msg-container').classList.add('hidden');
                 iniciarSistema(); 
             } else { 
                 document.getElementById('login-screen').classList.remove('hidden'); 
@@ -732,25 +780,27 @@
                 atualizarInterfaceRastreio();
             });
             onSnapshot(query(collection(db, "logs"), orderBy("dataHora", "desc"), limit(100)), (snapshot) => {
-                const tbody = document.getElementById('logs-tbody'); tbody.innerHTML = ''; logsLocal = []; 
-                snapshot.forEach((docSnap) => {
-                    const log = docSnap.data(); logsLocal.push(log); 
-                    let dateStr = "N/A";
-                    if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
-                    let corAcao = log.tipo === 'ENTRADA' ? 'text-emerald-600' : 'text-orange-600', iconAcao = log.tipo === 'ENTRADA' ? 'fa-arrow-down' : 'fa-arrow-up';
-                    if(log.tipo.includes('LOCAL')) { corAcao = 'text-indigo-600'; iconAcao = 'fa-map-marker-alt'; }
-                    let userLogInfo = log.usuario ? `<br><span class="text-xs text-gray-400">Por: ${log.usuario}</span>` : '';
-                    tbody.innerHTML += `<tr class="hover:bg-slate-100 transition"><td class="px-4 py-3 whitespace-nowrap text-slate-500 font-medium">${dateStr}</td><td class="px-4 py-3 whitespace-nowrap font-bold ${corAcao}"><i class="fas ${iconAcao} mr-1"></i> ${log.tipo}</td><td class="px-4 py-3 text-slate-800 font-semibold">${log.itemNome}</td><td class="px-4 py-3 font-black text-slate-800">${log.qtd}</td><td class="px-4 py-3 text-slate-500 font-medium">${log.chamado || '-'}${userLogInfo}</td></tr>`;
-                });
-                atualizarInterfaceEstoque(); 
+                const tbody = document.getElementById('logs-tbody'); 
+                if(tbody) {
+                    tbody.innerHTML = ''; logsLocal = []; 
+                    snapshot.forEach((docSnap) => {
+                        const log = docSnap.data(); logsLocal.push(log); 
+                        let dateStr = "N/A";
+                        if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
+                        let corAcao = log.tipo === 'ENTRADA' ? 'text-emerald-600' : 'text-orange-600', iconAcao = log.tipo === 'ENTRADA' ? 'fa-arrow-down' : 'fa-arrow-up';
+                        if(log.tipo.includes('LOCAL')) { corAcao = 'text-indigo-600'; iconAcao = 'fa-map-marker-alt'; }
+                        let userLogInfo = log.usuario ? `<br><span class="text-xs text-gray-400">Por: ${log.usuario}</span>` : '';
+                        tbody.innerHTML += `<tr class="hover:bg-slate-100 transition"><td class="px-4 py-3 whitespace-nowrap text-slate-500 font-medium">${dateStr}</td><td class="px-4 py-3 whitespace-nowrap font-bold ${corAcao}"><i class="fas ${iconAcao} mr-1"></i> ${log.tipo}</td><td class="px-4 py-3 text-slate-800 font-semibold">${log.itemNome}</td><td class="px-4 py-3 font-black text-slate-800">${log.qtd}</td><td class="px-4 py-3 text-slate-500 font-medium">${log.chamado || '-'}${userLogInfo}</td></tr>`;
+                    });
+                    atualizarInterfaceEstoque(); // Atualiza gráfico de saídas
+                }
             });
         }
 
         async function registrarLog(tipo, itemNome, qtd, chamado = "") { try { await addDoc(collection(db, "logs"), { tipo, itemNome, qtd: Number(qtd), chamado, usuario: userEmail, dataHora: serverTimestamp() }); } catch(e) {} }
 
-        // ================= GERAÇÃO DE RELATÓRIO ANALÍTICO (COMPLETO) =================
+        // ================= GERAÇÃO DE RELATÓRIO ANALÍTICO =================
         function gerarRelatorioAnalitico(tipoRelatorio) {
-            // Isolamento da impressão
             document.getElementById('printable-simple-table').classList.remove('active-print');
             document.getElementById('printable-report').classList.add('active-print');
 
@@ -764,8 +814,9 @@
                 let tTotal = 0, tZerados = 0, tBaixos = 0; let categorias = new Set(); tbody.innerHTML = '';
                 [...estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => {
                     tTotal += (i.Quantidade || 0); categorias.add(i.Categoria || 'Geral');
-                    if(i.Quantidade === 0) tZerados++; else if(i.Quantidade <= 5) tBaixos++;
-                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||'-'}</td><td class="border px-2 py-1">${i.Componente||'-'}</td><td class="border px-2 py-1">${i.Modelo||'-'} / ${i.Especificação||'-'}</td><td class="border px-2 py-1">${i.Local||'-'}</td><td class="border px-2 py-1 font-mono">${i.Patrimonio||'-'}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`;
+                    let minEstoque = i.EstoqueMinimo || 5;
+                    if(i.Quantidade === 0) tZerados++; else if(i.Quantidade <= minEstoque) tBaixos++;
+                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||'-'}</td><td class="border px-2 py-1">${i.Componente||'-'}</td><td class="border px-2 py-1">${i.Modelo||'-'} / ${i.Especificação||'-'}</td><td class="border px-2 py-1">${i.Local||'-'}</td><td class="border px-2 py-1 font-mono">${i.Série||i.Patrimonio||'-'}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`;
                 });
                 let taxaCritica = estoqueLocal.length > 0 ? (((tZerados + tBaixos) / estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1);
 
@@ -778,12 +829,12 @@
                     <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade de Itens</p><p class="text-2xl font-black text-slate-800">${estoqueLocal.length}</p></div>
                     <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde do Estoque</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>
                     <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Taxa de Criticidade</p><p class="text-2xl font-black text-slate-800">${taxaCritica}%</p></div>
-                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Em Alerta (≤5)</p><p class="text-2xl font-black text-orange-500">${tBaixos}</p></div>
+                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Em Alerta</p><p class="text-2xl font-black text-orange-500">${tBaixos}</p></div>
                     <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Rupturas (Qtd 0)</p><p class="text-2xl font-black text-red-600">${tZerados}</p></div>
                     <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Status Sistêmico</p><p class="text-2xl font-black text-blue-600">ATIVO</p></div>
                 `;
 
-                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
+                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Série/Patr.</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
                 
                 visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid';
                 if(chartComponentesAmpliado) document.getElementById('print-chart-1').src = document.getElementById('chartComponentesAmpliado').toDataURL('image/png');
@@ -815,14 +866,11 @@
             }
             
             window.print();
-            
-            // Restaura
             setTimeout(() => { document.getElementById('printable-report').classList.remove('active-print'); }, 1000);
         }
 
-        // ================= GERAÇÃO DE PDF SIMPLIFICADO (FOTO DA TABELA) =================
+        // ================= GERAÇÃO DE PDF SIMPLIFICADO =================
         function gerarPDFSimples(tipo) {
-            // Isolamento da impressão
             document.getElementById('printable-report').classList.remove('active-print');
             document.getElementById('printable-simple-table').classList.add('active-print');
 
@@ -838,25 +886,35 @@
 
             if(tipo === 'estoque') {
                 titleObj.innerText = "Extrato: Inventário Consolidado de Estoque";
-                theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente</th><th>Modelo / Especificação</th><th>Local</th><th>Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
-                [...estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => {
-                    tbodyObj.innerHTML += `<tr><td>${i.Categoria||'-'}</td><td><b>${i.Componente||'-'}</b></td><td>${i.Modelo||'-'} / ${i.Especificação||'-'}</td><td>${i.Local||'-'}</td><td style="font-family:monospace;">${i.Patrimonio||'-'}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`;
+                theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente</th><th>Modelo / Espec.</th><th>Local</th><th>Série/Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
+                
+                // Usando os dados filtrados pela busca e paginação atual
+                let filtrados = estoqueLocal.filter(item => {
+                    let matchBusca = !currentSearchText || (item.Componente+item.Modelo+item.Especificação+item.Local).toLowerCase().includes(currentSearchText.toLowerCase());
+                    let matchCat = !currentFilterCat || item.Categoria === currentFilterCat;
+                    return matchBusca && matchCat;
+                });
+
+                filtrados.sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => {
+                    tbodyObj.innerHTML += `<tr><td>${i.Categoria||'-'}</td><td><b>${i.Componente||'-'}</b></td><td>${i.Modelo||'-'} / ${i.Especificação||'-'}</td><td>${i.Local||'-'}</td><td style="font-family:monospace;">${i.Série||i.Patrimonio||'-'}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`;
                 });
             } else {
                 titleObj.innerText = "Extrato: Rastreamento de Ativos (Mapa Físico)";
                 theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
-                [...localidadesLocais].sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
+                
+                let filtradosRastreio = localidadesLocais.filter(item => {
+                    return !currentSearchRastreio || (item.Equipamento+item.Local+item.Serie+item.Patrimonio).toLowerCase().includes(currentSearchRastreio.toLowerCase());
+                });
+
+                filtradosRastreio.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
                     tbodyObj.innerHTML += `<tr><td><b>${loc.Equipamento||'-'}</b></td><td>${loc.Local||'-'}</td><td>${loc.Marca||'-'}</td><td style="font-family:monospace;">${loc.Serie||'-'}</td><td style="font-family:monospace;">${loc.Patrimonio||'-'}</td><td style="text-align:center; font-weight:bold;">${loc.Quantidade||0}</td></tr>`;
                 });
             }
 
             window.print();
-
-            // Restaura
             setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
         }
 
-        // LIGAÇÃO DOS BOTÕES BLINDADOS COM IFs PARA EVITAR TRAVAMENTOS
         if(document.getElementById('btn-print-estoque-main')) document.getElementById('btn-print-estoque-main').addEventListener('click', () => gerarPDFSimples('estoque'));
         if(document.getElementById('btn-print-rastreio-main')) document.getElementById('btn-print-rastreio-main').addEventListener('click', () => gerarPDFSimples('rastreio'));
         if(document.getElementById('btn-relatorio-analitico-estoque')) document.getElementById('btn-relatorio-analitico-estoque').addEventListener('click', () => gerarRelatorioAnalitico('estoque'));
@@ -879,7 +937,7 @@
             document.getElementById('btn-delete-loc').addEventListener('click', async () => {
                 if(confirm("Deseja realmente apagar toda a base de Rastreamento de Ativos? Esta ação é irreversível.")) {
                     const btn = document.getElementById('btn-delete-loc'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
-                    try { const locSnap = await getDocs(collection(db, "localidades")); locSnap.forEach((d) => deleteDoc(d.ref)); alert("Base de rastreamento apagada."); } catch(e) {}
+                    try { const locSnap = await getDocs(collection(db, "localidades")); locSnap.forEach((d) => deleteDoc(d.ref)); showToast("Base de rastreamento apagada."); } catch(e) {}
                     btn.innerHTML = originalText;
                 }
             });
@@ -890,7 +948,7 @@
                 const confirmacao = prompt("⚠️ ZONA DE PERIGO!\nIsso apagará TODO o Estoque Consolidado.\nPara confirmar, digite: APAGAR");
                 if(confirmacao === "APAGAR") {
                     const btn = document.getElementById('btn-delete-estoque'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
-                    try { const estSnap = await getDocs(collection(db, "estoque")); estSnap.forEach((d) => deleteDoc(d.ref)); alert("Estoque apagado com sucesso."); } catch(e) {}
+                    try { const estSnap = await getDocs(collection(db, "estoque")); estSnap.forEach((d) => deleteDoc(d.ref)); showToast("Estoque apagado com sucesso."); } catch(e) {}
                     btn.innerHTML = originalText;
                 }
             });
@@ -923,9 +981,9 @@
 
         if(document.getElementById('btn-process-upload')) {
             document.getElementById('btn-process-upload').addEventListener('click', () => {
-                const fileInput = document.getElementById('file-upload'), msgLabel = document.getElementById('msg-upload'), btn = document.getElementById('btn-process-upload');
+                const fileInput = document.getElementById('file-upload'), btn = document.getElementById('btn-process-upload');
                 if (!fileInput.files.length) return alert("Selecione um arquivo Excel.");
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Aguarde...'; msgLabel.classList.add('hidden');
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Aguarde...';
                 const reader = new FileReader();
                 reader.onload = async (e) => {
                     try {
@@ -940,8 +998,8 @@
                             cont++;
                         }
                         await registrarLog("ENTRADA", `Importação Lote Excel (Admin)`, cont, "");
-                        msgLabel.textContent = `Sucesso! ${cont} registros importados.`; msgLabel.className = "text-center mt-2 font-bold text-xs text-emerald-600 block"; fileInput.value = "";
-                    } catch (error) { msgLabel.textContent = "Erro na leitura."; msgLabel.className = "text-center mt-2 font-bold text-xs text-red-600 block"; }
+                        showToast(`Sucesso! ${cont} registros importados.`); fileInput.value = "";
+                    } catch (error) { showToast("Erro na leitura do arquivo.", "error"); }
                     btn.innerHTML = '<i class="fas fa-cloud-upload-alt mr-1"></i> Processar';
                 };
                 reader.readAsArrayBuffer(fileInput.files[0]);
@@ -950,83 +1008,44 @@
 
         if(document.getElementById('btn-create-user')) {
             document.getElementById('btn-create-user').addEventListener('click', async () => {
-                const email = document.getElementById('new-user-email').value.trim(), pass = document.getElementById('new-user-pass').value.trim(), msg = document.getElementById('msg-create-user');
-                if(!email || pass.length < 6) { msg.textContent = "Erro: Mínimo 6 caracteres."; msg.className = "text-center mt-2 font-bold text-xs text-red-600 block"; return; }
+                const email = document.getElementById('new-user-email').value.trim(), pass = document.getElementById('new-user-pass').value.trim();
+                if(!email || pass.length < 6) { showToast("Erro: Mínimo 6 caracteres.", "error"); return; }
                 const btn = document.getElementById('btn-create-user'); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Criando...';
                 try {
                     await createUserWithEmailAndPassword(auth, email, pass);
-                    msg.textContent = "Usuário criado! (Sessão atualizada)."; msg.className = "text-center mt-2 font-bold text-xs text-emerald-600 block";
+                    showToast("Usuário criado! (Sessão atualizada).");
                     document.getElementById('new-user-email').value = ""; document.getElementById('new-user-pass').value = "";
-                } catch (error) { msg.textContent = "Erro: " + error.message; msg.className = "text-center mt-2 font-bold text-xs text-red-600 block"; }
+                } catch (error) { showToast("Erro: " + error.message, "error"); }
                 btn.innerHTML = '<i class="fas fa-save mr-1"></i> Cadastrar';
-            });
-        }
-
-        // ================= MÓDULO: RASTREIO E LOCALIDADES =================
-        if(document.getElementById('btn-save-loc')) {
-            document.getElementById('btn-save-loc').addEventListener('click', async () => {
-                const equip = document.getElementById('loc-equip').value.trim(), local = document.getElementById('loc-local').value.trim(), marca = document.getElementById('loc-marca').value.trim() || 'N/A', serie = document.getElementById('loc-serie').value.trim() || 'N/A', patrim = document.getElementById('loc-patrimonio').value.trim() || 'N/A', qtd = parseInt(document.getElementById('loc-qtd').value);
-                if(!equip || !local || isNaN(qtd) || qtd <= 0) return alert("Preencha Nome do Equipamento, Local e Quantidade corretamente.");
-                try {
-                    await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
-                    await registrarLog("MAP_LOCAL", `${equip} (Local: ${local})`, qtd, `Série: ${serie}`);
-                    document.getElementById('msg-loc-manual').classList.remove('hidden'); setTimeout(() => document.getElementById('msg-loc-manual').classList.add('hidden'), 3000);
-                    ['loc-equip','loc-local','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1;
-                } catch (e) { alert("Erro ao mapear: " + e.message); }
-            });
-        }
-
-        if(document.getElementById('btn-loc-upload')) {
-            document.getElementById('btn-loc-upload').addEventListener('click', () => {
-                const fileInput = document.getElementById('loc-file-upload'), msgLabel = document.getElementById('msg-loc-upload'), btn = document.getElementById('btn-loc-upload');
-                if (!fileInput.files.length) return alert("Selecione um arquivo Excel.");
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mapeando...'; msgLabel.classList.add('hidden');
-                const reader = new FileReader();
-                reader.onload = async (e) => {
-                    try {
-                        const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' }), json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-                        let cont = 0;
-                        for (let row of json) {
-                            const equip = row['EQUIPAMENTO'] || row['Equipamento'] || row['Nome'] || 'Equipamento Indefinido', local = row['LOCAL FISICO'] || row['Local Físico'] || row['Local'] || 'N/A', marca = row['MARCA'] || row['Marca'] || 'N/A', serie = row['Nº DE SÉRIE'] || row['N Serie'] || row['Série'] || 'N/A', patrim = row['Nº PATRIMONIO'] || row['Patrimônio'] || row['Patrimonio'] || 'N/A', qtd = parseInt(row['QUANTIDADE'] || row['Quantidade'] || row['Qtd'] || 1);
-                            await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
-                            cont++;
-                        }
-                        await registrarLog("MAP_LOCAL", `Importação em Lote (Excel)`, cont, "");
-                        msgLabel.textContent = `Sucesso! ${cont} locais mapeados.`; msgLabel.className = "text-center mt-2 font-bold text-sm text-emerald-600 block"; fileInput.value = "";
-                    } catch (error) { msgLabel.textContent = "Erro na leitura."; msgLabel.className = "text-center mt-2 font-bold text-sm text-red-600 block"; }
-                    btn.innerHTML = 'Iniciar Importação';
-                };
-                reader.readAsArrayBuffer(fileInput.files[0]);
-            });
-        }
-
-        function atualizarInterfaceRastreio() {
-            const tbody = document.getElementById('rastreio-tbody'); tbody.innerHTML = '';
-            [...localidadesLocais].sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
-                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||'-'}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
             });
         }
 
         // ================= CADASTRO ESTOQUE (MANUAL E LOTE) =================
         if(document.getElementById('btn-save-item')) {
             document.getElementById('btn-save-item').addEventListener('click', async () => {
-                const cat = document.getElementById('form-cat').value.trim(), comp = document.getElementById('form-comp').value.trim(), mod = document.getElementById('form-mod').value.trim(), esp = document.getElementById('form-esp').value.trim(), local = document.getElementById('form-local').value.trim() || 'N/A', patrim = document.getElementById('form-patrimonio-estoque').value.trim() || 'N/A', qtd = parseInt(document.getElementById('form-qtd').value);
-                if(!cat || !comp || isNaN(qtd) || qtd <= 0) return alert("Preencha os campos obrigatórios.");
-                const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local && (i.Patrimonio||'N/A') === patrim);
+                const cat = document.getElementById('form-cat').value.trim(), comp = document.getElementById('form-comp').value.trim(), mod = document.getElementById('form-mod').value.trim(), esp = document.getElementById('form-esp').value.trim(), local = document.getElementById('form-local').value.trim() || 'N/A', patrim = document.getElementById('form-patrimonio-estoque').value.trim() || 'N/A', qtd = parseInt(document.getElementById('form-qtd').value), minEstoque = parseInt(document.getElementById('form-minimo').value) || 5;
+                let serie = document.getElementById('form-patrimonio-estoque').value.trim() || 'N/A'; // Reutilizando campo para Série/Patrimônio
+                
+                if(!cat || !comp || isNaN(qtd) || qtd <= 0) return showToast("Preencha os campos obrigatórios.", "error");
+                const btn = document.getElementById('btn-save-item'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registrando...';
+                
+                const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local && (i.Série||'N/A') === serie);
                 try {
-                    if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd });
-                    else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Patrimonio: patrim, Quantidade: qtd });
+                    if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd, EstoqueMinimo: minEstoque });
+                    else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque });
                     await registrarLog("ENTRADA", `${comp} - ${mod} (${esp})`, qtd, `Local: ${local}`);
-                    document.getElementById('msg-entrada').classList.remove('hidden'); setTimeout(() => document.getElementById('msg-entrada').classList.add('hidden'), 3000); document.getElementById('form-qtd').value = 1;
-                } catch (e) {}
+                    showToast("Entrada registrada com sucesso!"); 
+                    document.getElementById('form-qtd').value = 1; document.getElementById('form-patrimonio-estoque').value = "";
+                } catch (e) { showToast("Erro: " + e.message, "error");}
+                btn.innerHTML = 'Registrar Entrada no Estoque';
             });
         }
 
         if(document.getElementById('btn-estoque-upload')) {
             document.getElementById('btn-estoque-upload').addEventListener('click', () => {
-                const fileInput = document.getElementById('estoque-file-upload'), msgLabel = document.getElementById('msg-estoque-upload'), btn = document.getElementById('btn-estoque-upload');
-                if (!fileInput.files.length) return alert("Selecione um arquivo Excel ou CSV.");
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Importando...'; msgLabel.classList.add('hidden');
+                const fileInput = document.getElementById('estoque-file-upload'), btn = document.getElementById('btn-estoque-upload');
+                if (!fileInput.files.length) return showToast("Selecione um arquivo Excel ou CSV.", "error");
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Importando...';
                 const reader = new FileReader();
                 reader.onload = async (e) => {
                     try {
@@ -1039,19 +1058,21 @@
                             const mod = row['MODELO'] || row['Modelo'] || 'N/A';
                             const esp = row['ESPECIFICAÇÃO'] || row['ESPECIFICACAO'] || row['Especificação'] || 'N/A';
                             const local = row['LOCAL FISICO'] || row['LOCAL'] || row['Local'] || 'N/A';
+                            const serie = row['SÉRIE'] || row['Série'] || row['SERIE'] || 'N/A';
                             const patrim = row['PATRIMÔNIO'] || row['PATRIMONIO'] || row['Patrimônio'] || row['Patrimonio'] || 'N/A';
+                            const minEst = parseInt(row['ESTOQUE MÍNIMO'] || row['ESTOQUE MINIMO'] || row['Estoque Minimo'] || 5);
                             const qtd = parseInt(row['QUANTIDADE'] || row['Quantidade'] || row['Qtd'] || 1);
                             
                             if(comp === 'Desc') continue;
                             
-                            const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local && (i.Patrimonio||'N/A') === patrim);
-                            if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd });
-                            else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Patrimonio: patrim, Quantidade: qtd });
+                            const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local && (i.Série||'N/A') === serie);
+                            if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd, EstoqueMinimo: minEst });
+                            else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, EstoqueMinimo: minEst, Quantidade: qtd });
                             cont++;
                         }
                         await registrarLog("ENTRADA", `Importação Lote Estoque (Excel)`, cont, "");
-                        msgLabel.textContent = `Sucesso! ${cont} registros importados.`; msgLabel.className = "text-center mt-2 font-bold text-sm text-emerald-600 block"; fileInput.value = "";
-                    } catch (error) { msgLabel.textContent = "Erro na leitura do arquivo."; msgLabel.className = "text-center mt-2 font-bold text-sm text-red-600 block"; }
+                        showToast(`Sucesso! ${cont} registros de estoque importados.`); fileInput.value = "";
+                    } catch (error) { showToast("Erro na leitura do arquivo.", "error"); }
                     btn.innerHTML = 'Processar Planilha de Estoque';
                 };
                 reader.readAsArrayBuffer(fileInput.files[0]);
@@ -1060,21 +1081,65 @@
 
         if(document.getElementById('btn-register-saida')) {
             document.getElementById('btn-register-saida').addEventListener('click', async () => {
-                const idItem = document.getElementById('saida-select-item').value, qtdSaida = parseInt(document.getElementById('saida-qtd').value), chamado = document.getElementById('saida-chamado').value.trim(), msgObj = document.getElementById('msg-saida');
-                if(!idItem || isNaN(qtdSaida) || qtdSaida <= 0) return alert("Valores inválidos.");
+                const idItem = document.getElementById('saida-select-item').value, qtdSaida = parseInt(document.getElementById('saida-qtd').value), chamado = document.getElementById('saida-chamado').value.trim();
+                if(!idItem || isNaN(qtdSaida) || qtdSaida <= 0) return showToast("Valores inválidos.", "error");
+                const btn = document.getElementById('btn-register-saida'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+                
                 const itemDB = estoqueLocal.find(i => i.id === idItem);
-                if(qtdSaida > (itemDB.Quantidade||0)) { msgObj.textContent = "Estoque insuficiente!"; msgObj.className = "text-center mt-3 font-bold text-red-600 block"; return; }
+                if(qtdSaida > (itemDB.Quantidade||0)) { showToast("Estoque insuficiente!", "error"); btn.innerHTML = 'Confirmar Baixa'; return; }
                 try {
                     await updateDoc(doc(db, "estoque", idItem), { Quantidade: (itemDB.Quantidade||0) - qtdSaida });
                     await registrarLog("SAÍDA", `${itemDB.Componente} - ${itemDB.Modelo} (${itemDB.Especificação})`, qtdSaida, chamado);
-                    msgObj.textContent = "Baixa processada!"; msgObj.className = "text-center mt-3 font-bold text-emerald-600 block"; document.getElementById('saida-qtd').value = 1; document.getElementById('saida-chamado').value = ""; setTimeout(() => msgObj.classList.add('hidden'), 3000);
-                } catch(e) {}
+                    showToast("Baixa processada com sucesso!"); document.getElementById('saida-qtd').value = 1; document.getElementById('saida-chamado').value = ""; 
+                } catch(e) { showToast("Erro ao processar baixa.", "error"); }
+                btn.innerHTML = 'Confirmar Baixa';
             });
         }
 
-        // ================= INSIGHTS COM PROTEÇÃO =================
+        // ================= MÓDULO: RASTREIO E LOCALIDADES =================
+        if(document.getElementById('btn-save-loc')) {
+            document.getElementById('btn-save-loc').addEventListener('click', async () => {
+                const equip = document.getElementById('loc-equip').value.trim(), local = document.getElementById('loc-local').value.trim(), marca = document.getElementById('loc-marca').value.trim() || 'N/A', serie = document.getElementById('loc-serie').value.trim() || 'N/A', patrim = document.getElementById('loc-patrimonio').value.trim() || 'N/A', qtd = parseInt(document.getElementById('loc-qtd').value);
+                if(!equip || !local || isNaN(qtd) || qtd <= 0) return alert("Preencha Nome do Equipamento, Local e Quantidade corretamente.");
+                try {
+                    await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
+                    await registrarLog("MAP_LOCAL", `${equip} (Local: ${local})`, qtd, `Série: ${serie}`);
+                    showToast("Equipamento mapeado com sucesso!");
+                    ['loc-equip','loc-local','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1;
+                } catch (e) { showToast("Erro ao mapear: " + e.message, "error"); }
+            });
+        }
+
+        if(document.getElementById('btn-loc-upload')) {
+            document.getElementById('btn-loc-upload').addEventListener('click', () => {
+                const fileInput = document.getElementById('loc-file-upload'), btn = document.getElementById('btn-loc-upload');
+                if (!fileInput.files.length) return showToast("Selecione um arquivo Excel.", "error");
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mapeando...'; 
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    try {
+                        const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' }), json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                        let cont = 0;
+                        for (let row of json) {
+                            const equip = row['EQUIPAMENTO'] || row['Equipamento'] || row['Nome'] || 'Equipamento Indefinido', local = row['LOCAL FISICO'] || row['Local Físico'] || row['Local'] || 'N/A', marca = row['MARCA'] || row['Marca'] || 'N/A', serie = row['Nº DE SÉRIE'] || row['N Serie'] || row['Série'] || 'N/A', patrim = row['Nº PATRIMONIO'] || row['Patrimônio'] || row['Patrimonio'] || 'N/A', qtd = parseInt(row['QUANTIDADE'] || row['Quantidade'] || row['Qtd'] || 1);
+                            await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
+                            cont++;
+                        }
+                        await registrarLog("MAP_LOCAL", `Importação em Lote (Excel)`, cont, "");
+                        showToast(`Sucesso! ${cont} locais mapeados.`); fileInput.value = "";
+                    } catch (error) { showToast("Erro na leitura.", "error"); }
+                    btn.innerHTML = 'Iniciar Importação';
+                };
+                reader.readAsArrayBuffer(fileInput.files[0]);
+            });
+        }
+
+        // ================= ATUALIZAÇÃO DE INTERFACE E PAGINAÇÃO =================
+        
         function gerarInsights() {
-            const container = document.getElementById('insights-container'); container.innerHTML = ''; 
+            const container = document.getElementById('insights-container'); 
+            if(!container) return;
+            container.innerHTML = ''; 
             let zerados = [], baixos = [], maiorVolume = null, totalItens = 0, hdCount = 0, ssdCount = 0;
 
             if (!estoqueLocal || estoqueLocal.length === 0) {
@@ -1084,7 +1149,9 @@
 
             estoqueLocal.forEach(item => {
                 const qtd = item.Quantidade || 0; totalItens += qtd;
-                if (qtd === 0) zerados.push(item); else if (qtd <= 5) baixos.push(item);
+                const minEstoque = item.EstoqueMinimo || 5;
+                
+                if (qtd === 0) zerados.push(item); else if (qtd <= minEstoque) baixos.push(item);
                 const compUpper = (item.Componente || '').toUpperCase();
                 if (compUpper.includes('HD INTERNO') || compUpper.includes('DISCO RÍGIDO') || compUpper.includes('HD ')) hdCount += qtd;
                 if (compUpper.includes('SSD')) ssdCount += qtd;
@@ -1095,7 +1162,7 @@
             if (zerados.length > 0 || baixos.length > 0) {
                 let desc = '';
                 if (zerados.length > 0) desc += `<span class="text-red-600 font-bold">${zerados.length} itens esgotados.</span> `;
-                if (baixos.length > 0) desc += `<span class="text-orange-600 font-bold">${baixos.length} itens em alerta (≤5).</span>`;
+                if (baixos.length > 0) desc += `<span class="text-orange-600 font-bold">${baixos.length} itens em alerta.</span>`;
                 let exemplos = [...zerados, ...baixos].slice(0, 2).map(i => i.Componente || 'Item').join(', ');
                 alertHtml = `<div class="bg-red-50 border-l-4 border-red-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-exclamation-triangle text-red-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-red-800 uppercase tracking-wide">Reposição Prioritária</h4><p class="text-xs text-red-700 mt-2 leading-relaxed">${desc}</p><p class="text-[11px] text-red-500 mt-1 font-semibold">Ex: ${exemplos}...</p></div></div>`;
             } else { alertHtml = `<div class="bg-emerald-50 border-l-4 border-emerald-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-check-circle text-emerald-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wide">Estoque Saudável</h4><p class="text-xs text-emerald-700 mt-2 leading-relaxed">Nenhum equipamento em nível crítico ou zerado no momento.</p></div></div>`; }
@@ -1117,28 +1184,96 @@
             container.innerHTML = alertHtml + acumuloHtml + techHtml;
         }
 
-        function atualizarDatalists() { document.getElementById('lista-componentes').innerHTML = [...new Set(estoqueLocal.map(i => i.Componente||''))].map(c => `<option value="${c}">`).join(''); }
+        function atualizarDatalists() { 
+            if(document.getElementById('lista-componentes')) document.getElementById('lista-componentes').innerHTML = [...new Set(estoqueLocal.map(i => i.Componente||''))].map(c => `<option value="${c}">`).join(''); 
+            
+            // Popula Dropdown de Filtro de Categoria
+            const filterCat = document.getElementById('filter-cat-estoque');
+            if(filterCat) {
+                const categoriasUnicas = [...new Set(estoqueLocal.map(i => i.Categoria || 'Sem Categoria'))].sort();
+                filterCat.innerHTML = '<option value="">Todas as Categorias</option>';
+                categoriasUnicas.forEach(cat => filterCat.innerHTML += `<option value="${cat}">${cat}</option>`);
+            }
+        }
+
         function atualizarSelectSaida() {
-            const sel = document.getElementById('saida-select-item'); sel.innerHTML = '<option value="">-- Selecione o equipamento --</option>';
+            const sel = document.getElementById('saida-select-item'); 
+            if(!sel) return;
+            sel.innerHTML = '<option value="">-- Selecione o equipamento --</option>';
             [...estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { sel.innerHTML += `<option value="${i.id}">[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||'N/A'}) - (Qtd: ${i.Quantidade||0})</option>`; });
         }
         
         function atualizarInterfaceEstoque() {
-            const tbody = document.getElementById('inventory-tbody'); tbody.innerHTML = '';
+            const tbody = document.getElementById('inventory-tbody'); 
+            if(!tbody) return;
+            
             let tTotal = 0, tArmaz = 0, tEnergia = 0, tZerado = 0; const mapCat = {};
+            
+            // Calcula KPIs Globais
             estoqueLocal.forEach(item => {
                 const cat = item.Categoria || 'Sem Categoria'; const qtd = item.Quantidade || 0;
                 tTotal += qtd;
                 if(cat === 'Armazenamento') tArmaz += qtd; if(cat === 'Fonte de Alimentação' || cat === 'Bateria') tEnergia += qtd; if(qtd === 0) tZerado++;
                 mapCat[cat] = (mapCat[cat] || 0) + qtd;
-                let badge = qtd === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' : qtd <= 5 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>' : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${cat}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${item.Modelo||'-'} / ${item.Especificação||'-'}</td><td class="px-6 py-4 text-sm text-blue-600">${item.Local||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${item.Patrimonio||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
             });
-            document.getElementById('kpi-total').innerText = tTotal; document.getElementById('kpi-armazenamento').innerText = tArmaz; document.getElementById('kpi-energia').innerText = tEnergia; document.getElementById('kpi-zerado').innerText = tZerado;
+            if(document.getElementById('kpi-total')) document.getElementById('kpi-total').innerText = tTotal; 
+            if(document.getElementById('kpi-armazenamento')) document.getElementById('kpi-armazenamento').innerText = tArmaz; 
+            if(document.getElementById('kpi-energia')) document.getElementById('kpi-energia').innerText = tEnergia; 
+            if(document.getElementById('kpi-zerado')) document.getElementById('kpi-zerado').innerText = tZerado;
+
+            // Filtros Dinâmicos
+            let filtrados = estoqueLocal.filter(item => {
+                let matchBusca = !currentSearchText || (item.Componente+item.Modelo+item.Especificação+item.Local+item.Série+item.Patrimonio).toLowerCase().includes(currentSearchText.toLowerCase());
+                let matchCat = !currentFilterCat || (item.Categoria || 'Sem Categoria') === currentFilterCat;
+                return matchBusca && matchCat;
+            });
+
+            // Paginação Matemática
+            const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1;
+            if(currentPageEstoque > totalPaginas) currentPageEstoque = totalPaginas;
+            const inicio = (currentPageEstoque - 1) * itemsPerPage;
+            const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
+
+            tbody.innerHTML = '';
+            dadosPagina.forEach(item => {
+                const qtd = item.Quantidade || 0;
+                const minEstoque = item.EstoqueMinimo || 5;
+                let badge = qtd === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' : qtd <= minEstoque ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>' : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
+                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${item.Categoria||'Sem Categoria'}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente||'-'}<br><span class="text-xs font-normal text-slate-500">${item.Modelo||''} / ${item.Especificação||''}</span></td><td class="px-6 py-4 text-sm text-blue-600">${item.Local||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${item.Série||item.Patrimonio||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
+            });
+
+            if(document.getElementById('estoque-page-info')) document.getElementById('estoque-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
+            if(document.getElementById('btn-prev-estoque')) document.getElementById('btn-prev-estoque').disabled = currentPageEstoque === 1;
+            if(document.getElementById('btn-next-estoque')) document.getElementById('btn-next-estoque').disabled = currentPageEstoque === totalPaginas;
+
             renderChartsUIUX(mapCat, estoqueLocal, logsLocal);
         }
 
-        // ================= RENDERIZAÇÃO DOS GRÁFICOS (BLINDADOS) =================
+        function atualizarInterfaceRastreio() {
+            const tbody = document.getElementById('rastreio-tbody'); 
+            if(!tbody) return;
+
+            let filtrados = localidadesLocais.filter(item => {
+                return !currentSearchRastreio || (item.Equipamento+item.Local+item.Marca+item.Serie+item.Patrimonio).toLowerCase().includes(currentSearchRastreio.toLowerCase());
+            });
+
+            // Paginação Rastreio
+            const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1;
+            if(currentPageRastreio > totalPaginas) currentPageRastreio = totalPaginas;
+            const inicio = (currentPageRastreio - 1) * itemsPerPage;
+            const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
+
+            tbody.innerHTML = '';
+            dadosPagina.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
+                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||'-'}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
+            });
+
+            if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
+            if(document.getElementById('btn-prev-rastreio')) document.getElementById('btn-prev-rastreio').disabled = currentPageRastreio === 1;
+            if(document.getElementById('btn-next-rastreio')) document.getElementById('btn-next-rastreio').disabled = currentPageRastreio === totalPaginas;
+        }
+
+        // ================= RENDERIZAÇÃO DOS GRÁFICOS =================
         function renderChartsUIUX(mapCat, dados, logs) {
             if(chartComponentesAmpliado) { chartComponentesAmpliado.destroy(); }
             if(chartTopSaidas) { chartTopSaidas.destroy(); }
@@ -1208,7 +1343,7 @@
             }
         }
 
-        // ================= COMPORTAMENTO DE ABAS E EVENTOS DE MENU =================
+        // ================= COMPORTAMENTO DE ABAS E NAVEGAÇÃO =================
         if(document.getElementById('btn-theme')) document.getElementById('btn-theme').addEventListener('click', () => document.body.classList.toggle('dark'));
         const modal = document.getElementById('tools-modal'); 
         if(document.getElementById('btn-tools')) document.getElementById('btn-tools').addEventListener('click', () => modal.classList.remove('hidden')); 
@@ -1246,8 +1381,31 @@
             });
         }
 
-        if(document.getElementById('search-table-estoque')) document.getElementById('search-table-estoque').addEventListener('input', e => { const term = e.target.value.toLowerCase(), rows = document.getElementById('inventory-tbody').getElementsByTagName('tr'); for(let row of rows) row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; });
-        if(document.getElementById('search-table-rastreio')) document.getElementById('search-table-rastreio').addEventListener('input', e => { const term = e.target.value.toLowerCase(), rows = document.getElementById('rastreio-tbody').getElementsByTagName('tr'); for(let row of rows) row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; });
+        // Eventos de Busca e Filtros Dinâmicos
+        if(document.getElementById('search-table-estoque')) {
+            document.getElementById('search-table-estoque').addEventListener('input', e => { 
+                currentSearchText = e.target.value; currentPageEstoque = 1; atualizarInterfaceEstoque(); 
+            });
+        }
+        if(document.getElementById('filter-cat-estoque')) {
+            document.getElementById('filter-cat-estoque').addEventListener('change', e => { 
+                currentFilterCat = e.target.value; currentPageEstoque = 1; atualizarInterfaceEstoque(); 
+            });
+        }
+        if(document.getElementById('search-table-rastreio')) {
+            document.getElementById('search-table-rastreio').addEventListener('input', e => { 
+                currentSearchRastreio = e.target.value; currentPageRastreio = 1; atualizarInterfaceRastreio(); 
+            });
+        }
+
+        // Eventos Paginação Estoque
+        if(document.getElementById('btn-prev-estoque')) document.getElementById('btn-prev-estoque').addEventListener('click', () => { if(currentPageEstoque > 1) { currentPageEstoque--; atualizarInterfaceEstoque(); } });
+        if(document.getElementById('btn-next-estoque')) document.getElementById('btn-next-estoque').addEventListener('click', () => { currentPageEstoque++; atualizarInterfaceEstoque(); });
+
+        // Eventos Paginação Rastreio
+        if(document.getElementById('btn-prev-rastreio')) document.getElementById('btn-prev-rastreio').addEventListener('click', () => { if(currentPageRastreio > 1) { currentPageRastreio--; atualizarInterfaceRastreio(); } });
+        if(document.getElementById('btn-next-rastreio')) document.getElementById('btn-next-rastreio').addEventListener('click', () => { currentPageRastreio++; atualizarInterfaceRastreio(); });
+
         
         if(document.getElementById('btn-export-csv')) {
             document.getElementById('btn-export-csv').addEventListener('click', () => { 
