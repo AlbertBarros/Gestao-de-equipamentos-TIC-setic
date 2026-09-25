@@ -10,25 +10,41 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         
-        body { font-family: 'Inter', sans-serif; background-color: #F3F4F6; }
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; }
         
+        /* Modern Cards Customization */
+        .modern-card { background: #ffffff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid rgba(226, 232, 240, 0.8); }
+        .chart-container { position: relative; height: 100%; width: 100%; }
+
         /* Dark Mode Customizações */
         .dark { background-color: #0F172A; color: #E2E8F0; }
-        .dark .bg-white { background-color: #1E293B; border-color: #334155; }
-        .dark .text-gray-800 { color: #F8FAFC; }
-        .dark .text-gray-500, .dark .text-gray-600 { color: #94A3B8; }
+        .dark .bg-white, .dark .modern-card { background-color: #1E293B; border-color: #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+        .dark .text-gray-800, .dark .text-slate-800 { color: #F8FAFC; }
+        .dark .text-gray-500, .dark .text-slate-500 { color: #94A3B8; }
         .dark table thead th { background-color: #334155; color: #F1F5F9; }
         .dark table tbody tr { border-color: #334155; }
         .dark table tbody tr:hover { background-color: #475569; }
         .dark input, .dark select, .dark file { background-color: #334155; color: white; border-color: #475569; }
         .hidden { display: none !important; }
 
+        /* Scrollbar customizada e limpa */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+        /* Chatbot Animantions */
+        @keyframes chatPopUp { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .chat-window-anim { animation: chatPopUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .chat-bubble-ai { background: #F1F5F9; color: #1E293B; border-radius: 16px 16px 16px 4px; padding: 10px 14px; font-size: 13px; max-width: 85%; margin-bottom: 8px; line-height: 1.5; }
+        .chat-bubble-user { background: #3B82F6; color: #FFFFFF; border-radius: 16px 16px 4px 16px; padding: 10px 14px; font-size: 13px; max-width: 85%; margin-bottom: 8px; margin-left: auto; line-height: 1.5; }
+
         /* Estilos Restritos para Impressão Global */
         @media print {
             body { background-color: white; }
-            #login-screen, #main-system, #tools-modal, #toast-container { display: none !important; }
+            #login-screen, #main-system, #tools-modal, #toast-container, #ai-chatbot-container { display: none !important; }
             .print-bg { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             .no-print { display: none !important; }
             table { border-collapse: collapse; width: 100%; font-size: 10pt;}
@@ -65,7 +81,7 @@
     <!-- TELA DE LOGIN -->
     <div id="login-screen" class="fixed inset-0 flex justify-center items-center z-50 bg-cover bg-center bg-no-repeat" style="background-image: url('https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg'); transition: background-image 0.5s ease;">
         <div class="absolute inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm"></div>
-        <div class="bg-white rounded-xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500 relative z-10">
+        <div class="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500 relative z-10">
             <div class="text-center mb-8">
                 <!-- LOGO BLINDADA -->
                 <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
@@ -75,16 +91,16 @@
             <div class="space-y-5">
                 <div>
                     <label class="block text-sm font-semibold text-slate-700">E-mail Corporativo</label>
-                    <input type="email" id="login-email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2.5 border focus:ring-blue-500 focus:border-blue-500" placeholder="usuario@prf.gov.br">
+                    <input type="email" id="login-email" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-blue-500 focus:border-blue-500 transition" placeholder="usuario@prf.gov.br">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-slate-700">Senha</label>
-                    <input type="password" id="login-password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2.5 border focus:ring-blue-500 focus:border-blue-500" placeholder="••••••••">
+                    <input type="password" id="login-password" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-blue-500 focus:border-blue-500 transition" placeholder="••••••••">
                     <div class="text-right mt-1.5">
                         <button id="btn-forgot-password" class="text-xs text-blue-600 hover:text-blue-800 hover:underline transition font-medium">Esqueci minha senha</button>
                     </div>
                 </div>
-                <button id="btn-login" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:opacity-90 transition shadow-lg mt-2 pointer-events-auto">
+                <button id="btn-login" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3.5 px-4 rounded-lg hover:opacity-90 transition shadow-lg mt-2 pointer-events-auto flex justify-center items-center">
                     <i class="fas fa-sign-in-alt mr-2"></i> Autenticar
                 </button>
             </div>
@@ -95,10 +111,10 @@
     </div>
 
     <!-- SISTEMA PRINCIPAL -->
-    <div id="main-system" class="hidden">
+    <div id="main-system" class="hidden relative">
         
         <!-- NAVBAR -->
-        <nav id="navbar-main" class="bg-[#161B33] text-white shadow-md border-b-4 border-yellow-500 no-print transition-colors">
+        <nav id="navbar-main" class="bg-[#161B33] text-white shadow-md border-b-4 border-yellow-500 no-print transition-colors sticky top-0 z-40">
             <div class="px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center space-x-3">
@@ -107,16 +123,16 @@
                         <span id="navbar-title" class="font-bold text-lg tracking-wide whitespace-nowrap">Painel de Gestão de Estoque - SETIC</span>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <span class="bg-green-500 text-white text-xs px-2.5 py-1.5 rounded flex items-center font-bold shadow-sm hidden md:flex">
+                        <span class="bg-green-500 text-white text-xs px-2.5 py-1.5 rounded-md flex items-center font-bold shadow-sm hidden md:flex">
                             <i class="fas fa-check-circle mr-1.5"></i> Sincronizado
                         </span>
-                        <button id="btn-theme" class="p-2 rounded-full hover:bg-black hover:bg-opacity-20 transition" title="Modo Noturno">
+                        <button id="btn-theme" class="p-2 rounded-full hover:bg-white hover:bg-opacity-10 transition" title="Modo Noturno">
                             <i class="fas fa-moon text-lg"></i>
                         </button>
-                        <button id="btn-tools" class="bg-black bg-opacity-20 hover:bg-opacity-40 border border-white border-opacity-20 px-4 py-2 rounded text-sm font-semibold transition shadow-sm flex items-center">
+                        <button id="btn-tools" class="bg-white bg-opacity-10 hover:bg-opacity-20 border border-white border-opacity-10 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-sm flex items-center backdrop-blur-sm">
                             <i class="fas fa-toolbox mr-2"></i> <span class="hidden md:inline">Painel de Ferramentas</span>
                         </button>
-                        <button id="btn-logout" class="bg-[#E53935] hover:bg-red-700 px-4 py-2 rounded text-sm font-semibold transition shadow-sm flex items-center">
+                        <button id="btn-logout" class="bg-[#E53935] hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-sm flex items-center">
                             <i class="fas fa-sign-out-alt mr-2"></i> <span class="hidden md:inline">Sair</span>
                         </button>
                     </div>
@@ -125,175 +141,240 @@
         </nav>
 
         <!-- DASHBOARD CONTAINER -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
+        <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
             
-            <!-- KPIS -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex items-center justify-between hover:shadow-md transition">
-                    <div><p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Total de Ativos</p><p id="kpi-total" class="text-3xl font-black text-slate-800">0</p></div>
-                    <div class="p-3 bg-blue-50 rounded-full"><i class="fas fa-cubes text-blue-600 text-2xl"></i></div>
+            <!-- KPIS MODERNOS -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-6">
+                <div class="modern-card p-5 flex items-start justify-between relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-cubes text-6xl text-blue-600"></i></div>
+                    <div class="z-10">
+                        <div class="flex items-center gap-2 mb-2"><i class="fas fa-cubes text-blue-500 text-sm"></i><p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total de Ativos</p></div>
+                        <p id="kpi-total" class="text-3xl font-extrabold text-slate-800">0</p>
+                    </div>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex items-center justify-between hover:shadow-md transition">
-                    <div><p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Armazenamento (SSDs)</p><p id="kpi-armazenamento" class="text-3xl font-black text-slate-800">0</p></div>
-                    <div class="p-3 bg-green-50 rounded-full"><i class="fas fa-hdd text-green-600 text-2xl"></i></div>
+                <div class="modern-card p-5 flex items-start justify-between relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-hdd text-6xl text-green-600"></i></div>
+                    <div class="z-10">
+                        <div class="flex items-center gap-2 mb-2"><i class="fas fa-hdd text-green-500 text-sm"></i><p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Armazenamento</p></div>
+                        <p id="kpi-armazenamento" class="text-3xl font-extrabold text-slate-800">0</p>
+                    </div>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex items-center justify-between hover:shadow-md transition">
-                    <div><p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Energia (Fontes/Bat)</p><p id="kpi-energia" class="text-3xl font-black text-slate-800">0</p></div>
-                    <div class="p-3 bg-yellow-50 rounded-full"><i class="fas fa-plug text-yellow-600 text-2xl"></i></div>
+                <div class="modern-card p-5 flex items-start justify-between relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-plug text-6xl text-yellow-600"></i></div>
+                    <div class="z-10">
+                        <div class="flex items-center gap-2 mb-2"><i class="fas fa-plug text-yellow-500 text-sm"></i><p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Energia (Fontes/Bat)</p></div>
+                        <p id="kpi-energia" class="text-3xl font-extrabold text-slate-800">0</p>
+                    </div>
                 </div>
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex items-center justify-between hover:shadow-md transition">
-                    <div><p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Alerta: Estoque Crítico</p><p id="kpi-zerado" class="text-3xl font-black text-red-600">0</p></div>
-                    <div class="p-3 bg-red-50 rounded-full"><i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i></div>
-                </div>
-            </div>
-
-            <!-- GRÁFICOS -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 md:col-span-2">
-                    <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center justify-between">
-                        <span><i class="fas fa-chart-bar text-blue-600 mr-2"></i> Panorama Geral de Componentes em Estoque</span>
-                    </h3>
-                    <div class="h-64"><canvas id="chartComponentesAmpliado"></canvas></div>
-                </div>
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-                    <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center">
-                        <i class="fas fa-fire text-red-500 mr-2"></i> Top 5 Mais Retirados (Saídas)
-                    </h3>
-                    <div class="h-64"><canvas id="chartTopSaidas"></canvas></div>
+                <div class="modern-card p-5 flex items-start justify-between relative overflow-hidden group border-l-4 border-l-red-500">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-exclamation-triangle text-6xl text-red-600"></i></div>
+                    <div class="z-10">
+                        <div class="flex items-center gap-2 mb-2"><i class="fas fa-exclamation-triangle text-red-500 text-sm"></i><p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Itens em Alerta</p></div>
+                        <p id="kpi-zerado" class="text-3xl font-extrabold text-red-600">0</p>
+                    </div>
                 </div>
             </div>
 
+            <!-- GRÁFICOS MODERNIZADOS (INSPIRADOS NA IMAGEM) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                
+                <!-- Gráfico Principal: Área com Gradiente (Ocupa 2/3) -->
+                <div class="modern-card p-6 md:col-span-2 flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-sm font-bold text-slate-800 flex items-center"><i class="fas fa-chart-area text-blue-500 mr-2"></i> Panorama Físico de Componentes</h3>
+                        <span class="text-xs font-semibold text-emerald-500 bg-emerald-50 px-2 py-1 rounded-md">Atualizado em Tempo Real</span>
+                    </div>
+                    <div class="flex-1 min-h-[260px] relative w-full">
+                        <canvas id="chartComponentesAmpliado"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico Lateral Secundário: Barras com Destaque -->
+                <div class="modern-card p-6 flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-sm font-bold text-slate-800 flex items-center"><i class="fas fa-arrow-trend-down text-red-500 mr-2"></i> Itens Mais Retirados</h3>
+                        <i class="fas fa-ellipsis-h text-slate-300"></i>
+                    </div>
+                    <div class="flex-1 min-h-[260px] relative w-full flex justify-center items-end pb-2">
+                        <canvas id="chartTopSaidas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LINHA INFERIOR DO DASHBOARD -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-                    <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center">
-                        <i class="fas fa-chart-pie text-purple-600 mr-2"></i> Distribuição por Categoria
-                    </h3>
-                    <div class="h-64 flex justify-center items-center"><canvas id="chartPizzaCategorias"></canvas></div>
+                
+                <!-- Gráfico de Categoria: Semicírculo -->
+                <div class="modern-card p-6 flex flex-col justify-center items-center relative">
+                    <h3 class="text-sm font-bold text-slate-800 absolute top-6 left-6 flex items-center"><i class="fas fa-sitemap text-indigo-500 mr-2"></i> Divisão Estrutural</h3>
+                    <i class="fas fa-ellipsis-h text-slate-300 absolute top-6 right-6"></i>
+                    <div class="h-48 w-full flex justify-center mt-10">
+                        <canvas id="chartPizzaCategorias"></canvas>
+                    </div>
                 </div>
                 
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 flex flex-col justify-between">
+                <!-- Assistente Card Info -->
+                <div class="modern-card p-6 flex flex-col justify-between" style="background: linear-gradient(135deg, #161B33 0%, #2a3563 100%);">
                     <div>
-                        <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3"><i class="fas fa-shield-alt text-yellow-600 mr-2"></i> Conformidade SETIC</h3>
-                        <p class="text-xs text-slate-500 leading-relaxed">O almoxarifado opera em regime de auditoria em tempo real, garantindo rastreabilidade de ponta a ponta com carimbo digital de segurança em cada log gerado.</p>
+                        <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-2 flex items-center"><i class="fas fa-robot text-blue-400 mr-2 text-lg"></i> Copilot SETIC</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed opacity-90">O almoxarifado conta agora com uma IA analítica integrada. O assistente cruza dados de rastreio e estoque instantaneamente.</p>
                     </div>
-                    <div class="bg-slate-50 p-3 rounded border text-center">
-                        <span class="text-xs font-bold text-slate-600">Sincronização Nuvem Ativa</span>
-                    </div>
+                    <button onclick="document.getElementById('ai-chat-window').classList.toggle('hidden'); document.getElementById('ai-input').focus();" class="w-full bg-white text-[#161B33] text-sm font-bold py-3 rounded-lg shadow hover:bg-gray-100 transition mt-4 flex justify-center items-center">
+                        <i class="fas fa-comment-dots mr-2"></i> Iniciar Diálogo
+                    </button>
                 </div>
 
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 flex flex-col justify-between">
+                <!-- Ferramentas Rápidas Card -->
+                <div class="modern-card p-6 flex flex-col justify-between">
                     <div>
-                        <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3"><i class="fas fa-bolt text-emerald-600 mr-2"></i> Acesso Rápido</h3>
-                        <p class="text-xs text-slate-500 leading-relaxed">Utilize o painel de ferramentas à esquerda para realizar novas entradas em lote ou gerenciar localidades físicas instantaneamente.</p>
+                        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-2 flex items-center"><i class="fas fa-bolt text-yellow-500 mr-2 text-lg"></i> Acesso Operacional</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">Painel unificado para gestão de entradas, despachos de TI, mapeamento de localidades e relatórios em PDF.</p>
                     </div>
-                    <button onclick="document.getElementById('btn-tools').click()" class="w-full bg-[#161B33] text-white text-xs font-bold py-2.5 rounded shadow hover:opacity-90 transition">
-                        <i class="fas fa-toolbox mr-1"></i> Abrir Painel de Ferramentas
+                    <button onclick="document.getElementById('btn-tools').click()" class="w-full bg-blue-600 text-white text-sm font-bold py-3 rounded-lg shadow hover:bg-blue-700 transition mt-4 flex justify-center items-center">
+                        <i class="fas fa-toolbox mr-2"></i> Abrir Ferramentas
                     </button>
                 </div>
             </div>
 
-            <!-- MOTOR DE INSIGHTS E ALERTAS -->
-            <div class="mb-8">
-                <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center">
-                    <i class="fas fa-robot text-blue-500 mr-2 text-lg"></i> Análise Inteligente de Estoque
-                </h3>
-                <div id="insights-container" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
-            </div>
-
             <!-- NAVEGAÇÃO DE TABELAS PRINCIPAIS -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-8">
-                <div class="border-b border-gray-200 bg-gray-50/50">
-                    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500">
-                        <li class="mr-2"><button id="view-estoque-btn" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 active rounded-t-lg transition-colors"><i class="fas fa-boxes mr-2"></i>Estoque Consolidado</button></li>
-                        <li class="mr-2"><button id="view-rastreio-btn" class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg transition-colors"><i class="fas fa-map-marker-alt mr-2"></i>Rastreamento de Ativos (Mapa Físico)</button></li>
+            <div class="modern-card overflow-hidden mb-8">
+                <div class="border-b border-gray-100 bg-gray-50/50 pt-2 px-2">
+                    <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 gap-1">
+                        <li><button id="view-estoque-btn" class="inline-block px-5 py-3 text-blue-600 border-b-2 border-blue-600 active rounded-t-lg transition-colors bg-white font-bold"><i class="fas fa-boxes mr-2"></i>Estoque Consolidado</button></li>
+                        <li><button id="view-rastreio-btn" class="inline-block px-5 py-3 border-b-2 border-transparent hover:text-gray-600 hover:bg-gray-100 rounded-t-lg transition-colors font-medium"><i class="fas fa-map-marker-alt mr-2"></i>Rastreamento de Ativos (Mapa Físico)</button></li>
                     </ul>
                 </div>
 
                 <!-- CONTEÚDO: TABELA ESTOQUE -->
                 <div id="view-estoque-content">
-                    <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center gap-4">
+                    <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center gap-4 bg-white">
                         <div class="flex items-center gap-4">
-                            <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Inventário Consolidado</h3>
-                            <button id="btn-print-estoque-main" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
-                                <i class="fas fa-print mr-1.5"></i> Gerar PDF
+                            <h3 class="text-sm font-bold text-slate-800 tracking-wide">Base de Inventário Físico</h3>
+                            <button id="btn-print-estoque-main" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-1.5 px-3 rounded-md border border-slate-300 transition flex items-center">
+                                <i class="fas fa-print mr-1.5 text-blue-600"></i> Gerar Relatório
                             </button>
                         </div>
                         <div class="flex items-center gap-3">
-                            <select id="filter-cat-estoque" class="border border-gray-300 rounded text-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                            <select id="filter-cat-estoque" class="border border-gray-200 rounded-lg text-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 font-medium text-slate-600 cursor-pointer">
                                 <option value="">Todas as Categorias</option>
                             </select>
                             <div class="relative">
                                 <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                                <input type="text" id="search-table-estoque" placeholder="Pesquisar Nome, Série, Patr..." class="pl-9 pr-3 py-2 border border-gray-300 rounded text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                                <input type="text" id="search-table-estoque" placeholder="Pesquisar registro..." class="pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 transition-shadow focus:bg-white">
                             </div>
                         </div>
                     </div>
-                    <div class="overflow-x-auto min-h-[300px]">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+                    <div class="overflow-x-auto min-h-[300px] bg-white">
+                        <table class="min-w-full divide-y divide-gray-100">
+                            <thead class="bg-gray-50/80">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Categoria</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Componente / Espec.</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider text-blue-600">Local</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nº Série</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nº Patrimônio</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider text-center">Quantidade</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Categoria</th>
+                                    <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Componente / Espec.</th>
+                                    <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider text-blue-600">Localização</th>
+                                    <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Nº Série</th>
+                                    <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Nº Patrimônio</th>
+                                    <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider text-center">Quantidade</th>
+                                    <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
                                 </tr>
                             </thead>
-                            <tbody id="inventory-tbody" class="bg-white divide-y divide-gray-200"></tbody>
+                            <tbody id="inventory-tbody" class="bg-white divide-y divide-gray-50 text-slate-600"></tbody>
                         </table>
                     </div>
-                    <div class="px-6 py-3 border-t border-gray-100 flex items-center justify-between bg-gray-50">
-                        <span class="text-sm text-gray-500" id="estoque-page-info">Mostrando 0 registos</span>
+                    <div class="px-6 py-3 border-t border-gray-100 flex items-center justify-between bg-gray-50/50">
+                        <span class="text-xs font-medium text-slate-500" id="estoque-page-info">Mostrando 0 registos</span>
                         <div class="flex gap-2">
-                            <button id="btn-prev-estoque" class="px-3 py-1 border border-gray-300 rounded bg-white text-gray-600 hover:bg-gray-100 text-sm font-medium transition disabled:opacity-50"><i class="fas fa-chevron-left"></i> Anterior</button>
-                            <button id="btn-next-estoque" class="px-3 py-1 border border-gray-300 rounded bg-white text-gray-600 hover:bg-gray-100 text-sm font-medium transition disabled:opacity-50">Próxima <i class="fas fa-chevron-right"></i></button>
+                            <button id="btn-prev-estoque" class="px-3 py-1.5 border border-gray-200 rounded-md bg-white text-slate-600 hover:bg-slate-50 text-xs font-bold transition disabled:opacity-50"><i class="fas fa-chevron-left"></i></button>
+                            <button id="btn-next-estoque" class="px-3 py-1.5 border border-gray-200 rounded-md bg-white text-slate-600 hover:bg-slate-50 text-xs font-bold transition disabled:opacity-50"><i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </div>
 
                 <!-- CONTEÚDO: TABELA RASTREAMENTO -->
                 <div id="view-rastreio-content" class="hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center bg-indigo-50/30 gap-4">
+                    <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center bg-indigo-50/10 gap-4">
                         <div class="flex items-center gap-4">
-                            <h3 class="text-sm font-bold text-indigo-800 uppercase tracking-wider"><i class="fas fa-map-pin mr-2"></i>Mapa de Ativos Físicos</h3>
-                            <button id="btn-print-rastreio-main" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
-                                <i class="fas fa-print mr-1.5"></i> Gerar PDF
+                            <h3 class="text-sm font-bold text-indigo-900 tracking-wide"><i class="fas fa-location-dot mr-2 text-indigo-500"></i>Mapa de Distribuição de Ativos</h3>
+                            <button id="btn-print-rastreio-main" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-1.5 px-3 rounded-md border border-indigo-200 transition flex items-center">
+                                <i class="fas fa-print mr-1.5"></i> Gerar Relatório
                             </button>
                         </div>
                         <div class="relative">
-                            <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                            <input type="text" id="search-table-rastreio" placeholder="Pesquisar Local, Patrimônio, Série..." class="pl-9 pr-3 py-2 border border-indigo-200 rounded text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm">
+                            <i class="fas fa-search absolute left-3 top-2.5 text-indigo-300 text-sm"></i>
+                            <input type="text" id="search-table-rastreio" placeholder="Pesquisar Local, Patrimônio, Série..." class="pl-9 pr-3 py-2 border border-indigo-100 rounded-lg text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm transition-shadow">
                         </div>
                     </div>
-                    <div class="overflow-x-auto min-h-[300px]">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-indigo-50/50">
+                    <div class="overflow-x-auto min-h-[300px] bg-white">
+                        <table class="min-w-full divide-y divide-gray-100">
+                            <thead class="bg-indigo-50/30">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Equipamento</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Local Físico</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider text-indigo-600">Local SIPAC</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Marca/Modelo</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Nº de Série</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Nº Patrimônio</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider text-center">Qtd</th>
+                                    <th class="px-6 py-3.5 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Equipamento</th>
+                                    <th class="px-6 py-3.5 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Local Físico</th>
+                                    <th class="px-6 py-3.5 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Local SIPAC</th>
+                                    <th class="px-6 py-3.5 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Marca/Modelo</th>
+                                    <th class="px-6 py-3.5 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Nº de Série</th>
+                                    <th class="px-6 py-3.5 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Nº Patrimônio</th>
+                                    <th class="px-6 py-3.5 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider text-center">Qtd</th>
                                 </tr>
                             </thead>
-                            <tbody id="rastreio-tbody" class="bg-white divide-y divide-gray-200"></tbody>
+                            <tbody id="rastreio-tbody" class="bg-white divide-y divide-gray-50 text-slate-600"></tbody>
                         </table>
                     </div>
-                    <div class="px-6 py-3 border-t border-gray-100 flex items-center justify-between bg-indigo-50/20">
-                        <span class="text-sm text-indigo-600" id="rastreio-page-info">Mostrando 0 registos</span>
+                    <div class="px-6 py-3 border-t border-gray-100 flex items-center justify-between bg-indigo-50/10">
+                        <span class="text-xs font-medium text-indigo-400" id="rastreio-page-info">Mostrando 0 registos</span>
                         <div class="flex gap-2">
-                            <button id="btn-prev-rastreio" class="px-3 py-1 border border-indigo-200 rounded bg-white text-indigo-700 hover:bg-indigo-50 text-sm font-medium transition disabled:opacity-50"><i class="fas fa-chevron-left"></i> Anterior</button>
-                            <button id="btn-next-rastreio" class="px-3 py-1 border border-indigo-200 rounded bg-white text-indigo-700 hover:bg-indigo-50 text-sm font-medium transition disabled:opacity-50">Próxima <i class="fas fa-chevron-right"></i></button>
+                            <button id="btn-prev-rastreio" class="px-3 py-1.5 border border-indigo-100 rounded-md bg-white text-indigo-600 hover:bg-indigo-50 text-xs font-bold transition disabled:opacity-50"><i class="fas fa-chevron-left"></i></button>
+                            <button id="btn-next-rastreio" class="px-3 py-1.5 border border-indigo-100 rounded-md bg-white text-indigo-600 hover:bg-indigo-50 text-xs font-bold transition disabled:opacity-50"><i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- ================= IA CHATBOT WIDGET ================= -->
+    <div id="ai-chatbot-container" class="fixed bottom-6 right-6 z-50">
+        <!-- Floating Button -->
+        <button id="btn-ai-toggle" class="bg-blue-600 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:bg-blue-700 hover:scale-105 transition-all focus:outline-none">
+            <i class="fas fa-sparkles text-xl"></i>
+        </button>
+
+        <!-- Chat Window -->
+        <div id="ai-chat-window" class="hidden absolute bottom-16 right-0 w-80 md:w-96 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col h-[450px] chat-window-anim origin-bottom-right">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-blue-700 to-indigo-800 p-4 flex justify-between items-center text-white">
+                <div class="flex items-center gap-2">
+                    <div class="bg-white/20 p-2 rounded-full"><i class="fas fa-robot text-sm"></i></div>
+                    <div>
+                        <h3 class="font-bold text-sm leading-tight">Assistente IA SETIC</h3>
+                        <p class="text-[10px] text-blue-200 opacity-90"><i class="fas fa-circle text-green-400 text-[8px] mr-1 animate-pulse"></i>Online e analisando dados</p>
+                    </div>
+                </div>
+                <button onclick="document.getElementById('ai-chat-window').classList.add('hidden')" class="text-white hover:text-red-300 transition"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <!-- Chat Body -->
+            <div id="ai-chat-body" class="flex-1 p-4 overflow-y-auto bg-slate-50 flex flex-col">
+                <div class="chat-bubble-ai shadow-sm border border-gray-100">
+                    Olá! Sou o Assistente Inteligente da SETIC. Analiso o estoque em tempo real. Pode me perguntar coisas como:
+                    <br><br>• <i>"Quantos monitores temos?"</i>
+                    <br>• <i>"Qual item tem mais volume?"</i>
+                    <br>• <i>"Existem itens zerados?"</i>
+                    <br>• <i>"Como faço para exportar PDF?"</i>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="p-3 bg-white border-t border-gray-200">
+                <div class="relative">
+                    <input type="text" id="ai-input" class="w-full bg-gray-100 border-transparent rounded-full py-2.5 pl-4 pr-12 text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all outline-none" placeholder="Pergunte sobre o estoque...">
+                    <button id="btn-ai-send" class="absolute right-1 top-1 w-8 h-8 bg-blue-600 text-white rounded-full flex justify-center items-center hover:bg-blue-700 transition">
+                        <i class="fas fa-paper-plane text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- =================================================== -->
 
     <!-- MODELO 1: RELATÓRIO OFICIAL GERENCIAL -->
     <div id="printable-report" class="hidden font-sans">
@@ -667,7 +748,6 @@
 
         Chart.register(ChartDataLabels);
 
-        // ATENÇÃO: Substituir pelas chaves válidas do Firebase.
         const firebaseConfig = {
             apiKey: "AIzaSyBRCRThFRIEGYQ8ukI8IzJ78AyqSEyspsc",
             authDomain: "gestao-de-equipamentos-tic.firebaseapp.com",
@@ -704,6 +784,88 @@
         let chartComponentesAmpliado = null; 
         let chartTopSaidas = null; 
         let chartPizzaCategorias = null; 
+
+        // ================= IA CHATBOT SYSTEM =================
+        const aiInput = document.getElementById('ai-input');
+        const aiSendBtn = document.getElementById('btn-ai-send');
+        const aiBody = document.getElementById('ai-chat-body');
+
+        function appendAI_Msg(text, sender) {
+            const div = document.createElement('div');
+            div.className = sender === 'ai' ? 'chat-bubble-ai shadow-sm border border-gray-100' : 'chat-bubble-user shadow-sm';
+            div.innerHTML = text;
+            aiBody.appendChild(div);
+            aiBody.scrollTop = aiBody.scrollHeight;
+        }
+
+        function processAILogic(msg) {
+            const m = msg.toLowerCase();
+            
+            // Greetings
+            if(m.includes('ola') || m.includes('olá') || m.includes('oi') || m.includes('bom dia') || m.includes('boa tarde')) {
+                return "Olá! Sou o Copilot SETIC. Como posso ajudar na gestão do nosso almoxarifado hoje?";
+            }
+            // Totals
+            if(m.includes('quantos itens') || (m.includes('total') && m.includes('estoque'))) {
+                let t = 0; estoqueLocal.forEach(i => t += i.Quantidade||0);
+                return `Atualmente, contabilizo <b>${t} unidades</b> consolidadas fisicamente no nosso estoque geral.`;
+            }
+            if(m.includes('quantos equipamentos') || (m.includes('total') && m.includes('rastreio'))) {
+                let t = 0; localidadesLocais.forEach(i => t += i.Quantidade||0);
+                return `Temos um total de <b>${t} equipamentos</b> rastreados e distribuídos pelos nossos locais físicos.`;
+            }
+            // Alertas
+            if(m.includes('alerta') || m.includes('zerado') || m.includes('faltando') || m.includes('critico')) {
+                let alertas = estoqueLocal.filter(i => (i.Quantidade||0) <= (i.EstoqueMinimo||5));
+                if(alertas.length === 0) return "Ótimas notícias! Não identifiquei nenhum item em nível crítico de estoque no momento.";
+                let resp = `Atenção, identifiquei <b>${alertas.length} item(ns)</b> em estado crítico de reposição:<br><br>`;
+                alertas.slice(0, 3).forEach(i => resp += `• ${i.Componente} (Qtd: ${i.Quantidade})<br>`);
+                if(alertas.length > 3) resp += `<i>... e mais ${alertas.length - 3} itens. Veja no painel.</i>`;
+                return resp;
+            }
+            // Maior quantidade
+            if(m.includes('maior') || m.includes('mais sobra') || m.includes('mais temos')) {
+                if(estoqueLocal.length === 0) return "Não há dados no estoque ainda.";
+                let top = estoqueLocal.reduce((prev, current) => (prev.Quantidade > current.Quantidade) ? prev : current);
+                return `O item com maior volume no estoque no momento é <b>${top.Componente}</b>, com ${top.Quantidade} unidades em ${top.Local}.`;
+            }
+            // Busca específica de item (RegEx simples)
+            if(m.includes('quantos') && m.length > 8) {
+                let itemBuscado = m.replace('quantos', '').replace('temos', '').replace('?', '').trim();
+                let achados = estoqueLocal.filter(i => i.Componente.toLowerCase().includes(itemBuscado) || (i.Categoria||'').toLowerCase().includes(itemBuscado));
+                if(achados.length === 0) return `Não encontrei nenhum registro de "${itemBuscado}" no nosso estoque consolidado.`;
+                let totalItem = 0; achados.forEach(i => totalItem += i.Quantidade||0);
+                return `Contabilizo <b>${totalItem} unidades</b> de ${itemBuscado} disponíveis no momento.`;
+            }
+            // Tutoriais Help
+            if(m.includes('como') && m.includes('pdf')) {
+                return "Para gerar um relatório oficial em PDF, clique no botão azul 'Exportações / Relatórios' no painel de ferramentas à esquerda, ou use o atalho 'Gerar Relatório' logo acima das tabelas principais.";
+            }
+            if(m.includes('como') && (m.includes('cadastrar') || m.includes('entrada'))) {
+                return "Você tem duas opções: pode abrir a aba 'Entrada Estoque' para preencher o formulário manual de forma rápida, ou pode fazer o upload de uma planilha Excel diretamente por lá para cadastros em lote.";
+            }
+            if(m.includes('como') && m.includes('baixa')) {
+                return "Acesse a aba 'Baixa / Saída'. Lá você encontra um campo de busca inteligente: digite o nome do equipamento, selecione a quantidade, informe o número do chamado GLPI e confirme!";
+            }
+
+            return "Compreendo, mas não tenho certeza se captei a informação exata. Tente me perguntar coisas diretas como: <i>'Quantos mouses temos?'</i>, <i>'Existem itens zerados?'</i> ou <i>'Como gerar um PDF?'</i>.";
+        }
+
+        function handleAIChat() {
+            const txt = aiInput.value.trim();
+            if(!txt) return;
+            appendAI_Msg(txt, 'user');
+            aiInput.value = '';
+            
+            // Simula "pensamento" de 1 segundo
+            setTimeout(() => {
+                const response = processAILogic(txt);
+                appendAI_Msg(response, 'ai');
+            }, 600);
+        }
+
+        aiSendBtn.addEventListener('click', handleAIChat);
+        aiInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') handleAIChat(); });
 
         // ================= NOTIFICAÇÕES =================
         function showToast(msg, type = 'success') {
@@ -844,14 +1006,18 @@
                 }).forEach(i => {
                     tTotal += (i.Quantidade || 0); categorias.add(i.Categoria || 'Geral'); let minEstoque = i.EstoqueMinimo || 5;
                     if(i.Quantidade === 0) tZerados++; else if(i.Quantidade <= minEstoque) tBaixos++;
-                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||''}</td><td class="border px-2 py-1">${i.Componente||''}</td><td class="border px-2 py-1">${i.Modelo||''} / ${i.Especificação||''}</td><td class="border px-2 py-1">${i.Local||''}</td><td class="border px-2 py-1 font-mono">${i.Série||''}</td><td class="border px-2 py-1 font-mono">${i.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`;
+                    
+                    let strS = i.Série ? `S: ${i.Série}` : '';
+                    let strP = i.Patrimonio ? `P: ${i.Patrimonio}` : '';
+                    let separator = (strS && strP) ? '<br>' : '';
+                    
+                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||''}</td><td class="border px-2 py-1">${i.Componente||''}</td><td class="border px-2 py-1">${i.Modelo||''} / ${i.Especificação||''}</td><td class="border px-2 py-1">${i.Local||''}</td><td class="border px-2 py-1 font-mono">${strS}${separator}${strP}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`;
                 });
-                
                 let taxaCritica = estoqueLocal.length > 0 ? (((tZerados + tBaixos) / estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1);
                 parecer.innerHTML = `Extração consolidou <b>${estoqueLocal.length}</b> registos de estoque físico. Emitido por ${userEmail} em ${dataAtual}.`;
                 resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. Saúde: ${saude}%. ${tZerados} zerados e ${tBaixos} em risco (Criticidade: ${taxaCritica}%).`;
                 kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`;
-                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
+                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Série/Patr.</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
                 visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid';
                 if(chartComponentesAmpliado) document.getElementById('print-chart-1').src = document.getElementById('chartComponentesAmpliado').toDataURL('image/png');
                 if(chartTopSaidas) document.getElementById('print-chart-2').src = document.getElementById('chartTopSaidas').toDataURL('image/png');
@@ -867,13 +1033,17 @@
                     return (a.Local || '').localeCompare(b.Local || '');
                 }).forEach(loc => {
                     tLocaisUnicos.add(loc.Local || 'N/A'); tVolumeRastreado += (loc.Quantidade||0); tEquipsUnicos.add(loc.Equipamento || 'N/A');
-                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento||''}</td><td class="border px-2 py-1">${loc.Local||''}</td><td class="border px-2 py-1">${loc.LocalSipac||''}</td><td class="border px-2 py-1">${loc.Marca||''}</td><td class="border px-2 py-1 font-mono">${loc.Serie||''}</td><td class="border px-2 py-1 font-mono">${loc.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`;
+                    
+                    let strS = loc.Serie ? `S: ${loc.Serie}` : '';
+                    let strP = loc.Patrimonio ? `P: ${loc.Patrimonio}` : '';
+                    let separator = (strS && strP) ? '<br>' : '';
+                    
+                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento||''}</td><td class="border px-2 py-1">${loc.Local||''}</td><td class="border px-2 py-1">${loc.LocalSipac||''}</td><td class="border px-2 py-1">${loc.Marca||''}</td><td class="border px-2 py-1 font-mono">${strS}${separator}${strP}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`;
                 });
-                
                 parecer.innerHTML = `A extração consolidou <b>${localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${userEmail} em ${dataAtual}.`;
                 resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades, com ${tEquipsUnicos.size} modelos distintos.`;
                 kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros</p><p class="text-2xl font-black text-slate-800">${localidadesLocais.length}</p></div>`;
-                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Património</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
+                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Série/Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
                 visualTitle.style.display = 'none'; chartsContainer.style.display = 'none';
             }
             window.print(); setTimeout(() => { document.getElementById('printable-report').classList.remove('active-print'); }, 1000);
@@ -1426,145 +1596,6 @@
             });
         }
 
-        // ================= INSIGHTS E UI =================
-        function gerarInsights() {
-            const container = document.getElementById('insights-container'); if(!container) return; container.innerHTML = ''; 
-            let zerados = [], baixos = [], maiorVolume = null, totalItens = 0, hdCount = 0, ssdCount = 0;
-            if (!estoqueLocal || estoqueLocal.length === 0) { container.innerHTML = `<div class="col-span-3 bg-gray-50 border-l-4 border-gray-400 p-4 rounded-xl shadow-sm text-gray-500 font-medium flex items-center"><i class="fas fa-info-circle mr-2 text-xl"></i> Sem dados no estoque.</div>`; return; }
-            estoqueLocal.forEach(item => {
-                const qtd = item.Quantidade || 0; totalItens += qtd; const minEstoque = item.EstoqueMinimo || 5;
-                if (qtd === 0) zerados.push(item); else if (qtd <= minEstoque) baixos.push(item);
-                const compUpper = (item.Componente || '').toUpperCase(); if (compUpper.includes('HD INTERNO') || compUpper.includes('HD ')) hdCount += qtd; if (compUpper.includes('SSD')) ssdCount += qtd;
-                if (!maiorVolume || qtd > maiorVolume.Quantidade) maiorVolume = item;
-            });
-            let alertHtml = '';
-            if (zerados.length > 0 || baixos.length > 0) {
-                let desc = ''; if (zerados.length > 0) desc += `<span class="text-red-600 font-bold">${zerados.length} itens esgotados.</span> `; if (baixos.length > 0) desc += `<span class="text-orange-600 font-bold">${baixos.length} em alerta.</span>`;
-                alertHtml = `<div class="bg-red-50 border-l-4 border-red-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-exclamation-triangle text-red-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-red-800 uppercase tracking-wide">Reposição Prioritária</h4><p class="text-xs text-red-700 mt-2">${desc}</p></div></div>`;
-            } else { alertHtml = `<div class="bg-emerald-50 border-l-4 border-emerald-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-check-circle text-emerald-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wide">Estoque Saudável</h4><p class="text-xs text-emerald-700 mt-2">Nenhum equipamento em nível crítico.</p></div></div>`; }
-            
-            let acumuloHtml = `<div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-boxes text-blue-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-blue-800 uppercase tracking-wide">Concentração</h4><p class="text-xs text-blue-700 mt-2"><b>${maiorVolume ? maiorVolume.Componente : 'Item'}</b> possui o maior volume.</p></div></div>`;
-            let techHtml = `<div class="bg-purple-50 border-l-4 border-purple-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-sitemap text-purple-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-purple-800 uppercase tracking-wide">Diversidade</h4><p class="text-xs text-purple-700 mt-2">Gestão de ${[...new Set(estoqueLocal.map(i => i.Categoria || 'Geral'))].length} categorias.</p></div></div>`;
-            container.innerHTML = alertHtml + acumuloHtml + techHtml;
-        }
-
-        function atualizarDatalists() { 
-            if(document.getElementById('lista-componentes')) document.getElementById('lista-componentes').innerHTML = [...new Set(estoqueLocal.map(i => i.Componente||''))].map(c => `<option value="${c}">`).join(''); 
-            const filterCat = document.getElementById('filter-cat-estoque');
-            if(filterCat) {
-                const categoriasUnicas = [...new Set(estoqueLocal.map(i => i.Categoria || 'Sem Categoria'))].sort();
-                filterCat.innerHTML = '<option value="">Todas as Categorias</option>';
-                categoriasUnicas.forEach(cat => filterCat.innerHTML += `<option value="${cat}">${cat}</option>`);
-            }
-            atualizarSelectEdicaoEstoque();
-        }
-        
-        function atualizarInterfaceEstoque() {
-            const tbody = document.getElementById('inventory-tbody'); if(!tbody) return;
-            let tTotal = 0, tArmaz = 0, tEnergia = 0, tZerado = 0; const mapCat = {};
-            estoqueLocal.forEach(item => {
-                const cat = item.Categoria || 'Sem Categoria'; const qtd = item.Quantidade || 0;
-                tTotal += qtd; if(cat === 'Armazenamento') tArmaz += qtd; if(cat === 'Fonte de Alimentação' || cat === 'Bateria') tEnergia += qtd; if(qtd === 0) tZerado++;
-                mapCat[cat] = (mapCat[cat] || 0) + qtd;
-            });
-            if(document.getElementById('kpi-total')) document.getElementById('kpi-total').innerText = tTotal; 
-            if(document.getElementById('kpi-armazenamento')) document.getElementById('kpi-armazenamento').innerText = tArmaz; 
-            if(document.getElementById('kpi-energia')) document.getElementById('kpi-energia').innerText = tEnergia; 
-            if(document.getElementById('kpi-zerado')) document.getElementById('kpi-zerado').innerText = tZerado;
-
-            let filtrados = estoqueLocal.filter(item => {
-                let matchBusca = true;
-                if (currentSearchText) {
-                    const searchTerms = currentSearchText.toLowerCase().split(' ');
-                    const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase();
-                    matchBusca = searchTerms.every(term => itemText.includes(term));
-                }
-                let matchCat = !currentFilterCat || (item.Categoria || 'Sem Categoria') === currentFilterCat;
-                return matchBusca && matchCat;
-            });
-            const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1;
-            if(currentPageEstoque > totalPaginas) currentPageEstoque = totalPaginas;
-            const inicio = (currentPageEstoque - 1) * itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
-
-            tbody.innerHTML = '';
-            dadosPagina.forEach(item => {
-                const qtd = item.Quantidade || 0; const minEstoque = item.EstoqueMinimo || 5;
-                let badge = qtd === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' : qtd <= minEstoque ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>' : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
-                
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${item.Categoria||''}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente||''}<br><span class="text-xs font-normal text-slate-500">${item.Modelo||''} / ${item.Especificação||''}</span></td><td class="px-6 py-4 text-sm text-blue-600">${item.Local||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${item.Série||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${item.Patrimonio||''}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
-            });
-
-            if(document.getElementById('estoque-page-info')) document.getElementById('estoque-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
-            if(document.getElementById('btn-prev-estoque')) document.getElementById('btn-prev-estoque').disabled = currentPageEstoque === 1;
-            if(document.getElementById('btn-next-estoque')) document.getElementById('btn-next-estoque').disabled = currentPageEstoque === totalPaginas;
-
-            renderChartsUIUX(mapCat, estoqueLocal, logsLocal);
-        }
-
-        function atualizarInterfaceRastreio() {
-            const tbody = document.getElementById('rastreio-tbody'); if(!tbody) return;
-            
-            let filtrados = localidadesLocais.filter(item => {
-                if (!currentSearchRastreio) return true;
-                const searchTerms = currentSearchRastreio.toLowerCase().split(' ');
-                const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase();
-                return searchTerms.every(term => itemText.includes(term));
-            });
-
-            const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1;
-            if(currentPageRastreio > totalPaginas) currentPageRastreio = totalPaginas;
-            const inicio = (currentPageRastreio - 1) * itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
-
-            tbody.innerHTML = '';
-            dadosPagina.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
-                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||''}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.LocalSipac||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||''}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
-            });
-
-            if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
-            if(document.getElementById('btn-prev-rastreio')) document.getElementById('btn-prev-rastreio').disabled = currentPageRastreio === 1;
-            if(document.getElementById('btn-next-rastreio')) document.getElementById('btn-next-rastreio').disabled = currentPageRastreio === totalPaginas;
-        }
-
-        // ================= RENDERIZAÇÃO DOS GRÁFICOS (BLINDADOS) =================
-        function renderChartsUIUX(mapCat, dados, logs) {
-            if(chartComponentesAmpliado) { chartComponentesAmpliado.destroy(); }
-            if(chartTopSaidas) { chartTopSaidas.destroy(); }
-            if(chartPizzaCategorias) { chartPizzaCategorias.destroy(); }
-            
-            const primColor = localStorage.getItem('pref_color') || '#161B33';
-
-            const topItensEstoque = [...dados].sort((a, b) => (b.Quantidade||0) - (a.Quantidade||0)).slice(0, 8);
-            if(document.getElementById('chartComponentesAmpliado')) {
-                chartComponentesAmpliado = new Chart(document.getElementById('chartComponentesAmpliado'), {
-                    type: 'bar', data: { labels: topItensEstoque.map(i => (i.Componente || '').substring(0, 18)), datasets: [{ data: topItensEstoque.map(i => i.Quantidade || 0), backgroundColor: primColor, borderRadius: 6 }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold', size: 11 }, anchor: 'end', align: 'start', offset: 8 } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 } } } } }
-                });
-            }
-
-            const saidasMap = {};
-            logs.forEach(log => { if (log.tipo === 'SAÍDA' && log.itemNome) { saidasMap[log.itemNome] = (saidasMap[log.itemNome] || 0) + (log.qtd || 0); } });
-            const topSaidasKeys = Object.keys(saidasMap).sort((a,b) => saidasMap[b] - saidasMap[a]).slice(0, 5);
-            const saidasLabels = topSaidasKeys.map(k => k.split(' - ')[0].substring(0, 12));
-            const saidasValues = topSaidasKeys.map(k => saidasMap[k]);
-            if(saidasLabels.length === 0) { saidasLabels.push('Sem Baixas'); saidasValues.push(0); }
-
-            if(document.getElementById('chartTopSaidas')) {
-                chartTopSaidas = new Chart(document.getElementById('chartTopSaidas'), {
-                    type: 'bar', data: { labels: saidasLabels, datasets: [{ data: saidasValues, backgroundColor: '#EF4444', borderRadius: 6 }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold', size: 11 }, anchor: 'end', align: 'start', offset: 8 } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 } } } } }
-                });
-            }
-
-            const catLabels = Object.keys(mapCat); const catData = catLabels.map(k => mapCat[k]); const coresVibrantes = ['#4F46E5', '#EC4899', '#10B981', '#F59E0B', '#3B82F6', '#8B5CF6', '#EF4444', '#06B6D4'];
-
-            if(document.getElementById('chartPizzaCategorias')) {
-                chartPizzaCategorias = new Chart(document.getElementById('chartPizzaCategorias'), {
-                    type: 'doughnut', data: { labels: catLabels.length > 0 ? catLabels : ['Sem Dados'], datasets: [{ data: catData.length > 0 ? catData : [1], backgroundColor: coresVibrantes, borderWidth: 2, borderColor: '#ffffff' }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 12, font: { size: 10, weight: 'bold' } } }, datalabels: { color: '#ffffff', font: { weight: 'bold', size: 10 } } } }
-                });
-            }
-        }
-
         // ================= COMPORTAMENTO DE NAVEGAÇÃO =================
         if(document.getElementById('btn-theme')) document.getElementById('btn-theme').addEventListener('click', () => document.body.classList.toggle('dark'));
         const modal = document.getElementById('tools-modal'); 
@@ -1585,8 +1616,8 @@
             }); 
         });
 
-        if(document.getElementById('view-estoque-btn')) document.getElementById('view-estoque-btn').addEventListener('click', (e) => { e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600'); const otherBtn = document.getElementById('view-rastreio-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500'); document.getElementById('view-estoque-content').classList.remove('hidden'); document.getElementById('view-rastreio-content').classList.add('hidden'); });
-        if(document.getElementById('view-rastreio-btn')) document.getElementById('view-rastreio-btn').addEventListener('click', (e) => { e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600'); const otherBtn = document.getElementById('view-estoque-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500'); document.getElementById('view-rastreio-content').classList.remove('hidden'); document.getElementById('view-estoque-content').classList.add('hidden'); });
+        if(document.getElementById('view-estoque-btn')) document.getElementById('view-estoque-btn').addEventListener('click', (e) => { e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600'); e.currentTarget.classList.replace('bg-gray-100', 'bg-white'); const otherBtn = document.getElementById('view-rastreio-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500'); otherBtn.classList.replace('bg-white', 'bg-gray-100'); document.getElementById('view-estoque-content').classList.remove('hidden'); document.getElementById('view-rastreio-content').classList.add('hidden'); });
+        if(document.getElementById('view-rastreio-btn')) document.getElementById('view-rastreio-btn').addEventListener('click', (e) => { e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600'); e.currentTarget.classList.replace('bg-gray-100', 'bg-white'); const otherBtn = document.getElementById('view-estoque-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500'); otherBtn.classList.replace('bg-white', 'bg-gray-100'); document.getElementById('view-rastreio-content').classList.remove('hidden'); document.getElementById('view-estoque-content').classList.add('hidden'); });
 
         if(document.getElementById('search-table-estoque')) document.getElementById('search-table-estoque').addEventListener('input', e => { currentSearchText = e.target.value; currentPageEstoque = 1; atualizarInterfaceEstoque(); });
         if(document.getElementById('filter-cat-estoque')) document.getElementById('filter-cat-estoque').addEventListener('change', e => { currentFilterCat = e.target.value; currentPageEstoque = 1; atualizarInterfaceEstoque(); });
