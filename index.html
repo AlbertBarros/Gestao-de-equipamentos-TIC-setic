@@ -39,9 +39,13 @@
 </head>
 <body class="transition-colors duration-200">
 
-    <!-- TELA DE LOGIN -->
-    <div id="login-screen" class="fixed inset-0 bg-slate-900 flex justify-center items-center z-50">
-        <div class="bg-white rounded-xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500">
+    <!-- TELA DE LOGIN COM IMAGEM DE FUNDO -->
+    <div id="login-screen" class="fixed inset-0 flex justify-center items-center z-50 bg-cover bg-center bg-no-repeat" style="background-image: url('https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg');">
+        
+        <!-- Overlay escuro com blur para dar destaque ao quadro branco -->
+        <div class="absolute inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm"></div>
+
+        <div class="bg-white rounded-xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500 relative z-10">
             <div class="text-center mb-8">
                 <!-- LOGO -->
                 <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
@@ -75,7 +79,7 @@
                     <div class="flex items-center space-x-3">
                         <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" class="h-10">
                         <i id="navbar-icon" class="fas fa-chart-line text-xl ml-2"></i>
-                        <span id="navbar-title" class="font-bold text-lg tracking-wide hidden sm:block">Painel de Gestão de Estoque - SETIC</span>
+                        <span id="navbar-title" class="font-bold text-lg tracking-wide whitespace-nowrap">Painel de Gestão de Estoque - SETIC</span>
                     </div>
                     <div class="flex items-center space-x-4">
                         <span class="bg-green-500 text-white text-xs px-2.5 py-1.5 rounded flex items-center font-bold shadow-sm hidden md:flex">
@@ -257,7 +261,7 @@
                     </div>
                 </div>
 
-                <!-- TAB PREFERÊNCIAS (NOVA) -->
+                <!-- TAB PREFERÊNCIAS -->
                 <div id="tab-pref" class="tab-content hidden">
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Preferências do Sistema</h2>
                     <p class="text-sm text-slate-500 mb-8 border-b pb-4">Personalize a aparência do painel oficial.</p>
@@ -393,11 +397,11 @@
             const color = localStorage.getItem('pref_color') || '#161B33';
             const icon = localStorage.getItem('pref_icon') || 'fa-chart-line';
 
-            // Aplica Titulo
-            document.getElementById('navbar-title').innerText = title;
+            // Aplica Titulo usando textContent
+            document.getElementById('navbar-title').textContent = title;
             document.title = title;
             document.getElementById('pref-title').value = title;
-            document.getElementById('print-title-doc').innerText = "Relatório Geral - " + title;
+            document.getElementById('print-title-doc').textContent = "Relatório Geral - " + title;
 
             // Aplica Cor Primária
             document.getElementById('navbar-main').style.backgroundColor = color;
@@ -421,11 +425,10 @@
             setTimeout(() => document.getElementById('msg-pref').classList.add('hidden'), 3000);
         });
 
-        // Sincroniza inputs de cor
         document.getElementById('pref-color').addEventListener('input', (e) => document.getElementById('pref-color-text').value = e.target.value.toUpperCase());
         document.getElementById('pref-color-text').addEventListener('input', (e) => { if(/^#[0-9A-F]{6}$/i.test(e.target.value)) document.getElementById('pref-color').value = e.target.value; });
 
-        carregarPreferencias(); // Aplica ao abrir a página
+        carregarPreferencias(); 
         // =================================================================
 
 
@@ -599,9 +602,7 @@
             chartCat = new Chart(document.getElementById('chartCategoria'), { type: 'bar', data: { labels: catLabels, datasets: [{ data: catData, backgroundColor: catColors, borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start', offset: 10 }, tooltip: { backgroundColor: '#1E293B', titleFont: { size: 14 }, bodyFont: { size: 13, weight: 'bold' }, padding: 10, cornerRadius: 4 } }, scales: { x: { display: false, grid: { display: false } }, y: { grid: { display: false }, ticks: { font: { weight: 'bold' } } } } } });
             const topItems = [...dados].sort((a, b) => b.Quantidade - a.Quantidade).slice(0, 5);
             
-            // Usar a cor primária dinâmica para o gráfico também
             const primColor = localStorage.getItem('pref_color') || '#161B33';
-
             chartTop = new Chart(document.getElementById('chartTopItems'), { type: 'bar', data: { labels: topItems.map(i => i.Componente.substring(0, 15)), datasets: [{ data: topItems.map(i => i.Quantidade), backgroundColor: primColor, borderRadius: 4 }] }, options: { responsive: true, plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start', offset: 10 }, tooltip: { backgroundColor: '#1E293B', padding: 10, cornerRadius: 4 } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold' } } } } } });
         }
 
