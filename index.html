@@ -264,7 +264,7 @@
                         </div>
                         <div class="relative">
                             <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                            <input type="text" id="search-table-rastreio" placeholder="Pesquisar Nome, Local, Série..." class="pl-9 pr-3 py-2 border border-indigo-200 rounded text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm">
+                            <input type="text" id="search-table-rastreio" placeholder="Pesquisar Local, Patrimônio, Série..." class="pl-9 pr-3 py-2 border border-indigo-200 rounded text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm">
                         </div>
                     </div>
                     <div class="overflow-x-auto min-h-[300px]">
@@ -572,7 +572,6 @@
 
                         <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
                             
-                            <!-- NOVA ZONA DE PERIGO (MÚLTIPLA SELEÇÃO DE EXCLUSÃO EM LOTE) -->
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between col-span-1 lg:col-span-2">
                                 <div>
                                     <h3 class="font-bold text-red-800 mb-1"><i class="fas fa-exclamation-triangle text-red-600 mr-2"></i> Zona de Perigo (Exclusão em Lote)</h3>
@@ -667,7 +666,6 @@
 
         Chart.register(ChartDataLabels);
 
-        // ATENÇÃO: Substituir pelas chaves válidas do Firebase.
         const firebaseConfig = {
             apiKey: "AIzaSyBRCRThFRIEGYQ8ukI8IzJ78AyqSEyspsc",
             authDomain: "gestao-de-equipamentos-tic.firebaseapp.com",
@@ -697,6 +695,9 @@
         let mapItensSaida = {}; 
         let mapEditLocais = {};
         let mapEditEstoque = {};
+        
+        let mapAdminDelLoc = {};
+        let mapAdminDelEst = {};
         
         let chartComponentesAmpliado = null; 
         let chartTopSaidas = null; 
@@ -860,7 +861,7 @@
                 parecer.innerHTML = `A extração consolidou <b>${localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${userEmail} em ${dataAtual}.`;
                 resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades, com ${tEquipsUnicos.size} modelos distintos.`;
                 kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros</p><p class="text-2xl font-black text-slate-800">${localidadesLocais.length}</p></div>`;
-                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
+                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Património</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
                 visualTitle.style.display = 'none'; chartsContainer.style.display = 'none';
             }
             window.print(); setTimeout(() => { document.getElementById('printable-report').classList.remove('active-print'); }, 1000);
@@ -1337,7 +1338,7 @@
             }; reader.readAsArrayBuffer(fileInput.files[0]);
         });
 
-        // ================= ABA SAÍDA =================
+        // ================= ABA SAÍDA (AUTO-COMPLETAR INTELIGENTE) =================
         function atualizarDatalistSaida() {
             const dl = document.getElementById('lista-saida-items'); 
             if(!dl) return;
@@ -1470,12 +1471,7 @@
                 const qtd = item.Quantidade || 0; const minEstoque = item.EstoqueMinimo || 5;
                 let badge = qtd === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' : qtd <= minEstoque ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>' : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
                 
-                let strS = item.Série ? `Série: ${item.Série}` : '';
-                let strP = item.Patrimonio ? `Patr: ${item.Patrimonio}` : '';
-                let separator = (strS && strP) ? '<br>' : '';
-                let cellSP = (strS || strP) ? `${strS}${separator}${strP}` : '-';
-
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${item.Categoria||''}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente||''}<br><span class="text-xs font-normal text-slate-500">${item.Modelo||''} / ${item.Especificação||''}</span></td><td class="px-6 py-4 text-sm text-blue-600">${item.Local||''}</td><td class="px-6 py-4 text-xs font-mono text-slate-500 leading-tight">${cellSP}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
+                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${item.Categoria||''}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente||''}<br><span class="text-xs font-normal text-slate-500">${item.Modelo||''} / ${item.Especificação||''}</span></td><td class="px-6 py-4 text-sm text-blue-600">${item.Local||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${item.Série||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${item.Patrimonio||''}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
             });
 
             if(document.getElementById('estoque-page-info')) document.getElementById('estoque-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
@@ -1501,12 +1497,7 @@
 
             tbody.innerHTML = '';
             dadosPagina.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
-                let strS = loc.Serie ? `Série: ${loc.Serie}` : '';
-                let strP = loc.Patrimonio ? `Patr: ${loc.Patrimonio}` : '';
-                let separator = (strS && strP) ? '<br>' : '';
-                let cellSP = (strS || strP) ? `${strS}${separator}${strP}` : '-';
-                
-                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||''}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.LocalSipac||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||''}</td><td class="px-6 py-4 text-xs font-mono text-slate-600 leading-tight">${cellSP}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
+                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||''}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.LocalSipac||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||''}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
             });
 
             if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
