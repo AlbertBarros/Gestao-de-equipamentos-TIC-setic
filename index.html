@@ -67,7 +67,6 @@
         <div class="absolute inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm"></div>
         <div class="bg-white rounded-xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500 relative z-10">
             <div class="text-center mb-8">
-                <!-- LOGO BLINDADA -->
                 <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
                 <h2 id="login-title" class="text-2xl font-bold text-slate-800">Almoxarifado TIC</h2>
                 <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p>
@@ -224,7 +223,7 @@
                             </select>
                             <div class="relative">
                                 <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                                <input type="text" id="search-table-estoque" placeholder="Filtrar registro..." class="pl-9 pr-3 py-2 border border-gray-300 rounded text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                                <input type="text" id="search-table-estoque" placeholder="Pesquisar Nome, Série, etc..." class="pl-9 pr-3 py-2 border border-gray-300 rounded text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
                             </div>
                         </div>
                     </div>
@@ -235,8 +234,8 @@
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Categoria</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Componente / Espec.</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider text-blue-600">Local</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nº Série / Patr.</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider text-center">Quantidade</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Série / Patr.</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider text-center">Qtd</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
                                 </tr>
                             </thead>
@@ -244,7 +243,7 @@
                         </table>
                     </div>
                     <div class="px-6 py-3 border-t border-gray-100 flex items-center justify-between bg-gray-50">
-                        <span class="text-sm text-gray-500" id="estoque-page-info">Mostrando 0 registos</span>
+                        <span class="text-sm text-gray-500" id="estoque-page-info">Mostrando 0 registros</span>
                         <div class="flex gap-2">
                             <button id="btn-prev-estoque" class="px-3 py-1 border border-gray-300 rounded bg-white text-gray-600 hover:bg-gray-100 text-sm font-medium transition disabled:opacity-50"><i class="fas fa-chevron-left"></i> Anterior</button>
                             <button id="btn-next-estoque" class="px-3 py-1 border border-gray-300 rounded bg-white text-gray-600 hover:bg-gray-100 text-sm font-medium transition disabled:opacity-50">Próxima <i class="fas fa-chevron-right"></i></button>
@@ -263,7 +262,7 @@
                         </div>
                         <div class="relative">
                             <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
-                            <input type="text" id="search-table-rastreio" placeholder="Filtrar Local, Património, Série..." class="pl-9 pr-3 py-2 border border-indigo-200 rounded text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm">
+                            <input type="text" id="search-table-rastreio" placeholder="Pesquisar Nome, Local, Série..." class="pl-9 pr-3 py-2 border border-indigo-200 rounded text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm">
                         </div>
                     </div>
                     <div class="overflow-x-auto min-h-[300px]">
@@ -282,7 +281,7 @@
                         </table>
                     </div>
                     <div class="px-6 py-3 border-t border-gray-100 flex items-center justify-between bg-indigo-50/20">
-                        <span class="text-sm text-indigo-600" id="rastreio-page-info">Mostrando 0 registos</span>
+                        <span class="text-sm text-indigo-600" id="rastreio-page-info">Mostrando 0 registros</span>
                         <div class="flex gap-2">
                             <button id="btn-prev-rastreio" class="px-3 py-1 border border-indigo-200 rounded bg-white text-indigo-700 hover:bg-indigo-50 text-sm font-medium transition disabled:opacity-50"><i class="fas fa-chevron-left"></i> Anterior</button>
                             <button id="btn-next-rastreio" class="px-3 py-1 border border-indigo-200 rounded bg-white text-indigo-700 hover:bg-indigo-50 text-sm font-medium transition disabled:opacity-50">Próxima <i class="fas fa-chevron-right"></i></button>
@@ -375,7 +374,22 @@
                     
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
                         <div class="bg-blue-50/50 p-6 rounded-xl border border-blue-100 shadow-sm flex flex-col">
-                            <h3 class="font-bold text-blue-800 mb-4"><i class="fas fa-keyboard mr-2"></i>Cadastro Manual</h3>
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="font-bold text-blue-800"><i class="fas fa-keyboard mr-2"></i>Gestão Manual</h3>
+                                <select id="estoque-action-type" class="border-blue-300 rounded text-xs py-1 px-2 focus:ring-blue-500 bg-white font-bold text-blue-700 shadow-sm cursor-pointer outline-none">
+                                    <option value="new">Novo Registo</option>
+                                    <option value="edit">Editar Registo</option>
+                                </select>
+                            </div>
+                            
+                            <!-- NOVO CAMPO DE PESQUISA INTELIGENTE (ESTOQUE) -->
+                            <div id="estoque-edit-container" class="relative hidden mb-4">
+                                <i class="fas fa-search absolute left-3 top-3 text-orange-500"></i>
+                                <input list="lista-edit-estoque" id="estoque-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500" placeholder="Pesquise o item para editar...">
+                                <datalist id="lista-edit-estoque"></datalist>
+                            </div>
+                            <input type="hidden" id="estoque-edit-id">
+
                             <div class="space-y-4 flex-1">
                                 <div class="grid grid-cols-2 gap-3">
                                     <div><label class="block text-xs font-bold text-slate-700 uppercase">Categoria Macro *</label><input list="lista-categorias" id="form-cat" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div>
@@ -391,7 +405,7 @@
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
                                     <div><label class="block text-xs font-bold text-slate-700 uppercase text-orange-600" title="Alerta automático abaixo desta quantidade">Estoque Mínimo</label><input type="number" id="form-minimo" class="mt-1 block w-full rounded border-orange-300 border p-2 text-sm" min="1" value="5"></div>
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase text-emerald-600">Qtd a Adicionar *</label><input type="number" id="form-qtd" class="mt-1 block w-full rounded border-emerald-300 border p-2 text-sm" min="1" value="1"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 uppercase text-emerald-600">Qtd (Total) *</label><input type="number" id="form-qtd" class="mt-1 block w-full rounded border-emerald-300 border p-2 text-sm" min="1" value="1"></div>
                                 </div>
                             </div>
                             <button id="btn-save-item" class="w-full bg-blue-600 text-white font-bold py-2.5 px-4 rounded hover:bg-blue-700 transition shadow mt-4">Registar Entrada no Estoque</button>
@@ -414,19 +428,17 @@
                     <datalist id="lista-componentes"></datalist>
                 </div>
 
-                <!-- TAB SAÍDA (ATUALIZADA COM DATALIST AUTOMÁTICO) -->
+                <!-- TAB SAÍDA -->
                 <div id="tab-saida" class="tab-content hidden h-full flex flex-col">
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Baixa de Material</h2>
                     <p class="text-sm text-slate-500 mb-8 border-b pb-4">Despacho de componentes para atendimento de incidentes.</p>
                     
                     <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex-1">
                         <div class="space-y-5 mb-8">
-                            <!-- NOVO CAMPO: PESQUISA COM LISTA SUSPENSA -->
                             <div>
-                                <label class="block text-sm font-semibold text-slate-700">Pesquisar Equipamento (Digite as primeiras letras...)</label>
+                                <label class="block text-sm font-semibold text-slate-700">Pesquisar Equipamento (Digite Nome, Modelo ou Local...)</label>
                                 <div class="relative">
                                     <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
-                                    <!-- O 'list' aciona a lista suspensa nativa do HTML5 -->
                                     <input list="lista-saida-items" id="saida-item-input" class="mt-1 block w-full rounded-md border-gray-300 border py-3 pl-10 shadow-sm focus:ring-red-500 focus:border-red-500 text-sm font-medium" placeholder="Ex: Memória, SSD, Monitor...">
                                     <datalist id="lista-saida-items"></datalist>
                                 </div>
@@ -458,9 +470,12 @@
                                 </select>
                             </div>
                             
-                            <select id="loc-edit-select" class="w-full rounded border-orange-300 border p-2 text-sm mb-4 hidden bg-orange-50 font-medium text-orange-900 outline-none">
-                                <option value="">-- Selecione o item para editar --</option>
-                            </select>
+                            <!-- NOVO CAMPO DE PESQUISA INTELIGENTE (LOCAIS) -->
+                            <div id="loc-edit-container" class="relative hidden mb-4">
+                                <i class="fas fa-search absolute left-3 top-3 text-orange-500"></i>
+                                <input list="lista-edit-locais" id="loc-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500" placeholder="Pesquise Equipamento, Local, Série ou Patr...">
+                                <datalist id="lista-edit-locais"></datalist>
+                            </div>
                             <input type="hidden" id="loc-edit-id">
                             
                             <div class="space-y-4 flex-1">
@@ -474,6 +489,7 @@
                                     <div><label class="block text-xs font-bold text-slate-700 uppercase">Quantidade *</label><input type="number" id="loc-qtd" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" min="1" value="1"></div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
+                                    <!-- Os campos de Série e Patrimônio suportam livremente texto e números -->
                                     <div><label class="block text-xs font-bold text-slate-700 uppercase">Nº de Série</label><input type="text" id="loc-serie" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: SN-987654"></div>
                                     <div><label class="block text-xs font-bold text-slate-700 uppercase">Nº Património</label><input type="text" id="loc-patrimonio" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: PRF-123456"></div>
                                 </div>
@@ -642,8 +658,9 @@
         let currentPageRastreio = 1;
         let currentSearchRastreio = '';
         
-        // NOVO: Dicionário para auxiliar na baixa de material
         let mapItensSaida = {}; 
+        let mapEditLocais = {};
+        let mapEditEstoque = {};
         
         let chartComponentesAmpliado = null; 
         let chartTopSaidas = null; 
@@ -797,12 +814,33 @@
 
             if(tipo === 'estoque') {
                 titleObj.innerText = "Extrato: Inventário Consolidado"; theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente</th><th>Modelo / Espec.</th><th>Local</th><th>Série/Património</th><th style="text-align:center;">Qtd</th></tr>`;
-                let filtrados = estoqueLocal.filter(item => { let matchBusca = !currentSearchText || (item.Componente+item.Modelo+item.Especificação+item.Local).toLowerCase().includes(currentSearchText.toLowerCase()); let matchCat = !currentFilterCat || item.Categoria === currentFilterCat; return matchBusca && matchCat; });
-                filtrados.sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { tbodyObj.innerHTML += `<tr><td>${i.Categoria||'-'}</td><td><b>${i.Componente||'-'}</b></td><td>${i.Modelo||'-'} / ${i.Especificação||'-'}</td><td>${i.Local||'-'}</td><td style="font-family:monospace;">${i.Série||i.Patrimonio||'-'}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`; });
+                let filtrados = estoqueLocal.filter(item => { 
+                    let matchBusca = true;
+                    if (currentSearchText) {
+                        const searchTerms = currentSearchText.toLowerCase().split(' ');
+                        const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase();
+                        matchBusca = searchTerms.every(term => itemText.includes(term));
+                    }
+                    let matchCat = !currentFilterCat || item.Categoria === currentFilterCat; 
+                    return matchBusca && matchCat; 
+                });
+
+                filtrados.sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { 
+                    tbodyObj.innerHTML += `<tr><td>${i.Categoria||'-'}</td><td><b>${i.Componente||'-'}</b></td><td>${i.Modelo||'-'} / ${i.Especificação||'-'}</td><td>${i.Local||'-'}</td><td style="font-family:monospace;">S: ${i.Série||'-'} P: ${i.Patrimonio||'-'}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`; 
+                });
             } else {
-                titleObj.innerText = "Extrato: Rastreamento Físico"; theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Local SIPAC</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Património</th><th style="text-align:center;">Qtd</th></tr>`;
-                let filtradosRastreio = localidadesLocais.filter(item => { return !currentSearchRastreio || (item.Equipamento+item.Local+item.LocalSipac+item.Serie+item.Patrimonio).toLowerCase().includes(currentSearchRastreio.toLowerCase()); });
-                filtradosRastreio.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => { tbodyObj.innerHTML += `<tr><td><b>${loc.Equipamento||'-'}</b></td><td>${loc.Local||'-'}</td><td>${loc.LocalSipac||'-'}</td><td>${loc.Marca||'-'}</td><td style="font-family:monospace;">${loc.Serie||'-'}</td><td style="font-family:monospace;">${loc.Patrimonio||'-'}</td><td style="text-align:center; font-weight:bold;">${loc.Quantidade||0}</td></tr>`; });
+                titleObj.innerText = "Extrato: Rastreamento Físico"; theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Local SIPAC</th><th>Marca/Modelo</th><th>Série/Património</th><th style="text-align:center;">Qtd</th></tr>`;
+                
+                let filtradosRastreio = localidadesLocais.filter(item => { 
+                    if (!currentSearchRastreio) return true;
+                    const searchTerms = currentSearchRastreio.toLowerCase().split(' ');
+                    const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase();
+                    return searchTerms.every(term => itemText.includes(term));
+                });
+
+                filtradosRastreio.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => { 
+                    tbodyObj.innerHTML += `<tr><td><b>${loc.Equipamento||'-'}</b></td><td>${loc.Local||'-'}</td><td>${loc.LocalSipac||'-'}</td><td>${loc.Marca||'-'}</td><td style="font-family:monospace;">S: ${loc.Serie||'-'} P: ${loc.Patrimonio||'-'}</td><td style="text-align:center; font-weight:bold;">${loc.Quantidade||0}</td></tr>`; 
+                });
             }
             window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
         }
@@ -836,25 +874,29 @@
 
         // ================= GESTÃO DE LOCALIDADES E EDIÇÃO / MOVIMENTAÇÃO =================
         function atualizarSelectEdicaoLocais() {
-            const sel = document.getElementById('loc-edit-select');
-            if(!sel) return;
-            sel.innerHTML = '<option value="">-- Selecione o item para editar ou transferir --</option>';
+            const dl = document.getElementById('lista-edit-locais');
+            if(!dl) return;
+            dl.innerHTML = '';
+            mapEditLocais = {};
             [...localidadesLocais].sort((a,b) => (a.Equipamento||'').localeCompare(b.Equipamento||'')).forEach(loc => {
-                sel.innerHTML += `<option value="${loc.id}">${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio}</option>`;
+                const text = `${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio || 'Vazio'} | Série: ${loc.Serie || 'Vazio'}`;
+                mapEditLocais[text] = loc;
+                dl.innerHTML += `<option value="${text}"></option>`;
             });
         }
 
         if(document.getElementById('loc-action-type')) {
             document.getElementById('loc-action-type').addEventListener('change', (e) => {
                 const isEdit = e.target.value === 'edit';
-                const sel = document.getElementById('loc-edit-select');
+                const container = document.getElementById('loc-edit-container');
+                const input = document.getElementById('loc-edit-input');
                 const btn = document.getElementById('btn-save-loc');
                 if(isEdit) {
-                    sel.classList.remove('hidden');
+                    container.classList.remove('hidden');
                     btn.innerText = 'Gravar Alterações';
                     btn.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded hover:bg-orange-600 transition shadow mt-4';
                 } else {
-                    sel.classList.add('hidden'); sel.value = '';
+                    container.classList.add('hidden'); input.value = '';
                     btn.innerText = 'Mapear Equipamento';
                     btn.className = 'w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded hover:bg-indigo-700 transition shadow mt-4';
                     ['loc-equip','loc-local', 'loc-sipac', 'loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(id => document.getElementById(id).value = ''); 
@@ -863,24 +905,22 @@
             });
         }
 
-        if(document.getElementById('loc-edit-select')) {
-            document.getElementById('loc-edit-select').addEventListener('change', (e) => {
-                const id = e.target.value;
-                if(!id) {
+        if(document.getElementById('loc-edit-input')) {
+            document.getElementById('loc-edit-input').addEventListener('input', (e) => {
+                const text = e.target.value;
+                const item = mapEditLocais[text];
+                if(!item) {
                     ['loc-equip','loc-local', 'loc-sipac','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(idx => document.getElementById(idx).value = ''); 
                     document.getElementById('loc-qtd').value = 1; return;
                 }
-                const item = localidadesLocais.find(i => i.id === id);
-                if(item) {
-                    document.getElementById('loc-edit-id').value = item.id;
-                    document.getElementById('loc-equip').value = item.Equipamento || '';
-                    document.getElementById('loc-local').value = item.Local || '';
-                    document.getElementById('loc-sipac').value = item.LocalSipac || '';
-                    document.getElementById('loc-marca').value = item.Marca || '';
-                    document.getElementById('loc-qtd').value = item.Quantidade || 1;
-                    document.getElementById('loc-serie').value = item.Serie || '';
-                    document.getElementById('loc-patrimonio').value = item.Patrimonio || '';
-                }
+                document.getElementById('loc-edit-id').value = item.id;
+                document.getElementById('loc-equip').value = item.Equipamento || '';
+                document.getElementById('loc-local').value = item.Local || '';
+                document.getElementById('loc-sipac').value = item.LocalSipac || '';
+                document.getElementById('loc-marca').value = item.Marca || '';
+                document.getElementById('loc-qtd').value = item.Quantidade || 1;
+                document.getElementById('loc-serie').value = item.Serie || '';
+                document.getElementById('loc-patrimonio').value = item.Patrimonio || '';
             });
         }
 
@@ -891,10 +931,10 @@
                 
                 const equip = document.getElementById('loc-equip').value.trim();
                 const local = document.getElementById('loc-local').value.trim();
-                const sipac = document.getElementById('loc-sipac').value.trim() || 'N/A';
-                const marca = document.getElementById('loc-marca').value.trim() || 'N/A';
-                const serie = document.getElementById('loc-serie').value.trim() || 'N/A';
-                const patrim = document.getElementById('loc-patrimonio').value.trim() || 'N/A';
+                const sipac = document.getElementById('loc-sipac').value.trim();
+                const marca = document.getElementById('loc-marca').value.trim();
+                const serie = document.getElementById('loc-serie').value.trim();
+                const patrim = document.getElementById('loc-patrimonio').value.trim();
                 const qtd = parseInt(document.getElementById('loc-qtd').value);
                 
                 if(!equip || !local || isNaN(qtd) || qtd <= 0) return showToast("Preencha Equipamento, Local Físico e Quantidade.", "error");
@@ -906,15 +946,15 @@
                 try {
                     if(actionType === 'edit' && editId) {
                         await updateDoc(doc(db, "localidades", editId), { Equipamento: equip, Local: local, LocalSipac: sipac, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
-                        await registrarLog("MOVIMENTAÇÃO", `${equip} (Novo: ${local})`, qtd, `SIPAC: ${sipac} | Série: ${serie}`);
+                        await registrarLog("MOVIMENTAÇÃO", `${equip} (Novo: ${local})`, qtd, `SIPAC: ${sipac || '-'} | Série: ${serie || '-'}`);
                         showToast("Alteração gravada e movimentada com sucesso!");
                     } else {
                         await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, LocalSipac: sipac, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
-                        await registrarLog("MAP_LOCAL", `${equip} (${local})`, qtd, `SIPAC: ${sipac} | Série: ${serie}`);
+                        await registrarLog("MAP_LOCAL", `${equip} (${local})`, qtd, `SIPAC: ${sipac || '-'} | Série: ${serie || '-'}`);
                         showToast("Equipamento mapeado com sucesso!");
                     }
                     
-                    ['loc-equip','loc-local', 'loc-sipac','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(id => document.getElementById(id).value = ''); 
+                    ['loc-equip','loc-local', 'loc-sipac','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id', 'loc-edit-input'].forEach(id => document.getElementById(id).value = ''); 
                     document.getElementById('loc-qtd').value = 1;
                     document.getElementById('loc-action-type').value = 'new';
                     document.getElementById('loc-action-type').dispatchEvent(new Event('change'));
@@ -932,8 +972,14 @@
                 try {
                     const json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let cont = 0;
                     for (let row of json) {
-                        const sipac = row['LOCAL SIPAC'] || row['Local SIPAC'] || row['Local Sipac'] || row['LOCAL_SIPAC'] || 'N/A';
-                        await addDoc(collection(db, "localidades"), { Equipamento: row['EQUIPAMENTO']||row['Equipamento']||'N/A', Local: row['LOCAL FISICO']||row['Local Físico']||row['Local']||'N/A', LocalSipac: sipac, Marca: row['MARCA']||row['Marca']||'N/A', Serie: row['Nº DE SÉRIE']||row['N Serie']||row['Série']||'N/A', Patrimonio: row['Nº PATRIMONIO']||row['Patrimônio']||row['Patrimonio']||'N/A', Quantidade: parseInt(row['QUANTIDADE']||row['Quantidade']||1) }); cont++;
+                        const sipac = (row['LOCAL SIPAC'] || row['Local SIPAC'] || row['Local Sipac'] || row['LOCAL_SIPAC'] || '').toString().trim();
+                        const serie = (row['Nº DE SÉRIE'] || row['N Serie'] || row['Série'] || '').toString().trim();
+                        const patrim = (row['Nº PATRIMONIO'] || row['Patrimônio'] || row['Patrimonio'] || '').toString().trim();
+                        const equip = (row['EQUIPAMENTO'] || row['Equipamento'] || row['Nome'] || '').toString().trim();
+                        const local = (row['LOCAL FISICO'] || row['Local Físico'] || row['Local'] || '').toString().trim();
+                        const marca = (row['MARCA'] || row['Marca'] || '').toString().trim();
+                        
+                        await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, LocalSipac: sipac, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: parseInt(row['QUANTIDADE']||row['Quantidade']||1) }); cont++;
                     }
                     await registrarLog("MAP_LOCAL", `Upload Excel`, cont, ""); showToast(`Sucesso! ${cont} locais mapeados.`); fileInput.value = "";
                 } catch (error) { showToast("Erro leitura.", "error"); } btn.innerHTML = 'Iniciar Importação';
@@ -941,16 +987,107 @@
         });
 
         // ================= CADASTRO ESTOQUE (MANUAL E LOTE) =================
+        function atualizarSelectEdicaoEstoque() {
+            const dl = document.getElementById('lista-edit-estoque');
+            if(!dl) return;
+            dl.innerHTML = '';
+            mapEditEstoque = {};
+            [...estoqueLocal].sort((a,b) => (a.Componente||'').localeCompare(b.Componente||'')).forEach(item => {
+                const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || item.Série || 'Vazio'}`;
+                mapEditEstoque[text] = item;
+                dl.innerHTML += `<option value="${text}"></option>`;
+            });
+        }
+
+        if(document.getElementById('estoque-action-type')) {
+            document.getElementById('estoque-action-type').addEventListener('change', (e) => {
+                const isEdit = e.target.value === 'edit';
+                const container = document.getElementById('estoque-edit-container');
+                const input = document.getElementById('estoque-edit-input');
+                const btn = document.getElementById('btn-save-item');
+                if(isEdit) {
+                    container.classList.remove('hidden');
+                    btn.innerText = 'Gravar Alterações';
+                    btn.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded hover:bg-orange-600 transition shadow mt-4';
+                } else {
+                    container.classList.add('hidden'); input.value = '';
+                    btn.innerText = 'Registar Entrada no Estoque';
+                    btn.className = 'w-full bg-blue-600 text-white font-bold py-2.5 px-4 rounded hover:bg-blue-700 transition shadow mt-4';
+                    ['form-cat','form-comp','form-mod','form-esp','form-local','form-patrimonio-estoque', 'estoque-edit-id'].forEach(id => document.getElementById(id).value = ''); 
+                    document.getElementById('form-qtd').value = 1;
+                    document.getElementById('form-minimo').value = 5;
+                }
+            });
+        }
+
+        if(document.getElementById('estoque-edit-input')) {
+            document.getElementById('estoque-edit-input').addEventListener('input', (e) => {
+                const text = e.target.value;
+                const item = mapEditEstoque[text];
+                if(!item) {
+                    ['form-cat','form-comp','form-mod','form-esp','form-local','form-patrimonio-estoque', 'estoque-edit-id'].forEach(idx => document.getElementById(idx).value = ''); 
+                    document.getElementById('form-qtd').value = 1; 
+                    document.getElementById('form-minimo').value = 5;
+                    return;
+                }
+                document.getElementById('estoque-edit-id').value = item.id;
+                document.getElementById('form-cat').value = item.Categoria || '';
+                document.getElementById('form-comp').value = item.Componente || '';
+                document.getElementById('form-mod').value = item.Modelo || '';
+                document.getElementById('form-esp').value = item.Especificação || '';
+                document.getElementById('form-local').value = item.Local || '';
+                document.getElementById('form-patrimonio-estoque').value = item.Patrimonio || item.Série || '';
+                document.getElementById('form-qtd').value = item.Quantidade || 1;
+                document.getElementById('form-minimo').value = item.EstoqueMinimo || 5;
+            });
+        }
+
         if(document.getElementById('btn-save-item')) document.getElementById('btn-save-item').addEventListener('click', async () => {
-            const cat = document.getElementById('form-cat').value.trim(), comp = document.getElementById('form-comp').value.trim(), mod = document.getElementById('form-mod').value.trim(), esp = document.getElementById('form-esp').value.trim(), local = document.getElementById('form-local').value.trim() || 'N/A', patrim = document.getElementById('form-patrimonio-estoque').value.trim() || 'N/A', qtd = parseInt(document.getElementById('form-qtd').value), minEstoque = parseInt(document.getElementById('form-minimo').value) || 5; let serie = document.getElementById('form-patrimonio-estoque').value.trim() || 'N/A';
-            if(!cat || !comp || isNaN(qtd) || qtd <= 0) return showToast("Preencha os campos obrigatórios.", "error");
-            const btn = document.getElementById('btn-save-item'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registrando...';
-            const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local && (i.Série||'N/A') === serie);
+            const actionType = document.getElementById('estoque-action-type') ? document.getElementById('estoque-action-type').value : 'new';
+            const editId = document.getElementById('estoque-edit-id') ? document.getElementById('estoque-edit-id').value : '';
+            
+            const cat = document.getElementById('form-cat').value.trim();
+            const comp = document.getElementById('form-comp').value.trim();
+            const mod = document.getElementById('form-mod').value.trim();
+            const esp = document.getElementById('form-esp').value.trim();
+            const local = document.getElementById('form-local').value.trim();
+            const patrim = document.getElementById('form-patrimonio-estoque').value.trim();
+            const qtd = parseInt(document.getElementById('form-qtd').value);
+            const minEstoque = parseInt(document.getElementById('form-minimo').value) || 5; 
+            const serie = patrim; // Reutilizando campo
+            
+            if(!cat || !comp || isNaN(qtd) || qtd <= 0) return showToast("Preencha Categoria, Componente e Quantidade.", "error");
+            
+            const btn = document.getElementById('btn-save-item'); 
+            const originalText = btn.innerText;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+            
             try {
-                if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd, EstoqueMinimo: minEstoque });
-                else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque });
-                await registrarLog("ENTRADA", `${comp} (${esp})`, qtd, local); showToast("Entrada registada!"); document.getElementById('form-qtd').value = 1; document.getElementById('form-patrimonio-estoque').value = "";
-            } catch (e) { showToast("Erro: " + e.message, "error");} btn.innerHTML = 'Registar Entrada no Estoque';
+                if(actionType === 'edit' && editId) {
+                    await updateDoc(doc(db, "estoque", editId), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque });
+                    await registrarLog("MOVIMENTAÇÃO (ESTOQUE)", `${comp} - ${mod}`, qtd, `Local: ${local}`);
+                    showToast("Alteração gravada com sucesso!");
+                } else {
+                    const existente = estoqueLocal.find(i => {
+                        let matchPatr = patrim && (i.Patrimonio === patrim || i.Série === patrim);
+                        if(matchPatr) return true;
+                        return (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'') === local;
+                    });
+                    
+                    if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd, EstoqueMinimo: minEstoque });
+                    else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque });
+                    await registrarLog("ENTRADA", `${comp} (${esp})`, qtd, local); 
+                    showToast("Entrada registada!"); 
+                }
+                
+                ['form-cat','form-comp','form-mod','form-esp','form-local','form-patrimonio-estoque', 'estoque-edit-id', 'estoque-edit-input'].forEach(id => document.getElementById(id).value = ''); 
+                document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5;
+                if(document.getElementById('estoque-action-type')) {
+                    document.getElementById('estoque-action-type').value = 'new';
+                    document.getElementById('estoque-action-type').dispatchEvent(new Event('change'));
+                }
+            } catch (e) { showToast("Erro: " + e.message, "error");} 
+            btn.innerText = originalText;
         });
 
         if(document.getElementById('btn-estoque-upload')) document.getElementById('btn-estoque-upload').addEventListener('click', () => {
@@ -961,9 +1098,25 @@
                 try {
                     const json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let cont = 0;
                     for (let row of json) {
-                        const cat = row['CATEGORIA']||row['Categoria']||'Geral', comp = row['COMPONENTE']||row['Componente']||'Desc', mod = row['MODELO']||row['Modelo']||'N/A', esp = row['ESPECIFICAÇÃO']||row['Especificacao']||'N/A', local = row['LOCAL FISICO']||row['Local']||'N/A', serie = row['SÉRIE']||row['Série']||'N/A', patrim = row['PATRIMÔNIO']||row['Património']||'N/A', minEst = parseInt(row['ESTOQUE MÍNIMO']||row['Estoque Minimo']||5), qtd = parseInt(row['QUANTIDADE']||row['Quantidade']||1);
+                        const cat = (row['CATEGORIA'] || row['Categoria'] || 'Geral').toString().trim();
+                        const comp = (row['COMPONENTE'] || row['Componente'] || 'Desc').toString().trim();
+                        const mod = (row['MODELO'] || row['Modelo'] || '').toString().trim();
+                        const esp = (row['ESPECIFICAÇÃO'] || row['ESPECIFICACAO'] || row['Especificação'] || '').toString().trim();
+                        const local = (row['LOCAL FISICO'] || row['LOCAL'] || row['Local'] || '').toString().trim();
+                        const serie = (row['SÉRIE'] || row['Série'] || row['SERIE'] || '').toString().trim();
+                        const patrim = (row['PATRIMÔNIO'] || row['PATRIMONIO'] || row['Patrimônio'] || row['Patrimonio'] || '').toString().trim();
+                        const minEst = parseInt(row['ESTOQUE MÍNIMO'] || row['ESTOQUE MINIMO'] || row['Estoque Minimo'] || 5);
+                        const qtd = parseInt(row['QUANTIDADE'] || row['Quantidade'] || row['Qtd'] || 1);
+                        
                         if(comp === 'Desc') continue;
-                        const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local && (i.Série||'N/A') === serie);
+                        
+                        const existente = estoqueLocal.find(i => {
+                            let matchPatr = (patrim && (i.Patrimonio === patrim || i.Série === patrim));
+                            let matchSerie = (serie && (i.Série === serie || i.Patrimonio === serie));
+                            if(matchPatr || matchSerie) return true;
+                            return (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'') === local;
+                        });
+
                         if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd, EstoqueMinimo: minEst });
                         else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, EstoqueMinimo: minEst, Quantidade: qtd });
                         cont++;
@@ -980,7 +1133,7 @@
             dl.innerHTML = '';
             mapItensSaida = {};
             [...estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { 
-                const text = `[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||'N/A'}) - Qtd: ${i.Quantidade||0}`;
+                const text = `[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||''}) - Qtd: ${i.Quantidade||0}`;
                 mapItensSaida[text] = i;
                 dl.innerHTML += `<option value="${text}"></option>`; 
             });
@@ -1050,6 +1203,7 @@
                 filterCat.innerHTML = '<option value="">Todas as Categorias</option>';
                 categoriasUnicas.forEach(cat => filterCat.innerHTML += `<option value="${cat}">${cat}</option>`);
             }
+            atualizarSelectEdicaoEstoque();
         }
         
         function atualizarInterfaceEstoque() {
@@ -1066,7 +1220,12 @@
             if(document.getElementById('kpi-zerado')) document.getElementById('kpi-zerado').innerText = tZerado;
 
             let filtrados = estoqueLocal.filter(item => {
-                let matchBusca = !currentSearchText || (item.Componente+item.Modelo+item.Especificação+item.Local+item.Série+item.Patrimonio).toLowerCase().includes(currentSearchText.toLowerCase());
+                let matchBusca = true;
+                if (currentSearchText) {
+                    const searchTerms = currentSearchText.toLowerCase().split(' ');
+                    const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase();
+                    matchBusca = searchTerms.every(term => itemText.includes(term));
+                }
                 let matchCat = !currentFilterCat || (item.Categoria || 'Sem Categoria') === currentFilterCat;
                 return matchBusca && matchCat;
             });
@@ -1078,10 +1237,10 @@
             dadosPagina.forEach(item => {
                 const qtd = item.Quantidade || 0; const minEstoque = item.EstoqueMinimo || 5;
                 let badge = qtd === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' : qtd <= minEstoque ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>' : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${item.Categoria||'Sem Categoria'}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente||'-'}<br><span class="text-xs font-normal text-slate-500">${item.Modelo||''} / ${item.Especificação||''}</span></td><td class="px-6 py-4 text-sm text-blue-600">${item.Local||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${item.Série||item.Patrimonio||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
+                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${item.Categoria||'-'}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente||'-'}<br><span class="text-xs font-normal text-slate-500">${item.Modelo||''} / ${item.Especificação||''}</span></td><td class="px-6 py-4 text-sm text-blue-600">${item.Local||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">S: ${item.Série||'-'}<br>P: ${item.Patrimonio||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
             });
 
-            if(document.getElementById('estoque-page-info')) document.getElementById('estoque-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length}`;
+            if(document.getElementById('estoque-page-info')) document.getElementById('estoque-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
             if(document.getElementById('btn-prev-estoque')) document.getElementById('btn-prev-estoque').disabled = currentPageEstoque === 1;
             if(document.getElementById('btn-next-estoque')) document.getElementById('btn-next-estoque').disabled = currentPageEstoque === totalPaginas;
 
@@ -1090,17 +1249,24 @@
 
         function atualizarInterfaceRastreio() {
             const tbody = document.getElementById('rastreio-tbody'); if(!tbody) return;
-            let filtrados = localidadesLocais.filter(item => { return !currentSearchRastreio || (item.Equipamento+item.Local+item.LocalSipac+item.Marca+item.Serie+item.Patrimonio).toLowerCase().includes(currentSearchRastreio.toLowerCase()); });
+            
+            let filtrados = localidadesLocais.filter(item => {
+                if (!currentSearchRastreio) return true;
+                const searchTerms = currentSearchRastreio.toLowerCase().split(' ');
+                const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase();
+                return searchTerms.every(term => itemText.includes(term));
+            });
+
             const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1;
             if(currentPageRastreio > totalPaginas) currentPageRastreio = totalPaginas;
             const inicio = (currentPageRastreio - 1) * itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
 
             tbody.innerHTML = '';
             dadosPagina.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
-                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||'-'}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.LocalSipac||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
+                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||'-'}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.LocalSipac||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">S: ${loc.Serie||'-'}<br>P: ${loc.Patrimonio||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
             });
 
-            if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length}`;
+            if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
             if(document.getElementById('btn-prev-rastreio')) document.getElementById('btn-prev-rastreio').disabled = currentPageRastreio === 1;
             if(document.getElementById('btn-next-rastreio')) document.getElementById('btn-next-rastreio').disabled = currentPageRastreio === totalPaginas;
         }
@@ -1178,7 +1344,7 @@
 
         if(document.getElementById('btn-export-csv')) document.getElementById('btn-export-csv').addEventListener('click', () => { 
             let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Local,Patrimonio,Quantidade\n"; 
-            estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Local||'N/A'}","${r.Patrimonio||'N/A'}","${r.Quantidade||0}"\n`); 
+            estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Local||''}","${r.Patrimonio||''}","${r.Quantidade||0}"\n`); 
             const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); 
         });
     </script>
