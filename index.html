@@ -25,28 +25,30 @@
         .dark input, .dark select, .dark file { background-color: #334155; color: white; border-color: #475569; }
         .hidden { display: none !important; }
 
-        /* Estilos de Impressão */
+        /* Estilos Restritos para Impressão de Relatórios Oficiais */
         @media print {
-            body * { visibility: hidden; }
-            #printable-report, #printable-report * { visibility: visible; }
-            #printable-report { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; }
+            body { background-color: white; }
+            #login-screen, #main-system, #tools-modal { display: none !important; }
+            #printable-report { display: block !important; position: static; width: 100%; }
+            .print-bg { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             .no-print { display: none !important; }
-            table { border-collapse: collapse; width: 100%; }
-            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-            th { background-color: #f2f2f2 !important; color: black !important; }
+            table { border-collapse: collapse; width: 100%; font-size: 10pt;}
+            th, td { border: 1px solid #cbd5e1; padding: 6px; }
+            th { background-color: #f8fafc !important; }
+            @page { margin: 1cm; size: A4 portrait; }
         }
     </style>
 </head>
 <body class="transition-colors duration-200">
 
-    <!-- TELA DE LOGIN COM IMAGEM DE FUNDO -->
-    <div id="login-screen" class="fixed inset-0 flex justify-center items-center z-50 bg-cover bg-center bg-no-repeat" style="background-image: url('https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg');">
+    <!-- TELA DE LOGIN COM IMAGEM DE FUNDO DINÂMICA -->
+    <div id="login-screen" class="fixed inset-0 flex justify-center items-center z-50 bg-cover bg-center bg-no-repeat" style="background-image: url('https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg'); transition: background-image 0.5s ease;">
         <div class="absolute inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm"></div>
         <div class="bg-white rounded-xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500 relative z-10">
             <div class="text-center mb-8">
                 <!-- LOGO -->
                 <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
-                <h2 class="text-2xl font-bold text-slate-800">Almoxarifado TIC</h2>
+                <h2 id="login-title" class="text-2xl font-bold text-slate-800">Almoxarifado TIC</h2>
                 <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p>
             </div>
             <div class="space-y-5">
@@ -143,20 +145,14 @@
 
             <!-- NAVEGAÇÃO DE TABELAS PRINCIPAIS -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-8">
-                
-                <!-- Abas da Tabela -->
                 <div class="border-b border-gray-200 bg-gray-50/50">
                     <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500">
-                        <li class="mr-2">
-                            <button id="view-estoque-btn" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 active rounded-t-lg transition-colors"><i class="fas fa-boxes mr-2"></i>Estoque Consolidado</button>
-                        </li>
-                        <li class="mr-2">
-                            <button id="view-rastreio-btn" class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg transition-colors"><i class="fas fa-map-marker-alt mr-2"></i>Rastreamento de Ativos (Mapa Físico)</button>
-                        </li>
+                        <li class="mr-2"><button id="view-estoque-btn" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 active rounded-t-lg transition-colors"><i class="fas fa-boxes mr-2"></i>Estoque Consolidado</button></li>
+                        <li class="mr-2"><button id="view-rastreio-btn" class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg transition-colors"><i class="fas fa-map-marker-alt mr-2"></i>Rastreamento de Ativos (Mapa Físico)</button></li>
                     </ul>
                 </div>
 
-                <!-- CONTEÚDO: TABELA ESTOQUE CONSOLIDADO -->
+                <!-- CONTEÚDO: TABELA ESTOQUE -->
                 <div id="view-estoque-content">
                     <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
                         <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Inventário Consolidado</h3>
@@ -181,7 +177,7 @@
                     </div>
                 </div>
 
-                <!-- CONTEÚDO: TABELA RASTREAMENTO LOCALIDADES -->
+                <!-- CONTEÚDO: TABELA RASTREAMENTO -->
                 <div id="view-rastreio-content" class="hidden">
                     <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-indigo-50/30">
                         <h3 class="text-sm font-bold text-indigo-800 uppercase tracking-wider"><i class="fas fa-map-pin mr-2"></i>Mapa de Ativos Físicos</h3>
@@ -210,26 +206,50 @@
         </div>
     </div>
 
-    <!-- AREA DE IMPRESSÃO (Oculta) -->
-    <div id="printable-report" class="hidden">
-        <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px;">
-            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" style="height: 80px; margin-bottom: 10px;">
-            <h2 style="margin: 0; font-family: Arial, sans-serif; font-size: 18px; text-transform: uppercase;">Ministério da Justiça e Segurança Pública</h2>
-            <h3 style="margin: 5px 0; font-family: Arial, sans-serif; font-size: 16px;">Polícia Rodoviária Federal</h3>
-            <p style="margin: 5px 0; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold;" id="print-title-doc">Relatório Geral de Estoque - SETIC</p>
-            <p id="print-date" style="margin: 0; font-family: Arial, sans-serif; font-size: 12px; color: #555;"></p>
+    <!-- MODELO DO RELATÓRIO OFICIAL PARA IMPRESSÃO / PDF -->
+    <div id="printable-report" class="hidden font-sans">
+        <!-- Cabeçalho Institucional Azul Escuro -->
+        <div class="bg-[#161B33] text-white p-6 flex justify-between items-center print-bg mb-6">
+            <div>
+                <h1 class="text-2xl font-bold uppercase tracking-wide">MINISTÉRIO DA JUSTIÇA E SEGURANÇA PÚBLICA</h1>
+                <p class="text-sm mt-1 text-slate-300">Polícia Rodoviária Federal - Diretoria de Tecnologia da Informação e Comunicação (DTIC)</p>
+                <p class="text-lg font-bold mt-3 text-white" id="print-header-title">Relatório Gerencial Analítico - Gestão de Estoque (SETIC)</p>
+            </div>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-20">
         </div>
-        <table id="print-table" style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 12px;">
-            <thead>
-                <tr>
-                    <th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Categoria</th>
-                    <th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Componente</th>
-                    <th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Especificação</th>
-                    <th style="border: 1px solid #000; padding: 5px; background-color: #eee; text-align: center;">Qtd</th>
-                </tr>
-            </thead>
-            <tbody id="print-tbody"></tbody>
-        </table>
+        
+        <div class="px-6">
+            <!-- Parecer e Metodologia -->
+            <h2 class="text-xl font-bold text-slate-800">Parecer e Metodologia de Cálculo</h2>
+            <p class="text-sm text-slate-700 mt-1 mb-6 leading-relaxed" id="print-parecer"></p>
+            
+            <!-- Resumo Executivo -->
+            <h2 class="text-xl font-bold text-slate-800">Resumo Executivo</h2>
+            <p class="text-sm text-slate-700 mt-1 mb-6 leading-relaxed" id="print-resumo"></p>
+            
+            <!-- Grid de KPIs -->
+            <div class="grid grid-cols-4 gap-4 mb-8" id="print-kpis"></div>
+            
+            <!-- Análise Visual (Gráficos) -->
+            <h2 class="text-xl font-bold text-slate-800 mb-3" id="print-visual-title">Análise Visual</h2>
+            <div class="grid grid-cols-2 gap-6 mb-8" id="print-charts-container">
+                <div>
+                    <p class="text-xs font-bold text-slate-500 mb-1 uppercase text-center">Volume por Categoria</p>
+                    <img id="print-chart-1" src="" class="w-full border p-2">
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-slate-500 mb-1 uppercase text-center">Equipamentos em Foco</p>
+                    <img id="print-chart-2" src="" class="w-full border p-2">
+                </div>
+            </div>
+            
+            <!-- Tabela de Dados -->
+            <h2 class="text-xl font-bold text-slate-800 mb-3">Detalhamento Analítico</h2>
+            <table class="w-full text-left text-sm border-collapse">
+                <thead id="print-thead"></thead>
+                <tbody id="print-tbody" class="border-b"></tbody>
+            </table>
+        </div>
     </div>
 
     <!-- MODAL PAINEL DE FERRAMENTAS -->
@@ -246,7 +266,6 @@
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg bg-blue-100 text-blue-800 font-bold transition flex items-center text-sm" data-target="tab-entrada"><i class="fas fa-plus-circle w-6"></i> Entrada Estoque</button></li>
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-saida"><i class="fas fa-minus-circle w-6"></i> Baixa / Saída</button></li>
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-indigo-100 hover:text-indigo-800 font-semibold transition flex items-center text-sm border-l-4 border-transparent hover:border-indigo-500" data-target="tab-localidade"><i class="fas fa-map-marker-alt w-6 text-indigo-500"></i> Locais / Rastreio</button></li>
-                    
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm mt-4" data-target="tab-relatorio"><i class="fas fa-file-pdf w-6"></i> Exportações</button></li>
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-pref"><i class="fas fa-sliders-h w-6"></i> Preferências</button></li>
                 </ul>
@@ -262,11 +281,7 @@
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Entrada de Ativos (Estoque Geral)</h2>
                     <p class="text-sm text-slate-500 mb-8 border-b pb-4">Adicione estoque a um item existente ou cadastre um novo equipamento.</p>
                     <div class="grid grid-cols-2 gap-5 mb-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700">Categoria Macro</label>
-                            <input list="lista-categorias" id="form-cat" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5">
-                            <datalist id="lista-categorias"><option value="Armazenamento"><option value="Memória"><option value="Fonte de Alimentação"><option value="Bateria"><option value="Periféricos"></datalist>
-                        </div>
+                        <div><label class="block text-sm font-semibold text-slate-700">Categoria Macro</label><input list="lista-categorias" id="form-cat" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5"><datalist id="lista-categorias"><option value="Armazenamento"><option value="Memória"><option value="Fonte de Alimentação"><option value="Bateria"><option value="Periféricos"></datalist></div>
                         <div><label class="block text-sm font-semibold text-slate-700">Componente</label><input list="lista-componentes" id="form-comp" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5"><datalist id="lista-componentes"></datalist></div>
                         <div><label class="block text-sm font-semibold text-slate-700">Modelo</label><input type="text" id="form-mod" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5"></div>
                         <div><label class="block text-sm font-semibold text-slate-700">Especificação</label><input type="text" id="form-esp" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5"></div>
@@ -295,78 +310,56 @@
                 <div id="tab-localidade" class="tab-content hidden h-full flex flex-col">
                     <h2 class="text-2xl font-bold text-indigo-900 mb-2"><i class="fas fa-map-marker-alt mr-2 text-indigo-600"></i>Gestão de Localidades e Rastreio</h2>
                     <p class="text-sm text-slate-500 mb-6 border-b pb-4">Mapeie fisicamente os equipamentos registrando número de série e patrimônio.</p>
-                    
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
-                        <!-- Coluna 1: Cadastro Manual -->
                         <div class="bg-indigo-50/50 p-6 rounded-xl border border-indigo-100 shadow-sm">
                             <h3 class="font-bold text-indigo-800 mb-4"><i class="fas fa-keyboard mr-2"></i>Cadastro Manual</h3>
                             <div class="space-y-4">
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 uppercase">Equipamento / Nome</label>
-                                    <input type="text" id="loc-equip" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: Monitor Dell 24">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 uppercase">Local Físico</label>
-                                    <input type="text" id="loc-local" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: Sala TI - Armário 2">
+                                <div><label class="block text-xs font-bold text-slate-700 uppercase">Equipamento / Nome</label><input type="text" id="loc-equip" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: Monitor Dell 24"></div>
+                                <div><label class="block text-xs font-bold text-slate-700 uppercase">Local Físico</label><input type="text" id="loc-local" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: Sala TI - Armário 2"></div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Marca / Modelo</label><input type="text" id="loc-marca" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: Dell P2419H"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Quantidade</label><input type="number" id="loc-qtd" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" min="1" value="1"></div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
-                                    <div>
-                                        <label class="block text-xs font-bold text-slate-700 uppercase">Marca / Modelo</label>
-                                        <input type="text" id="loc-marca" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: Dell P2419H">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold text-slate-700 uppercase">Quantidade</label>
-                                        <input type="number" id="loc-qtd" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" min="1" value="1">
-                                    </div>
+                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Nº de Série</label><input type="text" id="loc-serie" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: SN-987654"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Nº Patrimônio</label><input type="text" id="loc-patrimonio" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: PRF-123456"></div>
                                 </div>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div>
-                                        <label class="block text-xs font-bold text-slate-700 uppercase">Nº de Série</label>
-                                        <input type="text" id="loc-serie" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: SN-987654">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold text-slate-700 uppercase">Nº Patrimônio</label>
-                                        <input type="text" id="loc-patrimonio" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: PRF-123456">
-                                    </div>
-                                </div>
-                                <button id="btn-save-loc" class="w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded hover:bg-indigo-700 transition shadow mt-2">
-                                    Mapear Equipamento
-                                </button>
+                                <button id="btn-save-loc" class="w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded hover:bg-indigo-700 transition shadow mt-2">Mapear Equipamento</button>
                                 <p id="msg-loc-manual" class="text-indigo-600 text-center mt-2 font-bold text-sm hidden">Mapeado com sucesso!</p>
                             </div>
                         </div>
-
-                        <!-- Coluna 2: Importação em Lote -->
                         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                             <h3 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-excel mr-2 text-emerald-600"></i>Importação em Lote (Excel)</h3>
-                            
-                            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800">
-                                <strong>Colunas exigidas na planilha:</strong><br>
-                                EQUIPAMENTO, LOCAL FISICO, QUANTIDADE, MARCA, Nº DE SÉRIE, Nº PATRIMONIO.
-                            </div>
-
+                            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800"><strong>Colunas exigidas na planilha:</strong><br>EQUIPAMENTO, LOCAL FISICO, QUANTIDADE, MARCA, Nº DE SÉRIE, Nº PATRIMONIO.</div>
                             <div class="flex-1 flex flex-col justify-center items-center border-2 border-dashed border-slate-300 rounded-lg p-6 hover:bg-slate-100 transition">
                                 <i class="fas fa-cloud-upload-alt text-4xl text-slate-400 mb-3"></i>
                                 <input type="file" id="loc-file-upload" accept=".xlsx, .xls, .csv" class="block w-full max-w-xs text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:font-bold file:bg-indigo-50 file:text-indigo-700 cursor-pointer">
                             </div>
-                            
-                            <button id="btn-loc-upload" class="w-full bg-slate-800 text-white font-bold py-2.5 px-4 rounded hover:bg-slate-700 transition shadow mt-4">
-                                Iniciar Importação
-                            </button>
+                            <button id="btn-loc-upload" class="w-full bg-slate-800 text-white font-bold py-2.5 px-4 rounded hover:bg-slate-700 transition shadow mt-4">Iniciar Importação</button>
                             <p id="msg-loc-upload" class="text-center mt-2 font-bold text-sm hidden"></p>
                         </div>
                     </div>
                 </div>
 
-                <!-- TAB RELATORIO -->
-                <div id="tab-relatorio" class="tab-content hidden text-center pt-8">
-                    <i class="fas fa-print text-7xl text-slate-300 mb-6"></i>
-                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Exportações e Relatórios</h2>
-                    <p class="text-slate-500 mb-10">Gere documentos oficiais ou planilhas analíticas.</p>
-                    <div class="space-y-4 max-w-sm mx-auto">
-                        <button id="btn-print-pdf" class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-md hover:bg-blue-700 transition shadow flex justify-center items-center"><i class="fas fa-file-pdf mr-3 text-lg"></i> Gerar Relatório Oficial (PDF)</button>
-                        <button id="btn-export-csv" class="w-full bg-emerald-600 text-white font-bold py-3 px-6 rounded-md hover:bg-emerald-700 transition shadow flex justify-center items-center"><i class="fas fa-file-csv mr-3 text-lg"></i> Exportar Dados (Excel/CSV)</button>
+                <!-- TAB RELATORIOS E EXPORTAÇÕES -->
+                <div id="tab-relatorio" class="tab-content hidden h-full flex flex-col justify-center items-center">
+                    <i class="fas fa-file-contract text-6xl text-slate-300 mb-6"></i>
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Exportações e Relatórios Oficiais</h2>
+                    <p class="text-slate-500 mb-8 max-w-lg text-center">Os relatórios em PDF utilizam dados capturados em tempo real, gerando documentos analíticos nos padrões formais de impressão, com selo, assinatura de data/hora e análises visuais incorporadas.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl mb-8">
+                        <div class="border rounded-xl p-6 bg-blue-50 shadow-sm text-center">
+                            <i class="fas fa-boxes text-blue-500 text-3xl mb-3"></i>
+                            <h3 class="font-bold text-slate-800 mb-4">Relatório Consolidado</h3>
+                            <button id="btn-print-estoque" class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700 transition shadow flex justify-center items-center"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF de Estoque</button>
+                        </div>
+                        <div class="border rounded-xl p-6 bg-indigo-50 shadow-sm text-center">
+                            <i class="fas fa-map-marker-alt text-indigo-500 text-3xl mb-3"></i>
+                            <h3 class="font-bold text-slate-800 mb-4">Relatório de Rastreio</h3>
+                            <button id="btn-print-rastreio" class="w-full bg-indigo-600 text-white font-bold py-3 rounded hover:bg-indigo-700 transition shadow flex justify-center items-center"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF de Locais</button>
+                        </div>
                     </div>
+                    <button id="btn-export-csv" class="text-slate-500 hover:text-slate-800 font-bold transition flex items-center underline"><i class="fas fa-file-csv mr-2"></i> Ou exportar apenas os dados brutos em CSV</button>
                 </div>
 
                 <!-- TAB PREFERÊNCIAS -->
@@ -374,7 +367,7 @@
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Preferências do Sistema</h2>
                     <p class="text-sm text-slate-500 mb-8 border-b pb-4">Personalize a aparência do painel oficial.</p>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-1">Título do Painel Oficial</label>
                             <input type="text" id="pref-title" class="block w-full rounded-md border-gray-300 border p-2.5 shadow-sm focus:ring-blue-500 focus:border-blue-500">
@@ -397,7 +390,16 @@
                                 <option value="fa-shield-alt">Escudo / Segurança</option>
                             </select>
                         </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Fundo da Tela de Login</label>
+                            <div class="flex items-center space-x-2">
+                                <input type="file" id="pref-bg-upload" accept="image/png, image/jpeg, image/jpg" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:font-bold file:bg-blue-50 file:text-blue-700 cursor-pointer border border-gray-300 rounded-md p-1 bg-white">
+                                <button id="btn-clear-bg" title="Restaurar Imagem Padrão" class="bg-red-100 text-red-600 py-1.5 px-3 rounded border border-red-200 hover:bg-red-200 transition"><i class="fas fa-trash-restore"></i></button>
+                            </div>
+                            <p class="text-[10px] text-slate-500 mt-1">Recomendado: Imagem JPG/PNG (Tamanho máx. 2MB).</p>
+                        </div>
                     </div>
+                    
                     <button id="btn-save-pref" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:opacity-90 transition shadow mt-4">
                         <i class="fas fa-save mr-2"></i> Salvar Preferências
                     </button>
@@ -447,9 +449,7 @@
                                     <p class="text-xs text-red-600 mb-3">Apague bases de dados.<br><b>Aviso:</b> Logs de auditoria são imutáveis e nunca são apagados.</p>
                                 </div>
                                 <div class="space-y-2 mt-auto">
-                                    <!-- Botão Laranja: Apagar Rastreio -->
                                     <button id="btn-delete-loc" class="w-full bg-orange-600 text-white font-bold py-2 px-2 rounded hover:bg-orange-700 transition text-sm shadow"><i class="fas fa-eraser mr-1"></i> Apagar Rastreio</button>
-                                    <!-- Botão Vermelho: Apagar Estoque -->
                                     <button id="btn-delete-estoque" class="w-full bg-red-600 text-white font-bold py-2 px-2 rounded hover:bg-red-700 transition text-sm shadow"><i class="fas fa-trash-alt mr-1"></i> Apagar Estoque</button>
                                 </div>
                             </div>
@@ -501,39 +501,164 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        
         let estoqueLocal = []; 
         let localidadesLocais = []; 
-        let logsLocal = []; // Array global para exportar os logs
+        let logsLocal = []; 
         let userEmail = "";
+        let tempBgBase64 = null; 
 
-        // ================= PREFERÊNCIAS =================
+        // ================= PREFERÊNCIAS COM UPLOAD DE BACKGROUND E TÍTULO LOGIN =================
         function carregarPreferencias() {
             const title = localStorage.getItem('pref_title') || 'Painel de Gestão de Estoque - SETIC';
             const color = localStorage.getItem('pref_color') || '#161B33';
             const icon = localStorage.getItem('pref_icon') || 'fa-chart-line';
+            const bgImage = localStorage.getItem('pref_bg') || "https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg";
 
-            document.getElementById('navbar-title').textContent = title; document.title = title;
-            document.getElementById('pref-title').value = title; document.getElementById('print-title-doc').textContent = "Relatório Geral - " + title;
+            // Título (Sincronizado entre Navbar, Relatórios e Tela de Login)
+            document.getElementById('navbar-title').textContent = title; 
+            document.getElementById('login-title').textContent = title; 
+            document.title = title;
+            document.getElementById('pref-title').value = title; 
+            document.getElementById('print-title-doc').textContent = "Relatório Geral - " + title;
+            
+            // Cor e Ícone
             document.getElementById('navbar-main').style.backgroundColor = color;
             document.querySelectorAll('.btn-primary').forEach(el => el.style.backgroundColor = color);
             document.querySelectorAll('.btn-primary-text').forEach(el => el.style.color = color);
-            document.getElementById('pref-color').value = color; document.getElementById('pref-color-text').value = color.toUpperCase();
-            document.getElementById('navbar-icon').className = `fas ${icon} text-xl ml-2`; document.getElementById('pref-icon').value = icon;
+            document.getElementById('pref-color').value = color; 
+            document.getElementById('pref-color-text').value = color.toUpperCase();
+            document.getElementById('navbar-icon').className = `fas ${icon} text-xl ml-2`; 
+            document.getElementById('pref-icon').value = icon;
+
+            // Imagem de Fundo
+            document.getElementById('login-screen').style.backgroundImage = `url('${bgImage}')`;
         }
+
+        document.getElementById('pref-bg-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) { tempBgBase64 = event.target.result; };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('btn-clear-bg').addEventListener('click', () => {
+            localStorage.removeItem('pref_bg');
+            tempBgBase64 = null;
+            document.getElementById('pref-bg-upload').value = '';
+            carregarPreferencias();
+            alert("Imagem de fundo restaurada para o padrão da PRF!");
+        });
 
         document.getElementById('btn-save-pref').addEventListener('click', () => {
             localStorage.setItem('pref_title', document.getElementById('pref-title').value);
             localStorage.setItem('pref_color', document.getElementById('pref-color').value);
             localStorage.setItem('pref_icon', document.getElementById('pref-icon').value);
+            
+            if(tempBgBase64) {
+                try { localStorage.setItem('pref_bg', tempBgBase64); } 
+                catch(e) { alert("A imagem escolhida é muito grande para ser salva na memória do navegador. Escolha uma imagem menor (limite ideal: 2MB)."); }
+            }
+
             carregarPreferencias();
-            document.getElementById('msg-pref').classList.remove('hidden'); setTimeout(() => document.getElementById('msg-pref').classList.add('hidden'), 3000);
+            document.getElementById('msg-pref').classList.remove('hidden'); 
+            setTimeout(() => document.getElementById('msg-pref').classList.add('hidden'), 3000);
         });
 
         document.getElementById('pref-color').addEventListener('input', (e) => document.getElementById('pref-color-text').value = e.target.value.toUpperCase());
         document.getElementById('pref-color-text').addEventListener('input', (e) => { if(/^#[0-9A-F]{6}$/i.test(e.target.value)) document.getElementById('pref-color').value = e.target.value; });
 
         carregarPreferencias(); 
-        // ================================================
+
+        // ================= GERAÇÃO DE RELATÓRIO PDF (LAYOUT OFICIAL) =================
+        function gerarRelatorioPDF(tipoRelatorio) {
+            const dataAtual = new Date().toLocaleDateString('pt-BR');
+            const horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5);
+            
+            const titleDoc = document.getElementById('print-title-doc');
+            const parecer = document.getElementById('print-parecer');
+            const resumo = document.getElementById('print-resumo');
+            const kpisContainer = document.getElementById('print-kpis');
+            const thead = document.getElementById('print-thead');
+            const tbody = document.getElementById('print-tbody');
+            const chartsContainer = document.getElementById('print-charts-container');
+            const visualTitle = document.getElementById('print-visual-title');
+            
+            document.getElementById('print-date').innerText = `Documento eletrônico gerado por: ${userEmail} em ${dataAtual} às ${horaAtual}.`;
+
+            if(tipoRelatorio === 'estoque') {
+                titleDoc.textContent = "Relatório Gerencial Analítico - Estoque Consolidado";
+                
+                let tTotal = 0, tZerados = 0, tBaixos = 0; let categorias = new Set();
+                tbody.innerHTML = '';
+                [...estoqueLocal].sort((a,b) => a.Categoria.localeCompare(b.Categoria)).forEach(i => {
+                    tTotal += i.Quantidade; categorias.add(i.Categoria);
+                    if(i.Quantidade === 0) tZerados++; else if(i.Quantidade <= 5) tBaixos++;
+                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria}</td><td class="border px-2 py-1">${i.Componente}</td><td class="border px-2 py-1">${i.Modelo} / ${i.Especificação}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade}</td></tr>`;
+                });
+
+                let taxaCritica = estoqueLocal.length > 0 ? (((tZerados + tBaixos) / estoqueLocal.length) * 100).toFixed(1) : 0;
+                let saude = (100 - taxaCritica).toFixed(1);
+
+                parecer.innerHTML = `A presente extração consolidou um universo de <b>${estoqueLocal.length}</b> registros de componentes cadastrados na base de estoque físico. Documento processado sob os filtros de totalidade. Método de contagem reflete o saldo vivo no sistema à data da emissão.`;
+                resumo.innerHTML = `O período aponta um volume total de <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias estruturais. A eficiência de saúde do estoque registou a marca de ${saude}%. Foram identificados ${tZerados} itens com ruptura total (zerados) e ${tBaixos} em risco (alerta), representando uma taxa de criticidade de ${taxaCritica}%.`;
+
+                kpisContainer.innerHTML = `
+                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total Físico</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div>
+                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias Macro</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div>
+                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade de Itens</p><p class="text-2xl font-black text-slate-800">${estoqueLocal.length}</p></div>
+                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde do Estoque</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>
+                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Taxa de Criticidade</p><p class="text-2xl font-black text-slate-800">${taxaCritica}%</p></div>
+                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Em Alerta (≤5)</p><p class="text-2xl font-black text-orange-500">${tBaixos}</p></div>
+                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Rupturas (Qtd 0)</p><p class="text-2xl font-black text-red-600">${tZerados}</p></div>
+                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Status Sistêmico</p><p class="text-2xl font-black text-blue-600">ATIVO</p></div>
+                `;
+
+                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
+
+                visualTitle.style.display = 'block';
+                chartsContainer.style.display = 'grid';
+                document.getElementById('print-chart-1').src = document.getElementById('chartCategoria').toDataURL('image/png');
+                document.getElementById('print-chart-2').src = document.getElementById('chartTopItems').toDataURL('image/png');
+
+            } else if (tipoRelatorio === 'rastreio') {
+                titleDoc.textContent = "Relatório Gerencial Analítico - Rastreamento de Ativos";
+                
+                let tLocaisUnicos = new Set();
+                let tVolumeRastreado = 0;
+                let tEquipsUnicos = new Set();
+
+                tbody.innerHTML = '';
+                [...localidadesLocais].sort((a,b) => a.Local.localeCompare(b.Local)).forEach(loc => {
+                    tLocaisUnicos.add(loc.Local);
+                    tVolumeRastreado += loc.Quantidade;
+                    tEquipsUnicos.add(loc.Equipamento);
+                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento}</td><td class="border px-2 py-1">${loc.Local}</td><td class="border px-2 py-1 font-mono text-[10px]">${loc.Serie}</td><td class="border px-2 py-1 font-mono text-[10px]">${loc.Patrimonio}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade}</td></tr>`;
+                });
+
+                parecer.innerHTML = `A presente extração consolidou um universo de <b>${localidadesLocais.length}</b> linhas de rastreabilidade de ativos implantados fisicamente. Documento processado sob os filtros de totalidade espacial.`;
+                resumo.innerHTML = `O mapeamento georreferenciado e físico localizou <b>${tVolumeRastreado}</b> ativos de TI operacionais. Foram mapeadas <b>${tLocaisUnicos.size}</b> localidades ou pontos de rede distintos, suportando ${tEquipsUnicos.size} modelos variados de equipamentos. A auditoria de patrimônio indica integridade no rastreio listado abaixo.`;
+
+                kpisContainer.innerHTML = `
+                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div>
+                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div>
+                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equip. Distintos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div>
+                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros Lógicos</p><p class="text-2xl font-black text-slate-800">${localidadesLocais.length}</p></div>
+                `;
+
+                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Localização Físico</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
+
+                visualTitle.style.display = 'none';
+                chartsContainer.style.display = 'none';
+            }
+
+            window.print();
+        }
+
+        document.getElementById('btn-print-estoque').addEventListener('click', () => gerarRelatorioPDF('estoque'));
+        document.getElementById('btn-print-rastreio').addEventListener('click', () => gerarRelatorioPDF('rastreio'));
 
         // LOGIN DO SISTEMA
         document.getElementById('btn-login').addEventListener('click', () => {
@@ -554,7 +679,7 @@
         function iniciarSistema() {
             onSnapshot(collection(db, "estoque"), (snapshot) => {
                 estoqueLocal = []; snapshot.forEach((doc) => { estoqueLocal.push({ id: doc.id, ...doc.data() }); });
-                atualizarInterfaceEstoque(); atualizarDatalists(); atualizarSelectSaida(); prepararRelatorioImpressao(); gerarInsights();
+                atualizarInterfaceEstoque(); atualizarDatalists(); atualizarSelectSaida(); gerarInsights();
             });
 
             onSnapshot(collection(db, "localidades"), (snapshot) => {
@@ -564,10 +689,10 @@
 
             onSnapshot(query(collection(db, "logs"), orderBy("dataHora", "desc"), limit(100)), (snapshot) => {
                 const tbody = document.getElementById('logs-tbody'); tbody.innerHTML = '';
-                logsLocal = []; // Reseta o array global
+                logsLocal = []; 
                 snapshot.forEach((docSnap) => {
                     const log = docSnap.data(); 
-                    logsLocal.push(log); // Armazena para PDF
+                    logsLocal.push(log); 
                     
                     let dateStr = "N/A";
                     if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
@@ -590,62 +715,40 @@
 
         document.getElementById('btn-admin-lock').addEventListener('click', () => { document.getElementById('admin-content-section').classList.add('hidden'); document.getElementById('admin-login-section').classList.remove('hidden'); });
 
-        // APAGAR APENAS RASTREIO (Sem Senha)
         document.getElementById('btn-delete-loc').addEventListener('click', async () => {
             if(confirm("Deseja realmente apagar toda a base de Rastreamento de Ativos? Esta ação é irreversível.")) {
-                const btn = document.getElementById('btn-delete-loc'); 
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
-                try {
-                    const locSnap = await getDocs(collection(db, "localidades"));
-                    locSnap.forEach((d) => deleteDoc(d.ref));
-                    alert("Base de rastreamento apagada com sucesso.");
-                } catch(e) { alert("Erro ao apagar: " + e.message); }
+                const btn = document.getElementById('btn-delete-loc'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
+                try { const locSnap = await getDocs(collection(db, "localidades")); locSnap.forEach((d) => deleteDoc(d.ref)); alert("Base de rastreamento apagada."); } catch(e) {}
                 btn.innerHTML = originalText;
             }
         });
 
-        // APAGAR APENAS ESTOQUE (Com Senha, Logs Protegidos)
         document.getElementById('btn-delete-estoque').addEventListener('click', async () => {
-            const confirmacao = prompt("⚠️ ZONA DE PERIGO!\nIsso apagará TODO o Estoque Consolidado permanentemente.\nOs Logs de Auditoria NÃO serão apagados.\nPara confirmar, digite: APAGAR");
+            const confirmacao = prompt("⚠️ ZONA DE PERIGO!\nIsso apagará TODO o Estoque Consolidado.\nPara confirmar, digite: APAGAR");
             if(confirmacao === "APAGAR") {
-                const btn = document.getElementById('btn-delete-estoque'); 
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
-                try {
-                    const estSnap = await getDocs(collection(db, "estoque")); 
-                    estSnap.forEach((d) => deleteDoc(d.ref));
-                    alert("Estoque Consolidado apagado com sucesso.");
-                } catch(e) { alert("Erro ao apagar: " + e.message); }
+                const btn = document.getElementById('btn-delete-estoque'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
+                try { const estSnap = await getDocs(collection(db, "estoque")); estSnap.forEach((d) => deleteDoc(d.ref)); alert("Estoque apagado com sucesso."); } catch(e) {}
                 btn.innerHTML = originalText;
-            } else if (confirmacao !== null) { 
-                alert("Palavra incorreta. Ação cancelada."); 
             }
         });
 
-        // EXPORTAR LOGS PARA PDF
         document.getElementById('btn-export-logs-pdf').addEventListener('click', () => {
-            const tbody = document.getElementById('print-tbody'); 
-            tbody.innerHTML = '';
+            const tbody = document.getElementById('print-tbody'); tbody.innerHTML = '';
             document.getElementById('print-title-doc').textContent = "Relatório de Auditoria de Movimentações (Logs)";
             document.getElementById('print-date').innerText = "Gerado em: " + new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR');
-            
-            document.querySelector('#print-table thead').innerHTML = `<tr><th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Data</th><th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Ação</th><th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Item</th><th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Qtd</th><th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Usuário / Ref.</th></tr>`;
+            document.getElementById('print-parecer').innerHTML = "Extração inalterável do livro razão de movimentações do sistema.";
+            document.getElementById('print-resumo').innerHTML = `Foram extraídos os últimos ${logsLocal.length} logs de auditoria do banco de dados.`;
+            document.getElementById('print-kpis').innerHTML = '';
+            document.getElementById('print-visual-title').style.display = 'none';
+            document.getElementById('print-charts-container').style.display = 'none';
+            document.getElementById('print-thead').innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Data</th><th class="border px-2 py-1 text-left">Ação</th><th class="border px-2 py-1 text-left">Item</th><th class="border px-2 py-1 text-center">Qtd</th><th class="border px-2 py-1 text-left">Usuário / Ref.</th></tr>`;
 
             logsLocal.forEach(log => {
-                let dateStr = "N/A";
-                if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
-                let userInfo = log.usuario ? log.usuario : '';
-                let refInfo = log.chamado ? log.chamado : '';
-                let fullRef = refInfo + (userInfo ? ` (${userInfo})` : '');
-                tbody.innerHTML += `<tr><td style="border: 1px solid #000; padding: 5px;">${dateStr}</td><td style="border: 1px solid #000; padding: 5px;">${log.tipo}</td><td style="border: 1px solid #000; padding: 5px;">${log.itemNome}</td><td style="border: 1px solid #000; padding: 5px; text-align: center;">${log.qtd}</td><td style="border: 1px solid #000; padding: 5px;">${fullRef}</td></tr>`;
+                let dateStr = "N/A"; if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
+                let fullRef = (log.chamado||'') + (log.usuario ? ` (${log.usuario})` : '');
+                tbody.innerHTML += `<tr><td class="border px-2 py-1">${dateStr}</td><td class="border px-2 py-1 font-bold">${log.tipo}</td><td class="border px-2 py-1">${log.itemNome}</td><td class="border px-2 py-1 text-center font-bold">${log.qtd}</td><td class="border px-2 py-1">${fullRef}</td></tr>`;
             });
             window.print();
-            
-            // Restaura o layout padrão de impressão após 1 segundo
-            setTimeout(() => {
-                prepararRelatorioImpressao();
-            }, 1000);
         });
 
         document.getElementById('btn-process-upload').addEventListener('click', () => {
@@ -725,7 +828,6 @@
                 tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade}</td></tr>`;
             });
         }
-        // =================================================================
 
         // AÇÕES ENTRADA E SAÍDA (Estoque Geral)
         document.getElementById('btn-save-item').addEventListener('click', async () => {
@@ -821,22 +923,10 @@
             chartTop = new Chart(document.getElementById('chartTopItems'), { type: 'bar', data: { labels: topItems.map(i => i.Componente.substring(0, 15)), datasets: [{ data: topItems.map(i => i.Quantidade), backgroundColor: primColor, borderRadius: 4 }] }, options: { responsive: true, plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start', offset: 10 }, tooltip: { backgroundColor: '#1E293B', padding: 10, cornerRadius: 4 } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold' } } } } } });
         }
 
-        function prepararRelatorioImpressao() {
-            const tbody = document.getElementById('print-tbody'); tbody.innerHTML = '';
-            const title = localStorage.getItem('pref_title') || 'Painel de Gestão de Estoque - SETIC';
-            document.getElementById('print-title-doc').textContent = "Relatório Geral - " + title;
-            document.getElementById('print-date').innerText = "Gerado em: " + new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR');
-            document.querySelector('#print-table thead').innerHTML = `<tr><th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Categoria</th><th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Componente</th><th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Especificação</th><th style="border: 1px solid #000; padding: 5px; background-color: #eee; text-align: center;">Qtd</th></tr>`;
-            
-            [...estoqueLocal].sort((a,b) => a.Categoria.localeCompare(b.Categoria)).forEach(i => { tbody.innerHTML += `<tr><td style="border: 1px solid #000; padding: 5px;">${i.Categoria}</td><td style="border: 1px solid #000; padding: 5px;">${i.Componente}</td><td style="border: 1px solid #000; padding: 5px;">${i.Modelo} / ${i.Especificação}</td><td style="border: 1px solid #000; padding: 5px; text-align: center; font-weight: bold;">${i.Quantidade}</td></tr>`; });
-        }
-        document.getElementById('btn-print-pdf').addEventListener('click', () => { window.print(); });
-
-        // COMPORTAMENTO DA PÁGINA
+        // COMPORTAMENTO DA PÁGINA E NAVEGAÇÃO
         document.getElementById('btn-theme').addEventListener('click', () => document.body.classList.toggle('dark'));
         const modal = document.getElementById('tools-modal'); document.getElementById('btn-tools').addEventListener('click', () => modal.classList.remove('hidden')); document.querySelectorAll('.close-modal').forEach(b => b.addEventListener('click', () => modal.classList.add('hidden')));
         
-        // Alternar abas do Modal Ferramentas
         const tabsBtns = document.querySelectorAll('.tab-btn'), tabContents = document.querySelectorAll('.tab-content');
         tabsBtns.forEach(btn => { 
             btn.addEventListener('click', (e) => { 
@@ -852,7 +942,6 @@
             }); 
         });
 
-        // Alternar Tabelas do Painel Principal
         document.getElementById('view-estoque-btn').addEventListener('click', (e) => {
             e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600');
             const otherBtn = document.getElementById('view-rastreio-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500');
@@ -865,10 +954,8 @@
             document.getElementById('view-rastreio-content').classList.remove('hidden'); document.getElementById('view-estoque-content').classList.add('hidden');
         });
 
-        // Pesquisas
         document.getElementById('search-table-estoque').addEventListener('input', e => { const term = e.target.value.toLowerCase(), rows = document.getElementById('inventory-tbody').getElementsByTagName('tr'); for(let row of rows) row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; });
         document.getElementById('search-table-rastreio').addEventListener('input', e => { const term = e.target.value.toLowerCase(), rows = document.getElementById('rastreio-tbody').getElementsByTagName('tr'); for(let row of rows) row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; });
-
         document.getElementById('btn-export-csv').addEventListener('click', () => { let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Quantidade\n"; estoqueLocal.forEach(r => csv += `"${r.Categoria}","${r.Componente}","${r.Modelo}","${r.Especificação}","${r.Quantidade}"\n`); const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); });
     </script>
 </body>
