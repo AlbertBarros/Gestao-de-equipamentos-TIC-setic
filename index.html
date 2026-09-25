@@ -218,7 +218,7 @@
             <div>
                 <h1 class="text-2xl font-bold uppercase tracking-wide">MINISTÉRIO DA JUSTIÇA E SEGURANÇA PÚBLICA</h1>
                 <p class="text-sm mt-1 text-slate-300">Polícia Rodoviária Federal - Diretoria de Tecnologia da Informação e Comunicação (DTIC)</p>
-                <p class="text-lg font-bold mt-3 text-white" id="print-header-title">Relatório Gerencial Analítico - Gestão de Estoque (SETIC)</p>
+                <p class="text-lg font-bold mt-3 text-white" id="print-title-doc">Relatório Gerencial Analítico - Gestão de Estoque (SETIC)</p>
             </div>
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-20">
         </div>
@@ -355,9 +355,28 @@
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Preferências do Sistema</h2>
                     <p class="text-sm text-slate-500 mb-8 border-b pb-4">Personalize a aparência do painel oficial.</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Título do Painel Oficial</label><input type="text" id="pref-title" class="block w-full rounded-md border-gray-300 border p-2.5 shadow-sm focus:ring-blue-500 focus:border-blue-500"></div>
-                        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Cor Primária (Claro)</label><div class="flex items-center"><input type="color" id="pref-color" class="h-11 w-12 rounded border border-gray-300 cursor-pointer p-0.5"><input type="text" id="pref-color-text" class="ml-2 block w-full rounded-md border-gray-300 border p-2.5 shadow-sm uppercase font-mono text-sm"></div></div>
-                        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Ícone do Cabeçalho</label><select id="pref-icon" class="block w-full rounded-md border-gray-300 border p-2.5 shadow-sm bg-white focus:ring-blue-500 focus:border-blue-500"><option value="fa-chart-line">Gráfico de Linhas</option><option value="fa-boxes">Caixas / Estoque</option><option value="fa-server">Servidor</option><option value="fa-laptop-code">TI / Computador</option><option value="fa-tools">Ferramentas</option><option value="fa-shield-alt">Escudo / Segurança</option></select></div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Título do Painel Oficial</label>
+                            <input type="text" id="pref-title" class="block w-full rounded-md border-gray-300 border p-2.5 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Cor Primária (Claro)</label>
+                            <div class="flex items-center">
+                                <input type="color" id="pref-color" class="h-11 w-12 rounded border border-gray-300 cursor-pointer p-0.5">
+                                <input type="text" id="pref-color-text" class="ml-2 block w-full rounded-md border-gray-300 border p-2.5 shadow-sm uppercase font-mono text-sm">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Ícone do Cabeçalho</label>
+                            <select id="pref-icon" class="block w-full rounded-md border-gray-300 border p-2.5 shadow-sm bg-white focus:ring-blue-500 focus:border-blue-500">
+                                <option value="fa-chart-line">Gráfico de Linhas</option>
+                                <option value="fa-boxes">Caixas / Estoque</option>
+                                <option value="fa-server">Servidor</option>
+                                <option value="fa-laptop-code">TI / Computador</option>
+                                <option value="fa-tools">Ferramentas</option>
+                                <option value="fa-shield-alt">Escudo / Segurança</option>
+                            </select>
+                        </div>
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-1">Fundo da Tela de Login</label>
                             <div class="flex items-center space-x-2">
@@ -388,28 +407,39 @@
                             <button id="btn-admin-lock" class="text-slate-400 hover:text-slate-800 transition" title="Bloquear Sessão"><i class="fas fa-lock text-xl"></i></button>
                         </div>
 
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-                            <!-- Card: Importar Planilha -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+                            <!-- Importar Planilha -->
                             <div class="border rounded-xl p-5 bg-slate-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-slate-800 mb-2"><i class="fas fa-file-excel text-emerald-600 mr-2"></i> Alimentar Base</h3>
-                                <p class="text-xs text-slate-500 mb-3">Carregue arquivo .xlsx estruturado.</p>
+                                <p class="text-[11px] text-slate-500 mb-3">Carregue arquivo .xlsx estruturado.</p>
                                 <input type="file" id="file-upload" accept=".xlsx, .xls, .csv" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-blue-50 file:text-blue-700 cursor-pointer mb-2">
                                 <button id="btn-process-upload" class="btn-primary w-full bg-[#161B33] text-white font-bold py-2 px-2 rounded hover:opacity-90 transition text-sm mt-auto"><i class="fas fa-cloud-upload-alt mr-1"></i> Processar</button>
                                 <p id="msg-upload" class="text-center mt-2 font-bold text-xs hidden"></p>
                             </div>
 
-                            <!-- Card: Gerenciar Acessos -->
+                            <!-- Criar Usuário -->
                             <div class="border border-blue-200 rounded-xl p-5 bg-blue-50 shadow-sm flex flex-col">
-                                <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-users-cog text-blue-600 mr-2"></i> Gerir Acessos</h3>
-                                <p class="text-[11px] text-blue-700 mb-3 leading-relaxed">
-                                    Crie, exclua ou altere as senhas da sua equipe de forma segura pelo painel oficial Firebase.
+                                <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-user-plus text-blue-600 mr-2"></i> Novo Usuário</h3>
+                                <p class="text-[11px] text-blue-600 mb-2">Atenção: Cadastrar um novo logará você nele.</p>
+                                <input type="email" id="new-user-email" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="E-mail corporativo">
+                                <input type="password" id="new-user-pass" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="Senha (mín. 6 chars)">
+                                <button id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 px-2 rounded hover:bg-blue-700 transition text-sm shadow mt-auto"><i class="fas fa-save mr-1"></i> Cadastrar</button>
+                                <p id="msg-create-user" class="text-center mt-2 font-bold text-xs hidden"></p>
+                            </div>
+
+                            <!-- Excluir Usuário (Botão para o Firebase Console) -->
+                            <div class="border border-orange-200 rounded-xl p-5 bg-orange-50 shadow-sm flex flex-col">
+                                <h3 class="font-bold text-orange-800 mb-2"><i class="fas fa-user-minus text-orange-600 mr-2"></i> Gerir Acessos</h3>
+                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">
+                                    Para evitar ataques ao sistema, o Firebase bloqueia a exclusão de usuários pelo painel web.<br><br>
+                                    A demissão/exclusão deve ser feita diretamente no seu Console Oficial.
                                 </p>
-                                <a href="https://console.firebase.google.com/project/gestao-de-equipamentos-tic/authentication/users" target="_blank" class="w-full bg-blue-600 text-white font-bold py-2.5 px-2 rounded hover:bg-blue-700 transition text-sm shadow mt-auto flex items-center justify-center text-center">
+                                <a href="https://console.firebase.google.com/project/gestao-de-equipamentos-tic/authentication/users" target="_blank" class="w-full bg-orange-600 text-white font-bold py-2.5 px-2 rounded hover:bg-orange-700 transition text-sm shadow mt-auto flex items-center justify-center text-center">
                                     <i class="fas fa-external-link-alt mr-2"></i> Abrir Firebase Console
                                 </a>
                             </div>
 
-                            <!-- Card: Zona de Perigo -->
+                            <!-- Zona de Perigo -->
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between">
                                 <div>
                                     <h3 class="font-bold text-red-800 mb-1"><i class="fas fa-exclamation-triangle text-red-600 mr-2"></i> Zona de Perigo</h3>
@@ -451,7 +481,7 @@
     <!-- FIREBASE E SCRIPTS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, addDoc, serverTimestamp, query, orderBy, limit, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         Chart.register(ChartDataLabels);
@@ -475,13 +505,14 @@
         let userEmail = "";
         let tempBgBase64 = null; 
 
-        // ================= PREFERÊNCIAS E CUSTOMIZAÇÃO VISUAL =================
+        // ================= PREFERÊNCIAS E CUSTOMIZAÇÃO =================
         function carregarPreferencias() {
             const title = localStorage.getItem('pref_title') || 'Painel de Gestão de Estoque - SETIC';
             const color = localStorage.getItem('pref_color') || '#161B33';
             const icon = localStorage.getItem('pref_icon') || 'fa-chart-line';
             const bgImage = localStorage.getItem('pref_bg') || "https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg";
 
+            // Sincronizando o ID correto (print-title-doc)
             document.getElementById('navbar-title').textContent = title; 
             document.getElementById('login-title').textContent = title; 
             document.title = title;
@@ -610,7 +641,7 @@
 
         async function registrarLog(tipo, itemNome, qtd, chamado = "") { try { await addDoc(collection(db, "logs"), { tipo, itemNome, qtd: Number(qtd), chamado, usuario: userEmail, dataHora: serverTimestamp() }); } catch(e) {} }
 
-        // ================= GERAÇÃO DE RELATÓRIO PDF (LAYOUT OFICIAL) =================
+        // ================= GERAÇÃO DE RELATÓRIO PDF =================
         function gerarRelatorioPDF(tipoRelatorio) {
             const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5);
             const titleDoc = document.getElementById('print-title-doc'), parecer = document.getElementById('print-parecer'), resumo = document.getElementById('print-resumo'), kpisContainer = document.getElementById('print-kpis'), thead = document.getElementById('print-thead'), tbody = document.getElementById('print-tbody'), chartsContainer = document.getElementById('print-charts-container'), visualTitle = document.getElementById('print-visual-title');
@@ -740,6 +771,18 @@
                 btn.innerHTML = '<i class="fas fa-cloud-upload-alt mr-1"></i> Processar';
             };
             reader.readAsArrayBuffer(fileInput.files[0]);
+        });
+
+        document.getElementById('btn-create-user').addEventListener('click', async () => {
+            const email = document.getElementById('new-user-email').value.trim(), pass = document.getElementById('new-user-pass').value.trim(), msg = document.getElementById('msg-create-user');
+            if(!email || pass.length < 6) { msg.textContent = "Erro: Mínimo 6 caracteres."; msg.className = "text-center mt-2 font-bold text-xs text-red-600 block"; return; }
+            const btn = document.getElementById('btn-create-user'); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Criando...';
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+                msg.textContent = "Usuário criado! (Sessão atualizada)."; msg.className = "text-center mt-2 font-bold text-xs text-emerald-600 block";
+                document.getElementById('new-user-email').value = ""; document.getElementById('new-user-pass').value = "";
+            } catch (error) { msg.textContent = "Erro: " + error.message; msg.className = "text-center mt-2 font-bold text-xs text-red-600 block"; }
+            btn.innerHTML = '<i class="fas fa-save mr-1"></i> Cadastrar';
         });
 
         // ================= MÓDULO: RASTREIO E LOCALIDADES =================
