@@ -43,7 +43,8 @@
     <div id="login-screen" class="fixed inset-0 bg-slate-900 flex justify-center items-center z-50">
         <div class="bg-white rounded-xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500">
             <div class="text-center mb-8">
-                <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o.png" onerror="this.onerror=null; this.src='brasão.png';" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
+                <!-- LOGO COM FALLBACK AUTOMÁTICO PARA WIKIPEDIA SE O SEU ARQUIVO FALHAR -->
+                <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
                 <h2 class="text-2xl font-bold text-slate-800">Almoxarifado TIC</h2>
                 <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p>
             </div>
@@ -72,7 +73,7 @@
             <div class="px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center space-x-3">
-                        <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o.png" onerror="this.onerror=null; this.src='brasão.png';" alt="PRF Logo" class="h-10">
+                        <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" class="h-10">
                         <i class="fas fa-chart-line text-xl ml-2"></i>
                         <span class="font-bold text-lg tracking-wide hidden sm:block">Painel de Gestão de Estoque - SETIC</span>
                     </div>
@@ -169,7 +170,7 @@
     <!-- AREA DE IMPRESSÃO (Oculta) -->
     <div id="printable-report" class="hidden">
         <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px;">
-            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o.png" onerror="this.onerror=null; this.src='brasão.png';" alt="PRF Logo" style="height: 80px; margin-bottom: 10px;">
+            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" style="height: 80px; margin-bottom: 10px;">
             <h2 style="margin: 0; font-family: Arial, sans-serif; font-size: 18px; text-transform: uppercase;">Ministério da Justiça e Segurança Pública</h2>
             <h3 style="margin: 5px 0; font-family: Arial, sans-serif; font-size: 16px;">Polícia Rodoviária Federal</h3>
             <p style="margin: 5px 0; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold;">Relatório Geral de Estoque - SETIC</p>
@@ -203,7 +204,6 @@
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center" data-target="tab-saida"><i class="fas fa-minus-circle w-6"></i> Baixa / Saída</button></li>
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center" data-target="tab-relatorio"><i class="fas fa-file-pdf w-6"></i> Exportações</button></li>
                 </ul>
-                <!-- ABA ADMINISTRADOR SEPARADA EM BAIXO -->
                 <div class="border-t pt-4 mt-auto">
                     <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-purple-100 hover:text-purple-800 font-semibold transition flex items-center" data-target="tab-admin"><i class="fas fa-user-shield w-6 text-purple-600"></i> Administrador</button>
                 </div>
@@ -255,10 +255,10 @@
                     </div>
                 </div>
 
-                <!-- TAB ADMINISTRADOR (NOVA) -->
+                <!-- TAB ADMINISTRADOR -->
                 <div id="tab-admin" class="tab-content hidden h-full">
                     
-                    <!-- ESTADO: BLOQUEADO (Pede Senha) -->
+                    <!-- ESTADO: BLOQUEADO -->
                     <div id="admin-login-section" class="flex flex-col items-center justify-center h-full">
                         <i class="fas fa-user-shield text-7xl text-slate-300 mb-4"></i>
                         <h2 class="text-2xl font-bold text-slate-800 mb-2">Acesso Administrativo</h2>
@@ -268,39 +268,44 @@
                         <p id="admin-error" class="text-red-600 font-bold text-sm mt-3 hidden">Senha Incorreta.</p>
                     </div>
 
-                    <!-- ESTADO: DESBLOQUEADO (Conteúdo Admin) -->
+                    <!-- ESTADO: DESBLOQUEADO -->
                     <div id="admin-content-section" class="hidden h-full flex flex-col">
                         <div class="flex justify-between items-center mb-4 border-b pb-4">
-                            <div>
-                                <h2 class="text-2xl font-bold text-slate-800">Painel do Administrador</h2>
-                                <p class="text-sm text-slate-500">Gestão de banco de dados e auditoria do sistema.</p>
-                            </div>
+                            <div><h2 class="text-2xl font-bold text-slate-800">Painel do Administrador</h2><p class="text-sm text-slate-500">Gestão de banco de dados e usuários.</p></div>
                             <button id="btn-admin-lock" class="text-slate-400 hover:text-slate-800 transition" title="Bloquear Sessão"><i class="fas fa-lock text-xl"></i></button>
                         </div>
 
-                        <!-- Importar e Danger Zone Lado a Lado -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
                             <!-- Importar Planilha -->
-                            <div class="border rounded-xl p-6 bg-slate-50 shadow-sm">
-                                <h3 class="font-bold text-slate-800 mb-2"><i class="fas fa-file-excel text-emerald-600 mr-2 text-lg"></i> Alimentar Base (Lote)</h3>
-                                <p class="text-xs text-slate-500 mb-4">Carregue um arquivo Excel (.xlsx) estruturado.</p>
-                                <input type="file" id="file-upload" accept=".xlsx, .xls, .csv" class="block w-full text-xs text-slate-500 file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer mb-3">
-                                <button id="btn-process-upload" class="w-full bg-[#161B33] text-white font-bold py-2 px-4 rounded hover:bg-slate-800 transition text-sm"><i class="fas fa-cloud-upload-alt mr-2"></i> Processar Lote</button>
+                            <div class="border rounded-xl p-5 bg-slate-50 shadow-sm">
+                                <h3 class="font-bold text-slate-800 mb-2"><i class="fas fa-file-excel text-emerald-600 mr-2"></i> Alimentar Base</h3>
+                                <p class="text-xs text-slate-500 mb-3">Carregue um arquivo .xlsx estruturado.</p>
+                                <input type="file" id="file-upload" accept=".xlsx, .xls, .csv" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-blue-50 file:text-blue-700 cursor-pointer mb-2">
+                                <button id="btn-process-upload" class="w-full bg-[#161B33] text-white font-bold py-2 px-2 rounded hover:bg-slate-800 transition text-sm"><i class="fas fa-cloud-upload-alt mr-1"></i> Processar</button>
                                 <p id="msg-upload" class="text-center mt-2 font-bold text-xs hidden"></p>
                             </div>
 
+                            <!-- Criar Usuário -->
+                            <div class="border border-blue-200 rounded-xl p-5 bg-blue-50 shadow-sm">
+                                <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-user-plus text-blue-600 mr-2"></i> Novo Usuário</h3>
+                                <input type="email" id="new-user-email" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="E-mail (ex: novo@prf.gov.br)">
+                                <input type="password" id="new-user-pass" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="Senha (mín. 6 chars)">
+                                <button id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 px-2 rounded hover:bg-blue-700 transition text-sm shadow"><i class="fas fa-save mr-1"></i> Cadastrar</button>
+                                <p id="msg-create-user" class="text-center mt-2 font-bold text-xs hidden"></p>
+                            </div>
+
                             <!-- Zona de Perigo -->
-                            <div class="border border-red-200 rounded-xl p-6 bg-red-50 shadow-sm flex flex-col justify-between">
+                            <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between">
                                 <div>
-                                    <h3 class="font-bold text-red-800 mb-2"><i class="fas fa-exclamation-triangle text-red-600 mr-2 text-lg"></i> Zona de Perigo</h3>
-                                    <p class="text-xs text-red-600 mb-4">Ação <b>IRREVERSÍVEL</b>. Apaga todo o estoque e o histórico de logs permanentemente do servidor Firebase.</p>
+                                    <h3 class="font-bold text-red-800 mb-1"><i class="fas fa-exclamation-triangle text-red-600 mr-2"></i> Zona de Perigo</h3>
+                                    <p class="text-xs text-red-600 mb-3">Apaga todo o estoque e o histórico permanentemente.</p>
                                 </div>
-                                <button id="btn-delete-db" class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700 transition text-sm shadow"><i class="fas fa-trash-alt mr-2"></i> Apagar Todo o Banco de Dados</button>
+                                <button id="btn-delete-db" class="w-full bg-red-600 text-white font-bold py-2 px-2 rounded hover:bg-red-700 transition text-sm shadow"><i class="fas fa-trash-alt mr-1"></i> Apagar Tudo</button>
                             </div>
                         </div>
 
                         <!-- Auditoria (Logs) -->
-                        <h3 class="font-bold text-slate-800 mb-3"><i class="fas fa-history text-blue-600 mr-2"></i> Auditoria de Movimentações (Logs)</h3>
+                        <h3 class="font-bold text-slate-800 mb-2"><i class="fas fa-history text-blue-600 mr-2"></i> Auditoria de Movimentações (Logs)</h3>
                         <div class="flex-1 overflow-y-auto border rounded bg-slate-50 shadow-inner">
                             <table class="min-w-full divide-y divide-gray-200 text-sm">
                                 <thead class="bg-slate-200 sticky top-0">
@@ -309,7 +314,7 @@
                                         <th class="px-4 py-2 text-left text-slate-700 font-bold">Ação</th>
                                         <th class="px-4 py-2 text-left text-slate-700 font-bold">Item</th>
                                         <th class="px-4 py-2 text-left text-slate-700 font-bold">Qtd</th>
-                                        <th class="px-4 py-2 text-left text-slate-700 font-bold">Ref.</th>
+                                        <th class="px-4 py-2 text-left text-slate-700 font-bold">Usuário / Ref.</th>
                                     </tr>
                                 </thead>
                                 <tbody id="logs-tbody" class="bg-white divide-y divide-gray-200"></tbody>
@@ -325,7 +330,8 @@
     <!-- FIREBASE E SCRIPTS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        // Importação atualizada para incluir a função de criar usuário
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, addDoc, serverTimestamp, query, orderBy, limit, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         Chart.register(ChartDataLabels);
@@ -372,25 +378,25 @@
                     const log = docSnap.data(); let dateStr = "N/A";
                     if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
                     let corAcao = log.tipo === 'ENTRADA' ? 'text-emerald-600' : 'text-orange-600', iconAcao = log.tipo === 'ENTRADA' ? 'fa-arrow-down' : 'fa-arrow-up';
-                    tbody.innerHTML += `<tr class="hover:bg-slate-100 transition"><td class="px-4 py-3 whitespace-nowrap text-slate-500 font-medium">${dateStr}</td><td class="px-4 py-3 whitespace-nowrap font-bold ${corAcao}"><i class="fas ${iconAcao} mr-1"></i> ${log.tipo}</td><td class="px-4 py-3 text-slate-800 font-semibold">${log.itemNome}</td><td class="px-4 py-3 font-black text-slate-800">${log.qtd}</td><td class="px-4 py-3 text-slate-500 font-medium">${log.chamado || '-'}</td></tr>`;
+                    // Incluindo o e-mail de quem fez a alteração nos logs
+                    let userLogInfo = log.usuario ? `<br><span class="text-xs text-gray-400">Por: ${log.usuario}</span>` : '';
+                    tbody.innerHTML += `<tr class="hover:bg-slate-100 transition"><td class="px-4 py-3 whitespace-nowrap text-slate-500 font-medium">${dateStr}</td><td class="px-4 py-3 whitespace-nowrap font-bold ${corAcao}"><i class="fas ${iconAcao} mr-1"></i> ${log.tipo}</td><td class="px-4 py-3 text-slate-800 font-semibold">${log.itemNome}</td><td class="px-4 py-3 font-black text-slate-800">${log.qtd}</td><td class="px-4 py-3 text-slate-500 font-medium">${log.chamado || '-'}${userLogInfo}</td></tr>`;
                 });
             });
         }
 
         async function registrarLog(tipo, itemNome, qtd, chamado = "") { try { await addDoc(collection(db, "logs"), { tipo, itemNome, qtd: Number(qtd), chamado, usuario: userEmail, dataHora: serverTimestamp() }); } catch(e) {} }
 
-        // ABA ADMINISTRADOR (LOGIN E FUNÇÕES)
+        // ================= ABA ADMINISTRADOR =================
         document.getElementById('btn-admin-login').addEventListener('click', () => {
             const input = document.getElementById('admin-pass-input').value;
-            // Validação de senha por Hash Ofuscado em Base64 (senha: seticadmin)
+            // Validação de senha por Hash Ofuscado (senha: seticadmin)
             if(btoa(input) === "c2V0aWNhZG1pbg==") {
                 document.getElementById('admin-login-section').classList.add('hidden');
                 document.getElementById('admin-content-section').classList.remove('hidden');
                 document.getElementById('admin-error').classList.add('hidden');
                 document.getElementById('admin-pass-input').value = "";
-            } else {
-                document.getElementById('admin-error').classList.remove('hidden');
-            }
+            } else { document.getElementById('admin-error').classList.remove('hidden'); }
         });
 
         document.getElementById('btn-admin-lock').addEventListener('click', () => {
@@ -398,28 +404,26 @@
             document.getElementById('admin-login-section').classList.remove('hidden');
         });
 
+        // DELETAR BANCO DE DADOS
         document.getElementById('btn-delete-db').addEventListener('click', async () => {
             const confirmacao = prompt("⚠️ ZONA DE PERIGO!\nIsso apagará TODO o estoque e TODO o histórico permanentemente.\n\nPara confirmar, digite a palavra: APAGAR");
             if(confirmacao === "APAGAR") {
                 const btn = document.getElementById('btn-delete-db');
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo Dados...';
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
                 try {
-                    const estSnap = await getDocs(collection(db, "estoque"));
-                    estSnap.forEach((d) => deleteDoc(d.ref));
-                    const logSnap = await getDocs(collection(db, "logs"));
-                    logSnap.forEach((d) => deleteDoc(d.ref));
-                    alert("Banco de dados completamente apagado com sucesso.");
+                    const estSnap = await getDocs(collection(db, "estoque")); estSnap.forEach((d) => deleteDoc(d.ref));
+                    const logSnap = await getDocs(collection(db, "logs")); logSnap.forEach((d) => deleteDoc(d.ref));
+                    alert("Banco de dados apagado com sucesso.");
                 } catch(e) { alert("Erro ao apagar: " + e.message); }
-                btn.innerHTML = '<i class="fas fa-trash-alt mr-2"></i> Apagar Todo o Banco de Dados';
-            } else if (confirmacao) {
-                alert("Palavra de segurança incorreta. Ação cancelada.");
-            }
+                btn.innerHTML = '<i class="fas fa-trash-alt mr-1"></i> Apagar Tudo';
+            } else if (confirmacao) { alert("Palavra incorreta. Ação cancelada."); }
         });
 
+        // IMPORTAR PLANILHA
         document.getElementById('btn-process-upload').addEventListener('click', () => {
             const fileInput = document.getElementById('file-upload'), msgLabel = document.getElementById('msg-upload'), btn = document.getElementById('btn-process-upload');
             if (!fileInput.files.length) return alert("Selecione um arquivo Excel.");
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processando Lote...'; msgLabel.classList.add('hidden');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Aguarde...'; msgLabel.classList.add('hidden');
             const reader = new FileReader();
             reader.onload = async (e) => {
                 try {
@@ -436,10 +440,39 @@
                     await registrarLog("ENTRADA", `Importação Lote Excel (Admin)`, cont, "");
                     msgLabel.textContent = `Sucesso! ${cont} registros importados.`; msgLabel.className = "text-center mt-2 font-bold text-xs text-emerald-600 block"; fileInput.value = "";
                 } catch (error) { msgLabel.textContent = "Erro na leitura."; msgLabel.className = "text-center mt-2 font-bold text-xs text-red-600 block"; }
-                btn.innerHTML = '<i class="fas fa-cloud-upload-alt mr-2"></i> Processar Lote';
+                btn.innerHTML = '<i class="fas fa-cloud-upload-alt mr-1"></i> Processar';
             };
             reader.readAsArrayBuffer(fileInput.files[0]);
         });
+
+        // CRIAR NOVO USUÁRIO
+        document.getElementById('btn-create-user').addEventListener('click', async () => {
+            const email = document.getElementById('new-user-email').value.trim();
+            const pass = document.getElementById('new-user-pass').value.trim();
+            const msg = document.getElementById('msg-create-user');
+
+            if(!email || pass.length < 6) {
+                msg.textContent = "Erro: Preencha e-mail e senha (mínimo 6 caracteres).";
+                msg.className = "text-center mt-2 font-bold text-xs text-red-600 block";
+                return;
+            }
+
+            const btn = document.getElementById('btn-create-user');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Criando...';
+
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+                msg.textContent = "Usuário criado! (Você foi logado na nova conta).";
+                msg.className = "text-center mt-2 font-bold text-xs text-emerald-600 block";
+                document.getElementById('new-user-email').value = "";
+                document.getElementById('new-user-pass').value = "";
+            } catch (error) {
+                msg.textContent = "Erro: " + error.message;
+                msg.className = "text-center mt-2 font-bold text-xs text-red-600 block";
+            }
+            btn.innerHTML = '<i class="fas fa-save mr-1"></i> Cadastrar';
+        });
+        // =====================================================
 
         // AÇÕES ENTRADA E SAÍDA
         document.getElementById('btn-save-item').addEventListener('click', async () => {
