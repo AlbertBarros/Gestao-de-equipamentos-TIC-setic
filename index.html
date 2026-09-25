@@ -64,7 +64,10 @@
                     <i class="fas fa-sign-in-alt mr-2"></i> Autenticar
                 </button>
             </div>
-            <p id="login-error" class="text-red-600 text-sm mt-4 text-center font-medium hidden"></p>
+            <!-- MENSAGEM DE ERRO MELHORADA -->
+            <div id="login-error-container" class="mt-4 p-3 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm font-medium hidden rounded shadow-sm">
+                <p id="login-error"></p>
+            </div>
         </div>
     </div>
 
@@ -208,7 +211,6 @@
 
     <!-- MODELO DO RELATÓRIO OFICIAL PARA IMPRESSÃO / PDF -->
     <div id="printable-report" class="hidden font-sans">
-        <!-- Cabeçalho Institucional Azul Escuro -->
         <div class="bg-[#161B33] text-white p-6 flex justify-between items-center print-bg mb-6">
             <div>
                 <h1 class="text-2xl font-bold uppercase tracking-wide">MINISTÉRIO DA JUSTIÇA E SEGURANÇA PÚBLICA</h1>
@@ -217,33 +219,17 @@
             </div>
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-20">
         </div>
-        
         <div class="px-6">
-            <!-- Parecer e Metodologia -->
             <h2 class="text-xl font-bold text-slate-800">Parecer e Metodologia de Cálculo</h2>
             <p class="text-sm text-slate-700 mt-1 mb-6 leading-relaxed" id="print-parecer"></p>
-            
-            <!-- Resumo Executivo -->
             <h2 class="text-xl font-bold text-slate-800">Resumo Executivo</h2>
             <p class="text-sm text-slate-700 mt-1 mb-6 leading-relaxed" id="print-resumo"></p>
-            
-            <!-- Grid de KPIs -->
             <div class="grid grid-cols-4 gap-4 mb-8" id="print-kpis"></div>
-            
-            <!-- Análise Visual (Gráficos) -->
             <h2 class="text-xl font-bold text-slate-800 mb-3" id="print-visual-title">Análise Visual</h2>
             <div class="grid grid-cols-2 gap-6 mb-8" id="print-charts-container">
-                <div>
-                    <p class="text-xs font-bold text-slate-500 mb-1 uppercase text-center">Volume por Categoria</p>
-                    <img id="print-chart-1" src="" class="w-full border p-2">
-                </div>
-                <div>
-                    <p class="text-xs font-bold text-slate-500 mb-1 uppercase text-center">Equipamentos em Foco</p>
-                    <img id="print-chart-2" src="" class="w-full border p-2">
-                </div>
+                <div><p class="text-xs font-bold text-slate-500 mb-1 uppercase text-center">Volume por Categoria</p><img id="print-chart-1" src="" class="w-full border p-2"></div>
+                <div><p class="text-xs font-bold text-slate-500 mb-1 uppercase text-center">Equipamentos em Foco</p><img id="print-chart-2" src="" class="w-full border p-2"></div>
             </div>
-            
-            <!-- Tabela de Dados -->
             <h2 class="text-xl font-bold text-slate-800 mb-3">Detalhamento Analítico</h2>
             <table class="w-full text-left text-sm border-collapse">
                 <thead id="print-thead"></thead>
@@ -346,7 +332,6 @@
                     <i class="fas fa-file-contract text-6xl text-slate-300 mb-6"></i>
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Exportações e Relatórios Oficiais</h2>
                     <p class="text-slate-500 mb-8 max-w-lg text-center">Os relatórios em PDF utilizam dados capturados em tempo real, gerando documentos analíticos nos padrões formais de impressão, com selo, assinatura de data/hora e análises visuais incorporadas.</p>
-                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl mb-8">
                         <div class="border rounded-xl p-6 bg-blue-50 shadow-sm text-center">
                             <i class="fas fa-boxes text-blue-500 text-3xl mb-3"></i>
@@ -366,7 +351,6 @@
                 <div id="tab-pref" class="tab-content hidden">
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Preferências do Sistema</h2>
                     <p class="text-sm text-slate-500 mb-8 border-b pb-4">Personalize a aparência do painel oficial.</p>
-                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-1">Título do Painel Oficial</label>
@@ -399,10 +383,7 @@
                             <p class="text-[10px] text-slate-500 mt-1">Recomendado: Imagem JPG/PNG (Tamanho máx. 2MB).</p>
                         </div>
                     </div>
-                    
-                    <button id="btn-save-pref" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:opacity-90 transition shadow mt-4">
-                        <i class="fas fa-save mr-2"></i> Salvar Preferências
-                    </button>
+                    <button id="btn-save-pref" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:opacity-90 transition shadow mt-4"><i class="fas fa-save mr-2"></i> Salvar Preferências</button>
                     <p id="msg-pref" class="text-emerald-600 text-center mt-4 font-bold hidden"><i class="fas fa-check-circle"></i> Personalização aplicada com sucesso!</p>
                 </div>
 
@@ -442,7 +423,7 @@
                                 <p id="msg-create-user" class="text-center mt-2 font-bold text-xs hidden"></p>
                             </div>
 
-                            <!-- Zona de Perigo ATUALIZADA -->
+                            <!-- Zona de Perigo -->
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between">
                                 <div>
                                     <h3 class="font-bold text-red-800 mb-1"><i class="fas fa-exclamation-triangle text-red-600 mr-2"></i> Zona de Perigo</h3>
@@ -508,21 +489,19 @@
         let userEmail = "";
         let tempBgBase64 = null; 
 
-        // ================= PREFERÊNCIAS COM UPLOAD DE BACKGROUND E TÍTULO LOGIN =================
+        // ================= PREFERÊNCIAS COM UPLOAD DE BACKGROUND E TÍTULO =================
         function carregarPreferencias() {
             const title = localStorage.getItem('pref_title') || 'Painel de Gestão de Estoque - SETIC';
             const color = localStorage.getItem('pref_color') || '#161B33';
             const icon = localStorage.getItem('pref_icon') || 'fa-chart-line';
             const bgImage = localStorage.getItem('pref_bg') || "https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg";
 
-            // Título (Sincronizado entre Navbar, Relatórios e Tela de Login)
             document.getElementById('navbar-title').textContent = title; 
             document.getElementById('login-title').textContent = title; 
             document.title = title;
             document.getElementById('pref-title').value = title; 
             document.getElementById('print-title-doc').textContent = "Relatório Geral - " + title;
             
-            // Cor e Ícone
             document.getElementById('navbar-main').style.backgroundColor = color;
             document.querySelectorAll('.btn-primary').forEach(el => el.style.backgroundColor = color);
             document.querySelectorAll('.btn-primary-text').forEach(el => el.style.color = color);
@@ -530,8 +509,6 @@
             document.getElementById('pref-color-text').value = color.toUpperCase();
             document.getElementById('navbar-icon').className = `fas ${icon} text-xl ml-2`; 
             document.getElementById('pref-icon').value = icon;
-
-            // Imagem de Fundo
             document.getElementById('login-screen').style.backgroundImage = `url('${bgImage}')`;
         }
 
@@ -545,10 +522,7 @@
         });
 
         document.getElementById('btn-clear-bg').addEventListener('click', () => {
-            localStorage.removeItem('pref_bg');
-            tempBgBase64 = null;
-            document.getElementById('pref-bg-upload').value = '';
-            carregarPreferencias();
+            localStorage.removeItem('pref_bg'); tempBgBase64 = null; document.getElementById('pref-bg-upload').value = ''; carregarPreferencias();
             alert("Imagem de fundo restaurada para o padrão da PRF!");
         });
 
@@ -556,15 +530,8 @@
             localStorage.setItem('pref_title', document.getElementById('pref-title').value);
             localStorage.setItem('pref_color', document.getElementById('pref-color').value);
             localStorage.setItem('pref_icon', document.getElementById('pref-icon').value);
-            
-            if(tempBgBase64) {
-                try { localStorage.setItem('pref_bg', tempBgBase64); } 
-                catch(e) { alert("A imagem escolhida é muito grande para ser salva na memória do navegador. Escolha uma imagem menor (limite ideal: 2MB)."); }
-            }
-
-            carregarPreferencias();
-            document.getElementById('msg-pref').classList.remove('hidden'); 
-            setTimeout(() => document.getElementById('msg-pref').classList.add('hidden'), 3000);
+            if(tempBgBase64) { try { localStorage.setItem('pref_bg', tempBgBase64); } catch(e) { alert("A imagem é muito grande para ser salva na memória (limite: 2MB)."); } }
+            carregarPreferencias(); document.getElementById('msg-pref').classList.remove('hidden'); setTimeout(() => document.getElementById('msg-pref').classList.add('hidden'), 3000);
         });
 
         document.getElementById('pref-color').addEventListener('input', (e) => document.getElementById('pref-color-text').value = e.target.value.toUpperCase());
@@ -572,11 +539,96 @@
 
         carregarPreferencias(); 
 
+        // ================= LOGIN INTELIGENTE (Trim, Enter e Erros) =================
+        function fazerLogin() {
+            const email = document.getElementById('login-email').value.trim(); // .trim() resolve problema de espaços em branco
+            const pass = document.getElementById('login-password').value;
+            const btn = document.getElementById('btn-login');
+            
+            if(!email || !pass) {
+                document.getElementById('login-error').innerText = "Preencha e-mail e senha.";
+                document.getElementById('login-error-container').classList.remove('hidden');
+                return;
+            }
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Autenticando...';
+            
+            signInWithEmailAndPassword(auth, email, pass).catch((error) => {
+                let msg = "Credenciais inválidas ou acesso não autorizado.";
+                
+                // Tratamento de erros específicos do Firebase
+                if(error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+                    msg = "Usuário não encontrado. Verifique se o e-mail está correto.";
+                } else if(error.code === 'auth/wrong-password') {
+                    msg = "Senha incorreta. Tente novamente.";
+                } else if(error.code === 'auth/invalid-email') {
+                    msg = "Formato de e-mail inválido.";
+                }
+
+                document.getElementById('login-error').innerText = msg;
+                document.getElementById('login-error-container').classList.remove('hidden'); 
+                btn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Autenticar';
+            });
+        }
+
+        document.getElementById('btn-login').addEventListener('click', fazerLogin);
+
+        // Permite logar apertando ENTER
+        document.getElementById('login-password').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') fazerLogin();
+        });
+        document.getElementById('login-email').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') document.getElementById('login-password').focus();
+        });
+
+        document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+        onAuthStateChanged(auth, (user) => {
+            if (user) { 
+                userEmail = user.email; 
+                document.getElementById('login-screen').classList.add('hidden'); 
+                document.getElementById('main-system').classList.remove('hidden'); 
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-password').value = '';
+                document.getElementById('login-error-container').classList.add('hidden');
+                iniciarSistema(); 
+            } else { 
+                document.getElementById('login-screen').classList.remove('hidden'); 
+                document.getElementById('main-system').classList.add('hidden'); 
+            }
+        });
+
+        // ================= SISTEMA CORE =================
+        function iniciarSistema() {
+            onSnapshot(collection(db, "estoque"), (snapshot) => {
+                estoqueLocal = []; snapshot.forEach((doc) => { estoqueLocal.push({ id: doc.id, ...doc.data() }); });
+                atualizarInterfaceEstoque(); atualizarDatalists(); atualizarSelectSaida(); gerarInsights();
+            });
+
+            onSnapshot(collection(db, "localidades"), (snapshot) => {
+                localidadesLocais = []; snapshot.forEach((doc) => { localidadesLocais.push({ id: doc.id, ...doc.data() }); });
+                atualizarInterfaceRastreio();
+            });
+
+            onSnapshot(query(collection(db, "logs"), orderBy("dataHora", "desc"), limit(100)), (snapshot) => {
+                const tbody = document.getElementById('logs-tbody'); tbody.innerHTML = ''; logsLocal = []; 
+                snapshot.forEach((docSnap) => {
+                    const log = docSnap.data(); logsLocal.push(log); 
+                    let dateStr = "N/A";
+                    if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
+                    let corAcao = log.tipo === 'ENTRADA' ? 'text-emerald-600' : 'text-orange-600', iconAcao = log.tipo === 'ENTRADA' ? 'fa-arrow-down' : 'fa-arrow-up';
+                    if(log.tipo.includes('LOCAL')) { corAcao = 'text-indigo-600'; iconAcao = 'fa-map-marker-alt'; }
+                    let userLogInfo = log.usuario ? `<br><span class="text-xs text-gray-400">Por: ${log.usuario}</span>` : '';
+                    tbody.innerHTML += `<tr class="hover:bg-slate-100 transition"><td class="px-4 py-3 whitespace-nowrap text-slate-500 font-medium">${dateStr}</td><td class="px-4 py-3 whitespace-nowrap font-bold ${corAcao}"><i class="fas ${iconAcao} mr-1"></i> ${log.tipo}</td><td class="px-4 py-3 text-slate-800 font-semibold">${log.itemNome}</td><td class="px-4 py-3 font-black text-slate-800">${log.qtd}</td><td class="px-4 py-3 text-slate-500 font-medium">${log.chamado || '-'}${userLogInfo}</td></tr>`;
+                });
+            });
+        }
+
+        async function registrarLog(tipo, itemNome, qtd, chamado = "") { try { await addDoc(collection(db, "logs"), { tipo, itemNome, qtd: Number(qtd), chamado, usuario: userEmail, dataHora: serverTimestamp() }); } catch(e) {} }
+
         // ================= GERAÇÃO DE RELATÓRIO PDF (LAYOUT OFICIAL) =================
         function gerarRelatorioPDF(tipoRelatorio) {
             const dataAtual = new Date().toLocaleDateString('pt-BR');
             const horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5);
-            
             const titleDoc = document.getElementById('print-title-doc');
             const parecer = document.getElementById('print-parecer');
             const resumo = document.getElementById('print-resumo');
@@ -590,15 +642,12 @@
 
             if(tipoRelatorio === 'estoque') {
                 titleDoc.textContent = "Relatório Gerencial Analítico - Estoque Consolidado";
-                
-                let tTotal = 0, tZerados = 0, tBaixos = 0; let categorias = new Set();
-                tbody.innerHTML = '';
+                let tTotal = 0, tZerados = 0, tBaixos = 0; let categorias = new Set(); tbody.innerHTML = '';
                 [...estoqueLocal].sort((a,b) => a.Categoria.localeCompare(b.Categoria)).forEach(i => {
                     tTotal += i.Quantidade; categorias.add(i.Categoria);
                     if(i.Quantidade === 0) tZerados++; else if(i.Quantidade <= 5) tBaixos++;
                     tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria}</td><td class="border px-2 py-1">${i.Componente}</td><td class="border px-2 py-1">${i.Modelo} / ${i.Especificação}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade}</td></tr>`;
                 });
-
                 let taxaCritica = estoqueLocal.length > 0 ? (((tZerados + tBaixos) / estoqueLocal.length) * 100).toFixed(1) : 0;
                 let saude = (100 - taxaCritica).toFixed(1);
 
@@ -617,24 +666,15 @@
                 `;
 
                 thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
-
-                visualTitle.style.display = 'block';
-                chartsContainer.style.display = 'grid';
+                visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid';
                 document.getElementById('print-chart-1').src = document.getElementById('chartCategoria').toDataURL('image/png');
                 document.getElementById('print-chart-2').src = document.getElementById('chartTopItems').toDataURL('image/png');
 
             } else if (tipoRelatorio === 'rastreio') {
                 titleDoc.textContent = "Relatório Gerencial Analítico - Rastreamento de Ativos";
-                
-                let tLocaisUnicos = new Set();
-                let tVolumeRastreado = 0;
-                let tEquipsUnicos = new Set();
-
-                tbody.innerHTML = '';
+                let tLocaisUnicos = new Set(), tVolumeRastreado = 0, tEquipsUnicos = new Set(); tbody.innerHTML = '';
                 [...localidadesLocais].sort((a,b) => a.Local.localeCompare(b.Local)).forEach(loc => {
-                    tLocaisUnicos.add(loc.Local);
-                    tVolumeRastreado += loc.Quantidade;
-                    tEquipsUnicos.add(loc.Equipamento);
+                    tLocaisUnicos.add(loc.Local); tVolumeRastreado += loc.Quantidade; tEquipsUnicos.add(loc.Equipamento);
                     tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento}</td><td class="border px-2 py-1">${loc.Local}</td><td class="border px-2 py-1 font-mono text-[10px]">${loc.Serie}</td><td class="border px-2 py-1 font-mono text-[10px]">${loc.Patrimonio}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade}</td></tr>`;
                 });
 
@@ -649,62 +689,13 @@
                 `;
 
                 thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Localização Físico</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
-
-                visualTitle.style.display = 'none';
-                chartsContainer.style.display = 'none';
+                visualTitle.style.display = 'none'; chartsContainer.style.display = 'none';
             }
-
             window.print();
         }
 
         document.getElementById('btn-print-estoque').addEventListener('click', () => gerarRelatorioPDF('estoque'));
         document.getElementById('btn-print-rastreio').addEventListener('click', () => gerarRelatorioPDF('rastreio'));
-
-        // LOGIN DO SISTEMA
-        document.getElementById('btn-login').addEventListener('click', () => {
-            const email = document.getElementById('login-email').value, pass = document.getElementById('login-password').value, btn = document.getElementById('btn-login');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Autenticando...';
-            signInWithEmailAndPassword(auth, email, pass).catch(() => {
-                document.getElementById('login-error').innerText = "Credenciais inválidas ou acesso não autorizado.";
-                document.getElementById('login-error').classList.remove('hidden'); btn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Autenticar';
-            });
-        });
-
-        document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
-        onAuthStateChanged(auth, (user) => {
-            if (user) { userEmail = user.email; document.getElementById('login-screen').classList.add('hidden'); document.getElementById('main-system').classList.remove('hidden'); iniciarSistema(); } 
-            else { document.getElementById('login-screen').classList.remove('hidden'); document.getElementById('main-system').classList.add('hidden'); }
-        });
-
-        function iniciarSistema() {
-            onSnapshot(collection(db, "estoque"), (snapshot) => {
-                estoqueLocal = []; snapshot.forEach((doc) => { estoqueLocal.push({ id: doc.id, ...doc.data() }); });
-                atualizarInterfaceEstoque(); atualizarDatalists(); atualizarSelectSaida(); gerarInsights();
-            });
-
-            onSnapshot(collection(db, "localidades"), (snapshot) => {
-                localidadesLocais = []; snapshot.forEach((doc) => { localidadesLocais.push({ id: doc.id, ...doc.data() }); });
-                atualizarInterfaceRastreio();
-            });
-
-            onSnapshot(query(collection(db, "logs"), orderBy("dataHora", "desc"), limit(100)), (snapshot) => {
-                const tbody = document.getElementById('logs-tbody'); tbody.innerHTML = '';
-                logsLocal = []; 
-                snapshot.forEach((docSnap) => {
-                    const log = docSnap.data(); 
-                    logsLocal.push(log); 
-                    
-                    let dateStr = "N/A";
-                    if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
-                    let corAcao = log.tipo === 'ENTRADA' ? 'text-emerald-600' : 'text-orange-600', iconAcao = log.tipo === 'ENTRADA' ? 'fa-arrow-down' : 'fa-arrow-up';
-                    if(log.tipo.includes('LOCAL')) { corAcao = 'text-indigo-600'; iconAcao = 'fa-map-marker-alt'; }
-                    let userLogInfo = log.usuario ? `<br><span class="text-xs text-gray-400">Por: ${log.usuario}</span>` : '';
-                    tbody.innerHTML += `<tr class="hover:bg-slate-100 transition"><td class="px-4 py-3 whitespace-nowrap text-slate-500 font-medium">${dateStr}</td><td class="px-4 py-3 whitespace-nowrap font-bold ${corAcao}"><i class="fas ${iconAcao} mr-1"></i> ${log.tipo}</td><td class="px-4 py-3 text-slate-800 font-semibold">${log.itemNome}</td><td class="px-4 py-3 font-black text-slate-800">${log.qtd}</td><td class="px-4 py-3 text-slate-500 font-medium">${log.chamado || '-'}${userLogInfo}</td></tr>`;
-                });
-            });
-        }
-
-        async function registrarLog(tipo, itemNome, qtd, chamado = "") { try { await addDoc(collection(db, "logs"), { tipo, itemNome, qtd: Number(qtd), chamado, usuario: userEmail, dataHora: serverTimestamp() }); } catch(e) {} }
 
         // ================= ABA ADMINISTRADOR =================
         document.getElementById('btn-admin-login').addEventListener('click', () => {
