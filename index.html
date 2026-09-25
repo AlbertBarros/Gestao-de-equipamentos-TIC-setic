@@ -11,14 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        
         body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; }
-        
-        /* Modern Cards Customization */
         .modern-card { background: #ffffff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid rgba(226, 232, 240, 0.8); }
-        .chart-container { position: relative; height: 100%; width: 100%; }
-
-        /* Dark Mode Customizações */
         .dark { background-color: #0F172A; color: #E2E8F0; }
         .dark .bg-white, .dark .modern-card { background-color: #1E293B; border-color: #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
         .dark .text-gray-800, .dark .text-slate-800 { color: #F8FAFC; }
@@ -28,20 +22,14 @@
         .dark table tbody tr:hover { background-color: #475569; }
         .dark input, .dark select, .dark file { background-color: #334155; color: white; border-color: #475569; }
         .hidden { display: none !important; }
-
-        /* Scrollbar customizada e limpa */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
-
-        /* Chatbot Animantions */
         @keyframes chatPopUp { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
         .chat-window-anim { animation: chatPopUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .chat-bubble-ai { background: #F1F5F9; color: #1E293B; border-radius: 16px 16px 16px 4px; padding: 10px 14px; font-size: 13px; max-width: 85%; margin-bottom: 8px; line-height: 1.5; }
         .chat-bubble-user { background: #3B82F6; color: #FFFFFF; border-radius: 16px 16px 4px 16px; padding: 10px 14px; font-size: 13px; max-width: 85%; margin-bottom: 8px; margin-left: auto; line-height: 1.5; }
-
-        /* Estilos Restritos para Impressão Global */
         @media print {
             body { background-color: white; }
             #login-screen, #main-system, #tools-modal, #toast-container, #ai-chatbot-container { display: none !important; }
@@ -50,23 +38,11 @@
             table { border-collapse: collapse; width: 100%; font-size: 10pt;}
             th, td { border: 1px solid #cbd5e1; padding: 6px; }
             @page { margin: 1cm; }
-        }
-
-        /* Layout 1: Relatório Gerencial (Retrato) */
-        @media print {
-            #printable-report.active-print { display: block !important; position: absolute; left:0; top:0; width: 100%; background: white; color: black; z-index: 9999; }
+            #printable-report.active-print { display: block !important; position: absolute; left:0; top:0; width: 100%; background: white; color: black; z-index: 9999; page: portrait; }
             #printable-report.active-print th { background-color: #f8fafc !important; color: black !important; }
-            #printable-report.active-print { page: portrait; }
-        }
-
-        /* Layout 2: Extrato Simplificado (Paisagem) */
-        @media print {
-            #printable-simple-table.active-print { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 20px; background: white; color: black; z-index: 9999; }
+            #printable-simple-table.active-print { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 20px; background: white; color: black; z-index: 9999; page: landscape; }
             #printable-simple-table.active-print th { background-color: #161B33 !important; color: white !important; }
-            #printable-simple-table.active-print { page: landscape; }
         }
-
-        /* Animação Toast */
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
         .toast-enter { animation: slideIn 0.3s ease-out forwards; }
@@ -74,46 +50,30 @@
     </style>
 </head>
 <body class="transition-colors duration-200">
-
-    <!-- Container de Notificações (Toasts) -->
     <div id="toast-container" class="fixed top-5 right-5 z-[9999] flex flex-col gap-3 pointer-events-none"></div>
 
-    <!-- TELA DE LOGIN -->
     <div id="login-screen" class="fixed inset-0 flex justify-center items-center z-50 bg-cover bg-center bg-no-repeat" style="background-image: url('https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg'); transition: background-image 0.5s ease;">
         <div class="absolute inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm"></div>
         <div class="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500 relative z-10">
             <div class="text-center mb-8">
-                <!-- LOGO BLINDADA -->
                 <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
                 <h2 id="login-title" class="text-2xl font-bold text-slate-800">Almoxarifado TIC</h2>
                 <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p>
             </div>
             <div class="space-y-5">
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700">E-mail Corporativo</label>
-                    <input type="email" id="login-email" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-blue-500 focus:border-blue-500 transition" placeholder="usuario@prf.gov.br">
-                </div>
+                <div><label class="block text-sm font-semibold text-slate-700">E-mail Corporativo</label><input type="email" id="login-email" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-blue-500 focus:border-blue-500 transition"></div>
                 <div>
                     <label class="block text-sm font-semibold text-slate-700">Senha</label>
-                    <input type="password" id="login-password" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-blue-500 focus:border-blue-500 transition" placeholder="••••••••">
-                    <div class="text-right mt-1.5">
-                        <button id="btn-forgot-password" class="text-xs text-blue-600 hover:text-blue-800 hover:underline transition font-medium">Esqueci minha senha</button>
-                    </div>
+                    <input type="password" id="login-password" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-blue-500 focus:border-blue-500 transition">
+                    <div class="text-right mt-1.5"><button id="btn-forgot-password" class="text-xs text-blue-600 hover:text-blue-800 hover:underline transition font-medium">Esqueci minha senha</button></div>
                 </div>
-                <button id="btn-login" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3.5 px-4 rounded-lg hover:opacity-90 transition shadow-lg mt-2 pointer-events-auto flex justify-center items-center">
-                    <i class="fas fa-sign-in-alt mr-2"></i> Autenticar
-                </button>
+                <button id="btn-login" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3.5 px-4 rounded-lg hover:opacity-90 transition shadow-lg mt-2 pointer-events-auto flex justify-center items-center"><i class="fas fa-sign-in-alt mr-2"></i> Autenticar</button>
             </div>
-            <div id="login-msg-container" class="mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm hidden">
-                <p id="login-msg-text"></p>
-            </div>
+            <div id="login-msg-container" class="mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm hidden"><p id="login-msg-text"></p></div>
         </div>
     </div>
 
-    <!-- SISTEMA PRINCIPAL -->
     <div id="main-system" class="hidden relative">
-        
-        <!-- NAVBAR -->
         <nav id="navbar-main" class="bg-[#161B33] text-white shadow-md border-b-4 border-yellow-500 no-print transition-colors sticky top-0 z-40">
             <div class="px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
@@ -123,120 +83,71 @@
                         <span id="navbar-title" class="font-bold text-lg tracking-wide whitespace-nowrap">Painel de Gestão de Estoque - SETIC</span>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <span class="bg-green-500 text-white text-xs px-2.5 py-1.5 rounded-md flex items-center font-bold shadow-sm hidden md:flex">
-                            <i class="fas fa-check-circle mr-1.5"></i> Sincronizado
-                        </span>
-                        <button id="btn-theme" class="p-2 rounded-full hover:bg-white hover:bg-opacity-10 transition" title="Modo Noturno">
-                            <i class="fas fa-moon text-lg"></i>
-                        </button>
-                        <button id="btn-tools" class="bg-white bg-opacity-10 hover:bg-opacity-20 border border-white border-opacity-10 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-sm flex items-center backdrop-blur-sm">
-                            <i class="fas fa-toolbox mr-2"></i> <span class="hidden md:inline">Painel de Ferramentas</span>
-                        </button>
-                        <button id="btn-logout" class="bg-[#E53935] hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-sm flex items-center">
-                            <i class="fas fa-sign-out-alt mr-2"></i> <span class="hidden md:inline">Sair</span>
-                        </button>
+                        <button id="btn-theme" class="p-2 rounded-full hover:bg-white hover:bg-opacity-10 transition" title="Modo Noturno"><i class="fas fa-moon text-lg"></i></button>
+                        <button id="btn-tools" class="bg-white bg-opacity-10 hover:bg-opacity-20 border border-white border-opacity-10 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-sm flex items-center backdrop-blur-sm"><i class="fas fa-toolbox mr-2"></i> <span class="hidden md:inline">Painel de Ferramentas</span></button>
+                        <button id="btn-logout" class="bg-[#E53935] hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-sm flex items-center"><i class="fas fa-sign-out-alt mr-2"></i> <span class="hidden md:inline">Sair</span></button>
                     </div>
                 </div>
             </div>
         </nav>
 
-        <!-- DASHBOARD CONTAINER -->
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
-            
-            <!-- KPIS MODERNOS -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-6">
                 <div class="modern-card p-5 flex items-start justify-between relative overflow-hidden group">
                     <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-cubes text-6xl text-blue-600"></i></div>
-                    <div class="z-10">
-                        <div class="flex items-center gap-2 mb-2"><i class="fas fa-cubes text-blue-500 text-sm"></i><p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total de Ativos</p></div>
-                        <p id="kpi-total" class="text-3xl font-extrabold text-slate-800">0</p>
-                    </div>
+                    <div class="z-10"><div class="flex items-center gap-2 mb-2"><i class="fas fa-cubes text-blue-500 text-sm"></i><p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total de Ativos</p></div><p id="kpi-total" class="text-3xl font-extrabold text-slate-800">0</p></div>
                 </div>
                 <div class="modern-card p-5 flex items-start justify-between relative overflow-hidden group">
                     <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-hdd text-6xl text-green-600"></i></div>
-                    <div class="z-10">
-                        <div class="flex items-center gap-2 mb-2"><i class="fas fa-hdd text-green-500 text-sm"></i><p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Armazenamento</p></div>
-                        <p id="kpi-armazenamento" class="text-3xl font-extrabold text-slate-800">0</p>
-                    </div>
+                    <div class="z-10"><div class="flex items-center gap-2 mb-2"><i class="fas fa-hdd text-green-500 text-sm"></i><p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Armazenamento</p></div><p id="kpi-armazenamento" class="text-3xl font-extrabold text-slate-800">0</p></div>
                 </div>
                 <div class="modern-card p-5 flex items-start justify-between relative overflow-hidden group">
                     <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-plug text-6xl text-yellow-600"></i></div>
-                    <div class="z-10">
-                        <div class="flex items-center gap-2 mb-2"><i class="fas fa-plug text-yellow-500 text-sm"></i><p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Energia (Fontes/Bat)</p></div>
-                        <p id="kpi-energia" class="text-3xl font-extrabold text-slate-800">0</p>
-                    </div>
+                    <div class="z-10"><div class="flex items-center gap-2 mb-2"><i class="fas fa-plug text-yellow-500 text-sm"></i><p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Energia (Fontes/Bat)</p></div><p id="kpi-energia" class="text-3xl font-extrabold text-slate-800">0</p></div>
                 </div>
                 <div class="modern-card p-5 flex items-start justify-between relative overflow-hidden group border-l-4 border-l-red-500">
                     <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-exclamation-triangle text-6xl text-red-600"></i></div>
-                    <div class="z-10">
-                        <div class="flex items-center gap-2 mb-2"><i class="fas fa-exclamation-triangle text-red-500 text-sm"></i><p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Itens em Alerta</p></div>
-                        <p id="kpi-zerado" class="text-3xl font-extrabold text-red-600">0</p>
-                    </div>
+                    <div class="z-10"><div class="flex items-center gap-2 mb-2"><i class="fas fa-exclamation-triangle text-red-500 text-sm"></i><p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Itens em Alerta</p></div><p id="kpi-zerado" class="text-3xl font-extrabold text-red-600">0</p></div>
                 </div>
             </div>
 
-            <!-- GRÁFICOS MODERNIZADOS (INSPIRADOS NA IMAGEM) -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                
-                <!-- Gráfico Principal: Área com Gradiente (Ocupa 2/3) -->
                 <div class="modern-card p-6 md:col-span-2 flex flex-col">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-sm font-bold text-slate-800 flex items-center"><i class="fas fa-chart-area text-blue-500 mr-2"></i> Panorama Físico de Componentes</h3>
                         <span class="text-xs font-semibold text-emerald-500 bg-emerald-50 px-2 py-1 rounded-md">Atualizado em Tempo Real</span>
                     </div>
-                    <div class="flex-1 min-h-[260px] relative w-full">
-                        <canvas id="chartComponentesAmpliado"></canvas>
-                    </div>
+                    <div class="flex-1 min-h-[260px] relative w-full"><canvas id="chartComponentesAmpliado"></canvas></div>
                 </div>
-
-                <!-- Gráfico Lateral Secundário: Barras com Destaque -->
                 <div class="modern-card p-6 flex flex-col">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-sm font-bold text-slate-800 flex items-center"><i class="fas fa-arrow-trend-down text-red-500 mr-2"></i> Itens Mais Retirados</h3>
-                        <i class="fas fa-ellipsis-h text-slate-300"></i>
                     </div>
-                    <div class="flex-1 min-h-[260px] relative w-full flex justify-center items-end pb-2">
-                        <canvas id="chartTopSaidas"></canvas>
-                    </div>
+                    <div class="flex-1 min-h-[260px] relative w-full flex justify-center items-end pb-2"><canvas id="chartTopSaidas"></canvas></div>
                 </div>
             </div>
 
-            <!-- LINHA INFERIOR DO DASHBOARD -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                
-                <!-- Gráfico de Categoria: Semicírculo -->
                 <div class="modern-card p-6 flex flex-col justify-center items-center relative">
                     <h3 class="text-sm font-bold text-slate-800 absolute top-6 left-6 flex items-center"><i class="fas fa-sitemap text-indigo-500 mr-2"></i> Divisão Estrutural</h3>
-                    <i class="fas fa-ellipsis-h text-slate-300 absolute top-6 right-6"></i>
-                    <div class="h-48 w-full flex justify-center mt-10">
-                        <canvas id="chartPizzaCategorias"></canvas>
-                    </div>
+                    <div class="h-48 w-full flex justify-center mt-10"><canvas id="chartPizzaCategorias"></canvas></div>
                 </div>
-                
-                <!-- Assistente Card Info -->
                 <div class="modern-card p-6 flex flex-col justify-between" style="background: linear-gradient(135deg, #161B33 0%, #2a3563 100%);">
                     <div>
                         <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-2 flex items-center"><i class="fas fa-robot text-blue-400 mr-2 text-lg"></i> Copilot SETIC</h3>
-                        <p class="text-xs text-slate-300 leading-relaxed opacity-90">O almoxarifado conta agora com uma IA analítica integrada. O assistente cruza dados de rastreio e estoque instantaneamente.</p>
+                        <p class="text-xs text-slate-300 leading-relaxed opacity-90">O almoxarifado conta agora com uma IA analítica integrada. O assistente cruza dados instantaneamente.</p>
                     </div>
-                    <button onclick="document.getElementById('ai-chat-window').classList.toggle('hidden'); document.getElementById('ai-input').focus();" class="w-full bg-white text-[#161B33] text-sm font-bold py-3 rounded-lg shadow hover:bg-gray-100 transition mt-4 flex justify-center items-center">
-                        <i class="fas fa-comment-dots mr-2"></i> Iniciar Diálogo
-                    </button>
+                    <button onclick="document.getElementById('ai-chat-window').classList.toggle('hidden'); document.getElementById('ai-input').focus();" class="w-full bg-white text-[#161B33] text-sm font-bold py-3 rounded-lg shadow hover:bg-gray-100 transition mt-4 flex justify-center items-center"><i class="fas fa-comment-dots mr-2"></i> Iniciar Diálogo</button>
                 </div>
-
-                <!-- Ferramentas Rápidas Card -->
                 <div class="modern-card p-6 flex flex-col justify-between">
                     <div>
                         <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-2 flex items-center"><i class="fas fa-bolt text-yellow-500 mr-2 text-lg"></i> Acesso Operacional</h3>
-                        <p class="text-xs text-slate-500 leading-relaxed">Painel unificado para gestão de entradas, despachos de TI, mapeamento de localidades e relatórios em PDF.</p>
+                        <p class="text-xs text-slate-500 leading-relaxed">Painel unificado para gestão de entradas, despachos de TI, mapeamento de localidades e relatórios.</p>
                     </div>
-                    <button onclick="document.getElementById('btn-tools').click()" class="w-full bg-blue-600 text-white text-sm font-bold py-3 rounded-lg shadow hover:bg-blue-700 transition mt-4 flex justify-center items-center">
-                        <i class="fas fa-toolbox mr-2"></i> Abrir Ferramentas
-                    </button>
+                    <button onclick="document.getElementById('btn-tools').click()" class="w-full bg-blue-600 text-white text-sm font-bold py-3 rounded-lg shadow hover:bg-blue-700 transition mt-4 flex justify-center items-center"><i class="fas fa-toolbox mr-2"></i> Abrir Ferramentas</button>
                 </div>
             </div>
 
-            <!-- NAVEGAÇÃO DE TABELAS PRINCIPAIS -->
             <div class="modern-card overflow-hidden mb-8">
                 <div class="border-b border-gray-100 bg-gray-50/50 pt-2 px-2">
                     <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 gap-1">
@@ -245,19 +156,14 @@
                     </ul>
                 </div>
 
-                <!-- CONTEÚDO: TABELA ESTOQUE -->
                 <div id="view-estoque-content">
                     <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center gap-4 bg-white">
                         <div class="flex items-center gap-4">
                             <h3 class="text-sm font-bold text-slate-800 tracking-wide">Base de Inventário Físico</h3>
-                            <button id="btn-print-estoque-main" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-1.5 px-3 rounded-md border border-slate-300 transition flex items-center">
-                                <i class="fas fa-print mr-1.5 text-blue-600"></i> Gerar Relatório
-                            </button>
+                            <button id="btn-print-estoque-main" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-1.5 px-3 rounded-md border border-slate-300 transition flex items-center"><i class="fas fa-print mr-1.5 text-blue-600"></i> Gerar Relatório</button>
                         </div>
                         <div class="flex items-center gap-3">
-                            <select id="filter-cat-estoque" class="border border-gray-200 rounded-lg text-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 font-medium text-slate-600 cursor-pointer">
-                                <option value="">Todas as Categorias</option>
-                            </select>
+                            <select id="filter-cat-estoque" class="border border-gray-200 rounded-lg text-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 font-medium text-slate-600 cursor-pointer"><option value="">Todas as Categorias</option></select>
                             <div class="relative">
                                 <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
                                 <input type="text" id="search-table-estoque" placeholder="Pesquisar registro..." class="pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 transition-shadow focus:bg-white">
@@ -273,7 +179,7 @@
                                     <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider text-blue-600">Localização</th>
                                     <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Nº Série</th>
                                     <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Nº Patrimônio</th>
-                                    <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider text-center">Quantidade</th>
+                                    <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider text-center">Qtd</th>
                                     <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
                                 </tr>
                             </thead>
@@ -289,14 +195,11 @@
                     </div>
                 </div>
 
-                <!-- CONTEÚDO: TABELA RASTREAMENTO -->
                 <div id="view-rastreio-content" class="hidden">
                     <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center bg-indigo-50/10 gap-4">
                         <div class="flex items-center gap-4">
                             <h3 class="text-sm font-bold text-indigo-900 tracking-wide"><i class="fas fa-location-dot mr-2 text-indigo-500"></i>Mapa de Distribuição de Ativos</h3>
-                            <button id="btn-print-rastreio-main" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-1.5 px-3 rounded-md border border-indigo-200 transition flex items-center">
-                                <i class="fas fa-print mr-1.5"></i> Gerar Relatório
-                            </button>
+                            <button id="btn-print-rastreio-main" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-1.5 px-3 rounded-md border border-indigo-200 transition flex items-center"><i class="fas fa-print mr-1.5"></i> Gerar Relatório</button>
                         </div>
                         <div class="relative">
                             <i class="fas fa-search absolute left-3 top-2.5 text-indigo-300 text-sm"></i>
@@ -309,7 +212,7 @@
                                 <tr>
                                     <th class="px-6 py-3.5 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Equipamento</th>
                                     <th class="px-6 py-3.5 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Local Físico</th>
-                                    <th class="px-6 py-3.5 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Local SIPAC</th>
+                                    <th class="px-6 py-3.5 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider text-indigo-600">Local SIPAC</th>
                                     <th class="px-6 py-3.5 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Marca/Modelo</th>
                                     <th class="px-6 py-3.5 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Nº de Série</th>
                                     <th class="px-6 py-3.5 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Nº Patrimônio</th>
@@ -331,60 +234,34 @@
         </div>
     </div>
 
-    <!-- ================= IA CHATBOT WIDGET ================= -->
+    <!-- AI CHATBOT WIDGET -->
     <div id="ai-chatbot-container" class="fixed bottom-6 right-6 z-50">
-        <!-- Floating Button -->
-        <button id="btn-ai-toggle" class="bg-blue-600 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:bg-blue-700 hover:scale-105 transition-all focus:outline-none">
-            <i class="fas fa-sparkles text-xl"></i>
-        </button>
-
-        <!-- Chat Window -->
+        <button id="btn-ai-toggle" onclick="document.getElementById('ai-chat-window').classList.toggle('hidden'); document.getElementById('ai-input').focus();" class="bg-blue-600 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:bg-blue-700 hover:scale-105 transition-all focus:outline-none"><i class="fas fa-sparkles text-xl"></i></button>
         <div id="ai-chat-window" class="hidden absolute bottom-16 right-0 w-80 md:w-96 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col h-[450px] chat-window-anim origin-bottom-right">
-            <!-- Header -->
             <div class="bg-gradient-to-r from-blue-700 to-indigo-800 p-4 flex justify-between items-center text-white">
-                <div class="flex items-center gap-2">
-                    <div class="bg-white/20 p-2 rounded-full"><i class="fas fa-robot text-sm"></i></div>
-                    <div>
-                        <h3 class="font-bold text-sm leading-tight">Assistente IA SETIC</h3>
-                        <p class="text-[10px] text-blue-200 opacity-90"><i class="fas fa-circle text-green-400 text-[8px] mr-1 animate-pulse"></i>Online e analisando dados</p>
-                    </div>
-                </div>
+                <div class="flex items-center gap-2"><div class="bg-white/20 p-2 rounded-full"><i class="fas fa-robot text-sm"></i></div><div><h3 class="font-bold text-sm leading-tight">Copilot SETIC</h3><p class="text-[10px] text-blue-200 opacity-90"><i class="fas fa-circle text-green-400 text-[8px] mr-1 animate-pulse"></i>Online e analisando dados</p></div></div>
                 <button onclick="document.getElementById('ai-chat-window').classList.add('hidden')" class="text-white hover:text-red-300 transition"><i class="fas fa-times"></i></button>
             </div>
-            
-            <!-- Chat Body -->
             <div id="ai-chat-body" class="flex-1 p-4 overflow-y-auto bg-slate-50 flex flex-col">
-                <div class="chat-bubble-ai shadow-sm border border-gray-100">
-                    Olá! Sou o Assistente Inteligente da SETIC. Analiso o estoque em tempo real. Pode me perguntar coisas como:
-                    <br><br>• <i>"Quantos monitores temos?"</i>
-                    <br>• <i>"Qual item tem mais volume?"</i>
-                    <br>• <i>"Existem itens zerados?"</i>
-                    <br>• <i>"Como faço para exportar PDF?"</i>
-                </div>
+                <div class="chat-bubble-ai shadow-sm border border-gray-100">Olá! Sou o Assistente Inteligente da SETIC. Analiso o estoque em tempo real. Pode me perguntar coisas como:<br><br>• <i>"Quantos itens temos no total?"</i><br>• <i>"Existem itens zerados?"</i><br>• <i>"Como gerar PDF?"</i></div>
             </div>
-
-            <!-- Input Area -->
             <div class="p-3 bg-white border-t border-gray-200">
                 <div class="relative">
                     <input type="text" id="ai-input" class="w-full bg-gray-100 border-transparent rounded-full py-2.5 pl-4 pr-12 text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all outline-none" placeholder="Pergunte sobre o estoque...">
-                    <button id="btn-ai-send" class="absolute right-1 top-1 w-8 h-8 bg-blue-600 text-white rounded-full flex justify-center items-center hover:bg-blue-700 transition">
-                        <i class="fas fa-paper-plane text-xs"></i>
-                    </button>
+                    <button id="btn-ai-send" class="absolute right-1 top-1 w-8 h-8 bg-blue-600 text-white rounded-full flex justify-center items-center hover:bg-blue-700 transition"><i class="fas fa-paper-plane text-xs"></i></button>
                 </div>
             </div>
         </div>
     </div>
-    <!-- =================================================== -->
 
-    <!-- MODELO 1: RELATÓRIO OFICIAL GERENCIAL -->
+    <!-- MODALS E RELATORIOS PDF -->
     <div id="printable-report" class="hidden font-sans">
         <div class="bg-[#161B33] text-white p-6 flex justify-between items-center print-bg mb-6">
             <div>
                 <h1 class="text-2xl font-bold uppercase tracking-wide">MINISTÉRIO DA JUSTIÇA E SEGURANÇA PÚBLICA</h1>
                 <p class="text-sm mt-1 text-slate-300">Polícia Rodoviária Federal - Diretoria de Tecnologia da Informação e Comunicação (DTIC)</p>
-                <p class="text-lg font-bold mt-3 text-white" id="print-title-doc">Relatório Gerencial Analítico - Gestão de Estoque (SETIC)</p>
+                <p class="text-lg font-bold mt-3 text-white" id="print-title-doc">Relatório Gerencial Analítico - Gestão de Estoque</p>
             </div>
-            <!-- LOGO OFICIAL BLINDADA -->
             <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" class="h-20">
         </div>
         <div class="px-6">
@@ -393,14 +270,12 @@
             <h2 class="text-xl font-bold text-slate-800">Resumo Executivo</h2>
             <p class="text-sm text-slate-700 mt-1 mb-6 leading-relaxed" id="print-resumo"></p>
             <div class="grid grid-cols-4 gap-4 mb-8" id="print-kpis"></div>
-            
             <h2 class="text-xl font-bold text-slate-800 mb-3" id="print-visual-title">Análise Visual</h2>
             <div class="grid grid-cols-3 gap-4 mb-8" id="print-charts-container">
                 <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center">Panorama Geral de Componentes</p><img id="print-chart-1" src="" class="w-full border p-2 bg-white"></div>
                 <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center">Top 5 Mais Retirados</p><img id="print-chart-2" src="" class="w-full border p-2 bg-white"></div>
                 <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center">Distribuição por Categoria</p><img id="print-chart-3" src="" class="w-full border p-2 bg-white"></div>
             </div>
-            
             <h2 class="text-xl font-bold text-slate-800 mb-3">Detalhamento Analítico</h2>
             <table class="w-full text-left text-sm border-collapse">
                 <thead id="print-thead"></thead>
@@ -409,7 +284,6 @@
         </div>
     </div>
 
-    <!-- MODELO 2: IMPRESSÃO SIMPLIFICADA (FOTO DA TABELA) -->
     <div id="printable-simple-table" class="hidden">
         <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
             <div style="text-align: left;">
@@ -418,7 +292,6 @@
                 <p style="margin: 0; font-size: 12px; font-weight: bold; font-family: Arial, sans-serif;" id="print-simple-title">Extrato de Ativos</p>
                 <p style="margin: 2px 0 0 0; font-size: 10px; color: #555; font-family: Arial, sans-serif;" id="print-simple-date"></p>
             </div>
-            <!-- LOGO FIXA INSTITUCIONAL BLINDADA -->
             <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" style="height: 65px;">
         </div>
         <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif;">
@@ -427,16 +300,11 @@
         </table>
     </div>
 
-    <!-- MODAL PAINEL DE FERRAMENTAS -->
     <div id="tools-modal" class="hidden fixed inset-0 bg-slate-900 bg-opacity-80 flex justify-center items-center z-50 p-4">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-[1200px] flex overflow-hidden h-[750px] flex-col md:flex-row relative">
-            <button class="absolute top-4 right-4 text-gray-400 hover:text-red-600 text-3xl transition z-10 close-modal" title="Fechar Janela"><i class="fas fa-times"></i></button>
-            
+            <button class="absolute top-4 right-4 text-gray-400 hover:text-red-600 text-3xl transition z-10 close-modal"><i class="fas fa-times"></i></button>
             <div class="w-full md:w-64 bg-slate-50 border-r border-gray-200 p-6 flex flex-col h-full">
-                <div class="flex items-center mb-8 border-b pb-4">
-                    <i class="fas fa-toolbox text-[#161B33] text-2xl mr-3 btn-primary-text"></i>
-                    <h3 class="text-lg font-bold text-slate-800">Ferramentas</h3>
-                </div>
+                <div class="flex items-center mb-8 border-b pb-4"><i class="fas fa-toolbox text-[#161B33] text-2xl mr-3 btn-primary-text"></i><h3 class="text-lg font-bold text-slate-800">Ferramentas</h3></div>
                 <ul class="space-y-2 flex-1">
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg bg-blue-100 text-blue-800 font-bold transition flex items-center text-sm" data-target="tab-entrada"><i class="fas fa-plus-circle w-6"></i> Entrada Estoque</button></li>
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-saida"><i class="fas fa-minus-circle w-6"></i> Baixa / Saída</button></li>
@@ -450,87 +318,48 @@
             </div>
 
             <div class="flex-1 p-8 overflow-y-auto bg-white relative">
-                
                 <!-- TAB ENTRADA -->
                 <div id="tab-entrada" class="tab-content h-full flex flex-col">
                     <h2 class="text-2xl font-bold text-blue-900 mb-2"><i class="fas fa-boxes mr-2 text-blue-600"></i>Entrada de Ativos (Estoque)</h2>
-                    <p class="text-sm text-slate-500 mb-6 border-b pb-4">Adicione estoque manualmente com informações de rastreio ou importe em lote por planilha.</p>
-                    
+                    <p class="text-sm text-slate-500 mb-6 border-b pb-4">Adicione estoque manualmente ou importe em lote por planilha.</p>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
                         <div class="bg-blue-50/50 p-6 rounded-xl border border-blue-100 shadow-sm flex flex-col">
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="font-bold text-blue-800"><i class="fas fa-keyboard mr-2"></i>Gestão Manual</h3>
-                                <select id="estoque-action-type" class="border-blue-300 rounded text-xs py-1 px-2 focus:ring-blue-500 bg-white font-bold text-blue-700 shadow-sm cursor-pointer outline-none">
-                                    <option value="new">Novo Registo</option>
-                                    <option value="edit">Editar Registo</option>
-                                </select>
+                                <select id="estoque-action-type" class="border-blue-300 rounded text-xs py-1 px-2 focus:ring-blue-500 bg-white font-bold text-blue-700 shadow-sm cursor-pointer outline-none"><option value="new">Novo Registo</option><option value="edit">Editar Registo</option></select>
                             </div>
-                            
-                            <!-- PESQUISA INTELIGENTE ESTOQUE -->
-                            <div id="estoque-edit-container" class="relative hidden mb-4">
-                                <i class="fas fa-search absolute left-3 top-3 text-orange-500"></i>
-                                <input list="lista-edit-estoque" id="estoque-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500" placeholder="Pesquise Equipamento, Marca, Série ou Patr...">
-                                <datalist id="lista-edit-estoque"></datalist>
-                            </div>
+                            <div id="estoque-edit-container" class="relative hidden mb-4"><i class="fas fa-search absolute left-3 top-3 text-orange-500"></i><input list="lista-edit-estoque" id="estoque-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500" placeholder="Pesquise Equipamento, Marca, Série ou Patr..."><datalist id="lista-edit-estoque"></datalist></div>
                             <input type="hidden" id="estoque-edit-id">
-
                             <div class="space-y-4 flex-1">
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Categoria Macro *</label><input list="lista-categorias" id="form-cat" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div>
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Componente *</label><input list="lista-componentes" id="form-comp" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Modelo / Marca</label><input type="text" id="form-mod" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div>
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Especificação</label><input type="text" id="form-esp" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div>
-                                </div>
+                                <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-700 uppercase">Categoria Macro *</label><input list="lista-categorias" id="form-cat" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div><div><label class="block text-xs font-bold text-slate-700 uppercase">Componente *</label><input list="lista-componentes" id="form-comp" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div></div>
+                                <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-700 uppercase">Modelo / Marca</label><input type="text" id="form-mod" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div><div><label class="block text-xs font-bold text-slate-700 uppercase">Especificação</label><input type="text" id="form-esp" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div></div>
                                 <div><label class="block text-xs font-bold text-slate-700 uppercase text-blue-600">Local Físico *</label><input type="text" id="form-local" class="mt-1 block w-full rounded border-blue-300 border p-2 text-sm bg-white" placeholder="Ex: Armazém A"></div>
-                                
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Nº de Série</label><input type="text" id="form-serie-estoque" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Opcional"></div>
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Nº Património</label><input type="text" id="form-patrimonio-estoque" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Opcional"></div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase text-orange-600" title="Alerta automático abaixo desta quantidade">Estoque Mínimo</label><input type="number" id="form-minimo" class="mt-1 block w-full rounded border-orange-300 border p-2 text-sm" min="1" value="5"></div>
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase text-emerald-600">Qtd (Total) *</label><input type="number" id="form-qtd" class="mt-1 block w-full rounded border-emerald-300 border p-2 text-sm" min="1" value="1"></div>
-                                </div>
+                                <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-700 uppercase">Nº de Série</label><input type="text" id="form-serie-estoque" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Opcional"></div><div><label class="block text-xs font-bold text-slate-700 uppercase">Nº Património</label><input type="text" id="form-patrimonio-estoque" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Opcional"></div></div>
+                                <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-700 uppercase text-orange-600" title="Alerta automático">Estoque Mínimo</label><input type="number" id="form-minimo" class="mt-1 block w-full rounded border-orange-300 border p-2 text-sm" min="1" value="5"></div><div><label class="block text-xs font-bold text-slate-700 uppercase text-emerald-600">Qtd (Total) *</label><input type="number" id="form-qtd" class="mt-1 block w-full rounded border-emerald-300 border p-2 text-sm" min="1" value="1"></div></div>
                             </div>
                             <button id="btn-save-item" class="w-full bg-blue-600 text-white font-bold py-2.5 px-4 rounded hover:bg-blue-700 transition shadow mt-4">Registar Entrada no Estoque</button>
                         </div>
-                        
                         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                             <h3 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-excel mr-2 text-emerald-600"></i>Importação em Lote (Excel/CSV)</h3>
-                            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800">
-                                <strong>Colunas flexíveis:</strong> O sistema lê variações de cabeçalho. <br><b>Células em branco ou "N/A" na planilha ficarão em branco no sistema de forma transparente.</b>
-                            </div>
-                            <div class="flex-1 flex flex-col justify-center items-center border-2 border-dashed border-slate-300 rounded-lg p-6 hover:bg-slate-100 transition">
-                                <i class="fas fa-cloud-upload-alt text-4xl text-slate-400 mb-3"></i>
-                                <input type="file" id="estoque-file-upload" accept=".xlsx, .xls, .csv" class="block w-full max-w-xs text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:font-bold file:bg-blue-50 file:text-blue-700 cursor-pointer">
-                            </div>
+                            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800">Células em branco na planilha ficarão em branco no sistema. O sistema aceita qualquer formato numérico ou texto.</div>
+                            <div class="flex-1 flex flex-col justify-center items-center border-2 border-dashed border-slate-300 rounded-lg p-6 hover:bg-slate-100 transition"><i class="fas fa-cloud-upload-alt text-4xl text-slate-400 mb-3"></i><input type="file" id="estoque-file-upload" accept=".xlsx, .xls, .csv" class="block w-full max-w-xs text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:font-bold file:bg-blue-50 file:text-blue-700 cursor-pointer"></div>
                             <button id="btn-estoque-upload" class="w-full bg-slate-800 text-white font-bold py-3 px-4 rounded hover:bg-slate-700 transition shadow mt-4">Processar Planilha de Estoque</button>
                         </div>
                     </div>
-                    <datalist id="lista-categorias"><option value="Armazenamento"><option value="Memória"><option value="Fonte de Alimentação"><option value="Bateria"><option value="Periféricos"></datalist>
-                    <datalist id="lista-componentes"></datalist>
+                    <datalist id="lista-categorias"></datalist><datalist id="lista-componentes"></datalist>
                 </div>
 
                 <!-- TAB SAÍDA -->
                 <div id="tab-saida" class="tab-content hidden h-full flex flex-col">
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Baixa de Material</h2>
                     <p class="text-sm text-slate-500 mb-8 border-b pb-4">Despacho de componentes para atendimento de incidentes.</p>
-                    
                     <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex-1">
                         <div class="space-y-5 mb-8">
                             <div>
-                                <label class="block text-sm font-semibold text-slate-700">Pesquisar Equipamento (Digite Nome, Modelo, Local, Série ou Patr...)</label>
-                                <div class="relative">
-                                    <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
-                                    <input list="lista-saida-items" id="saida-item-input" class="mt-1 block w-full rounded-md border-gray-300 border py-3 pl-10 shadow-sm focus:ring-red-500 focus:border-red-500 text-sm font-medium" placeholder="Comece a digitar (ex: Monitor, SSD)...">
-                                    <datalist id="lista-saida-items"></datalist>
-                                </div>
+                                <label class="block text-sm font-semibold text-slate-700">Pesquisar Equipamento (Digite Nome, Modelo, Local...)</label>
+                                <div class="relative"><i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i><input list="lista-saida-items" id="saida-item-input" class="mt-1 block w-full rounded-md border-gray-300 border py-3 pl-10 shadow-sm focus:ring-red-500 focus:border-red-500 text-sm font-medium" placeholder="Comece a digitar..."><datalist id="lista-saida-items"></datalist></div>
                             </div>
-
                             <hr class="border-gray-200">
-                            
                             <div class="grid grid-cols-2 gap-5">
                                 <div><label class="block text-sm font-semibold text-slate-700">Qtd Retirada</label><input type="number" id="saida-qtd" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500" min="1" value="1"></div>
                                 <div><label class="block text-sm font-semibold text-slate-700">Sistema / Chamado (GLPI)</label><input type="text" id="saida-chamado" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500" placeholder="Ex: GLPI-1234"></div>
@@ -545,72 +374,38 @@
                     <h2 class="text-2xl font-bold text-indigo-900 mb-2"><i class="fas fa-map-marker-alt mr-2 text-indigo-600"></i>Gestão de Localidades e Rastreio</h2>
                     <p class="text-sm text-slate-500 mb-6 border-b pb-4">Mapeie fisicamente os equipamentos registando número de série e património.</p>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
-                        
                         <div class="bg-indigo-50/50 p-6 rounded-xl border border-indigo-100 shadow-sm flex flex-col">
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="font-bold text-indigo-800"><i class="fas fa-keyboard mr-2"></i>Gestão Manual</h3>
-                                <select id="loc-action-type" class="border-indigo-300 rounded text-xs py-1 px-2 focus:ring-indigo-500 bg-white font-bold text-indigo-700 shadow-sm cursor-pointer outline-none">
-                                    <option value="new">Novo Registo</option>
-                                    <option value="edit">Editar / Mover</option>
-                                </select>
+                                <select id="loc-action-type" class="border-indigo-300 rounded text-xs py-1 px-2 focus:ring-indigo-500 bg-white font-bold text-indigo-700 shadow-sm cursor-pointer outline-none"><option value="new">Novo Registo</option><option value="edit">Editar / Mover</option></select>
                             </div>
-                            
-                            <div id="loc-edit-container" class="relative hidden mb-4">
-                                <i class="fas fa-search absolute left-3 top-3 text-orange-500"></i>
-                                <input list="lista-edit-locais" id="loc-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500" placeholder="Pesquise Equipamento, Local, Série ou Patr...">
-                                <datalist id="lista-edit-locais"></datalist>
-                            </div>
+                            <div id="loc-edit-container" class="relative hidden mb-4"><i class="fas fa-search absolute left-3 top-3 text-orange-500"></i><input list="lista-edit-locais" id="loc-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500" placeholder="Pesquise Equipamento, Local, Série ou Patr..."><datalist id="lista-edit-locais"></datalist></div>
                             <input type="hidden" id="loc-edit-id">
-                            
                             <div class="space-y-4 flex-1">
                                 <div><label class="block text-xs font-bold text-slate-700 uppercase">Equipamento / Nome *</label><input type="text" id="loc-equip" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: Monitor Dell 24"></div>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Local Físico *</label><input type="text" id="loc-local" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: Sala TI"></div>
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase text-indigo-600">Local SIPAC</label><input type="text" id="loc-sipac" class="mt-1 block w-full rounded border-indigo-300 border p-2 text-sm bg-white" placeholder="Ex: Almoxarifado Principal"></div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Marca / Modelo</label><input type="text" id="loc-marca" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: Dell P2419H"></div>
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Quantidade *</label><input type="number" id="loc-qtd" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" min="1" value="1"></div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Nº de Série</label><input type="text" id="loc-serie" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Opcional"></div>
-                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Nº Património</label><input type="text" id="loc-patrimonio" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Opcional"></div>
-                                </div>
+                                <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-700 uppercase">Local Físico *</label><input type="text" id="loc-local" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: Sala TI"></div><div><label class="block text-xs font-bold text-slate-700 uppercase text-indigo-600">Local SIPAC</label><input type="text" id="loc-sipac" class="mt-1 block w-full rounded border-indigo-300 border p-2 text-sm bg-white" placeholder="Ex: Almoxarifado Principal"></div></div>
+                                <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-700 uppercase">Marca / Modelo</label><input type="text" id="loc-marca" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Ex: Dell P2419H"></div><div><label class="block text-xs font-bold text-slate-700 uppercase">Quantidade *</label><input type="number" id="loc-qtd" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" min="1" value="1"></div></div>
+                                <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-700 uppercase">Nº de Série</label><input type="text" id="loc-serie" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Opcional"></div><div><label class="block text-xs font-bold text-slate-700 uppercase">Nº Património</label><input type="text" id="loc-patrimonio" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Opcional"></div></div>
                             </div>
                             <button id="btn-save-loc" class="w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded hover:bg-indigo-700 transition shadow mt-4">Mapear Equipamento</button>
                         </div>
-                        
                         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                             <h3 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-excel mr-2 text-emerald-600"></i>Importação em Lote (Excel)</h3>
-                            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800">
-                                <strong>Colunas flexíveis:</strong> O sistema procura por MARCA, MODELO, Nº DE SÉRIE, PATRIMÔNIO. <br><b>Células vazias ou "N/A" na planilha ficarão puramente em branco no sistema.</b>
-                            </div>
-                            <div class="flex-1 flex flex-col justify-center items-center border-2 border-dashed border-slate-300 rounded-lg p-6 hover:bg-slate-100 transition">
-                                <i class="fas fa-cloud-upload-alt text-4xl text-slate-400 mb-3"></i>
-                                <input type="file" id="loc-file-upload" accept=".xlsx, .xls, .csv" class="block w-full max-w-xs text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:font-bold file:bg-indigo-50 file:text-indigo-700 cursor-pointer">
-                            </div>
+                            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800">Células vazias na planilha ficarão em branco no sistema. Total flexibilidade.</div>
+                            <div class="flex-1 flex flex-col justify-center items-center border-2 border-dashed border-slate-300 rounded-lg p-6 hover:bg-slate-100 transition"><i class="fas fa-cloud-upload-alt text-4xl text-slate-400 mb-3"></i><input type="file" id="loc-file-upload" accept=".xlsx, .xls, .csv" class="block w-full max-w-xs text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:font-bold file:bg-indigo-50 file:text-indigo-700 cursor-pointer"></div>
                             <button id="btn-loc-upload" class="w-full bg-slate-800 text-white font-bold py-2.5 px-4 rounded hover:bg-slate-700 transition shadow mt-4">Iniciar Importação</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- TAB RELATORIOS E EXPORTAÇÕES OFICIAIS -->
+                <!-- TAB RELATORIOS -->
                 <div id="tab-relatorio" class="tab-content hidden h-full flex flex-col justify-center items-center">
                     <i class="fas fa-file-contract text-6xl text-slate-300 mb-6"></i>
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Exportações e Relatórios Oficiais</h2>
-                    <p class="text-slate-500 mb-8 max-w-lg text-center">Os relatórios em PDF utilizam dados capturados em tempo real, gerando documentos analíticos nos padrões formais de impressão, com selo, assinatura de data/hora e análises visuais incorporadas.</p>
-                    
+                    <p class="text-slate-500 mb-8 max-w-lg text-center">Os relatórios em PDF utilizam dados capturados em tempo real e em ordem alfabética estrita.</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl mb-8">
-                        <div class="border rounded-xl p-6 bg-blue-50 shadow-sm text-center">
-                            <i class="fas fa-boxes text-blue-500 text-3xl mb-3"></i>
-                            <h3 class="font-bold text-slate-800 mb-4">Relatório Consolidado</h3>
-                            <button id="btn-relatorio-analitico-estoque" class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700 transition shadow flex justify-center items-center"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF de Estoque</button>
-                        </div>
-                        <div class="border rounded-xl p-6 bg-indigo-50 shadow-sm text-center">
-                            <i class="fas fa-map-marker-alt text-indigo-500 text-3xl mb-3"></i>
-                            <h3 class="font-bold text-slate-800 mb-4">Relatório de Rastreio</h3>
-                            <button id="btn-relatorio-analitico-rastreio" class="w-full bg-indigo-600 text-white font-bold py-3 rounded hover:bg-indigo-700 transition shadow flex justify-center items-center"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF de Locais</button>
-                        </div>
+                        <div class="border rounded-xl p-6 bg-blue-50 shadow-sm text-center"><i class="fas fa-boxes text-blue-500 text-3xl mb-3"></i><h3 class="font-bold text-slate-800 mb-4">Relatório Consolidado</h3><button id="btn-relatorio-analitico-estoque" class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700 transition shadow flex justify-center items-center"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF de Estoque</button></div>
+                        <div class="border rounded-xl p-6 bg-indigo-50 shadow-sm text-center"><i class="fas fa-map-marker-alt text-indigo-500 text-3xl mb-3"></i><h3 class="font-bold text-slate-800 mb-4">Relatório de Rastreio</h3><button id="btn-relatorio-analitico-rastreio" class="w-full bg-indigo-600 text-white font-bold py-3 rounded hover:bg-indigo-700 transition shadow flex justify-center items-center"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF de Locais</button></div>
                     </div>
                     <button id="btn-export-csv" class="text-slate-500 hover:text-slate-800 font-bold transition flex items-center underline"><i class="fas fa-file-csv mr-2"></i> Ou exportar apenas os dados brutos em CSV</button>
                 </div>
@@ -623,14 +418,7 @@
                         <div><label class="block text-sm font-semibold text-slate-700 mb-1">Título do Painel Oficial</label><input type="text" id="pref-title" class="block w-full rounded-md border-gray-300 border p-2.5 shadow-sm focus:ring-blue-500 focus:border-blue-500"></div>
                         <div><label class="block text-sm font-semibold text-slate-700 mb-1">Cor Primária (Claro)</label><div class="flex items-center"><input type="color" id="pref-color" class="h-11 w-12 rounded border border-gray-300 cursor-pointer p-0.5"><input type="text" id="pref-color-text" class="ml-2 block w-full rounded-md border-gray-300 border p-2.5 shadow-sm uppercase font-mono text-sm"></div></div>
                         <div><label class="block text-sm font-semibold text-slate-700 mb-1">Ícone do Cabeçalho</label><select id="pref-icon" class="block w-full rounded-md border-gray-300 border p-2.5 shadow-sm bg-white focus:ring-blue-500 focus:border-blue-500"><option value="fa-chart-line">Gráfico de Linhas</option><option value="fa-boxes">Caixas / Estoque</option><option value="fa-server">Servidor</option><option value="fa-laptop-code">TI / Computador</option><option value="fa-tools">Ferramentas</option><option value="fa-shield-alt">Escudo / Segurança</option></select></div>
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Fundo da Tela de Login</label>
-                            <div class="flex items-center space-x-2">
-                                <input type="file" id="pref-bg-upload" accept="image/png, image/jpeg, image/jpg" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:font-bold file:bg-blue-50 file:text-blue-700 cursor-pointer border border-gray-300 rounded-md p-1 bg-white">
-                                <button id="btn-clear-bg" title="Restaurar Imagem Padrão" class="bg-red-100 text-red-600 py-1.5 px-3 rounded border border-red-200 hover:bg-red-200 transition"><i class="fas fa-trash-restore"></i></button>
-                            </div>
-                            <p class="text-[10px] text-slate-500 mt-1">Recomendado: Imagem JPG/PNG (Tamanho máx. 2MB).</p>
-                        </div>
+                        <div><label class="block text-sm font-semibold text-slate-700 mb-1">Fundo da Tela de Login</label><div class="flex items-center space-x-2"><input type="file" id="pref-bg-upload" accept="image/png, image/jpeg, image/jpg" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:font-bold file:bg-blue-50 file:text-blue-700 cursor-pointer border border-gray-300 rounded-md p-1 bg-white"><button id="btn-clear-bg" title="Restaurar Imagem Padrão" class="bg-red-100 text-red-600 py-1.5 px-3 rounded border border-red-200 hover:bg-red-200 transition"><i class="fas fa-trash-restore"></i></button></div></div>
                     </div>
                     <button id="btn-save-pref" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:opacity-90 transition shadow mt-4"><i class="fas fa-save mr-2"></i> Salvar Preferências</button>
                 </div>
@@ -640,7 +428,6 @@
                     <div id="admin-login-section" class="flex flex-col items-center justify-center h-full">
                         <i class="fas fa-user-shield text-7xl text-slate-300 mb-4"></i>
                         <h2 class="text-2xl font-bold text-slate-800 mb-2">Acesso Administrativo</h2>
-                        <p class="text-sm text-slate-500 mb-6">Área restrita. Ferramentas sensíveis do banco de dados.</p>
                         <input type="password" id="admin-pass-input" class="rounded-md border-gray-300 border p-3 w-64 mb-4 text-center tracking-widest" placeholder="••••••••">
                         <button id="btn-admin-login" class="btn-primary bg-[#161B33] text-white font-bold py-3 px-8 rounded-md hover:opacity-90 transition shadow-lg"><i class="fas fa-unlock-alt mr-2"></i> Desbloquear</button>
                         <p id="admin-error" class="text-red-600 font-bold text-sm mt-3 hidden">Senha Incorreta.</p>
@@ -648,88 +435,65 @@
 
                     <div id="admin-content-section" class="hidden h-full flex flex-col">
                         <div class="flex justify-between items-center mb-4 border-b pb-4">
-                            <div><h2 class="text-2xl font-bold text-slate-800">Painel do Administrador</h2><p class="text-sm text-slate-500">Gestão de banco de dados e usuários.</p></div>
-                            <button id="btn-admin-lock" class="text-slate-400 hover:text-slate-800 transition" title="Bloquear Sessão"><i class="fas fa-lock text-xl"></i></button>
+                            <div><h2 class="text-2xl font-bold text-slate-800">Painel do Administrador</h2></div>
+                            <button id="btn-admin-lock" class="text-slate-400 hover:text-slate-800 transition"><i class="fas fa-lock text-xl"></i></button>
                         </div>
 
                         <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-                            
+                            <!-- EXCLUSÃO EM LOTE (NOVO MOTOR VISUAL) -->
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between col-span-1 lg:col-span-2">
-                                <div>
-                                    <h3 class="font-bold text-red-800 mb-1"><i class="fas fa-exclamation-triangle text-red-600 mr-2"></i> Zona de Perigo (Exclusão em Lote)</h3>
-                                    <p class="text-[11px] text-red-600 mb-3">Pesquise, selecione os itens desejados e apague. Ação irreversível.</p>
-                                </div>
+                                <div><h3 class="font-bold text-red-800 mb-1"><i class="fas fa-exclamation-triangle text-red-600 mr-2"></i> Zona de Perigo (Exclusão em Lote)</h3></div>
                                 
                                 <div class="space-y-4 mt-auto">
-                                    <!-- BLOCO RASTREIO -->
                                     <div class="bg-white p-3 border border-orange-200 rounded shadow-sm">
                                         <label class="block text-[11px] font-bold text-orange-800 mb-1">Apagar do Rastreio (Mapa Físico)</label>
                                         <div class="relative mb-2">
                                             <i class="fas fa-search absolute left-2 top-2 text-orange-400 text-xs"></i>
                                             <input type="text" id="admin-search-loc" class="w-full text-[11px] p-1.5 pl-7 border border-orange-300 rounded focus:ring-orange-500 focus:outline-none" placeholder="Digite equipamento, local, série...">
                                         </div>
-                                        
                                         <div id="admin-loc-list-container" class="hidden flex-col gap-1 max-h-32 overflow-y-auto bg-gray-50 border border-gray-200 rounded p-2 mb-2 text-[10px]">
-                                            <div class="flex items-center gap-2 mb-1 pb-1 border-b border-gray-300">
-                                                <input type="checkbox" id="admin-loc-select-all" class="rounded border-gray-400 cursor-pointer">
-                                                <label for="admin-loc-select-all" class="font-bold text-slate-700 cursor-pointer">Selecionar Todos da Busca</label>
-                                            </div>
+                                            <div class="flex items-center gap-2 mb-1 pb-1 border-b border-gray-300"><input type="checkbox" id="admin-loc-select-all" class="rounded border-gray-400 cursor-pointer"><label for="admin-loc-select-all" class="font-bold text-slate-700 cursor-pointer">Selecionar Todos</label></div>
                                             <div id="admin-loc-items" class="flex flex-col gap-1"></div>
                                         </div>
-                                        
-                                        <button id="btn-delete-loc-batch" class="w-full bg-orange-600 text-white font-bold py-1.5 px-2 rounded hover:bg-orange-700 transition text-[11px] shadow flex items-center justify-center disabled:opacity-50" disabled><i class="fas fa-eraser mr-1"></i> Apagar Selecionados (0)</button>
+                                        <button id="btn-delete-loc-batch" class="w-full bg-orange-600 text-white font-bold py-1.5 px-2 rounded hover:bg-orange-700 transition text-[11px] shadow disabled:opacity-50" disabled><i class="fas fa-eraser mr-1"></i> Apagar Selecionados (0)</button>
                                     </div>
 
-                                    <!-- BLOCO ESTOQUE -->
                                     <div class="bg-white p-3 border border-red-200 rounded shadow-sm">
                                         <label class="block text-[11px] font-bold text-red-800 mb-1">Apagar do Estoque Consolidado</label>
                                         <div class="relative mb-2">
                                             <i class="fas fa-search absolute left-2 top-2 text-red-400 text-xs"></i>
                                             <input type="text" id="admin-search-est" class="w-full text-[11px] p-1.5 pl-7 border border-red-300 rounded focus:ring-red-500 focus:outline-none" placeholder="Digite componente, modelo, série...">
                                         </div>
-                                        
                                         <div id="admin-est-list-container" class="hidden flex-col gap-1 max-h-32 overflow-y-auto bg-gray-50 border border-gray-200 rounded p-2 mb-2 text-[10px]">
-                                            <div class="flex items-center gap-2 mb-1 pb-1 border-b border-gray-300">
-                                                <input type="checkbox" id="admin-est-select-all" class="rounded border-gray-400 cursor-pointer">
-                                                <label for="admin-est-select-all" class="font-bold text-slate-700 cursor-pointer">Selecionar Todos da Busca</label>
-                                            </div>
+                                            <div class="flex items-center gap-2 mb-1 pb-1 border-b border-gray-300"><input type="checkbox" id="admin-est-select-all" class="rounded border-gray-400 cursor-pointer"><label for="admin-est-select-all" class="font-bold text-slate-700 cursor-pointer">Selecionar Todos</label></div>
                                             <div id="admin-est-items" class="flex flex-col gap-1"></div>
                                         </div>
-                                        
-                                        <button id="btn-delete-est-batch" class="w-full bg-red-600 text-white font-bold py-1.5 px-2 rounded hover:bg-red-700 transition text-[11px] shadow flex items-center justify-center disabled:opacity-50" disabled><i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)</button>
+                                        <button id="btn-delete-est-batch" class="w-full bg-red-600 text-white font-bold py-1.5 px-2 rounded hover:bg-red-700 transition text-[11px] shadow disabled:opacity-50" disabled><i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)</button>
                                     </div>
                                 </div>
                             </div>
+                            <!-- FIM EXCLUSÃO LOTE -->
 
                             <div class="border border-blue-200 rounded-xl p-5 bg-blue-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-user-plus text-blue-600 mr-2"></i> Novo Usuário</h3>
-                                <p class="text-[11px] text-blue-600 mb-2">Atenção: Cadastrar um novo logará você nele.</p>
                                 <input type="email" id="new-user-email" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="E-mail corporativo">
                                 <input type="password" id="new-user-pass" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="Senha (mín. 6 chars)">
                                 <button id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 px-2 rounded hover:bg-blue-700 transition text-sm shadow mt-auto"><i class="fas fa-save mr-1"></i> Cadastrar</button>
                             </div>
                             <div class="border border-orange-200 rounded-xl p-5 bg-orange-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-orange-800 mb-2"><i class="fas fa-user-minus text-orange-600 mr-2"></i> Gerir Acessos</h3>
-                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">O Firebase bloqueia exclusão via web.<br><br>A exclusão deve ser feita no Console Oficial.</p>
+                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">A exclusão de usuários deve ser feita no Console Oficial do Firebase por segurança.</p>
                                 <a href="https://console.firebase.google.com/project/gestao-de-equipamentos-tic/authentication/users" target="_blank" class="w-full bg-orange-600 text-white font-bold py-2.5 px-2 rounded hover:bg-orange-700 transition text-sm shadow mt-auto flex items-center justify-center text-center"><i class="fas fa-external-link-alt mr-2"></i> Abrir Console</a>
                             </div>
                         </div>
 
                         <div class="flex justify-between items-center mb-2">
-                            <h3 class="font-bold text-slate-800"><i class="fas fa-history text-blue-600 mr-2"></i> Auditoria de Movimentações (Logs)</h3>
+                            <h3 class="font-bold text-slate-800"><i class="fas fa-history text-blue-600 mr-2"></i> Auditoria de Movimentações</h3>
                             <button id="btn-export-logs-pdf" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition"><i class="fas fa-file-pdf mr-1"></i> Exportar Logs PDF</button>
                         </div>
                         <div class="flex-1 overflow-y-auto border rounded bg-slate-50 shadow-inner">
                             <table class="min-w-full divide-y divide-gray-200 text-sm">
-                                <thead class="bg-slate-200 sticky top-0">
-                                    <tr>
-                                        <th class="px-4 py-2 text-left text-slate-700 font-bold">Data</th>
-                                        <th class="px-4 py-2 text-left text-slate-700 font-bold">Ação</th>
-                                        <th class="px-4 py-2 text-left text-slate-700 font-bold">Item</th>
-                                        <th class="px-4 py-2 text-left text-slate-700 font-bold">Qtd</th>
-                                        <th class="px-4 py-2 text-left text-slate-700 font-bold">Usuário / Ref.</th>
-                                    </tr>
-                                </thead>
+                                <thead class="bg-slate-200 sticky top-0"><tr><th class="px-4 py-2 text-left font-bold">Data</th><th class="px-4 py-2 text-left font-bold">Ação</th><th class="px-4 py-2 text-left font-bold">Item</th><th class="px-4 py-2 text-left font-bold">Qtd</th><th class="px-4 py-2 text-left font-bold">Ref.</th></tr></thead>
                                 <tbody id="logs-tbody" class="bg-white divide-y divide-gray-200"></tbody>
                             </table>
                         </div>
@@ -740,14 +504,14 @@
         </div>
     </div>
 
-    <!-- FIREBASE E SCRIPTS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, addDoc, serverTimestamp, query, orderBy, limit, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, addDoc, serverTimestamp, query, orderBy, limit, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         Chart.register(ChartDataLabels);
 
+        // ATENÇÃO: Substituir pelas chaves válidas do Firebase.
         const firebaseConfig = {
             apiKey: "AIzaSyBRCRThFRIEGYQ8ukI8IzJ78AyqSEyspsc",
             authDomain: "gestao-de-equipamentos-tic.firebaseapp.com",
@@ -761,29 +525,13 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         
-        let estoqueLocal = []; 
-        let localidadesLocais = []; 
-        let logsLocal = []; 
-        let userEmail = "";
-        let tempBgBase64 = null; 
-        
-        let currentPageEstoque = 1;
+        let estoqueLocal = [], localidadesLocais = [], logsLocal = []; 
+        let userEmail = "", tempBgBase64 = null; 
+        let currentPageEstoque = 1, currentPageRastreio = 1;
         const itemsPerPage = 10;
-        let currentFilterCat = '';
-        let currentSearchText = '';
-        let currentPageRastreio = 1;
-        let currentSearchRastreio = '';
-        
-        let mapItensSaida = {}; 
-        let mapEditLocais = {};
-        let mapEditEstoque = {};
-        
-        let mapAdminDelLoc = {};
-        let mapAdminDelEst = {};
-        
-        let chartComponentesAmpliado = null; 
-        let chartTopSaidas = null; 
-        let chartPizzaCategorias = null; 
+        let currentFilterCat = '', currentSearchText = '', currentSearchRastreio = '';
+        let mapItensSaida = {}, mapEditLocais = {}, mapEditEstoque = {};
+        let chartComponentesAmpliado = null, chartTopSaidas = null, chartPizzaCategorias = null; 
 
         // ================= IA CHATBOT SYSTEM =================
         const aiInput = document.getElementById('ai-input');
@@ -800,55 +548,14 @@
 
         function processAILogic(msg) {
             const m = msg.toLowerCase();
-            
-            // Greetings
-            if(m.includes('ola') || m.includes('olá') || m.includes('oi') || m.includes('bom dia') || m.includes('boa tarde')) {
-                return "Olá! Sou o Copilot SETIC. Como posso ajudar na gestão do nosso almoxarifado hoje?";
-            }
-            // Totals
-            if(m.includes('quantos itens') || (m.includes('total') && m.includes('estoque'))) {
-                let t = 0; estoqueLocal.forEach(i => t += i.Quantidade||0);
-                return `Atualmente, contabilizo <b>${t} unidades</b> consolidadas fisicamente no nosso estoque geral.`;
-            }
-            if(m.includes('quantos equipamentos') || (m.includes('total') && m.includes('rastreio'))) {
-                let t = 0; localidadesLocais.forEach(i => t += i.Quantidade||0);
-                return `Temos um total de <b>${t} equipamentos</b> rastreados e distribuídos pelos nossos locais físicos.`;
-            }
-            // Alertas
-            if(m.includes('alerta') || m.includes('zerado') || m.includes('faltando') || m.includes('critico')) {
-                let alertas = estoqueLocal.filter(i => (i.Quantidade||0) <= (i.EstoqueMinimo||5));
-                if(alertas.length === 0) return "Ótimas notícias! Não identifiquei nenhum item em nível crítico de estoque no momento.";
-                let resp = `Atenção, identifiquei <b>${alertas.length} item(ns)</b> em estado crítico de reposição:<br><br>`;
-                alertas.slice(0, 3).forEach(i => resp += `• ${i.Componente} (Qtd: ${i.Quantidade})<br>`);
-                if(alertas.length > 3) resp += `<i>... e mais ${alertas.length - 3} itens. Veja no painel.</i>`;
-                return resp;
-            }
-            // Maior quantidade
-            if(m.includes('maior') || m.includes('mais sobra') || m.includes('mais temos')) {
-                if(estoqueLocal.length === 0) return "Não há dados no estoque ainda.";
-                let top = estoqueLocal.reduce((prev, current) => (prev.Quantidade > current.Quantidade) ? prev : current);
-                return `O item com maior volume no estoque no momento é <b>${top.Componente}</b>, com ${top.Quantidade} unidades em ${top.Local}.`;
-            }
-            // Busca específica de item (RegEx simples)
-            if(m.includes('quantos') && m.length > 8) {
-                let itemBuscado = m.replace('quantos', '').replace('temos', '').replace('?', '').trim();
-                let achados = estoqueLocal.filter(i => i.Componente.toLowerCase().includes(itemBuscado) || (i.Categoria||'').toLowerCase().includes(itemBuscado));
-                if(achados.length === 0) return `Não encontrei nenhum registro de "${itemBuscado}" no nosso estoque consolidado.`;
-                let totalItem = 0; achados.forEach(i => totalItem += i.Quantidade||0);
-                return `Contabilizo <b>${totalItem} unidades</b> de ${itemBuscado} disponíveis no momento.`;
-            }
-            // Tutoriais Help
-            if(m.includes('como') && m.includes('pdf')) {
-                return "Para gerar um relatório oficial em PDF, clique no botão azul 'Exportações / Relatórios' no painel de ferramentas à esquerda, ou use o atalho 'Gerar Relatório' logo acima das tabelas principais.";
-            }
-            if(m.includes('como') && (m.includes('cadastrar') || m.includes('entrada'))) {
-                return "Você tem duas opções: pode abrir a aba 'Entrada Estoque' para preencher o formulário manual de forma rápida, ou pode fazer o upload de uma planilha Excel diretamente por lá para cadastros em lote.";
-            }
-            if(m.includes('como') && m.includes('baixa')) {
-                return "Acesse a aba 'Baixa / Saída'. Lá você encontra um campo de busca inteligente: digite o nome do equipamento, selecione a quantidade, informe o número do chamado GLPI e confirme!";
-            }
-
-            return "Compreendo, mas não tenho certeza se captei a informação exata. Tente me perguntar coisas diretas como: <i>'Quantos mouses temos?'</i>, <i>'Existem itens zerados?'</i> ou <i>'Como gerar um PDF?'</i>.";
+            if(m.includes('ola') || m.includes('oi') || m.includes('bom dia') || m.includes('boa tarde')) return "Olá! Sou o Copilot SETIC. Como posso ajudar na gestão do nosso almoxarifado hoje?";
+            if(m.includes('quantos itens') || (m.includes('total') && m.includes('estoque'))) { let t = 0; estoqueLocal.forEach(i => t += i.Quantidade||0); return `Atualmente, contabilizo <b>${t} unidades</b> consolidadas fisicamente no nosso estoque geral.`; }
+            if(m.includes('quantos equipamentos') || (m.includes('total') && m.includes('rastreio'))) { let t = 0; localidadesLocais.forEach(i => t += i.Quantidade||0); return `Temos um total de <b>${t} equipamentos</b> rastreados e distribuídos pelos locais físicos.`; }
+            if(m.includes('alerta') || m.includes('zerado') || m.includes('critico')) { let alertas = estoqueLocal.filter(i => (i.Quantidade||0) <= (i.EstoqueMinimo||5)); if(alertas.length === 0) return "Ótimas notícias! Não identifiquei nenhum item em nível crítico de estoque no momento."; let resp = `Atenção, identifiquei <b>${alertas.length} item(ns)</b> em estado crítico:<br><br>`; alertas.slice(0, 3).forEach(i => resp += `• ${i.Componente} (Qtd: ${i.Quantidade})<br>`); if(alertas.length > 3) resp += `<i>... e mais ${alertas.length - 3} itens.</i>`; return resp; }
+            if(m.includes('maior') || m.includes('mais temos')) { if(estoqueLocal.length === 0) return "Não há dados no estoque ainda."; let top = estoqueLocal.reduce((prev, current) => (prev.Quantidade > current.Quantidade) ? prev : current); return `O item com maior volume no estoque no momento é <b>${top.Componente}</b>, com ${top.Quantidade} unidades em ${top.Local}.`; }
+            if(m.includes('quantos') && m.length > 8) { let itemBuscado = m.replace('quantos', '').replace('temos', '').replace('?', '').trim(); let achados = estoqueLocal.filter(i => i.Componente.toLowerCase().includes(itemBuscado) || (i.Categoria||'').toLowerCase().includes(itemBuscado)); if(achados.length === 0) return `Não encontrei registro de "${itemBuscado}" no estoque consolidado.`; let totalItem = 0; achados.forEach(i => totalItem += i.Quantidade||0); return `Contabilizo <b>${totalItem} unidades</b> de ${itemBuscado} disponíveis.`; }
+            if(m.includes('como') && m.includes('pdf')) return "Para gerar um relatório oficial em PDF, clique no botão azul 'Exportações / Relatórios' no painel de ferramentas à esquerda, ou use o atalho 'Gerar Relatório' logo acima das tabelas principais.";
+            return "Compreendo, mas tente perguntar coisas diretas como: <i>'Quantos itens temos?'</i>, <i>'Existem itens zerados?'</i> ou <i>'Como gerar um PDF?'</i>.";
         }
 
         function handleAIChat() {
@@ -856,18 +563,13 @@
             if(!txt) return;
             appendAI_Msg(txt, 'user');
             aiInput.value = '';
-            
-            // Simula "pensamento" de 1 segundo
-            setTimeout(() => {
-                const response = processAILogic(txt);
-                appendAI_Msg(response, 'ai');
-            }, 600);
+            setTimeout(() => { const response = processAILogic(txt); appendAI_Msg(response, 'ai'); }, 600);
         }
 
-        aiSendBtn.addEventListener('click', handleAIChat);
-        aiInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') handleAIChat(); });
+        if(aiSendBtn) aiSendBtn.addEventListener('click', handleAIChat);
+        if(aiInput) aiInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') handleAIChat(); });
 
-        // ================= NOTIFICAÇÕES =================
+        // ================= FUNÇÕES UTILITÁRIAS =================
         function showToast(msg, type = 'success') {
             const container = document.getElementById('toast-container');
             if(!container) return;
@@ -881,7 +583,6 @@
             setTimeout(() => { toast.classList.add('translate-x-full'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
-        // ================= SANITIZADOR UNIVERSAL (FIM DO N/A) =================
         function sanitizeVal(val) {
             if (val === undefined || val === null) return '';
             let strVal = String(val).trim();
@@ -895,74 +596,40 @@
                 let cleanKey = rawKey.toString().toUpperCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                 for (let pKey of possibleKeys) {
                     let cleanPKey = pKey.toUpperCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                    if (cleanKey === cleanPKey || cleanKey.indexOf(cleanPKey) !== -1) {
-                        return sanitizeVal(row[rawKey]);
-                    }
+                    if (cleanKey === cleanPKey || cleanKey.indexOf(cleanPKey) !== -1) return sanitizeVal(row[rawKey]);
                 }
             }
             return '';
         }
 
-        // ================= PREFERÊNCIAS =================
+        // ================= PREFERÊNCIAS E LOGIN =================
         function carregarPreferencias() {
             const title = localStorage.getItem('pref_title') || 'Painel de Gestão de Estoque - SETIC';
             const color = localStorage.getItem('pref_color') || '#161B33';
             const icon = localStorage.getItem('pref_icon') || 'fa-chart-line';
             const bgImage = localStorage.getItem('pref_bg') || "https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg";
-
             if(document.getElementById('navbar-title')) document.getElementById('navbar-title').textContent = title; 
-            if(document.getElementById('login-title')) document.getElementById('login-title').textContent = title; 
             document.title = title;
-            if(document.getElementById('pref-title')) document.getElementById('pref-title').value = title; 
-            if(document.getElementById('print-title-doc')) document.getElementById('print-title-doc').textContent = "Relatório Geral - " + title;
             if(document.getElementById('navbar-main')) document.getElementById('navbar-main').style.backgroundColor = color;
             document.querySelectorAll('.btn-primary').forEach(el => el.style.backgroundColor = color);
-            document.querySelectorAll('.btn-primary-text').forEach(el => el.style.color = color);
-            if(document.getElementById('pref-color')) document.getElementById('pref-color').value = color; 
-            if(document.getElementById('pref-color-text')) document.getElementById('pref-color-text').value = color.toUpperCase();
             if(document.getElementById('navbar-icon')) document.getElementById('navbar-icon').className = `fas ${icon} text-xl ml-2`; 
-            if(document.getElementById('pref-icon')) document.getElementById('pref-icon').value = icon;
             if(document.getElementById('login-screen')) document.getElementById('login-screen').style.backgroundImage = `url('${bgImage}')`;
         }
-
-        if(document.getElementById('pref-bg-upload')) document.getElementById('pref-bg-upload').addEventListener('change', function(e) { const file = e.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = function(event) { tempBgBase64 = event.target.result; }; reader.readAsDataURL(file); } });
-        if(document.getElementById('btn-clear-bg')) document.getElementById('btn-clear-bg').addEventListener('click', () => { localStorage.removeItem('pref_bg'); tempBgBase64 = null; document.getElementById('pref-bg-upload').value = ''; carregarPreferencias(); showToast("Imagem restaurada com sucesso!"); });
-        if(document.getElementById('btn-save-pref')) document.getElementById('btn-save-pref').addEventListener('click', () => { localStorage.setItem('pref_title', document.getElementById('pref-title').value); localStorage.setItem('pref_color', document.getElementById('pref-color').value); localStorage.setItem('pref_icon', document.getElementById('pref-icon').value); if(tempBgBase64) { try { localStorage.setItem('pref_bg', tempBgBase64); } catch(e) { showToast("A imagem é muito grande.", "error"); return; } } carregarPreferencias(); showToast("Preferências salvas com sucesso!"); });
-        if(document.getElementById('pref-color')) document.getElementById('pref-color').addEventListener('input', (e) => document.getElementById('pref-color-text').value = e.target.value.toUpperCase());
-        if(document.getElementById('pref-color-text')) document.getElementById('pref-color-text').addEventListener('input', (e) => { if(/^#[0-9A-F]{6}$/i.test(e.target.value)) document.getElementById('pref-color').value = e.target.value; });
-        
         carregarPreferencias(); 
 
-        // ================= LOGIN =================
-        function showLoginMessage(msg, isError = true) {
-            const container = document.getElementById('login-msg-container');
-            const textObj = document.getElementById('login-msg-text');
-            if(container && textObj) { textObj.innerText = msg; container.classList.remove('hidden'); container.className = isError ? "mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm block bg-red-50 border-red-500 text-red-700" : "mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm block bg-emerald-50 border-emerald-500 text-emerald-700"; }
-        }
-
-        if(document.getElementById('btn-forgot-password')) {
-            document.getElementById('btn-forgot-password').addEventListener('click', () => {
-                const email = document.getElementById('login-email').value.trim();
-                if (!email) return showLoginMessage("Digite seu e-mail para recuperar a senha.", true);
-                sendPasswordResetEmail(auth, email).then(() => showLoginMessage(`E-mail enviado para: ${email}`, false)).catch((error) => showLoginMessage("Erro: Verifique a API ou e-mail.", true));
-            });
-        }
-
         function fazerLogin() {
-            const email = document.getElementById('login-email').value.trim(); const pass = document.getElementById('login-password').value; const btn = document.getElementById('btn-login');
-            if(!email || !pass) return showLoginMessage("Preencha e-mail e senha.", true);
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Autenticando...';
-            signInWithEmailAndPassword(auth, email, pass).catch((error) => { showLoginMessage("Usuário/Senha incorretos ou erro de API.", true); btn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Autenticar'; });
+            const email = document.getElementById('login-email').value.trim(); const pass = document.getElementById('login-password').value; 
+            if(!email || !pass) return showToast("Preencha e-mail e senha.", "error");
+            document.getElementById('btn-login').innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Autenticando...';
+            signInWithEmailAndPassword(auth, email, pass).catch(() => { showToast("Credenciais inválidas.", "error"); document.getElementById('btn-login').innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Autenticar'; });
         }
-
         if(document.getElementById('btn-login')) document.getElementById('btn-login').addEventListener('click', fazerLogin);
         if(document.getElementById('login-password')) document.getElementById('login-password').addEventListener('keypress', (e) => { if (e.key === 'Enter') fazerLogin(); });
-        if(document.getElementById('login-email')) document.getElementById('login-email').addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('login-password').focus(); });
         if(document.getElementById('btn-logout')) document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
         
         onAuthStateChanged(auth, (user) => {
             if (user) { 
-                userEmail = user.email; document.getElementById('login-screen').classList.add('hidden'); document.getElementById('main-system').classList.remove('hidden'); document.getElementById('login-email').value = ''; document.getElementById('login-password').value = ''; if(document.getElementById('login-msg-container')) document.getElementById('login-msg-container').classList.add('hidden'); iniciarSistema(); 
+                userEmail = user.email; document.getElementById('login-screen').classList.add('hidden'); document.getElementById('main-system').classList.remove('hidden'); iniciarSistema(); 
             } else { document.getElementById('login-screen').classList.remove('hidden'); document.getElementById('main-system').classList.add('hidden'); }
         });
 
@@ -979,132 +646,75 @@
                         if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
                         let corAcao = log.tipo === 'ENTRADA' ? 'text-emerald-600' : 'text-orange-600', iconAcao = log.tipo === 'ENTRADA' ? 'fa-arrow-down' : 'fa-arrow-up';
                         if(log.tipo.includes('LOCAL') || log.tipo.includes('MOVIMENTAÇÃO')) { corAcao = 'text-indigo-600'; iconAcao = 'fa-map-marker-alt'; }
-                        let userLogInfo = log.usuario ? `<br><span class="text-xs text-gray-400">Por: ${log.usuario}</span>` : '';
-                        tbody.innerHTML += `<tr class="hover:bg-slate-100 transition"><td class="px-4 py-3 whitespace-nowrap text-slate-500 font-medium">${dateStr}</td><td class="px-4 py-3 whitespace-nowrap font-bold ${corAcao}"><i class="fas ${iconAcao} mr-1"></i> ${log.tipo}</td><td class="px-4 py-3 text-slate-800 font-semibold">${log.itemNome}</td><td class="px-4 py-3 font-black text-slate-800">${log.qtd}</td><td class="px-4 py-3 text-slate-500 font-medium">${log.chamado || '-'}${userLogInfo}</td></tr>`;
+                        tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b"><td class="px-4 py-3">${dateStr}</td><td class="px-4 py-3 font-bold ${corAcao}"><i class="fas ${iconAcao} mr-1"></i> ${log.tipo}</td><td class="px-4 py-3">${log.itemNome}</td><td class="px-4 py-3">${log.qtd}</td><td class="px-4 py-3 text-xs text-gray-500">${log.usuario||''}</td></tr>`;
                     });
-                    atualizarInterfaceEstoque(); 
                 }
             });
         }
-
         async function registrarLog(tipo, itemNome, qtd, chamado = "") { try { await addDoc(collection(db, "logs"), { tipo, itemNome, qtd: Number(qtd), chamado, usuario: userEmail, dataHora: serverTimestamp() }); } catch(e) {} }
 
-        // ================= GERAÇÃO DE RELATÓRIO =================
-        function gerarRelatorioAnalitico(tipoRelatorio) {
-            document.getElementById('printable-simple-table').classList.remove('active-print'); document.getElementById('printable-report').classList.add('active-print');
-            const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5);
-            const titleDoc = document.getElementById('print-title-doc'), parecer = document.getElementById('print-parecer'), resumo = document.getElementById('print-resumo'), kpisContainer = document.getElementById('print-kpis'), thead = document.getElementById('print-thead'), tbody = document.getElementById('print-tbody'), chartsContainer = document.getElementById('print-charts-container'), visualTitle = document.getElementById('print-visual-title');
-            
-            if(tipoRelatorio === 'estoque') {
-                titleDoc.textContent = `Relatório Consolidado - ${localStorage.getItem('pref_title') || 'SETIC'}`;
-                let tTotal = 0, tZerados = 0, tBaixos = 0; let categorias = new Set(); tbody.innerHTML = '';
-                
-                [...estoqueLocal].sort((a, b) => {
-                    let cmp = (a.Componente || '').localeCompare(b.Componente || '');
-                    if (cmp !== 0) return cmp;
-                    return (a.Local || '').localeCompare(b.Local || '');
-                }).forEach(i => {
-                    tTotal += (i.Quantidade || 0); categorias.add(i.Categoria || 'Geral'); let minEstoque = i.EstoqueMinimo || 5;
-                    if(i.Quantidade === 0) tZerados++; else if(i.Quantidade <= minEstoque) tBaixos++;
-                    
-                    let strS = i.Série ? `S: ${i.Série}` : '';
-                    let strP = i.Patrimonio ? `P: ${i.Patrimonio}` : '';
-                    let separator = (strS && strP) ? '<br>' : '';
-                    
-                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||''}</td><td class="border px-2 py-1">${i.Componente||''}</td><td class="border px-2 py-1">${i.Modelo||''} / ${i.Especificação||''}</td><td class="border px-2 py-1">${i.Local||''}</td><td class="border px-2 py-1 font-mono">${strS}${separator}${strP}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`;
-                });
-                let taxaCritica = estoqueLocal.length > 0 ? (((tZerados + tBaixos) / estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1);
-                parecer.innerHTML = `Extração consolidou <b>${estoqueLocal.length}</b> registos de estoque físico. Emitido por ${userEmail} em ${dataAtual}.`;
-                resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. Saúde: ${saude}%. ${tZerados} zerados e ${tBaixos} em risco (Criticidade: ${taxaCritica}%).`;
-                kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`;
-                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Série/Patr.</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
-                visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid';
-                if(chartComponentesAmpliado) document.getElementById('print-chart-1').src = document.getElementById('chartComponentesAmpliado').toDataURL('image/png');
-                if(chartTopSaidas) document.getElementById('print-chart-2').src = document.getElementById('chartTopSaidas').toDataURL('image/png');
-                if(chartPizzaCategorias) document.getElementById('print-chart-3').src = document.getElementById('chartPizzaCategorias').toDataURL('image/png');
+        // ================= ATUALIZAÇÃO DAS TABELAS =================
+        function atualizarInterfaceEstoque() {
+            const tbody = document.getElementById('inventory-tbody'); if(!tbody) return;
+            let tTotal = 0, tArmaz = 0, tEnergia = 0, tZerado = 0; const mapCat = {};
+            estoqueLocal.forEach(item => {
+                const cat = item.Categoria || 'Sem Categoria'; const qtd = item.Quantidade || 0;
+                tTotal += qtd; if(cat === 'Armazenamento') tArmaz += qtd; if(cat === 'Fonte de Alimentação' || cat === 'Bateria') tEnergia += qtd; if(qtd === 0) tZerado++;
+                mapCat[cat] = (mapCat[cat] || 0) + qtd;
+            });
+            if(document.getElementById('kpi-total')) document.getElementById('kpi-total').innerText = tTotal; 
+            if(document.getElementById('kpi-armazenamento')) document.getElementById('kpi-armazenamento').innerText = tArmaz; 
+            if(document.getElementById('kpi-energia')) document.getElementById('kpi-energia').innerText = tEnergia; 
+            if(document.getElementById('kpi-zerado')) document.getElementById('kpi-zerado').innerText = tZerado;
 
-            } else if (tipoRelatorio === 'rastreio') {
-                titleDoc.textContent = `Relatório de Rastreio - ${localStorage.getItem('pref_title') || 'SETIC'}`;
-                let tLocaisUnicos = new Set(), tVolumeRastreado = 0, tEquipsUnicos = new Set(); tbody.innerHTML = '';
-                
-                [...localidadesLocais].sort((a, b) => {
-                    let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || '');
-                    if (cmp !== 0) return cmp;
-                    return (a.Local || '').localeCompare(b.Local || '');
-                }).forEach(loc => {
-                    tLocaisUnicos.add(loc.Local || 'N/A'); tVolumeRastreado += (loc.Quantidade||0); tEquipsUnicos.add(loc.Equipamento || 'N/A');
-                    
-                    let strS = loc.Serie ? `S: ${loc.Serie}` : '';
-                    let strP = loc.Patrimonio ? `P: ${loc.Patrimonio}` : '';
-                    let separator = (strS && strP) ? '<br>' : '';
-                    
-                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento||''}</td><td class="border px-2 py-1">${loc.Local||''}</td><td class="border px-2 py-1">${loc.LocalSipac||''}</td><td class="border px-2 py-1">${loc.Marca||''}</td><td class="border px-2 py-1 font-mono">${strS}${separator}${strP}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`;
-                });
-                parecer.innerHTML = `A extração consolidou <b>${localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${userEmail} em ${dataAtual}.`;
-                resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades, com ${tEquipsUnicos.size} modelos distintos.`;
-                kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros</p><p class="text-2xl font-black text-slate-800">${localidadesLocais.length}</p></div>`;
-                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Série/Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
-                visualTitle.style.display = 'none'; chartsContainer.style.display = 'none';
-            }
-            window.print(); setTimeout(() => { document.getElementById('printable-report').classList.remove('active-print'); }, 1000);
+            let filtrados = estoqueLocal.filter(item => {
+                let matchBusca = true;
+                if (currentSearchText) {
+                    const searchTerms = currentSearchText.toLowerCase().split(' ');
+                    const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase();
+                    matchBusca = searchTerms.every(term => itemText.includes(term));
+                }
+                let matchCat = !currentFilterCat || (item.Categoria || 'Sem Categoria') === currentFilterCat;
+                return matchBusca && matchCat;
+            });
+            const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1;
+            if(currentPageEstoque > totalPaginas) currentPageEstoque = totalPaginas;
+            const inicio = (currentPageEstoque - 1) * itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
+
+            tbody.innerHTML = '';
+            dadosPagina.forEach(item => {
+                const qtd = item.Quantidade || 0; const minEstoque = item.EstoqueMinimo || 5;
+                let badge = qtd === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' : qtd <= minEstoque ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>' : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
+                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${item.Categoria||''}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente||''}<br><span class="text-xs font-normal text-slate-500">${item.Modelo||''} / ${item.Especificação||''}</span></td><td class="px-6 py-4 text-sm text-blue-600">${item.Local||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${item.Série||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${item.Patrimonio||''}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
+            });
+            if(document.getElementById('estoque-page-info')) document.getElementById('estoque-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
+            if(document.getElementById('btn-prev-estoque')) document.getElementById('btn-prev-estoque').disabled = currentPageEstoque === 1;
+            if(document.getElementById('btn-next-estoque')) document.getElementById('btn-next-estoque').disabled = currentPageEstoque === totalPaginas;
+            renderChartsUIUX(mapCat, estoqueLocal, logsLocal);
         }
 
-        function gerarPDFSimples(tipo) {
-            document.getElementById('printable-report').classList.remove('active-print'); document.getElementById('printable-simple-table').classList.add('active-print');
-            const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5);
-            const titleObj = document.getElementById('print-simple-title'), dateObj = document.getElementById('print-simple-date'), theadObj = document.getElementById('print-simple-thead'), tbodyObj = document.getElementById('print-simple-tbody');
-            dateObj.innerText = `Emitido por: ${userEmail} em ${dataAtual} às ${horaAtual}`; tbodyObj.innerHTML = '';
+        function atualizarInterfaceRastreio() {
+            const tbody = document.getElementById('rastreio-tbody'); if(!tbody) return;
+            let filtrados = localidadesLocais.filter(item => {
+                if (!currentSearchRastreio) return true;
+                const searchTerms = currentSearchRastreio.toLowerCase().split(' ');
+                const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase();
+                return searchTerms.every(term => itemText.includes(term));
+            });
+            const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1;
+            if(currentPageRastreio > totalPaginas) currentPageRastreio = totalPaginas;
+            const inicio = (currentPageRastreio - 1) * itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
 
-            if(tipo === 'estoque') {
-                titleObj.innerText = "Extrato: Inventário Consolidado"; 
-                theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente / Espec.</th><th>Local</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
-                
-                let filtrados = estoqueLocal.filter(item => { 
-                    let matchBusca = true;
-                    if (currentSearchText) {
-                        const searchTerms = currentSearchText.toLowerCase().split(' ');
-                        const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase();
-                        matchBusca = searchTerms.every(term => itemText.includes(term));
-                    }
-                    let matchCat = !currentFilterCat || item.Categoria === currentFilterCat; 
-                    return matchBusca && matchCat; 
-                });
-
-                filtrados.sort((a, b) => {
-                    let cmp = (a.Componente || '').localeCompare(b.Componente || '');
-                    if (cmp !== 0) return cmp;
-                    return (a.Local || '').localeCompare(b.Local || '');
-                }).forEach(i => { 
-                    tbodyObj.innerHTML += `<tr><td>${i.Categoria||''}</td><td><b>${i.Componente||''}</b><br><span style="font-size:10px; color:#555;">${i.Modelo||''} / ${i.Especificação||''}</span></td><td>${i.Local||''}</td><td style="font-family:monospace;">${i.Série||''}</td><td style="font-family:monospace;">${i.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`; 
-                });
-            } else {
-                titleObj.innerText = "Extrato: Rastreamento Físico"; 
-                theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Local SIPAC</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
-                
-                let filtradosRastreio = localidadesLocais.filter(item => { 
-                    if (!currentSearchRastreio) return true;
-                    const searchTerms = currentSearchRastreio.toLowerCase().split(' ');
-                    const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase();
-                    return searchTerms.every(term => itemText.includes(term));
-                });
-
-                filtradosRastreio.sort((a, b) => {
-                    let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || '');
-                    if (cmp !== 0) return cmp;
-                    return (a.Local || '').localeCompare(b.Local || '');
-                }).forEach(loc => { 
-                    tbodyObj.innerHTML += `<tr><td><b>${loc.Equipamento||''}</b></td><td>${loc.Local||''}</td><td>${loc.LocalSipac||''}</td><td>${loc.Marca||''}</td><td style="font-family:monospace;">${loc.Serie||''}</td><td style="font-family:monospace;">${loc.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${loc.Quantidade||0}</td></tr>`; 
-                });
-            }
-            window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
+            tbody.innerHTML = '';
+            dadosPagina.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
+                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||''}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.LocalSipac||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||''}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
+            });
+            if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
+            if(document.getElementById('btn-prev-rastreio')) document.getElementById('btn-prev-rastreio').disabled = currentPageRastreio === 1;
+            if(document.getElementById('btn-next-rastreio')) document.getElementById('btn-next-rastreio').disabled = currentPageRastreio === totalPaginas;
         }
 
-        if(document.getElementById('btn-print-estoque-main')) document.getElementById('btn-print-estoque-main').addEventListener('click', () => gerarPDFSimples('estoque'));
-        if(document.getElementById('btn-print-rastreio-main')) document.getElementById('btn-print-rastreio-main').addEventListener('click', () => gerarPDFSimples('rastreio'));
-        if(document.getElementById('btn-relatorio-analitico-estoque')) document.getElementById('btn-relatorio-analitico-estoque').addEventListener('click', () => gerarRelatorioAnalitico('estoque'));
-        if(document.getElementById('btn-relatorio-analitico-rastreio')) document.getElementById('btn-relatorio-analitico-rastreio').addEventListener('click', () => gerarRelatorioAnalitico('rastreio'));
-
-        // ================= ABA ADMIN (EXCLUSÃO EM LOTE) =================
+        // ================= EXCLUSÃO EM LOTE NO ADMIN (O CÓDIGO CORRIGIDO E BLINDADO) =================
         if(document.getElementById('btn-admin-login')) document.getElementById('btn-admin-login').addEventListener('click', () => { const input = document.getElementById('admin-pass-input').value; if(btoa(input) === "c2V0aWNhZG1pbg==") { document.getElementById('admin-login-section').classList.add('hidden'); document.getElementById('admin-content-section').classList.remove('hidden'); document.getElementById('admin-error').classList.add('hidden'); document.getElementById('admin-pass-input').value = ""; } else { document.getElementById('admin-error').classList.remove('hidden'); } });
         if(document.getElementById('btn-admin-lock')) document.getElementById('btn-admin-lock').addEventListener('click', () => { document.getElementById('admin-content-section').classList.add('hidden'); document.getElementById('admin-login-section').classList.remove('hidden'); });
         
@@ -1158,8 +768,8 @@
                     const btn = document.getElementById('btn-delete-loc-batch'); const originalText = btn.innerHTML;
                     btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...'; btn.disabled = true;
                     try {
-                        await Promise.all(idsToDelete.map(id => deleteDoc(doc(db, "localidades", id))));
-                        showToast(`${idsToDelete.length} item(ns) apagado(s) do Rastreio.`);
+                        for(let id of idsToDelete) await deleteDoc(doc(db, "localidades", id));
+                        showToast(`${idsToDelete.length} item(ns) apagado(s).`);
                         document.getElementById('admin-search-loc').value = ''; document.getElementById('admin-search-loc').dispatchEvent(new Event('input'));
                     } catch (error) { showToast("Erro: " + error.message, "error"); btn.innerHTML = originalText; btn.disabled = false; }
                 }
@@ -1216,136 +826,117 @@
                     const btn = document.getElementById('btn-delete-est-batch'); const originalText = btn.innerHTML;
                     btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...'; btn.disabled = true;
                     try {
-                        await Promise.all(idsToDelete.map(id => deleteDoc(doc(db, "estoque", id))));
-                        showToast(`${idsToDelete.length} item(ns) apagado(s) do Estoque.`);
+                        for(let id of idsToDelete) await deleteDoc(doc(db, "estoque", id));
+                        showToast(`${idsToDelete.length} item(ns) apagado(s).`);
                         document.getElementById('admin-search-est').value = ''; document.getElementById('admin-search-est').dispatchEvent(new Event('input'));
                     } catch (error) { showToast("Erro: " + error.message, "error"); btn.innerHTML = originalText; btn.disabled = false; }
                 }
             });
         }
-        
-        if(document.getElementById('btn-export-logs-pdf')) document.getElementById('btn-export-logs-pdf').addEventListener('click', () => {
+
+        // ================= FUNÇÕES DOS RELATÓRIOS EM PDF =================
+        function gerarRelatorioAnalitico(tipoRelatorio) {
+            document.getElementById('printable-simple-table').classList.remove('active-print'); document.getElementById('printable-report').classList.add('active-print');
+            const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5);
+            const titleDoc = document.getElementById('print-title-doc'), parecer = document.getElementById('print-parecer'), resumo = document.getElementById('print-resumo'), kpisContainer = document.getElementById('print-kpis'), thead = document.getElementById('print-thead'), tbody = document.getElementById('print-tbody'), chartsContainer = document.getElementById('print-charts-container'), visualTitle = document.getElementById('print-visual-title');
+            
+            if(tipoRelatorio === 'estoque') {
+                titleDoc.textContent = `Relatório Consolidado - ${localStorage.getItem('pref_title') || 'SETIC'}`;
+                let tTotal = 0, tZerados = 0, tBaixos = 0; let categorias = new Set(); tbody.innerHTML = '';
+                [...estoqueLocal].sort((a, b) => { let cmp = (a.Componente || '').localeCompare(b.Componente || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(i => {
+                    tTotal += (i.Quantidade || 0); categorias.add(i.Categoria || 'Geral'); let minEstoque = i.EstoqueMinimo || 5;
+                    if(i.Quantidade === 0) tZerados++; else if(i.Quantidade <= minEstoque) tBaixos++;
+                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||''}</td><td class="border px-2 py-1">${i.Componente||''}</td><td class="border px-2 py-1">${i.Modelo||''} / ${i.Especificação||''}</td><td class="border px-2 py-1">${i.Local||''}</td><td class="border px-2 py-1 font-mono">${i.Série||''}</td><td class="border px-2 py-1 font-mono">${i.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`;
+                });
+                let taxaCritica = estoqueLocal.length > 0 ? (((tZerados + tBaixos) / estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1);
+                parecer.innerHTML = `Extração consolidou <b>${estoqueLocal.length}</b> registos de estoque físico. Emitido por ${userEmail} em ${dataAtual}.`;
+                resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. Saúde: ${saude}%. ${tZerados} zerados e ${tBaixos} em risco (Criticidade: ${taxaCritica}%).`;
+                kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`;
+                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
+                visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid';
+                if(chartComponentesAmpliado) document.getElementById('print-chart-1').src = document.getElementById('chartComponentesAmpliado').toDataURL('image/png');
+                if(chartTopSaidas) document.getElementById('print-chart-2').src = document.getElementById('chartTopSaidas').toDataURL('image/png');
+                if(chartPizzaCategorias) document.getElementById('print-chart-3').src = document.getElementById('chartPizzaCategorias').toDataURL('image/png');
+            } else if (tipoRelatorio === 'rastreio') {
+                titleDoc.textContent = `Relatório de Rastreio - ${localStorage.getItem('pref_title') || 'SETIC'}`;
+                let tLocaisUnicos = new Set(), tVolumeRastreado = 0, tEquipsUnicos = new Set(); tbody.innerHTML = '';
+                [...localidadesLocais].sort((a, b) => { let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(loc => {
+                    tLocaisUnicos.add(loc.Local || 'N/A'); tVolumeRastreado += (loc.Quantidade||0); tEquipsUnicos.add(loc.Equipamento || 'N/A');
+                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento||''}</td><td class="border px-2 py-1">${loc.Local||''}</td><td class="border px-2 py-1">${loc.LocalSipac||''}</td><td class="border px-2 py-1">${loc.Marca||''}</td><td class="border px-2 py-1 font-mono">${loc.Serie||''}</td><td class="border px-2 py-1 font-mono">${loc.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`;
+                });
+                parecer.innerHTML = `A extração consolidou <b>${localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${userEmail} em ${dataAtual}.`;
+                resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades, com ${tEquipsUnicos.size} modelos distintos.`;
+                kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros</p><p class="text-2xl font-black text-slate-800">${localidadesLocais.length}</p></div>`;
+                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Património</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
+                visualTitle.style.display = 'none'; chartsContainer.style.display = 'none';
+            }
+            window.print(); setTimeout(() => { document.getElementById('printable-report').classList.remove('active-print'); }, 1000);
+        }
+
+        function gerarPDFSimples(tipo) {
             document.getElementById('printable-report').classList.remove('active-print'); document.getElementById('printable-simple-table').classList.add('active-print');
-            document.getElementById('print-simple-title').innerText = "Auditoria de Movimentações"; document.getElementById('print-simple-date').innerText = `Gerado por: ${userEmail} em ${new Date().toLocaleDateString('pt-BR')}`;
-            document.getElementById('print-simple-thead').innerHTML = `<tr><th>Data/Hora</th><th>Ação</th><th>Item</th><th style="text-align:center;">Qtd</th><th>Usuário / Ref.</th></tr>`;
-            const tb = document.getElementById('print-simple-tbody'); tb.innerHTML = '';
-            logsLocal.forEach(log => { let dateStr = log.dataHora ? log.dataHora.toDate().toLocaleDateString('pt-BR') + ' ' + log.dataHora.toDate().toLocaleTimeString('pt-BR').substring(0,5) : "N/A"; tb.innerHTML += `<tr><td>${dateStr}</td><td><b>${log.tipo}</b></td><td>${log.itemNome}</td><td style="text-align:center;">${log.qtd}</td><td>${(log.chamado||'') + (log.usuario ? ` (${log.usuario})` : '')}</td></tr>`; });
+            const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5);
+            document.getElementById('print-simple-date').innerText = `Emitido por: ${userEmail} em ${dataAtual} às ${horaAtual}`; 
+            const theadObj = document.getElementById('print-simple-thead'), tbodyObj = document.getElementById('print-simple-tbody'); tbodyObj.innerHTML = '';
+
+            if(tipo === 'estoque') {
+                document.getElementById('print-simple-title').innerText = "Extrato: Inventário Consolidado"; 
+                theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente / Espec.</th><th>Local</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
+                let filtrados = estoqueLocal.filter(item => { let matchBusca = true; if (currentSearchText) { const searchTerms = currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !currentFilterCat || item.Categoria === currentFilterCat; return matchBusca && matchCat; });
+                filtrados.sort((a, b) => { let cmp = (a.Componente || '').localeCompare(b.Componente || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(i => { 
+                    tbodyObj.innerHTML += `<tr><td>${i.Categoria||''}</td><td><b>${i.Componente||''}</b><br><span style="font-size:10px; color:#555;">${i.Modelo||''} / ${i.Especificação||''}</span></td><td>${i.Local||''}</td><td style="font-family:monospace;">${i.Série||''}</td><td style="font-family:monospace;">${i.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`; 
+                });
+            } else {
+                document.getElementById('print-simple-title').innerText = "Extrato: Rastreamento Físico"; 
+                theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Local SIPAC</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
+                let filtradosRastreio = localidadesLocais.filter(item => { if (!currentSearchRastreio) return true; const searchTerms = currentSearchRastreio.toLowerCase().split(' '); const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); });
+                filtradosRastreio.sort((a, b) => { let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(loc => { 
+                    tbodyObj.innerHTML += `<tr><td><b>${loc.Equipamento||''}</b></td><td>${loc.Local||''}</td><td>${loc.LocalSipac||''}</td><td>${loc.Marca||''}</td><td style="font-family:monospace;">${loc.Serie||''}</td><td style="font-family:monospace;">${loc.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${loc.Quantidade||0}</td></tr>`; 
+                });
+            }
             window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
-        });
+        }
 
-        if(document.getElementById('btn-create-user')) document.getElementById('btn-create-user').addEventListener('click', async () => {
-            const email = document.getElementById('new-user-email').value.trim(), pass = document.getElementById('new-user-pass').value.trim();
-            if(!email || pass.length < 6) return showToast("Erro: Mínimo 6 chars.", "error");
-            const btn = document.getElementById('btn-create-user'); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Criando...';
-            try { await createUserWithEmailAndPassword(auth, email, pass); showToast("Usuário criado!"); document.getElementById('new-user-email').value = ""; document.getElementById('new-user-pass').value = ""; } catch (error) { showToast("Erro: " + error.message, "error"); } btn.innerHTML = '<i class="fas fa-save mr-1"></i> Cadastrar';
-        });
+        if(document.getElementById('btn-print-estoque-main')) document.getElementById('btn-print-estoque-main').addEventListener('click', () => gerarPDFSimples('estoque'));
+        if(document.getElementById('btn-print-rastreio-main')) document.getElementById('btn-print-rastreio-main').addEventListener('click', () => gerarPDFSimples('rastreio'));
+        if(document.getElementById('btn-relatorio-analitico-estoque')) document.getElementById('btn-relatorio-analitico-estoque').addEventListener('click', () => gerarRelatorioAnalitico('estoque'));
+        if(document.getElementById('btn-relatorio-analitico-rastreio')) document.getElementById('btn-relatorio-analitico-rastreio').addEventListener('click', () => gerarRelatorioAnalitico('rastreio'));
 
-        // ================= GESTÃO DE LOCALIDADES E EDIÇÃO / MOVIMENTAÇÃO =================
+        // ================= GESTÃO MANUAL E UPLOADS =================
         function atualizarSelectEdicaoLocais() {
-            const dl = document.getElementById('lista-edit-locais');
-            if(!dl) return;
-            dl.innerHTML = '';
-            mapEditLocais = {};
-            [...localidadesLocais].sort((a,b) => (a.Equipamento||'').localeCompare(b.Equipamento||'')).forEach(loc => {
-                const text = `${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio || 'Vazio'} | Série: ${loc.Serie || 'Vazio'}`;
-                mapEditLocais[text] = loc;
-            });
+            const dl = document.getElementById('lista-edit-locais'); if(!dl) return; dl.innerHTML = ''; mapEditLocais = {};
+            [...localidadesLocais].sort((a,b) => (a.Equipamento||'').localeCompare(b.Equipamento||'')).forEach(loc => { const text = `${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio || ''} | Série: ${loc.Serie || ''}`; mapEditLocais[text] = loc; });
         }
 
         if(document.getElementById('loc-action-type')) {
             document.getElementById('loc-action-type').addEventListener('change', (e) => {
-                const isEdit = e.target.value === 'edit';
-                const container = document.getElementById('loc-edit-container');
-                const input = document.getElementById('loc-edit-input');
-                const btn = document.getElementById('btn-save-loc');
-                if(isEdit) {
-                    container.classList.remove('hidden');
-                    btn.innerText = 'Gravar Alterações';
-                    btn.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded hover:bg-orange-600 transition shadow mt-4';
-                } else {
-                    container.classList.add('hidden'); input.value = '';
-                    btn.innerText = 'Mapear Equipamento';
-                    btn.className = 'w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded hover:bg-indigo-700 transition shadow mt-4';
-                    ['loc-equip','loc-local', 'loc-sipac', 'loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(id => document.getElementById(id).value = ''); 
-                    document.getElementById('loc-qtd').value = 1;
-                }
+                const isEdit = e.target.value === 'edit'; const container = document.getElementById('loc-edit-container'); const input = document.getElementById('loc-edit-input'); const btn = document.getElementById('btn-save-loc');
+                if(isEdit) { container.classList.remove('hidden'); btn.innerText = 'Gravar Alterações'; btn.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded hover:bg-orange-600 transition shadow mt-4'; } 
+                else { container.classList.add('hidden'); input.value = ''; btn.innerText = 'Mapear Equipamento'; btn.className = 'w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded hover:bg-indigo-700 transition shadow mt-4'; ['loc-equip','loc-local', 'loc-sipac', 'loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; }
             });
         }
 
         if(document.getElementById('loc-edit-input')) {
             document.getElementById('loc-edit-input').addEventListener('input', (e) => {
-                const text = e.target.value;
-                const dl = document.getElementById('lista-edit-locais');
-                dl.innerHTML = ''; 
-                
-                if(text.length >= 3) {
-                    const search = text.toLowerCase().split(' ');
-                    let count = 0;
-                    for(let key in mapEditLocais) {
-                        if(search.every(term => key.toLowerCase().includes(term))) {
-                            let option = document.createElement('option');
-                            option.value = key;
-                            dl.appendChild(option);
-                            count++;
-                            if(count > 40) break;
-                        }
-                    }
-                }
-
+                const text = e.target.value; const dl = document.getElementById('lista-edit-locais'); dl.innerHTML = ''; 
+                if(text.length >= 3) { const search = text.toLowerCase().split(' '); let count = 0; for(let key in mapEditLocais) { if(search.every(term => key.toLowerCase().includes(term))) { let option = document.createElement('option'); option.value = key; dl.appendChild(option); count++; if(count > 40) break; } } }
                 const item = mapEditLocais[text];
-                if(item) {
-                    document.getElementById('loc-edit-id').value = item.id;
-                    document.getElementById('loc-equip').value = item.Equipamento || '';
-                    document.getElementById('loc-local').value = item.Local || '';
-                    document.getElementById('loc-sipac').value = item.LocalSipac || '';
-                    document.getElementById('loc-marca').value = item.Marca || '';
-                    document.getElementById('loc-qtd').value = item.Quantidade || 1;
-                    document.getElementById('loc-serie').value = item.Serie || '';
-                    document.getElementById('loc-patrimonio').value = item.Patrimonio || '';
-                } else {
-                    ['loc-edit-id','loc-equip','loc-local','loc-sipac','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = '');
-                    document.getElementById('loc-qtd').value = 1;
-                }
+                if(item) { document.getElementById('loc-edit-id').value = item.id; document.getElementById('loc-equip').value = item.Equipamento || ''; document.getElementById('loc-local').value = item.Local || ''; document.getElementById('loc-sipac').value = item.LocalSipac || ''; document.getElementById('loc-marca').value = item.Marca || ''; document.getElementById('loc-qtd').value = item.Quantidade || 1; document.getElementById('loc-serie').value = item.Serie || ''; document.getElementById('loc-patrimonio').value = item.Patrimonio || ''; } 
+                else { ['loc-edit-id','loc-equip','loc-local','loc-sipac','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; }
             });
         }
 
         if(document.getElementById('btn-save-loc')) {
             document.getElementById('btn-save-loc').addEventListener('click', async () => {
-                const actionType = document.getElementById('loc-action-type').value;
-                const editId = document.getElementById('loc-edit-id').value;
-                
-                const equip = document.getElementById('loc-equip').value.trim();
-                const local = document.getElementById('loc-local').value.trim();
-                const sipac = sanitizeVal(document.getElementById('loc-sipac').value);
-                const marca = sanitizeVal(document.getElementById('loc-marca').value);
-                const serie = sanitizeVal(document.getElementById('loc-serie').value);
-                const patrim = sanitizeVal(document.getElementById('loc-patrimonio').value);
-                const qtd = parseInt(document.getElementById('loc-qtd').value);
-                
+                const actionType = document.getElementById('loc-action-type').value; const editId = document.getElementById('loc-edit-id').value;
+                const equip = document.getElementById('loc-equip').value.trim(); const local = document.getElementById('loc-local').value.trim(); const sipac = sanitizeVal(document.getElementById('loc-sipac').value); const marca = sanitizeVal(document.getElementById('loc-marca').value); const serie = sanitizeVal(document.getElementById('loc-serie').value); const patrim = sanitizeVal(document.getElementById('loc-patrimonio').value); const qtd = parseInt(document.getElementById('loc-qtd').value);
                 if(!equip || !local || isNaN(qtd) || qtd <= 0) return showToast("Preencha Equipamento, Local Físico e Quantidade.", "error");
-                
-                const btn = document.getElementById('btn-save-loc'); 
-                const originalText = btn.innerText;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-                
+                const btn = document.getElementById('btn-save-loc'); const originalText = btn.innerText; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
                 try {
-                    if(actionType === 'edit' && editId) {
-                        await updateDoc(doc(db, "localidades", editId), { Equipamento: equip, Local: local, LocalSipac: sipac, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
-                        await registrarLog("MOVIMENTAÇÃO", `${equip} (Novo: ${local})`, qtd, `SIPAC: ${sipac || '-'} | Série: ${serie || '-'}`);
-                        showToast("Alteração gravada e movimentada com sucesso!");
-                    } else {
-                        await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, LocalSipac: sipac, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
-                        await registrarLog("MAP_LOCAL", `${equip} (${local})`, qtd, `SIPAC: ${sipac || '-'} | Série: ${serie || '-'}`);
-                        showToast("Equipamento mapeado com sucesso!");
-                    }
-                    
-                    ['loc-equip','loc-local', 'loc-sipac','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id', 'loc-edit-input'].forEach(id => document.getElementById(id).value = ''); 
-                    document.getElementById('loc-qtd').value = 1;
-                    document.getElementById('loc-action-type').value = 'new';
-                    document.getElementById('loc-action-type').dispatchEvent(new Event('change'));
-
-                } catch (e) { showToast("Erro: " + e.message, "error"); }
-                btn.innerText = originalText;
+                    if(actionType === 'edit' && editId) { await updateDoc(doc(db, "localidades", editId), { Equipamento: equip, Local: local, LocalSipac: sipac, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd }); await registrarLog("MOVIMENTAÇÃO", `${equip} (Novo: ${local})`, qtd, `SIPAC: ${sipac || '-'} | Série: ${serie || '-'}`); showToast("Alteração gravada e movimentada com sucesso!"); } 
+                    else { await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, LocalSipac: sipac, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd }); await registrarLog("MAP_LOCAL", `${equip} (${local})`, qtd, `SIPAC: ${sipac || '-'} | Série: ${serie || '-'}`); showToast("Equipamento mapeado com sucesso!"); }
+                    ['loc-equip','loc-local', 'loc-sipac','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id', 'loc-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; document.getElementById('loc-action-type').value = 'new'; document.getElementById('loc-action-type').dispatchEvent(new Event('change'));
+                } catch (e) { showToast("Erro: " + e.message, "error"); } btn.innerText = originalText;
             });
         }
 
@@ -1357,13 +948,7 @@
                 try {
                     const json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let cont = 0;
                     for (let row of json) {
-                        const sipac = getVal(row, ['LOCAL SIPAC', 'Local SIPAC', 'Local Sipac', 'LOCAL_SIPAC']);
-                        const serie = getVal(row, ['Nº DE SÉRIE', 'N DE SERIE', 'Nº DE SERIE', 'Nº Série', 'N Serie', 'SÉRIE', 'Série', 'SERIE', 'NUMERO DE SERIE']);
-                        const patrim = getVal(row, ['Nº PATRIMÔNIO', 'Nº PATRIMONIO', 'N Patrimônio', 'N Patrimonio', 'PATRIMÔNIO', 'PATRIMONIO', 'Patrimônio', 'Patrimonio']);
-                        const equip = getVal(row, ['EQUIPAMENTO', 'Equipamento', 'Nome']);
-                        const local = getVal(row, ['LOCAL FISICO', 'Local Físico', 'LOCAL FÍSICO', 'Local']);
-                        const marca = getVal(row, ['MARCA/MODELO', 'Marca/Modelo', 'MARCA', 'Marca', 'MODELO', 'Modelo']);
-                        
+                        const sipac = getVal(row, ['LOCAL SIPAC', 'Local SIPAC', 'Local Sipac', 'LOCAL_SIPAC']); const serie = getVal(row, ['Nº DE SÉRIE', 'N DE SERIE', 'Nº DE SERIE', 'Nº Série', 'N Serie', 'SÉRIE', 'Série', 'SERIE', 'NUMERO DE SERIE']); const patrim = getVal(row, ['Nº PATRIMÔNIO', 'Nº PATRIMONIO', 'N Patrimônio', 'N Patrimonio', 'PATRIMÔNIO', 'PATRIMONIO', 'Patrimônio', 'Patrimonio']); const equip = getVal(row, ['EQUIPAMENTO', 'Equipamento', 'Nome']); const local = getVal(row, ['LOCAL FISICO', 'Local Físico', 'LOCAL FÍSICO', 'Local']); const marca = getVal(row, ['MARCA/MODELO', 'Marca/Modelo', 'MARCA', 'Marca', 'MODELO', 'Modelo']);
                         await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, LocalSipac: sipac, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: parseInt(row['QUANTIDADE']||row['Quantidade']||1) }); cont++;
                     }
                     await registrarLog("MAP_LOCAL", `Upload Excel`, cont, ""); showToast(`Sucesso! ${cont} locais mapeados.`); fileInput.value = "";
@@ -1371,125 +956,45 @@
             }; reader.readAsArrayBuffer(fileInput.files[0]);
         });
 
-        // ================= CADASTRO ESTOQUE (MANUAL E LOTE) =================
         function atualizarSelectEdicaoEstoque() {
-            const dl = document.getElementById('lista-edit-estoque');
-            if(!dl) return;
-            dl.innerHTML = '';
-            mapEditEstoque = {};
-            [...estoqueLocal].sort((a,b) => (a.Componente||'').localeCompare(b.Componente||'')).forEach(item => {
-                const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || 'Vazio'} | Série: ${item.Série || 'Vazio'}`;
-                mapEditEstoque[text] = item;
-            });
+            const dl = document.getElementById('lista-edit-estoque'); if(!dl) return; dl.innerHTML = ''; mapEditEstoque = {};
+            [...estoqueLocal].sort((a,b) => (a.Componente||'').localeCompare(b.Componente||'')).forEach(item => { const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || ''} | Série: ${item.Série || ''}`; mapEditEstoque[text] = item; });
         }
 
         if(document.getElementById('estoque-action-type')) {
             document.getElementById('estoque-action-type').addEventListener('change', (e) => {
-                const isEdit = e.target.value === 'edit';
-                const container = document.getElementById('estoque-edit-container');
-                const input = document.getElementById('estoque-edit-input');
-                const btn = document.getElementById('btn-save-item');
-                if(isEdit) {
-                    container.classList.remove('hidden');
-                    btn.innerText = 'Gravar Alterações';
-                    btn.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded hover:bg-orange-600 transition shadow mt-4';
-                } else {
-                    container.classList.add('hidden'); input.value = '';
-                    btn.innerText = 'Registar Entrada no Estoque';
-                    btn.className = 'w-full bg-blue-600 text-white font-bold py-2.5 px-4 rounded hover:bg-blue-700 transition shadow mt-4';
-                    ['form-cat','form-comp','form-mod','form-esp','form-local','form-patrimonio-estoque', 'form-serie-estoque', 'estoque-edit-id'].forEach(id => document.getElementById(id).value = ''); 
-                    document.getElementById('form-qtd').value = 1;
-                    document.getElementById('form-minimo').value = 5;
-                }
+                const isEdit = e.target.value === 'edit'; const container = document.getElementById('estoque-edit-container'); const input = document.getElementById('estoque-edit-input'); const btn = document.getElementById('btn-save-item');
+                if(isEdit) { container.classList.remove('hidden'); btn.innerText = 'Gravar Alterações'; btn.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded hover:bg-orange-600 transition shadow mt-4'; } 
+                else { container.classList.add('hidden'); input.value = ''; btn.innerText = 'Registar Entrada no Estoque'; btn.className = 'w-full bg-blue-600 text-white font-bold py-2.5 px-4 rounded hover:bg-blue-700 transition shadow mt-4'; ['form-cat','form-comp','form-mod','form-esp','form-local','form-patrimonio-estoque', 'form-serie-estoque', 'estoque-edit-id'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5; }
             });
         }
 
         if(document.getElementById('estoque-edit-input')) {
             document.getElementById('estoque-edit-input').addEventListener('input', (e) => {
-                const text = e.target.value;
-                const dl = document.getElementById('lista-edit-estoque');
-                dl.innerHTML = ''; 
-                
-                if(text.length >= 3) {
-                    const search = text.toLowerCase().split(' ');
-                    let count = 0;
-                    for(let key in mapEditEstoque) {
-                        if(search.every(term => key.toLowerCase().includes(term))) {
-                            let option = document.createElement('option');
-                            option.value = key;
-                            dl.appendChild(option);
-                            count++;
-                            if(count > 40) break; 
-                        }
-                    }
-                }
-
+                const text = e.target.value; const dl = document.getElementById('lista-edit-estoque'); dl.innerHTML = ''; 
+                if(text.length >= 3) { const search = text.toLowerCase().split(' '); let count = 0; for(let key in mapEditEstoque) { if(search.every(term => key.toLowerCase().includes(term))) { let option = document.createElement('option'); option.value = key; dl.appendChild(option); count++; if(count > 40) break; } } }
                 const item = mapEditEstoque[text];
-                if(item) {
-                    document.getElementById('estoque-edit-id').value = item.id;
-                    document.getElementById('form-cat').value = item.Categoria || '';
-                    document.getElementById('form-comp').value = item.Componente || '';
-                    document.getElementById('form-mod').value = item.Modelo || '';
-                    document.getElementById('form-esp').value = item.Especificação || '';
-                    document.getElementById('form-local').value = item.Local || '';
-                    document.getElementById('form-serie-estoque').value = item.Série || '';
-                    document.getElementById('form-patrimonio-estoque').value = item.Patrimonio || '';
-                    document.getElementById('form-qtd').value = item.Quantidade || 1;
-                    document.getElementById('form-minimo').value = item.EstoqueMinimo || 5;
-                } else {
-                    ['estoque-edit-id','form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque'].forEach(id => document.getElementById(id).value = '');
-                    document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5;
-                }
+                if(item) { document.getElementById('estoque-edit-id').value = item.id; document.getElementById('form-cat').value = item.Categoria || ''; document.getElementById('form-comp').value = item.Componente || ''; document.getElementById('form-mod').value = item.Modelo || ''; document.getElementById('form-esp').value = item.Especificação || ''; document.getElementById('form-local').value = item.Local || ''; document.getElementById('form-serie-estoque').value = item.Série || ''; document.getElementById('form-patrimonio-estoque').value = item.Patrimonio || ''; document.getElementById('form-qtd').value = item.Quantidade || 1; document.getElementById('form-minimo').value = item.EstoqueMinimo || 5; } 
+                else { ['estoque-edit-id','form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5; }
             });
         }
 
         if(document.getElementById('btn-save-item')) document.getElementById('btn-save-item').addEventListener('click', async () => {
-            const actionType = document.getElementById('estoque-action-type') ? document.getElementById('estoque-action-type').value : 'new';
-            const editId = document.getElementById('estoque-edit-id') ? document.getElementById('estoque-edit-id').value : '';
-            
-            const cat = document.getElementById('form-cat').value.trim();
-            const comp = document.getElementById('form-comp').value.trim();
-            const mod = sanitizeVal(document.getElementById('form-mod').value);
-            const esp = sanitizeVal(document.getElementById('form-esp').value);
-            const local = document.getElementById('form-local').value.trim();
-            const serie = sanitizeVal(document.getElementById('form-serie-estoque').value);
-            const patrim = sanitizeVal(document.getElementById('form-patrimonio-estoque').value);
-            const qtd = parseInt(document.getElementById('form-qtd').value);
-            const minEstoque = parseInt(document.getElementById('form-minimo').value) || 5; 
-            
+            const actionType = document.getElementById('estoque-action-type') ? document.getElementById('estoque-action-type').value : 'new'; const editId = document.getElementById('estoque-edit-id') ? document.getElementById('estoque-edit-id').value : '';
+            const cat = document.getElementById('form-cat').value.trim(); const comp = document.getElementById('form-comp').value.trim(); const mod = sanitizeVal(document.getElementById('form-mod').value); const esp = sanitizeVal(document.getElementById('form-esp').value); const local = document.getElementById('form-local').value.trim(); const serie = sanitizeVal(document.getElementById('form-serie-estoque').value); const patrim = sanitizeVal(document.getElementById('form-patrimonio-estoque').value); const qtd = parseInt(document.getElementById('form-qtd').value); const minEstoque = parseInt(document.getElementById('form-minimo').value) || 5; 
             if(!cat || !comp || !local || isNaN(qtd) || qtd <= 0) return showToast("Preencha Categoria, Componente, Local e Quantidade.", "error");
-            
-            const btn = document.getElementById('btn-save-item'); 
-            const originalText = btn.innerText;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-            
+            const btn = document.getElementById('btn-save-item'); const originalText = btn.innerText; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
             try {
-                if(actionType === 'edit' && editId) {
-                    await updateDoc(doc(db, "estoque", editId), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque });
-                    await registrarLog("MOVIMENTAÇÃO (ESTOQUE)", `${comp} - ${mod}`, qtd, `Local: ${local}`);
-                    showToast("Alteração gravada com sucesso!");
-                } else {
-                    const existente = estoqueLocal.find(i => {
-                        let matchPatr = (patrim && (i.Patrimonio === patrim || i.Série === patrim));
-                        let matchSerie = (serie && (i.Série === serie || i.Patrimonio === serie));
-                        if(matchPatr || matchSerie) return true;
-                        return (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'') === local;
-                    });
-                    
+                if(actionType === 'edit' && editId) { await updateDoc(doc(db, "estoque", editId), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque }); await registrarLog("MOVIMENTAÇÃO (ESTOQUE)", `${comp} - ${mod}`, qtd, `Local: ${local}`); showToast("Alteração gravada com sucesso!"); } 
+                else {
+                    const existente = estoqueLocal.find(i => { let matchPatr = patrim && (i.Patrimonio === patrim || i.Série === patrim); let matchSerie = serie && (i.Série === serie || i.Patrimonio === serie); if(matchPatr || matchSerie) return true; return (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'') === local; });
                     if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd, EstoqueMinimo: minEstoque });
                     else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque });
-                    await registrarLog("ENTRADA", `${comp} (${esp})`, qtd, local); 
-                    showToast("Entrada registada!"); 
+                    await registrarLog("ENTRADA", `${comp} (${esp})`, qtd, local); showToast("Entrada registada!"); 
                 }
-                
-                ['form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque', 'estoque-edit-id', 'estoque-edit-input'].forEach(id => document.getElementById(id).value = ''); 
-                document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5;
-                if(document.getElementById('estoque-action-type')) {
-                    document.getElementById('estoque-action-type').value = 'new';
-                    document.getElementById('estoque-action-type').dispatchEvent(new Event('change'));
-                }
-            } catch (e) { showToast("Erro: " + e.message, "error");} 
-            btn.innerText = originalText;
+                ['form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque', 'estoque-edit-id', 'estoque-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5;
+                if(document.getElementById('estoque-action-type')) { document.getElementById('estoque-action-type').value = 'new'; document.getElementById('estoque-action-type').dispatchEvent(new Event('change')); }
+            } catch (e) { showToast("Erro: " + e.message, "error");} btn.innerText = originalText;
         });
 
         if(document.getElementById('btn-estoque-upload')) document.getElementById('btn-estoque-upload').addEventListener('click', () => {
@@ -1500,108 +1005,42 @@
                 try {
                     const json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let cont = 0;
                     for (let row of json) {
-                        const cat = getVal(row, ['CATEGORIA', 'TIPO', 'GRUPO']) || 'Geral';
-                        const comp = getVal(row, ['COMPONENTE', 'EQUIPAMENTO', 'NOME', 'ITEM']);
-                        const mod = getVal(row, ['MODELO', 'MARCA/MODELO', 'MARCA MODELO', 'MARCA']);
-                        const esp = getVal(row, ['ESPECIFICAÇÃO', 'ESPECIFICACAO', 'Especificação', 'Especificacao']);
-                        const local = getVal(row, ['LOCAL FISICO', 'LOCAL', 'Local', 'LOCAL FÍSICO']);
-                        const serie = getVal(row, ['Nº DE SÉRIE', 'N DE SERIE', 'Nº DE SERIE', 'Nº Série', 'N Serie', 'SÉRIE', 'Série', 'SERIE', 'NUMERO DE SERIE']);
-                        const patrim = getVal(row, ['Nº PATRIMÔNIO', 'Nº PATRIMONIO', 'N Patrimônio', 'N Patrimonio', 'PATRIMÔNIO', 'PATRIMONIO', 'Patrimônio', 'Patrimonio']);
-                        const minEst = parseInt(getVal(row, ['ESTOQUE MÍNIMO', 'ESTOQUE MINIMO', 'Estoque Minimo', 'ESTOQUE MÍNIMO'])) || 5;
-                        const qtd = parseInt(getVal(row, ['QUANTIDADE', 'Quantidade', 'QTD', 'Qtd'])) || 1;
-                        
+                        const cat = getVal(row, ['CATEGORIA', 'TIPO', 'GRUPO']) || 'Geral'; const comp = getVal(row, ['COMPONENTE', 'EQUIPAMENTO', 'NOME', 'ITEM']); const mod = getVal(row, ['MODELO', 'MARCA/MODELO', 'MARCA MODELO', 'MARCA']); const esp = getVal(row, ['ESPECIFICAÇÃO', 'ESPECIFICACAO', 'Especificação', 'Especificacao']); const local = getVal(row, ['LOCAL FISICO', 'LOCAL', 'Local', 'LOCAL FÍSICO']); const serie = getVal(row, ['Nº DE SÉRIE', 'N DE SERIE', 'Nº DE SERIE', 'Nº Série', 'N Serie', 'SÉRIE', 'Série', 'SERIE', 'NUMERO DE SERIE']); const patrim = getVal(row, ['Nº PATRIMÔNIO', 'Nº PATRIMONIO', 'N Patrimônio', 'N Patrimonio', 'PATRIMÔNIO', 'PATRIMONIO', 'Patrimônio', 'Patrimonio']); const minEst = parseInt(getVal(row, ['ESTOQUE MÍNIMO', 'ESTOQUE MINIMO', 'Estoque Minimo', 'ESTOQUE MÍNIMO'])) || 5; const qtd = parseInt(getVal(row, ['QUANTIDADE', 'Quantidade', 'QTD', 'Qtd'])) || 1;
                         if(!comp) continue;
-                        
-                        const existente = estoqueLocal.find(i => {
-                            let matchPatr = (patrim && (i.Patrimonio === patrim || i.Série === patrim));
-                            let matchSerie = (serie && (i.Série === serie || i.Patrimonio === serie));
-                            if(matchPatr || matchSerie) return true;
-                            return (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'') === local;
-                        });
-
+                        const existente = estoqueLocal.find(i => { let matchPatr = patrim && (i.Patrimonio === patrim || i.Série === patrim); let matchSerie = serie && (i.Série === serie || i.Patrimonio === serie); if(matchPatr || matchSerie) return true; return (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'') === local; });
                         if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd, EstoqueMinimo: minEst });
-                        else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, EstoqueMinimo: minEst, Quantidade: qtd });
-                        cont++;
+                        else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, EstoqueMinimo: minEst, Quantidade: qtd }); cont++;
                     }
                     await registrarLog("ENTRADA", `Upload Lote`, cont, ""); showToast(`Sucesso! ${cont} importados.`); fileInput.value = "";
                 } catch (error) { showToast("Erro leitura.", "error"); } btn.innerHTML = 'Processar Planilha de Estoque';
             }; reader.readAsArrayBuffer(fileInput.files[0]);
         });
 
-        // ================= ABA SAÍDA (AUTO-COMPLETAR INTELIGENTE) =================
         function atualizarDatalistSaida() {
-            const dl = document.getElementById('lista-saida-items'); 
-            if(!dl) return;
-            dl.innerHTML = '';
-            mapItensSaida = {};
-            [...estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { 
-                const text = `[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||''}) - Qtd: ${i.Quantidade||0}`;
-                mapItensSaida[text] = i;
-            });
+            const dl = document.getElementById('lista-saida-items'); if(!dl) return; dl.innerHTML = ''; mapItensSaida = {};
+            [...estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { const text = `[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||''}) - Qtd: ${i.Quantidade||0}`; mapItensSaida[text] = i; });
         }
         
         if(document.getElementById('saida-item-input')) {
             document.getElementById('saida-item-input').addEventListener('input', (e) => {
-                const text = e.target.value;
-                const dl = document.getElementById('lista-saida-items');
-                dl.innerHTML = ''; 
-                
-                if(text.length >= 3) {
-                    const search = text.toLowerCase().split(' ');
-                    let count = 0;
-                    for(let key in mapItensSaida) {
-                        if(search.every(term => key.toLowerCase().includes(term))) {
-                            let option = document.createElement('option');
-                            option.value = key;
-                            dl.appendChild(option);
-                            count++;
-                            if(count > 40) break;
-                        }
-                    }
-                }
+                const text = e.target.value; const dl = document.getElementById('lista-saida-items'); dl.innerHTML = ''; 
+                if(text.length >= 3) { const search = text.toLowerCase().split(' '); let count = 0; for(let key in mapItensSaida) { if(search.every(term => key.toLowerCase().includes(term))) { let option = document.createElement('option'); option.value = key; dl.appendChild(option); count++; if(count > 40) break; } } }
             });
         }
 
         if(document.getElementById('btn-register-saida')) {
             document.getElementById('btn-register-saida').addEventListener('click', async () => {
-                const inputTexto = document.getElementById('saida-item-input').value;
-                const qtdSaida = parseInt(document.getElementById('saida-qtd').value);
-                const chamado = document.getElementById('saida-chamado').value.trim();
-                
+                const inputTexto = document.getElementById('saida-item-input').value; const qtdSaida = parseInt(document.getElementById('saida-qtd').value); const chamado = document.getElementById('saida-chamado').value.trim();
                 const itemDB = mapItensSaida[inputTexto];
-                
-                if(!itemDB) return showToast("Equipamento não encontrado ou seleção inválida. Selecione um item da lista.", "error");
+                if(!itemDB) return showToast("Equipamento não encontrado.", "error");
                 if(isNaN(qtdSaida) || qtdSaida <= 0) return showToast("Quantidade inválida.", "error");
-                
-                const btn = document.getElementById('btn-register-saida'); 
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-                
-                if(qtdSaida > (itemDB.Quantidade||0)) { 
-                    showToast("Estoque insuficiente para esta saída!", "error"); 
-                    btn.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa'; 
-                    return; 
-                }
-                
-                try { 
-                    await updateDoc(doc(db, "estoque", itemDB.id), { Quantidade: (itemDB.Quantidade||0) - qtdSaida }); 
-                    await registrarLog("SAÍDA", `${itemDB.Componente} (${itemDB.Especificação})`, qtdSaida, chamado); 
-                    showToast("Baixa processada com sucesso!"); 
-                    
-                    document.getElementById('saida-item-input').value = "";
-                    document.getElementById('saida-qtd').value = 1; 
-                    document.getElementById('saida-chamado').value = ""; 
-                } catch(e) { showToast("Erro ao processar baixa.", "error"); } 
-                
-                btn.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa';
+                const btn = document.getElementById('btn-register-saida'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+                if(qtdSaida > (itemDB.Quantidade||0)) { showToast("Estoque insuficiente para esta saída!", "error"); btn.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa'; return; }
+                try { await updateDoc(doc(db, "estoque", itemDB.id), { Quantidade: (itemDB.Quantidade||0) - qtdSaida }); await registrarLog("SAÍDA", `${itemDB.Componente} (${itemDB.Especificação})`, qtdSaida, chamado); showToast("Baixa processada com sucesso!"); document.getElementById('saida-item-input').value = ""; document.getElementById('saida-qtd').value = 1; document.getElementById('saida-chamado').value = ""; } catch(e) { showToast("Erro ao processar baixa.", "error"); } btn.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa';
             });
         }
 
-        // ================= COMPORTAMENTO DE NAVEGAÇÃO =================
-        if(document.getElementById('btn-theme')) document.getElementById('btn-theme').addEventListener('click', () => document.body.classList.toggle('dark'));
-        const modal = document.getElementById('tools-modal'); 
-        if(document.getElementById('btn-tools')) document.getElementById('btn-tools').addEventListener('click', () => modal.classList.remove('hidden')); 
-        document.querySelectorAll('.close-modal').forEach(b => b.addEventListener('click', () => modal.classList.add('hidden')));
-        
+        // ================= COMPORTAMENTO DE NAVEGAÇÃO E BOTOES =================
         const tabsBtns = document.querySelectorAll('.tab-btn'), tabContents = document.querySelectorAll('.tab-content');
         tabsBtns.forEach(btn => { 
             btn.addEventListener('click', (e) => { 
@@ -1615,6 +1054,11 @@
                 if(document.getElementById(target)) document.getElementById(target).classList.remove('hidden'); 
             }); 
         });
+
+        if(document.getElementById('btn-theme')) document.getElementById('btn-theme').addEventListener('click', () => document.body.classList.toggle('dark'));
+        const modal = document.getElementById('tools-modal'); 
+        if(document.getElementById('btn-tools')) document.getElementById('btn-tools').addEventListener('click', () => modal.classList.remove('hidden')); 
+        document.querySelectorAll('.close-modal').forEach(b => b.addEventListener('click', () => modal.classList.add('hidden')));
 
         if(document.getElementById('view-estoque-btn')) document.getElementById('view-estoque-btn').addEventListener('click', (e) => { e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600'); e.currentTarget.classList.replace('bg-gray-100', 'bg-white'); const otherBtn = document.getElementById('view-rastreio-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500'); otherBtn.classList.replace('bg-white', 'bg-gray-100'); document.getElementById('view-estoque-content').classList.remove('hidden'); document.getElementById('view-rastreio-content').classList.add('hidden'); });
         if(document.getElementById('view-rastreio-btn')) document.getElementById('view-rastreio-btn').addEventListener('click', (e) => { e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600'); e.currentTarget.classList.replace('bg-gray-100', 'bg-white'); const otherBtn = document.getElementById('view-estoque-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500'); otherBtn.classList.replace('bg-white', 'bg-gray-100'); document.getElementById('view-rastreio-content').classList.remove('hidden'); document.getElementById('view-estoque-content').classList.add('hidden'); });
@@ -1632,6 +1076,17 @@
             estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Local||''}","${r.Série||''}","${r.Patrimonio||''}","${r.Quantidade||0}"\n`); 
             const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); 
         });
+
+        // RENDERIZAÇÃO INICIAL DA TELA COM ANIMAÇÕES
+        setTimeout(() => {
+            const kpis = document.querySelectorAll('.modern-card');
+            kpis.forEach((kpi, i) => {
+                kpi.style.opacity = '0';
+                kpi.style.transform = 'translateY(10px)';
+                kpi.style.transition = 'all 0.4s ease-out';
+                setTimeout(() => { kpi.style.opacity = '1'; kpi.style.transform = 'translateY(0)'; }, i * 100);
+            });
+        }, 300);
     </script>
 </body>
 </html>
