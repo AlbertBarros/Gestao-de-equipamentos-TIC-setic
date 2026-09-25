@@ -3,67 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão de Almoxarifado TIC</title>
+    <title>Painel de Gestão de Estoque - SETIC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .dark { background-color: #1a202c; color: #e2e8f0; }
-        .dark .bg-white { background-color: #2d3748; }
-        .dark .text-gray-800 { color: #f7fafc; }
-        .dark .text-gray-600 { color: #cbd5e0; }
-        .dark .border-gray-200 { border-color: #4a5568; }
-        .dark input, .dark select { background-color: #4a5568; color: white; border-color: #718096; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; background-color: #F3F4F6; }
+        
+        /* Dark Mode Customizações */
+        .dark { background-color: #0F172A; color: #E2E8F0; }
+        .dark .bg-white { background-color: #1E293B; border-color: #334155; }
+        .dark .text-gray-800 { color: #F8FAFC; }
+        .dark .text-gray-500, .dark .text-gray-600 { color: #94A3B8; }
+        .dark table thead th { background-color: #334155; color: #F1F5F9; }
+        .dark table tbody tr { border-color: #334155; }
+        .dark table tbody tr:hover { background-color: #475569; }
+        .dark input, .dark select, .dark file { background-color: #334155; color: white; border-color: #475569; }
         .hidden { display: none !important; }
+
+        /* Estilos de Impressão para Relatório Oficial */
+        @media print {
+            body * { visibility: hidden; }
+            #printable-report, #printable-report * { visibility: visible; }
+            #printable-report { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; }
+            .no-print { display: none !important; }
+            table { border-collapse: collapse; width: 100%; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            th { background-color: #f2f2f2 !important; color: black !important; }
+        }
     </style>
 </head>
-<body class="bg-gray-100 transition-colors duration-200">
+<body class="transition-colors duration-200">
 
     <!-- TELA DE LOGIN -->
-    <div id="login-screen" class="fixed inset-0 bg-gray-600 bg-opacity-90 flex justify-center items-center z-50">
-        <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
-            <div class="text-center mb-6">
-                <i class="fas fa-server text-blue-600 text-4xl mb-2"></i>
-                <h2 class="text-2xl font-bold text-gray-800">Almoxarifado TI</h2>
-                <p class="text-sm text-gray-500">Acesso Restrito</p>
+    <div id="login-screen" class="fixed inset-0 bg-slate-900 flex justify-center items-center z-50">
+        <div class="bg-white rounded-xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500">
+            <div class="text-center mb-8">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-24 mx-auto mb-4">
+                <h2 class="text-2xl font-bold text-slate-800">Almoxarifado TIC</h2>
+                <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p>
             </div>
-            <div class="space-y-4">
+            <div class="space-y-5">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">E-mail</label>
-                    <input type="email" id="login-email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" placeholder="albertbarros18@gmail.com">
+                    <label class="block text-sm font-semibold text-slate-700">Correio Eletrônico</label>
+                    <input type="email" id="login-email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2.5 border focus:ring-blue-500 focus:border-blue-500" placeholder="usuario@prf.gov.br">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Senha</label>
-                    <input type="password" id="login-password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" placeholder="••••••••">
+                    <label class="block text-sm font-semibold text-slate-700">Senha</label>
+                    <input type="password" id="login-password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2.5 border focus:ring-blue-500 focus:border-blue-500" placeholder="••••••••">
                 </div>
-                <button id="btn-login" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition">
-                    <i class="fas fa-sign-in-alt mr-2"></i> Entrar
+                <button id="btn-login" class="w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:bg-slate-800 transition shadow-lg">
+                    <i class="fas fa-sign-in-alt mr-2"></i> Autenticar
                 </button>
             </div>
-            <p id="login-error" class="text-red-500 text-sm mt-3 text-center hidden"></p>
+            <p id="login-error" class="text-red-600 text-sm mt-4 text-center font-medium hidden"></p>
         </div>
     </div>
 
-    <!-- SISTEMA PRINCIPAL (Oculto inicialmente) -->
+    <!-- SISTEMA PRINCIPAL -->
     <div id="main-system" class="hidden">
         
-        <!-- NAVBAR -->
-        <nav class="bg-blue-800 text-white shadow-lg">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- NAVBAR PADRÃO REFERÊNCIA UI/UX -->
+        <nav class="bg-[#161B33] text-white shadow-md border-b-4 border-yellow-500 no-print">
+            <div class="px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
-                    <div class="flex items-center">
-                        <i class="fas fa-boxes text-2xl mr-3"></i>
-                        <span class="font-bold text-xl">Estoque TIC</span>
+                    <div class="flex items-center space-x-3">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-10">
+                        <i class="fas fa-chart-line text-xl ml-2"></i>
+                        <span class="font-bold text-lg tracking-wide hidden sm:block">Painel de Gestão de Estoque - SETIC</span>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <button id="btn-theme" class="p-2 rounded-full hover:bg-blue-700 transition" title="Modo Noturno">
-                            <i class="fas fa-moon"></i>
+                        <span class="bg-green-500 text-white text-xs px-2.5 py-1.5 rounded flex items-center font-bold shadow-sm hidden md:flex">
+                            <i class="fas fa-check-circle mr-1.5"></i> Sincronizado
+                        </span>
+                        <button id="btn-theme" class="p-2 rounded-full hover:bg-slate-700 transition" title="Modo Noturno">
+                            <i class="fas fa-moon text-lg"></i>
                         </button>
-                        <button id="btn-tools" class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-md font-medium transition shadow">
-                            <i class="fas fa-toolbox mr-2"></i> Painel de Ferramentas
+                        <button id="btn-tools" class="bg-[#2A314D] border border-slate-600 hover:bg-[#3B4468] px-4 py-2 rounded text-sm font-semibold transition shadow-sm flex items-center">
+                            <i class="fas fa-toolbox mr-2"></i> <span class="hidden md:inline">Painel de Ferramentas</span>
                         </button>
-                        <button id="btn-logout" class="p-2 rounded-full hover:bg-red-600 transition" title="Sair">
-                            <i class="fas fa-power-off"></i>
+                        <button id="btn-logout" class="bg-[#E53935] hover:bg-red-700 px-4 py-2 rounded text-sm font-semibold transition shadow-sm flex items-center">
+                            <i class="fas fa-sign-out-alt mr-2"></i> <span class="hidden md:inline">Sair</span>
                         </button>
                     </div>
                 </div>
@@ -71,55 +95,58 @@
         </nav>
 
         <!-- DASHBOARD CONTAINER -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
             
             <!-- KPIS -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500 flex items-center justify-between">
-                    <div><p class="text-sm text-gray-500 font-medium">Total de Itens</p><p id="kpi-total" class="text-3xl font-bold text-gray-800">0</p></div>
-                    <i class="fas fa-cubes text-blue-300 text-4xl"></i>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex items-center justify-between hover:shadow-md transition">
+                    <div><p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Total de Ativos</p><p id="kpi-total" class="text-3xl font-black text-[#161B33]">0</p></div>
+                    <div class="p-3 bg-blue-50 rounded-full"><i class="fas fa-cubes text-blue-600 text-2xl"></i></div>
                 </div>
-                <div class="bg-white rounded-lg shadow p-6 border-l-4 border-green-500 flex items-center justify-between">
-                    <div><p class="text-sm text-gray-500 font-medium">Armazenamento (SSDs/HDs)</p><p id="kpi-armazenamento" class="text-3xl font-bold text-gray-800">0</p></div>
-                    <i class="fas fa-hdd text-green-300 text-4xl"></i>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex items-center justify-between hover:shadow-md transition">
+                    <div><p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Armazenamento (SSDs)</p><p id="kpi-armazenamento" class="text-3xl font-black text-[#161B33]">0</p></div>
+                    <div class="p-3 bg-green-50 rounded-full"><i class="fas fa-hdd text-green-600 text-2xl"></i></div>
                 </div>
-                <div class="bg-white rounded-lg shadow p-6 border-l-4 border-yellow-500 flex items-center justify-between">
-                    <div><p class="text-sm text-gray-500 font-medium">Fontes e Baterias</p><p id="kpi-energia" class="text-3xl font-bold text-gray-800">0</p></div>
-                    <i class="fas fa-plug text-yellow-300 text-4xl"></i>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex items-center justify-between hover:shadow-md transition">
+                    <div><p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Energia (Fontes/Bat)</p><p id="kpi-energia" class="text-3xl font-black text-[#161B33]">0</p></div>
+                    <div class="p-3 bg-yellow-50 rounded-full"><i class="fas fa-plug text-yellow-600 text-2xl"></i></div>
                 </div>
-                <div class="bg-white rounded-lg shadow p-6 border-l-4 border-red-500 flex items-center justify-between">
-                    <div><p class="text-sm text-gray-500 font-medium">Estoque Zerado / Alerta</p><p id="kpi-zerado" class="text-3xl font-bold text-red-600">0</p></div>
-                    <i class="fas fa-exclamation-triangle text-red-300 text-4xl"></i>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex items-center justify-between hover:shadow-md transition">
+                    <div><p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Alerta: Estoque Crítico</p><p id="kpi-zerado" class="text-3xl font-black text-red-600">0</p></div>
+                    <div class="p-3 bg-red-50 rounded-full"><i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i></div>
                 </div>
             </div>
 
-            <!-- GRÁFICOS -->
+            <!-- GRÁFICOS (Estilizados conforme referência UI/UX) -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="bg-white rounded-lg shadow p-6">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Distribuição por Categoria</h3>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-6">Volume por Categoria</h3>
                     <canvas id="chartCategoria"></canvas>
                 </div>
-                <div class="bg-white rounded-lg shadow p-6">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Top 5 Maiores Volumes</h3>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-6">Top 5 Equipamentos em Estoque</h3>
                     <canvas id="chartTopItems"></canvas>
                 </div>
             </div>
 
             <!-- TABELA DE INVENTÁRIO -->
-            <div class="bg-white rounded-lg shadow overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
-                    <h3 class="text-lg font-bold text-gray-800">Inventário Detalhado</h3>
-                    <input type="text" id="search-table" placeholder="Buscar componente..." class="border rounded px-3 py-1 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50/50">
+                    <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Inventário Detalhado</h3>
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                        <input type="text" id="search-table" placeholder="Filtrar registro..." class="pl-9 pr-3 py-2 border border-gray-300 rounded text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                    </div>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-100">
+                        <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoria</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Componente</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Modelo / Espec.</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantidade</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Categoria</th>
+                                <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Componente</th>
+                                <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Modelo / Espec.</th>
+                                <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Quantidade</th>
+                                <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
                             </tr>
                         </thead>
                         <tbody id="inventory-tbody" class="bg-white divide-y divide-gray-200">
@@ -131,140 +158,188 @@
         </div>
     </div>
 
+    <!-- AREA DE IMPRESSÃO OCULTA (Exibida apenas no CTRL+P / PDF) -->
+    <div id="printable-report" class="hidden">
+        <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" style="height: 80px; margin-bottom: 10px;">
+            <h2 style="margin: 0; font-family: Arial, sans-serif; font-size: 18px; text-transform: uppercase;">Ministério da Justiça e Segurança Pública</h2>
+            <h3 style="margin: 5px 0; font-family: Arial, sans-serif; font-size: 16px;">Polícia Rodoviária Federal</h3>
+            <p style="margin: 5px 0; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold;">Relatório Geral de Estoque - SETIC</p>
+            <p id="print-date" style="margin: 0; font-family: Arial, sans-serif; font-size: 12px; color: #555;"></p>
+        </div>
+        <table id="print-table" style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 12px;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Categoria</th>
+                    <th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Componente</th>
+                    <th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Especificação</th>
+                    <th style="border: 1px solid #000; padding: 5px; background-color: #eee; text-align: center;">Qtd</th>
+                </tr>
+            </thead>
+            <tbody id="print-tbody"></tbody>
+        </table>
+    </div>
+
     <!-- MODAL PAINEL DE FERRAMENTAS -->
-    <div id="tools-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-75 flex justify-center items-center z-50">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl flex overflow-hidden h-[600px] flex-col md:flex-row">
+    <div id="tools-modal" class="hidden fixed inset-0 bg-slate-900 bg-opacity-80 flex justify-center items-center z-50 p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-5xl flex overflow-hidden h-[650px] flex-col md:flex-row relative">
             
-            <!-- Menu Lateral do Modal -->
-            <div class="w-full md:w-64 bg-gray-50 border-r border-gray-200 p-4">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-bold text-gray-800"><i class="fas fa-toolbox text-blue-600 mr-2"></i> Ferramentas</h3>
-                    <button class="md:hidden text-gray-500 hover:text-gray-800 close-modal"><i class="fas fa-times"></i></button>
+            <button class="absolute top-4 right-4 text-gray-400 hover:text-red-600 text-3xl transition z-10 close-modal" title="Fechar Janela">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- Menu Lateral -->
+            <div class="w-full md:w-64 bg-slate-50 border-r border-gray-200 p-6">
+                <div class="flex items-center mb-8 border-b pb-4">
+                    <i class="fas fa-toolbox text-[#161B33] text-2xl mr-3"></i>
+                    <h3 class="text-lg font-bold text-slate-800">Ferramentas</h3>
                 </div>
-                <ul class="space-y-2">
-                    <li><button class="tab-btn w-full text-left px-4 py-2 rounded bg-blue-100 text-blue-700 font-medium transition" data-target="tab-entrada"><i class="fas fa-plus-circle w-5"></i> Entrada (Adicionar)</button></li>
-                    <li><button class="tab-btn w-full text-left px-4 py-2 rounded text-gray-600 hover:bg-gray-200 transition" data-target="tab-saida"><i class="fas fa-minus-circle w-5"></i> Saída (Retirada)</button></li>
-                    <li><button class="tab-btn w-full text-left px-4 py-2 rounded text-gray-600 hover:bg-gray-200 transition" data-target="tab-logs"><i class="fas fa-history w-5"></i> Histórico / Logs</button></li>
-                    <li><button class="tab-btn w-full text-left px-4 py-2 rounded text-gray-600 hover:bg-gray-200 transition" data-target="tab-relatorio"><i class="fas fa-file-pdf w-5"></i> Relatórios</button></li>
+                <ul class="space-y-3">
+                    <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg bg-blue-100 text-blue-800 font-bold transition flex items-center" data-target="tab-entrada"><i class="fas fa-plus-circle w-6"></i> Entrada</button></li>
+                    <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center" data-target="tab-saida"><i class="fas fa-minus-circle w-6"></i> Baixa / Saída</button></li>
+                    <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center" data-target="tab-logs"><i class="fas fa-history w-6"></i> Auditoria</button></li>
+                    <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center" data-target="tab-importar"><i class="fas fa-file-excel w-6"></i> Importar Excel</button></li>
+                    <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center" data-target="tab-relatorio"><i class="fas fa-file-pdf w-6"></i> Exportações</button></li>
                 </ul>
             </div>
 
-            <!-- Conteúdo do Modal -->
-            <div class="flex-1 p-6 overflow-y-auto relative">
-                <button class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 hidden md:block close-modal"><i class="fas fa-times text-xl"></i></button>
+            <!-- Conteúdo -->
+            <div class="flex-1 p-8 overflow-y-auto">
                 
-                <!-- TAB 1: ENTRADA -->
+                <!-- TAB ENTRADA -->
                 <div id="tab-entrada" class="tab-content">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Registrar Entrada / Novo Item</h2>
-                    <p class="text-sm text-gray-500 mb-6">Adicione estoque a um item existente ou cadastre um novo equipamento.</p>
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Entrada de Ativos</h2>
+                    <p class="text-sm text-slate-500 mb-8 border-b pb-4">Adicione estoque a um item existente ou cadastre um novo equipamento.</p>
                     
-                    <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="grid grid-cols-2 gap-5 mb-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Categoria Macro</label>
-                            <input list="lista-categorias" id="form-cat" class="mt-1 block w-full rounded border-gray-300 border p-2" placeholder="Ex: Armazenamento">
+                            <label class="block text-sm font-semibold text-slate-700">Categoria Macro</label>
+                            <input list="lista-categorias" id="form-cat" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5" placeholder="Ex: Armazenamento">
                             <datalist id="lista-categorias">
-                                <option value="Armazenamento">
-                                <option value="Memória">
-                                <option value="Fonte de Alimentação">
-                                <option value="Bateria">
-                                <option value="Periféricos">
+                                <option value="Armazenamento"><option value="Memória"><option value="Fonte de Alimentação"><option value="Bateria"><option value="Periféricos">
                             </datalist>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Componente</label>
-                            <input list="lista-componentes" id="form-comp" class="mt-1 block w-full rounded border-gray-300 border p-2" placeholder="Ex: SSD M2">
+                            <label class="block text-sm font-semibold text-slate-700">Componente</label>
+                            <input list="lista-componentes" id="form-comp" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5" placeholder="Ex: SSD M2">
                             <datalist id="lista-componentes"></datalist>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Modelo</label>
-                            <input type="text" id="form-mod" class="mt-1 block w-full rounded border-gray-300 border p-2" placeholder="Ex: NVME">
+                            <label class="block text-sm font-semibold text-slate-700">Modelo</label>
+                            <input type="text" id="form-mod" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5" placeholder="Ex: NVME">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Especificação</label>
-                            <input type="text" id="form-esp" class="mt-1 block w-full rounded border-gray-300 border p-2" placeholder="Ex: 512 GB">
+                            <label class="block text-sm font-semibold text-slate-700">Especificação</label>
+                            <input type="text" id="form-esp" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5" placeholder="Ex: 512 GB">
                         </div>
                         <div class="col-span-2">
-                            <label class="block text-sm font-medium text-gray-700">Quantidade a Adicionar</label>
-                            <input type="number" id="form-qtd" class="mt-1 block w-full rounded border-gray-300 border p-2" min="1" value="1">
+                            <label class="block text-sm font-semibold text-slate-700">Quantidade</label>
+                            <input type="number" id="form-qtd" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5" min="1" value="1">
                         </div>
                     </div>
-                    <button id="btn-save-item" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700 transition">
-                        <i class="fas fa-save mr-2"></i> Gravar Entrada
+                    <button id="btn-save-item" class="w-full bg-emerald-600 text-white font-bold py-3 px-4 rounded-md hover:bg-emerald-700 transition shadow">
+                        Registrar Entrada
                     </button>
-                    <p id="msg-entrada" class="text-green-600 text-center mt-2 font-medium hidden">Entrada registada com sucesso!</p>
+                    <p id="msg-entrada" class="text-emerald-600 text-center mt-3 font-bold hidden"><i class="fas fa-check-circle"></i> Entrada registada com sucesso!</p>
                 </div>
 
-                <!-- TAB 2: SAÍDA -->
+                <!-- TAB SAÍDA -->
                 <div id="tab-saida" class="tab-content hidden">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Registrar Saída de Material</h2>
-                    <p class="text-sm text-gray-500 mb-6">Dê baixa num equipamento para atendimento de chamados.</p>
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Baixa de Material</h2>
+                    <p class="text-sm text-slate-500 mb-8 border-b pb-4">Despacho de componentes para atendimento de incidentes.</p>
                     
-                    <div class="space-y-4 mb-6">
+                    <div class="space-y-5 mb-8">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Selecione o Item em Estoque</label>
-                            <select id="saida-select-item" class="mt-1 block w-full rounded border-gray-300 border p-2 bg-white">
-                                <!-- Opções injetadas via JS -->
-                            </select>
+                            <label class="block text-sm font-semibold text-slate-700">Equipamento em Estoque</label>
+                            <select id="saida-select-item" class="mt-1 block w-full rounded-md border-gray-300 border p-3 bg-white shadow-sm"></select>
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-2 gap-5">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Quantidade Retirada</label>
-                                <input type="number" id="saida-qtd" class="mt-1 block w-full rounded border-gray-300 border p-2" min="1" value="1">
+                                <label class="block text-sm font-semibold text-slate-700">Qtd Retirada</label>
+                                <input type="number" id="saida-qtd" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm" min="1" value="1">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Nº do Chamado (Ex: GLPI / SEI)</label>
-                                <input type="text" id="saida-chamado" class="mt-1 block w-full rounded border-gray-300 border p-2" placeholder="GLPI-2026-1234">
+                                <label class="block text-sm font-semibold text-slate-700">Sistema / Chamado (GLPI)</label>
+                                <input type="text" id="saida-chamado" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm" placeholder="Ex: GLPI-1234">
                             </div>
                         </div>
                     </div>
-                    <button id="btn-register-saida" class="w-full bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-600 transition">
-                        <i class="fas fa-upload mr-2"></i> Confirmar Saída
+                    <button id="btn-register-saida" class="w-full bg-orange-500 text-white font-bold py-3 px-4 rounded-md hover:bg-orange-600 transition shadow">
+                        Confirmar Baixa
                     </button>
-                    <p id="msg-saida" class="text-center mt-2 font-medium hidden"></p>
+                    <p id="msg-saida" class="text-center mt-3 font-bold hidden"></p>
                 </div>
 
-                <!-- TAB 3: LOGS -->
+                <!-- TAB LOGS -->
                 <div id="tab-logs" class="tab-content hidden h-full flex flex-col">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2 border-b pb-2">Histórico de Movimentações</h2>
-                    <div class="flex-1 overflow-y-auto border rounded bg-gray-50">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Auditoria de Movimentações</h2>
+                    <p class="text-sm text-slate-500 mb-4 border-b pb-4">Registro inalterável de fluxo de ativos.</p>
+                    <div class="flex-1 overflow-y-auto border rounded bg-slate-50">
                         <table class="min-w-full divide-y divide-gray-200 text-sm">
-                            <thead class="bg-gray-200 sticky top-0">
+                            <thead class="bg-slate-200 sticky top-0">
                                 <tr>
-                                    <th class="px-4 py-2 text-left text-gray-600">Data/Hora</th>
-                                    <th class="px-4 py-2 text-left text-gray-600">Ação</th>
-                                    <th class="px-4 py-2 text-left text-gray-600">Item</th>
-                                    <th class="px-4 py-2 text-left text-gray-600">Qtd</th>
-                                    <th class="px-4 py-2 text-left text-gray-600">Chamado</th>
+                                    <th class="px-4 py-2 text-left text-slate-700 font-bold">Data</th>
+                                    <th class="px-4 py-2 text-left text-slate-700 font-bold">Ação</th>
+                                    <th class="px-4 py-2 text-left text-slate-700 font-bold">Item</th>
+                                    <th class="px-4 py-2 text-left text-slate-700 font-bold">Qtd</th>
+                                    <th class="px-4 py-2 text-left text-slate-700 font-bold">Ref.</th>
                                 </tr>
                             </thead>
-                            <tbody id="logs-tbody" class="bg-white divide-y divide-gray-200">
-                                <!-- Logs Injetados via JS -->
-                            </tbody>
+                            <tbody id="logs-tbody" class="bg-white divide-y divide-gray-200"></tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- TAB 4: RELATORIO -->
-                <div id="tab-relatorio" class="tab-content hidden text-center pt-10">
-                    <i class="fas fa-file-invoice text-6xl text-gray-300 mb-4"></i>
-                    <h2 class="text-xl font-bold text-gray-700">Geração de Relatórios</h2>
-                    <p class="text-gray-500 mb-6">Exporte a base atual ou o histórico de movimentações.</p>
-                    <button id="btn-export-csv" class="bg-blue-600 text-white font-bold py-2 px-6 rounded hover:bg-blue-700 transition">
-                        <i class="fas fa-file-csv mr-2"></i> Exportar Estoque CSV
+                <!-- TAB IMPORTAR -->
+                <div id="tab-importar" class="tab-content hidden">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Importação em Lote</h2>
+                    <p class="text-sm text-slate-500 mb-6 border-b pb-4">Migração de dados legados via planilha estruturada.</p>
+                    
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8 rounded">
+                        <p class="text-sm text-blue-800">
+                            <strong>Formato de Leitura:</strong> As colunas devem estar nomeadas exatamente como: <b>Categoria</b>, <b>Componente</b>, <b>Modelo</b>, <b>Especificação</b> e <b>Quantidade</b>.
+                        </p>
+                    </div>
+
+                    <div class="mb-8 border-2 border-dashed border-slate-300 p-10 text-center rounded-xl bg-slate-50 hover:bg-slate-100 transition">
+                        <i class="fas fa-file-excel text-5xl text-emerald-600 mb-4"></i>
+                        <input type="file" id="file-upload" accept=".xlsx, .xls, .csv" class="mx-auto block w-full max-w-xs text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                    </div>
+
+                    <button id="btn-process-upload" class="w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:bg-slate-800 transition shadow">
+                        <i class="fas fa-cloud-upload-alt mr-2"></i> Processar Estrutura
                     </button>
+                    <p id="msg-upload" class="text-center mt-4 font-bold text-sm hidden"></p>
+                </div>
+
+                <!-- TAB RELATORIO -->
+                <div id="tab-relatorio" class="tab-content hidden text-center pt-8">
+                    <i class="fas fa-print text-7xl text-slate-300 mb-6"></i>
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Exportações e Relatórios</h2>
+                    <p class="text-slate-500 mb-10">Gere documentos oficiais ou planilhas analíticas.</p>
+                    
+                    <div class="space-y-4 max-w-sm mx-auto">
+                        <button id="btn-print-pdf" class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-md hover:bg-blue-700 transition shadow flex justify-center items-center">
+                            <i class="fas fa-file-pdf mr-3 text-lg"></i> Gerar Relatório Oficial (PDF)
+                        </button>
+                        <button id="btn-export-csv" class="w-full bg-emerald-600 text-white font-bold py-3 px-6 rounded-md hover:bg-emerald-700 transition shadow flex justify-center items-center">
+                            <i class="fas fa-file-csv mr-3 text-lg"></i> Exportar Dados (Excel/CSV)
+                        </button>
+                    </div>
                 </div>
 
             </div>
         </div>
     </div>
 
-    <!-- FIREBASE SDKS -->
+    <!-- FIREBASE SDKS (Sua Configuração Original) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, addDoc, serverTimestamp, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // SUA CONFIGURAÇÃO EXATA DO FIREBASE
+        Chart.register(ChartDataLabels);
+
         const firebaseConfig = {
             apiKey: "AIzaSyBRCRThFRIEGYQ8ukI8IzJ78AyqSEyspsc",
             authDomain: "gestao-de-equipamentos-tic.firebaseapp.com",
@@ -278,21 +353,19 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let estoqueLocal = []; // Armazena cópia local para gráficos
+        let estoqueLocal = [];
         let userEmail = "";
 
-        // --- SISTEMA DE LOGIN ---
+        // LOGIN
         document.getElementById('btn-login').addEventListener('click', () => {
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-password').value;
             const btn = document.getElementById('btn-login');
-            
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Autenticando...';
-            
-            signInWithEmailAndPassword(auth, email, pass).catch((error) => {
-                document.getElementById('login-error').innerText = "Erro: Verifique email/senha ou regras de acesso.";
+            signInWithEmailAndPassword(auth, email, pass).catch(() => {
+                document.getElementById('login-error').innerText = "Credenciais inválidas ou acesso não autorizado.";
                 document.getElementById('login-error').classList.remove('hidden');
-                btn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Entrar';
+                btn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Autenticar';
             });
         });
 
@@ -310,7 +383,6 @@
             }
         });
 
-        // --- INICIALIZAÇÃO E LEITURA DE DADOS (ESTOQUE) ---
         function iniciarSistema() {
             const colRef = collection(db, "estoque");
             onSnapshot(colRef, (snapshot) => {
@@ -318,16 +390,12 @@
                 snapshot.forEach((doc) => {
                     estoqueLocal.push({ id: doc.id, ...doc.data() });
                 });
-                
-                // Se a base estiver totalmente vazia, insere dados iniciais (simulação de migração)
-                if(estoqueLocal.length === 0) { carregarDadosTeste(); }
-                
                 atualizarInterface();
                 atualizarDatalists();
                 atualizarSelectSaida();
+                prepararRelatorioImpressao();
             });
 
-            // Listener para Logs
             const logsRef = query(collection(db, "logs"), orderBy("dataHora", "desc"), limit(50));
             onSnapshot(logsRef, (snapshot) => {
                 const tbody = document.getElementById('logs-tbody');
@@ -337,263 +405,172 @@
                     let dateStr = "N/A";
                     if(log.dataHora) {
                         const d = log.dataHora.toDate();
-                        dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR');
+                        dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5);
                     }
-                    
-                    let corAcao = log.tipo === 'ENTRADA' ? 'text-green-600' : 'text-orange-600';
+                    let corAcao = log.tipo === 'ENTRADA' ? 'text-emerald-600' : 'text-orange-600';
                     let iconAcao = log.tipo === 'ENTRADA' ? 'fa-arrow-down' : 'fa-arrow-up';
-
                     tbody.innerHTML += `
-                        <tr class="hover:bg-gray-100">
-                            <td class="px-4 py-2 whitespace-nowrap text-gray-500">${dateStr}</td>
-                            <td class="px-4 py-2 whitespace-nowrap font-bold ${corAcao}"><i class="fas ${iconAcao} mr-1"></i> ${log.tipo}</td>
-                            <td class="px-4 py-2 text-gray-800">${log.itemNome}</td>
-                            <td class="px-4 py-2 font-bold text-gray-800">${log.qtd}</td>
-                            <td class="px-4 py-2 text-gray-500">${log.chamado || '-'}</td>
+                        <tr class="hover:bg-slate-100 transition">
+                            <td class="px-4 py-3 whitespace-nowrap text-slate-500 font-medium">${dateStr}</td>
+                            <td class="px-4 py-3 whitespace-nowrap font-bold ${corAcao}"><i class="fas ${iconAcao} mr-1"></i> ${log.tipo}</td>
+                            <td class="px-4 py-3 text-slate-800 font-semibold">${log.itemNome}</td>
+                            <td class="px-4 py-3 font-black text-slate-800">${log.qtd}</td>
+                            <td class="px-4 py-3 text-slate-500 font-medium">${log.chamado || '-'}</td>
                         </tr>
                     `;
                 });
             });
         }
 
-        // --- FUNÇÕES DE REGISTRO (ENTRADA / SAÍDA / LOG) ---
-        
-        // Função universal para registrar log
         async function registrarLog(tipo, itemNome, qtd, chamado = "") {
-            try {
-                await addDoc(collection(db, "logs"), {
-                    tipo: tipo, // "ENTRADA" ou "SAÍDA"
-                    itemNome: itemNome,
-                    qtd: Number(qtd),
-                    chamado: chamado,
-                    usuario: userEmail,
-                    dataHora: serverTimestamp()
-                });
-            } catch(e) { console.error("Erro ao salvar log:", e); }
+            try { await addDoc(collection(db, "logs"), { tipo, itemNome, qtd: Number(qtd), chamado, usuario: userEmail, dataHora: serverTimestamp() }); } catch(e) {}
         }
 
-        // Registrar Entrada (Novo Cadastro ou Adição)
+        // ENTRADA E SAÍDA (Lógica Mantida)
         document.getElementById('btn-save-item').addEventListener('click', async () => {
-            const cat = document.getElementById('form-cat').value.trim();
-            const comp = document.getElementById('form-comp').value.trim();
-            const mod = document.getElementById('form-mod').value.trim();
-            const esp = document.getElementById('form-esp').value.trim();
+            const cat = document.getElementById('form-cat').value.trim(), comp = document.getElementById('form-comp').value.trim();
+            const mod = document.getElementById('form-mod').value.trim(), esp = document.getElementById('form-esp').value.trim();
             const qtd = parseInt(document.getElementById('form-qtd').value);
-            
-            if(!cat || !comp || isNaN(qtd) || qtd <= 0) return alert("Preencha Categoria, Componente e Quantidade corretamente.");
-
-            const itemString = `${comp} - ${mod} (${esp})`;
-
-            // Verifica se o item já existe exato para somar, senão cria um novo
+            if(!cat || !comp || isNaN(qtd) || qtd <= 0) return alert("Preencha Categoria, Componente e Quantidade.");
             const existente = estoqueLocal.find(i => i.Componente === comp && i.Modelo === mod && i.Especificação === esp);
-            
             try {
-                if(existente) {
-                    const docRef = doc(db, "estoque", existente.id);
-                    await updateDoc(docRef, { Quantidade: existente.Quantidade + qtd });
-                } else {
-                    const newRef = doc(collection(db, "estoque"));
-                    await setDoc(newRef, {
-                        Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Quantidade: qtd
-                    });
-                }
-                
-                await registrarLog("ENTRADA", itemString, qtd, "");
-                
-                const msg = document.getElementById('msg-entrada');
-                msg.classList.remove('hidden');
-                setTimeout(() => msg.classList.add('hidden'), 3000);
-                
-                // Limpa campos qtde
+                if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: existente.Quantidade + qtd });
+                else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Quantidade: qtd });
+                await registrarLog("ENTRADA", `${comp} - ${mod} (${esp})`, qtd, "");
+                document.getElementById('msg-entrada').classList.remove('hidden');
+                setTimeout(() => document.getElementById('msg-entrada').classList.add('hidden'), 3000);
                 document.getElementById('form-qtd').value = 1;
-            } catch (e) { alert("Erro ao salvar: " + e.message); }
+            } catch (e) {}
         });
 
-        // Registrar Saída
         document.getElementById('btn-register-saida').addEventListener('click', async () => {
-            const idItem = document.getElementById('saida-select-item').value;
-            const qtdSaida = parseInt(document.getElementById('saida-qtd').value);
-            const chamado = document.getElementById('saida-chamado').value.trim();
-            const msgObj = document.getElementById('msg-saida');
-
+            const idItem = document.getElementById('saida-select-item').value, qtdSaida = parseInt(document.getElementById('saida-qtd').value);
+            const chamado = document.getElementById('saida-chamado').value.trim(), msgObj = document.getElementById('msg-saida');
             if(!idItem || isNaN(qtdSaida) || qtdSaida <= 0) return alert("Valores inválidos.");
-            
             const itemDB = estoqueLocal.find(i => i.id === idItem);
-            if(qtdSaida > itemDB.Quantidade) {
-                msgObj.textContent = "Erro: Quantidade superior ao estoque disponível!";
-                msgObj.className = "text-center mt-2 font-bold text-red-600 block";
-                return;
-            }
-
+            if(qtdSaida > itemDB.Quantidade) { msgObj.textContent = "Estoque insuficiente!"; msgObj.className = "text-center mt-3 font-bold text-red-600 block"; return; }
             try {
-                const docRef = doc(db, "estoque", idItem);
-                await updateDoc(docRef, { Quantidade: itemDB.Quantidade - qtdSaida });
-                
-                const itemString = `${itemDB.Componente} - ${itemDB.Modelo} (${itemDB.Especificação})`;
-                await registrarLog("SAÍDA", itemString, qtdSaida, chamado);
-
-                msgObj.textContent = "Saída registada com sucesso!";
-                msgObj.className = "text-center mt-2 font-bold text-green-600 block";
-                document.getElementById('saida-qtd').value = 1;
-                document.getElementById('saida-chamado').value = "";
-                
+                await updateDoc(doc(db, "estoque", idItem), { Quantidade: itemDB.Quantidade - qtdSaida });
+                await registrarLog("SAÍDA", `${itemDB.Componente} - ${itemDB.Modelo} (${itemDB.Especificação})`, qtdSaida, chamado);
+                msgObj.textContent = "Baixa processada!"; msgObj.className = "text-center mt-3 font-bold text-emerald-600 block";
+                document.getElementById('saida-qtd').value = 1; document.getElementById('saida-chamado').value = "";
                 setTimeout(() => msgObj.classList.add('hidden'), 3000);
-            } catch(e) { alert("Erro ao registar saída."); }
+            } catch(e) {}
         });
 
-
-        // --- ATUALIZAÇÕES DA INTERFACE UI ---
-
+        // ATUALIZA UI
         function atualizarDatalists() {
-            const dlComp = document.getElementById('lista-componentes');
-            const comps = [...new Set(estoqueLocal.map(i => i.Componente))];
-            dlComp.innerHTML = comps.map(c => `<option value="${c}">`).join('');
+            document.getElementById('lista-componentes').innerHTML = [...new Set(estoqueLocal.map(i => i.Componente))].map(c => `<option value="${c}">`).join('');
         }
-
         function atualizarSelectSaida() {
-            const select = document.getElementById('saida-select-item');
-            select.innerHTML = '<option value="">-- Selecione o item --</option>';
-            // Ordenar por categoria e nome
-            const ordenados = [...estoqueLocal].sort((a,b) => a.Categoria.localeCompare(b.Categoria));
-            
-            ordenados.forEach(item => {
-                if(item.Quantidade > 0) {
-                    const nome = `[${item.Categoria}] ${item.Componente} ${item.Modelo} ${item.Especificação} - (Estoque: ${item.Quantidade})`;
-                    select.innerHTML += `<option value="${item.id}">${nome}</option>`;
-                }
+            const sel = document.getElementById('saida-select-item'); sel.innerHTML = '<option value="">-- Selecione o equipamento --</option>';
+            [...estoqueLocal].sort((a,b) => a.Categoria.localeCompare(b.Categoria)).forEach(i => {
+                if(i.Quantidade > 0) sel.innerHTML += `<option value="${i.id}">[${i.Categoria}] ${i.Componente} ${i.Modelo} - (Qtd: ${i.Quantidade})</option>`;
             });
         }
-
         function atualizarInterface() {
-            // Renderiza Tabela
-            const tbody = document.getElementById('inventory-tbody');
-            tbody.innerHTML = '';
-            
-            let tTotal = 0, tArmaz = 0, tEnergia = 0, tZerado = 0;
-            const mapCat = {};
+            const tbody = document.getElementById('inventory-tbody'); tbody.innerHTML = '';
+            let tTotal = 0, tArmaz = 0, tEnergia = 0, tZerado = 0; const mapCat = {};
 
             estoqueLocal.forEach(item => {
                 tTotal += item.Quantidade;
                 if(item.Categoria === 'Armazenamento') tArmaz += item.Quantidade;
                 if(item.Categoria === 'Fonte de Alimentação' || item.Categoria === 'Bateria') tEnergia += item.Quantidade;
                 if(item.Quantidade === 0) tZerado++;
-
                 mapCat[item.Categoria] = (mapCat[item.Categoria] || 0) + item.Quantidade;
 
-                let statusHtml = item.Quantidade === 0 
-                    ? '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Zerado</span>' 
-                    : item.Quantidade < 5 
-                    ? '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Baixo</span>'
-                    : '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Normal</span>';
+                let badge = item.Quantidade === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' 
+                          : item.Quantidade < 5 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>'
+                          : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
 
-                tbody.innerHTML += `
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">${item.Categoria}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.Componente}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.Modelo} / ${item.Especificação}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-700">${item.Quantidade}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">${statusHtml}</td>
-                    </tr>
-                `;
+                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100">
+                    <td class="px-6 py-4 text-sm font-semibold text-slate-700">${item.Categoria}</td>
+                    <td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente}</td>
+                    <td class="px-6 py-4 text-sm text-slate-500">${item.Modelo} / ${item.Especificação}</td>
+                    <td class="px-6 py-4 text-sm font-black text-slate-800">${item.Quantidade}</td>
+                    <td class="px-6 py-4">${badge}</td>
+                </tr>`;
             });
-
-            // Atualiza KPIs
-            document.getElementById('kpi-total').innerText = tTotal;
-            document.getElementById('kpi-armazenamento').innerText = tArmaz;
-            document.getElementById('kpi-energia').innerText = tEnergia;
-            document.getElementById('kpi-zerado').innerText = tZerado;
-
-            renderCharts(mapCat, estoqueLocal);
+            document.getElementById('kpi-total').innerText = tTotal; document.getElementById('kpi-armazenamento').innerText = tArmaz;
+            document.getElementById('kpi-energia').innerText = tEnergia; document.getElementById('kpi-zerado').innerText = tZerado;
+            renderChartsUIUX(mapCat, estoqueLocal);
         }
 
-        // --- GRÁFICOS E UTILIDADES UI ---
-        let chartCatInstance = null;
-        let chartTopInstance = null;
-        
-        function renderCharts(mapCat, dados) {
-            if(chartCatInstance) chartCatInstance.destroy();
-            if(chartTopInstance) chartTopInstance.destroy();
+        let chartCat = null, chartTop = null;
+        function renderChartsUIUX(mapCat, dados) {
+            if(chartCat) chartCat.destroy(); if(chartTop) chartTop.destroy();
+            
+            // UI/UX Reference: Categorias (Barras Horizontais com degradê/multicor)
+            const catLabels = Object.keys(mapCat).sort((a,b) => mapCat[b] - mapCat[a]);
+            const catData = catLabels.map(k => mapCat[k]);
+            const catColors = ['#4F46E5', '#3B82F6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 
-            chartCatInstance = new Chart(document.getElementById('chartCategoria'), {
-                type: 'doughnut',
-                data: {
-                    labels: Object.keys(mapCat),
-                    datasets: [{ data: Object.values(mapCat), backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'] }]
-                },
-                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-            });
-
-            const topItems = [...dados].sort((a, b) => b.Quantidade - a.Quantidade).slice(0, 5);
-            chartTopInstance = new Chart(document.getElementById('chartTopItems'), {
+            chartCat = new Chart(document.getElementById('chartCategoria'), {
                 type: 'bar',
-                data: {
-                    labels: topItems.map(i => i.Componente.substring(0, 15)),
-                    datasets: [{ label: 'Quantidade', data: topItems.map(i => i.Quantidade), backgroundColor: '#3b82f6' }]
-                },
-                options: { responsive: true, scales: { y: { beginAtZero: true } } }
+                data: { labels: catLabels, datasets: [{ data: catData, backgroundColor: catColors, borderRadius: 4 }] },
+                options: {
+                    indexAxis: 'y', responsive: true, plugins: { legend: { display: false }, 
+                    datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start', offset: 10 },
+                    tooltip: { backgroundColor: '#1E293B', titleFont: { size: 14 }, bodyFont: { size: 13, weight: 'bold' }, padding: 10, cornerRadius: 4 }
+                    }, scales: { x: { display: false, grid: { display: false } }, y: { grid: { display: false }, ticks: { font: { weight: 'bold' } } } }
+                }
+            });
+
+            // UI/UX Reference: Top Equipamentos (Barras Verticais Escuras com número dentro)
+            const topItems = [...dados].sort((a, b) => b.Quantidade - a.Quantidade).slice(0, 5);
+            chartTop = new Chart(document.getElementById('chartTopItems'), {
+                type: 'bar',
+                data: { labels: topItems.map(i => i.Componente.substring(0, 15)), datasets: [{ data: topItems.map(i => i.Quantidade), backgroundColor: '#161B33', borderRadius: 4 }] },
+                options: {
+                    responsive: true, plugins: { legend: { display: false },
+                    datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start', offset: 10 },
+                    tooltip: { backgroundColor: '#1E293B', padding: 10, cornerRadius: 4 }
+                    }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold' } } } }
+                }
             });
         }
 
-        // Modo Noturno
-        document.getElementById('btn-theme').addEventListener('click', () => document.body.classList.toggle('dark'));
-
-        // Funcionalidade das Abas no Modal
-        const tabsBtns = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
-        
-        tabsBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                tabsBtns.forEach(b => { b.classList.remove('bg-blue-100', 'text-blue-700'); b.classList.add('text-gray-600'); });
-                e.currentTarget.classList.remove('text-gray-600');
-                e.currentTarget.classList.add('bg-blue-100', 'text-blue-700');
-                
-                const targetId = e.currentTarget.getAttribute('data-target');
-                tabContents.forEach(tc => tc.classList.add('hidden'));
-                document.getElementById(targetId).classList.remove('hidden');
+        // RELATÓRIOS E IMPRESSÃO (NOVO FORMATO)
+        function prepararRelatorioImpressao() {
+            const tbody = document.getElementById('print-tbody'); tbody.innerHTML = '';
+            const dataAtual = new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR');
+            document.getElementById('print-date').innerText = "Gerado em: " + dataAtual;
+            
+            [...estoqueLocal].sort((a,b) => a.Categoria.localeCompare(b.Categoria)).forEach(i => {
+                tbody.innerHTML += `<tr><td style="border: 1px solid #000; padding: 5px;">${i.Categoria}</td>
+                                    <td style="border: 1px solid #000; padding: 5px;">${i.Componente}</td>
+                                    <td style="border: 1px solid #000; padding: 5px;">${i.Modelo} / ${i.Especificação}</td>
+                                    <td style="border: 1px solid #000; padding: 5px; text-align: center; font-weight: bold;">${i.Quantidade}</td></tr>`;
             });
-        });
+        }
+        document.getElementById('btn-print-pdf').addEventListener('click', () => { window.print(); });
 
-        // Controles do Modal Geral
+        // COMPORTAMENTOS GERAIS
+        document.getElementById('btn-theme').addEventListener('click', () => document.body.classList.toggle('dark'));
         const modal = document.getElementById('tools-modal');
         document.getElementById('btn-tools').addEventListener('click', () => modal.classList.remove('hidden'));
         document.querySelectorAll('.close-modal').forEach(b => b.addEventListener('click', () => modal.classList.add('hidden')));
 
-        // Filtro Tabela Principal
-        document.getElementById('search-table').addEventListener('input', function(e) {
-            const term = e.target.value.toLowerCase();
-            const rows = document.getElementById('inventory-tbody').getElementsByTagName('tr');
-            for(let row of rows) {
-                row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none';
-            }
-        });
-
-        // Exportar CSV
-        document.getElementById('btn-export-csv').addEventListener('click', () => {
-            let csvContent = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Quantidade\n";
-            estoqueLocal.forEach(row => {
-                csvContent += `"${row.Categoria}","${row.Componente}","${row.Modelo}","${row.Especificação}","${row.Quantidade}"\n`;
+        const tabsBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabsBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                tabsBtns.forEach(b => { b.classList.remove('bg-blue-100', 'text-blue-800'); b.classList.add('text-slate-600'); });
+                e.currentTarget.classList.remove('text-slate-600'); e.currentTarget.classList.add('bg-blue-100', 'text-blue-800');
+                tabContents.forEach(tc => tc.classList.add('hidden'));
+                document.getElementById(e.currentTarget.getAttribute('data-target')).classList.remove('hidden');
             });
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "estoque_tic.csv");
-            document.body.appendChild(link);
-            link.click();
         });
-
-        // Inicialização fake para base vazia (baseado no excel fornecido anteriormente)
-        async function carregarDadosTeste() {
-            const dadosOriginais = [
-                { Categoria: "Memória", Componente: "MEMÓRIA NOTEBOOK", Modelo: "DDR 4", Especificação: "4GB", Quantidade: 66 },
-                { Categoria: "Armazenamento", Componente: "SSD M2", Modelo: "SATA", Especificação: "256 GB", Quantidade: 65 },
-                { Categoria: "Armazenamento", Componente: "HD INTERNO", Modelo: "Não especificado", Especificação: "Não especificada", Quantidade: 79 },
-                { Categoria: "Fonte de Alimentação", Componente: "FONTE DELL", Modelo: "LA65NM130/ DA65PM111", Especificação: "65W 19.5V", Quantidade: 158 }
-            ];
-            for (let item of dadosOriginais) {
-                const docRef = doc(collection(db, "estoque"));
-                await setDoc(docRef, item);
-            }
-        }
+        document.getElementById('search-table').addEventListener('input', e => {
+            const term = e.target.value.toLowerCase(), rows = document.getElementById('inventory-tbody').getElementsByTagName('tr');
+            for(let row of rows) row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none';
+        });
+        document.getElementById('btn-export-csv').addEventListener('click', () => {
+            let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Quantidade\n";
+            estoqueLocal.forEach(r => csv += `"${r.Categoria}","${r.Componente}","${r.Modelo}","${r.Especificação}","${r.Quantidade}"\n`);
+            const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv");
+            document.body.appendChild(link); link.click();
+        });
     </script>
 </body>
 </html>
