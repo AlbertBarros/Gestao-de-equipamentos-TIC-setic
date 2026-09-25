@@ -43,7 +43,7 @@
     <div id="login-screen" class="fixed inset-0 bg-slate-900 flex justify-center items-center z-50">
         <div class="bg-white rounded-xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500">
             <div class="text-center mb-8">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-24 mx-auto mb-4">
+                <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o.png" onerror="this.onerror=null; this.src='brasão.png';" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
                 <h2 class="text-2xl font-bold text-slate-800">Almoxarifado TIC</h2>
                 <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p>
             </div>
@@ -67,12 +67,12 @@
     <!-- SISTEMA PRINCIPAL -->
     <div id="main-system" class="hidden">
         
-        <!-- NAVBAR PADRÃO REFERÊNCIA UI/UX -->
+        <!-- NAVBAR -->
         <nav class="bg-[#161B33] text-white shadow-md border-b-4 border-yellow-500 no-print">
             <div class="px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center space-x-3">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-10">
+                        <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o.png" onerror="this.onerror=null; this.src='brasão.png';" alt="PRF Logo" class="h-10">
                         <i class="fas fa-chart-line text-xl ml-2"></i>
                         <span class="font-bold text-lg tracking-wide hidden sm:block">Painel de Gestão de Estoque - SETIC</span>
                     </div>
@@ -117,7 +117,7 @@
                 </div>
             </div>
 
-            <!-- GRÁFICOS (Estilizados conforme referência UI/UX) -->
+            <!-- GRÁFICOS -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-6">Volume por Categoria</h3>
@@ -126,6 +126,16 @@
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-6">Top 5 Equipamentos em Estoque</h3>
                     <canvas id="chartTopItems"></canvas>
+                </div>
+            </div>
+
+            <!-- MOTOR DE INSIGHTS E ALERTAS -->
+            <div class="mb-8">
+                <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center">
+                    <i class="fas fa-robot text-blue-500 mr-2 text-lg"></i> Análise Inteligente de Estoque
+                </h3>
+                <div id="insights-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Os cards de alerta serão injetados aqui via JavaScript -->
                 </div>
             </div>
 
@@ -149,19 +159,17 @@
                                 <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
                             </tr>
                         </thead>
-                        <tbody id="inventory-tbody" class="bg-white divide-y divide-gray-200">
-                            <!-- Injetado via JS -->
-                        </tbody>
+                        <tbody id="inventory-tbody" class="bg-white divide-y divide-gray-200"></tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- AREA DE IMPRESSÃO OCULTA (Exibida apenas no CTRL+P / PDF) -->
+    <!-- AREA DE IMPRESSÃO (Oculta) -->
     <div id="printable-report" class="hidden">
         <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" style="height: 80px; margin-bottom: 10px;">
+            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o.png" onerror="this.onerror=null; this.src='brasão.png';" alt="PRF Logo" style="height: 80px; margin-bottom: 10px;">
             <h2 style="margin: 0; font-family: Arial, sans-serif; font-size: 18px; text-transform: uppercase;">Ministério da Justiça e Segurança Pública</h2>
             <h3 style="margin: 5px 0; font-family: Arial, sans-serif; font-size: 16px;">Polícia Rodoviária Federal</h3>
             <p style="margin: 5px 0; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold;">Relatório Geral de Estoque - SETIC</p>
@@ -183,12 +191,8 @@
     <!-- MODAL PAINEL DE FERRAMENTAS -->
     <div id="tools-modal" class="hidden fixed inset-0 bg-slate-900 bg-opacity-80 flex justify-center items-center z-50 p-4">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-5xl flex overflow-hidden h-[650px] flex-col md:flex-row relative">
+            <button class="absolute top-4 right-4 text-gray-400 hover:text-red-600 text-3xl transition z-10 close-modal" title="Fechar Janela"><i class="fas fa-times"></i></button>
             
-            <button class="absolute top-4 right-4 text-gray-400 hover:text-red-600 text-3xl transition z-10 close-modal" title="Fechar Janela">
-                <i class="fas fa-times"></i>
-            </button>
-
-            <!-- Menu Lateral -->
             <div class="w-full md:w-64 bg-slate-50 border-r border-gray-200 p-6">
                 <div class="flex items-center mb-8 border-b pb-4">
                     <i class="fas fa-toolbox text-[#161B33] text-2xl mr-3"></i>
@@ -203,43 +207,23 @@
                 </ul>
             </div>
 
-            <!-- Conteúdo -->
             <div class="flex-1 p-8 overflow-y-auto">
-                
                 <!-- TAB ENTRADA -->
                 <div id="tab-entrada" class="tab-content">
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Entrada de Ativos</h2>
                     <p class="text-sm text-slate-500 mb-8 border-b pb-4">Adicione estoque a um item existente ou cadastre um novo equipamento.</p>
-                    
                     <div class="grid grid-cols-2 gap-5 mb-6">
                         <div>
                             <label class="block text-sm font-semibold text-slate-700">Categoria Macro</label>
-                            <input list="lista-categorias" id="form-cat" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5" placeholder="Ex: Armazenamento">
-                            <datalist id="lista-categorias">
-                                <option value="Armazenamento"><option value="Memória"><option value="Fonte de Alimentação"><option value="Bateria"><option value="Periféricos">
-                            </datalist>
+                            <input list="lista-categorias" id="form-cat" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5">
+                            <datalist id="lista-categorias"><option value="Armazenamento"><option value="Memória"><option value="Fonte de Alimentação"><option value="Bateria"><option value="Periféricos"></datalist>
                         </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700">Componente</label>
-                            <input list="lista-componentes" id="form-comp" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5" placeholder="Ex: SSD M2">
-                            <datalist id="lista-componentes"></datalist>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700">Modelo</label>
-                            <input type="text" id="form-mod" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5" placeholder="Ex: NVME">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700">Especificação</label>
-                            <input type="text" id="form-esp" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5" placeholder="Ex: 512 GB">
-                        </div>
-                        <div class="col-span-2">
-                            <label class="block text-sm font-semibold text-slate-700">Quantidade</label>
-                            <input type="number" id="form-qtd" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5" min="1" value="1">
-                        </div>
+                        <div><label class="block text-sm font-semibold text-slate-700">Componente</label><input list="lista-componentes" id="form-comp" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5"><datalist id="lista-componentes"></datalist></div>
+                        <div><label class="block text-sm font-semibold text-slate-700">Modelo</label><input type="text" id="form-mod" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5"></div>
+                        <div><label class="block text-sm font-semibold text-slate-700">Especificação</label><input type="text" id="form-esp" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5"></div>
+                        <div class="col-span-2"><label class="block text-sm font-semibold text-slate-700">Quantidade</label><input type="number" id="form-qtd" class="mt-1 block w-full rounded-md border-gray-300 border p-2.5" min="1" value="1"></div>
                     </div>
-                    <button id="btn-save-item" class="w-full bg-emerald-600 text-white font-bold py-3 px-4 rounded-md hover:bg-emerald-700 transition shadow">
-                        Registrar Entrada
-                    </button>
+                    <button id="btn-save-item" class="w-full bg-emerald-600 text-white font-bold py-3 px-4 rounded-md hover:bg-emerald-700 transition shadow">Registrar Entrada</button>
                     <p id="msg-entrada" class="text-emerald-600 text-center mt-3 font-bold hidden"><i class="fas fa-check-circle"></i> Entrada registada com sucesso!</p>
                 </div>
 
@@ -247,26 +231,14 @@
                 <div id="tab-saida" class="tab-content hidden">
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Baixa de Material</h2>
                     <p class="text-sm text-slate-500 mb-8 border-b pb-4">Despacho de componentes para atendimento de incidentes.</p>
-                    
                     <div class="space-y-5 mb-8">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700">Equipamento em Estoque</label>
-                            <select id="saida-select-item" class="mt-1 block w-full rounded-md border-gray-300 border p-3 bg-white shadow-sm"></select>
-                        </div>
+                        <div><label class="block text-sm font-semibold text-slate-700">Equipamento em Estoque</label><select id="saida-select-item" class="mt-1 block w-full rounded-md border-gray-300 border p-3 bg-white shadow-sm"></select></div>
                         <div class="grid grid-cols-2 gap-5">
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700">Qtd Retirada</label>
-                                <input type="number" id="saida-qtd" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm" min="1" value="1">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700">Sistema / Chamado (GLPI)</label>
-                                <input type="text" id="saida-chamado" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm" placeholder="Ex: GLPI-1234">
-                            </div>
+                            <div><label class="block text-sm font-semibold text-slate-700">Qtd Retirada</label><input type="number" id="saida-qtd" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm" min="1" value="1"></div>
+                            <div><label class="block text-sm font-semibold text-slate-700">Sistema / Chamado (GLPI)</label><input type="text" id="saida-chamado" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm" placeholder="Ex: GLPI-1234"></div>
                         </div>
                     </div>
-                    <button id="btn-register-saida" class="w-full bg-orange-500 text-white font-bold py-3 px-4 rounded-md hover:bg-orange-600 transition shadow">
-                        Confirmar Baixa
-                    </button>
+                    <button id="btn-register-saida" class="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-md hover:bg-red-700 transition shadow">Confirmar Baixa</button>
                     <p id="msg-saida" class="text-center mt-3 font-bold hidden"></p>
                 </div>
 
@@ -294,21 +266,12 @@
                 <div id="tab-importar" class="tab-content hidden">
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Importação em Lote</h2>
                     <p class="text-sm text-slate-500 mb-6 border-b pb-4">Migração de dados legados via planilha estruturada.</p>
-                    
-                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8 rounded">
-                        <p class="text-sm text-blue-800">
-                            <strong>Formato de Leitura:</strong> As colunas devem estar nomeadas exatamente como: <b>Categoria</b>, <b>Componente</b>, <b>Modelo</b>, <b>Especificação</b> e <b>Quantidade</b>.
-                        </p>
-                    </div>
-
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8 rounded"><p class="text-sm text-blue-800"><strong>Formato:</strong> As colunas devem estar nomeadas exatamente como: <b>Categoria</b>, <b>Componente</b>, <b>Modelo</b>, <b>Especificação</b> e <b>Quantidade</b>.</p></div>
                     <div class="mb-8 border-2 border-dashed border-slate-300 p-10 text-center rounded-xl bg-slate-50 hover:bg-slate-100 transition">
                         <i class="fas fa-file-excel text-5xl text-emerald-600 mb-4"></i>
-                        <input type="file" id="file-upload" accept=".xlsx, .xls, .csv" class="mx-auto block w-full max-w-xs text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                        <input type="file" id="file-upload" accept=".xlsx, .xls, .csv" class="mx-auto block w-full max-w-xs text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
                     </div>
-
-                    <button id="btn-process-upload" class="w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:bg-slate-800 transition shadow">
-                        <i class="fas fa-cloud-upload-alt mr-2"></i> Processar Estrutura
-                    </button>
+                    <button id="btn-process-upload" class="w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:bg-slate-800 transition shadow"><i class="fas fa-cloud-upload-alt mr-2"></i> Processar Estrutura</button>
                     <p id="msg-upload" class="text-center mt-4 font-bold text-sm hidden"></p>
                 </div>
 
@@ -317,22 +280,16 @@
                     <i class="fas fa-print text-7xl text-slate-300 mb-6"></i>
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Exportações e Relatórios</h2>
                     <p class="text-slate-500 mb-10">Gere documentos oficiais ou planilhas analíticas.</p>
-                    
                     <div class="space-y-4 max-w-sm mx-auto">
-                        <button id="btn-print-pdf" class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-md hover:bg-blue-700 transition shadow flex justify-center items-center">
-                            <i class="fas fa-file-pdf mr-3 text-lg"></i> Gerar Relatório Oficial (PDF)
-                        </button>
-                        <button id="btn-export-csv" class="w-full bg-emerald-600 text-white font-bold py-3 px-6 rounded-md hover:bg-emerald-700 transition shadow flex justify-center items-center">
-                            <i class="fas fa-file-csv mr-3 text-lg"></i> Exportar Dados (Excel/CSV)
-                        </button>
+                        <button id="btn-print-pdf" class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-md hover:bg-blue-700 transition shadow flex justify-center items-center"><i class="fas fa-file-pdf mr-3 text-lg"></i> Gerar Relatório Oficial (PDF)</button>
+                        <button id="btn-export-csv" class="w-full bg-emerald-600 text-white font-bold py-3 px-6 rounded-md hover:bg-emerald-700 transition shadow flex justify-center items-center"><i class="fas fa-file-csv mr-3 text-lg"></i> Exportar Dados (Excel/CSV)</button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 
-    <!-- FIREBASE SDKS (Sua Configuração Original) -->
+    <!-- FIREBASE E SCRIPTS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -352,225 +309,191 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-
-        let estoqueLocal = [];
-        let userEmail = "";
+        let estoqueLocal = []; let userEmail = "";
 
         // LOGIN
         document.getElementById('btn-login').addEventListener('click', () => {
-            const email = document.getElementById('login-email').value;
-            const pass = document.getElementById('login-password').value;
-            const btn = document.getElementById('btn-login');
+            const email = document.getElementById('login-email').value, pass = document.getElementById('login-password').value, btn = document.getElementById('btn-login');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Autenticando...';
             signInWithEmailAndPassword(auth, email, pass).catch(() => {
                 document.getElementById('login-error').innerText = "Credenciais inválidas ou acesso não autorizado.";
-                document.getElementById('login-error').classList.remove('hidden');
-                btn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Autenticar';
+                document.getElementById('login-error').classList.remove('hidden'); btn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Autenticar';
             });
         });
 
         document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
-
         onAuthStateChanged(auth, (user) => {
-            if (user) {
-                userEmail = user.email;
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('main-system').classList.remove('hidden');
-                iniciarSistema();
-            } else {
-                document.getElementById('login-screen').classList.remove('hidden');
-                document.getElementById('main-system').classList.add('hidden');
-            }
+            if (user) { userEmail = user.email; document.getElementById('login-screen').classList.add('hidden'); document.getElementById('main-system').classList.remove('hidden'); iniciarSistema(); } 
+            else { document.getElementById('login-screen').classList.remove('hidden'); document.getElementById('main-system').classList.add('hidden'); }
         });
 
         function iniciarSistema() {
-            const colRef = collection(db, "estoque");
-            onSnapshot(colRef, (snapshot) => {
-                estoqueLocal = [];
-                snapshot.forEach((doc) => {
-                    estoqueLocal.push({ id: doc.id, ...doc.data() });
-                });
-                atualizarInterface();
-                atualizarDatalists();
-                atualizarSelectSaida();
-                prepararRelatorioImpressao();
+            onSnapshot(collection(db, "estoque"), (snapshot) => {
+                estoqueLocal = []; snapshot.forEach((doc) => { estoqueLocal.push({ id: doc.id, ...doc.data() }); });
+                atualizarInterface(); atualizarDatalists(); atualizarSelectSaida(); prepararRelatorioImpressao(); gerarInsights();
             });
 
-            const logsRef = query(collection(db, "logs"), orderBy("dataHora", "desc"), limit(50));
-            onSnapshot(logsRef, (snapshot) => {
-                const tbody = document.getElementById('logs-tbody');
-                tbody.innerHTML = '';
+            onSnapshot(query(collection(db, "logs"), orderBy("dataHora", "desc"), limit(50)), (snapshot) => {
+                const tbody = document.getElementById('logs-tbody'); tbody.innerHTML = '';
                 snapshot.forEach((docSnap) => {
-                    const log = docSnap.data();
-                    let dateStr = "N/A";
-                    if(log.dataHora) {
-                        const d = log.dataHora.toDate();
-                        dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5);
-                    }
-                    let corAcao = log.tipo === 'ENTRADA' ? 'text-emerald-600' : 'text-orange-600';
-                    let iconAcao = log.tipo === 'ENTRADA' ? 'fa-arrow-down' : 'fa-arrow-up';
-                    tbody.innerHTML += `
-                        <tr class="hover:bg-slate-100 transition">
-                            <td class="px-4 py-3 whitespace-nowrap text-slate-500 font-medium">${dateStr}</td>
-                            <td class="px-4 py-3 whitespace-nowrap font-bold ${corAcao}"><i class="fas ${iconAcao} mr-1"></i> ${log.tipo}</td>
-                            <td class="px-4 py-3 text-slate-800 font-semibold">${log.itemNome}</td>
-                            <td class="px-4 py-3 font-black text-slate-800">${log.qtd}</td>
-                            <td class="px-4 py-3 text-slate-500 font-medium">${log.chamado || '-'}</td>
-                        </tr>
-                    `;
+                    const log = docSnap.data(); let dateStr = "N/A";
+                    if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
+                    let corAcao = log.tipo === 'ENTRADA' ? 'text-emerald-600' : 'text-orange-600', iconAcao = log.tipo === 'ENTRADA' ? 'fa-arrow-down' : 'fa-arrow-up';
+                    tbody.innerHTML += `<tr class="hover:bg-slate-100 transition"><td class="px-4 py-3 whitespace-nowrap text-slate-500 font-medium">${dateStr}</td><td class="px-4 py-3 whitespace-nowrap font-bold ${corAcao}"><i class="fas ${iconAcao} mr-1"></i> ${log.tipo}</td><td class="px-4 py-3 text-slate-800 font-semibold">${log.itemNome}</td><td class="px-4 py-3 font-black text-slate-800">${log.qtd}</td><td class="px-4 py-3 text-slate-500 font-medium">${log.chamado || '-'}</td></tr>`;
                 });
             });
         }
 
-        async function registrarLog(tipo, itemNome, qtd, chamado = "") {
-            try { await addDoc(collection(db, "logs"), { tipo, itemNome, qtd: Number(qtd), chamado, usuario: userEmail, dataHora: serverTimestamp() }); } catch(e) {}
-        }
+        async function registrarLog(tipo, itemNome, qtd, chamado = "") { try { await addDoc(collection(db, "logs"), { tipo, itemNome, qtd: Number(qtd), chamado, usuario: userEmail, dataHora: serverTimestamp() }); } catch(e) {} }
 
-        // ENTRADA E SAÍDA (Lógica Mantida)
+        // AÇÕES ENTRADA E SAÍDA
         document.getElementById('btn-save-item').addEventListener('click', async () => {
-            const cat = document.getElementById('form-cat').value.trim(), comp = document.getElementById('form-comp').value.trim();
-            const mod = document.getElementById('form-mod').value.trim(), esp = document.getElementById('form-esp').value.trim();
-            const qtd = parseInt(document.getElementById('form-qtd').value);
-            if(!cat || !comp || isNaN(qtd) || qtd <= 0) return alert("Preencha Categoria, Componente e Quantidade.");
+            const cat = document.getElementById('form-cat').value.trim(), comp = document.getElementById('form-comp').value.trim(), mod = document.getElementById('form-mod').value.trim(), esp = document.getElementById('form-esp').value.trim(), qtd = parseInt(document.getElementById('form-qtd').value);
+            if(!cat || !comp || isNaN(qtd) || qtd <= 0) return alert("Preencha os campos obrigatórios.");
             const existente = estoqueLocal.find(i => i.Componente === comp && i.Modelo === mod && i.Especificação === esp);
             try {
                 if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: existente.Quantidade + qtd });
                 else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Quantidade: qtd });
                 await registrarLog("ENTRADA", `${comp} - ${mod} (${esp})`, qtd, "");
-                document.getElementById('msg-entrada').classList.remove('hidden');
-                setTimeout(() => document.getElementById('msg-entrada').classList.add('hidden'), 3000);
-                document.getElementById('form-qtd').value = 1;
+                document.getElementById('msg-entrada').classList.remove('hidden'); setTimeout(() => document.getElementById('msg-entrada').classList.add('hidden'), 3000); document.getElementById('form-qtd').value = 1;
             } catch (e) {}
         });
 
         document.getElementById('btn-register-saida').addEventListener('click', async () => {
-            const idItem = document.getElementById('saida-select-item').value, qtdSaida = parseInt(document.getElementById('saida-qtd').value);
-            const chamado = document.getElementById('saida-chamado').value.trim(), msgObj = document.getElementById('msg-saida');
+            const idItem = document.getElementById('saida-select-item').value, qtdSaida = parseInt(document.getElementById('saida-qtd').value), chamado = document.getElementById('saida-chamado').value.trim(), msgObj = document.getElementById('msg-saida');
             if(!idItem || isNaN(qtdSaida) || qtdSaida <= 0) return alert("Valores inválidos.");
             const itemDB = estoqueLocal.find(i => i.id === idItem);
             if(qtdSaida > itemDB.Quantidade) { msgObj.textContent = "Estoque insuficiente!"; msgObj.className = "text-center mt-3 font-bold text-red-600 block"; return; }
             try {
                 await updateDoc(doc(db, "estoque", idItem), { Quantidade: itemDB.Quantidade - qtdSaida });
                 await registrarLog("SAÍDA", `${itemDB.Componente} - ${itemDB.Modelo} (${itemDB.Especificação})`, qtdSaida, chamado);
-                msgObj.textContent = "Baixa processada!"; msgObj.className = "text-center mt-3 font-bold text-emerald-600 block";
-                document.getElementById('saida-qtd').value = 1; document.getElementById('saida-chamado').value = "";
-                setTimeout(() => msgObj.classList.add('hidden'), 3000);
+                msgObj.textContent = "Baixa processada!"; msgObj.className = "text-center mt-3 font-bold text-emerald-600 block"; document.getElementById('saida-qtd').value = 1; document.getElementById('saida-chamado').value = ""; setTimeout(() => msgObj.classList.add('hidden'), 3000);
             } catch(e) {}
         });
 
-        // ATUALIZA UI
-        function atualizarDatalists() {
-            document.getElementById('lista-componentes').innerHTML = [...new Set(estoqueLocal.map(i => i.Componente))].map(c => `<option value="${c}">`).join('');
+        document.getElementById('btn-process-upload').addEventListener('click', () => {
+            const fileInput = document.getElementById('file-upload'), msgLabel = document.getElementById('msg-upload'), btn = document.getElementById('btn-process-upload');
+            if (!fileInput.files.length) return alert("Selecione um arquivo Excel.");
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processando...'; msgLabel.classList.add('hidden');
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                try {
+                    const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' }), json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                    let cont = 0;
+                    for (let row of json) {
+                        const cat = row['Categoria']||'Geral', comp = row['Componente']||'Desc', mod = row['Modelo']||'N/A', esp = row['Especificação']||row['Especificacao']||'N/A', qtd = parseInt(row['Quantidade']||1);
+                        if(comp === 'Desc') continue;
+                        const existente = estoqueLocal.find(i => i.Componente === comp && i.Modelo === mod && i.Especificação === esp);
+                        if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: existente.Quantidade + qtd });
+                        else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Quantidade: qtd });
+                        cont++;
+                    }
+                    await registrarLog("ENTRADA", `Importação em Lote (Excel)`, cont, "");
+                    msgLabel.textContent = `Sucesso! ${cont} registros importados.`; msgLabel.className = "text-center mt-4 font-bold text-sm text-emerald-600 block"; fileInput.value = "";
+                } catch (error) { msgLabel.textContent = "Erro na leitura."; msgLabel.className = "text-center mt-4 font-bold text-sm text-red-600 block"; }
+                btn.innerHTML = '<i class="fas fa-cloud-upload-alt mr-2"></i> Processar Estrutura';
+            };
+            reader.readAsArrayBuffer(fileInput.files[0]);
+        });
+
+        // FUNÇÃO DE INSIGHTS (INTELIGÊNCIA DE ESTOQUE)
+        function gerarInsights() {
+            const container = document.getElementById('insights-container');
+            container.innerHTML = '';
+            let alertasExibidos = 0;
+
+            const itensOrdenados = [...estoqueLocal].sort((a, b) => a.Quantidade - b.Quantidade);
+
+            itensOrdenados.forEach(item => {
+                if(item.Quantidade === 0) {
+                    container.innerHTML += `
+                        <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded shadow-sm flex items-start">
+                            <i class="fas fa-times-circle text-red-500 text-xl mt-0.5 mr-3"></i>
+                            <div>
+                                <h4 class="text-sm font-bold text-red-800">Ruptura Total de Estoque</h4>
+                                <p class="text-xs text-red-700 mt-1">O item <b>${item.Componente} (${item.Modelo})</b> está zerado. Impossível atender novos chamados.</p>
+                            </div>
+                        </div>`;
+                    alertasExibidos++;
+                } else if(item.Quantidade <= 5) {
+                    container.innerHTML += `
+                        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded shadow-sm flex items-start">
+                            <i class="fas fa-exclamation-triangle text-yellow-600 text-xl mt-0.5 mr-3"></i>
+                            <div>
+                                <h4 class="text-sm font-bold text-yellow-800">Atenção: Estoque Baixo</h4>
+                                <p class="text-xs text-yellow-700 mt-1">Apenas <b>${item.Quantidade} und.</b> de <b>${item.Componente} (${item.Especificação})</b> disponíveis.</p>
+                            </div>
+                        </div>`;
+                    alertasExibidos++;
+                } else if(item.Quantidade > 80) {
+                    container.innerHTML += `
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded shadow-sm flex items-start">
+                            <i class="fas fa-info-circle text-blue-500 text-xl mt-0.5 mr-3"></i>
+                            <div>
+                                <h4 class="text-sm font-bold text-blue-800">Aviso: Alto Volume</h4>
+                                <p class="text-xs text-blue-700 mt-1">Excesso de <b>${item.Componente}</b> (${item.Quantidade} und.). Avaliar depreciação/validade.</p>
+                            </div>
+                        </div>`;
+                    alertasExibidos++;
+                }
+            });
+
+            if(alertasExibidos === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full bg-emerald-50 border border-emerald-200 p-4 rounded shadow-sm flex items-center justify-center text-emerald-700 font-bold">
+                        <i class="fas fa-check-circle mr-2 text-xl"></i> O estoque encontra-se em níveis saudáveis e equilibrados no momento.
+                    </div>`;
+            }
         }
+
+        // INTERFACE, TABELAS E GRÁFICOS
+        function atualizarDatalists() { document.getElementById('lista-componentes').innerHTML = [...new Set(estoqueLocal.map(i => i.Componente))].map(c => `<option value="${c}">`).join(''); }
+        
         function atualizarSelectSaida() {
             const sel = document.getElementById('saida-select-item'); sel.innerHTML = '<option value="">-- Selecione o equipamento --</option>';
             [...estoqueLocal].sort((a,b) => a.Categoria.localeCompare(b.Categoria)).forEach(i => {
-                if(i.Quantidade > 0) sel.innerHTML += `<option value="${i.id}">[${i.Categoria}] ${i.Componente} ${i.Modelo} - (Qtd: ${i.Quantidade})</option>`;
+                sel.innerHTML += `<option value="${i.id}">[${i.Categoria}] ${i.Componente} ${i.Modelo} - (Qtd: ${i.Quantidade})</option>`;
             });
         }
+        
         function atualizarInterface() {
             const tbody = document.getElementById('inventory-tbody'); tbody.innerHTML = '';
             let tTotal = 0, tArmaz = 0, tEnergia = 0, tZerado = 0; const mapCat = {};
-
             estoqueLocal.forEach(item => {
                 tTotal += item.Quantidade;
-                if(item.Categoria === 'Armazenamento') tArmaz += item.Quantidade;
-                if(item.Categoria === 'Fonte de Alimentação' || item.Categoria === 'Bateria') tEnergia += item.Quantidade;
-                if(item.Quantidade === 0) tZerado++;
+                if(item.Categoria === 'Armazenamento') tArmaz += item.Quantidade; if(item.Categoria === 'Fonte de Alimentação' || item.Categoria === 'Bateria') tEnergia += item.Quantidade; if(item.Quantidade === 0) tZerado++;
                 mapCat[item.Categoria] = (mapCat[item.Categoria] || 0) + item.Quantidade;
-
-                let badge = item.Quantidade === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' 
-                          : item.Quantidade < 5 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>'
-                          : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
-
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100">
-                    <td class="px-6 py-4 text-sm font-semibold text-slate-700">${item.Categoria}</td>
-                    <td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente}</td>
-                    <td class="px-6 py-4 text-sm text-slate-500">${item.Modelo} / ${item.Especificação}</td>
-                    <td class="px-6 py-4 text-sm font-black text-slate-800">${item.Quantidade}</td>
-                    <td class="px-6 py-4">${badge}</td>
-                </tr>`;
+                let badge = item.Quantidade === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' : item.Quantidade <= 5 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>' : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
+                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${item.Categoria}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente}</td><td class="px-6 py-4 text-sm text-slate-500">${item.Modelo} / ${item.Especificação}</td><td class="px-6 py-4 text-sm font-black text-slate-800">${item.Quantidade}</td><td class="px-6 py-4">${badge}</td></tr>`;
             });
-            document.getElementById('kpi-total').innerText = tTotal; document.getElementById('kpi-armazenamento').innerText = tArmaz;
-            document.getElementById('kpi-energia').innerText = tEnergia; document.getElementById('kpi-zerado').innerText = tZerado;
+            document.getElementById('kpi-total').innerText = tTotal; document.getElementById('kpi-armazenamento').innerText = tArmaz; document.getElementById('kpi-energia').innerText = tEnergia; document.getElementById('kpi-zerado').innerText = tZerado;
             renderChartsUIUX(mapCat, estoqueLocal);
         }
 
         let chartCat = null, chartTop = null;
         function renderChartsUIUX(mapCat, dados) {
             if(chartCat) chartCat.destroy(); if(chartTop) chartTop.destroy();
-            
-            // UI/UX Reference: Categorias (Barras Horizontais com degradê/multicor)
-            const catLabels = Object.keys(mapCat).sort((a,b) => mapCat[b] - mapCat[a]);
-            const catData = catLabels.map(k => mapCat[k]);
-            const catColors = ['#4F46E5', '#3B82F6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
-
-            chartCat = new Chart(document.getElementById('chartCategoria'), {
-                type: 'bar',
-                data: { labels: catLabels, datasets: [{ data: catData, backgroundColor: catColors, borderRadius: 4 }] },
-                options: {
-                    indexAxis: 'y', responsive: true, plugins: { legend: { display: false }, 
-                    datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start', offset: 10 },
-                    tooltip: { backgroundColor: '#1E293B', titleFont: { size: 14 }, bodyFont: { size: 13, weight: 'bold' }, padding: 10, cornerRadius: 4 }
-                    }, scales: { x: { display: false, grid: { display: false } }, y: { grid: { display: false }, ticks: { font: { weight: 'bold' } } } }
-                }
-            });
-
-            // UI/UX Reference: Top Equipamentos (Barras Verticais Escuras com número dentro)
+            const catLabels = Object.keys(mapCat).sort((a,b) => mapCat[b] - mapCat[a]), catData = catLabels.map(k => mapCat[k]), catColors = ['#4F46E5', '#3B82F6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
+            chartCat = new Chart(document.getElementById('chartCategoria'), { type: 'bar', data: { labels: catLabels, datasets: [{ data: catData, backgroundColor: catColors, borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start', offset: 10 }, tooltip: { backgroundColor: '#1E293B', titleFont: { size: 14 }, bodyFont: { size: 13, weight: 'bold' }, padding: 10, cornerRadius: 4 } }, scales: { x: { display: false, grid: { display: false } }, y: { grid: { display: false }, ticks: { font: { weight: 'bold' } } } } } });
             const topItems = [...dados].sort((a, b) => b.Quantidade - a.Quantidade).slice(0, 5);
-            chartTop = new Chart(document.getElementById('chartTopItems'), {
-                type: 'bar',
-                data: { labels: topItems.map(i => i.Componente.substring(0, 15)), datasets: [{ data: topItems.map(i => i.Quantidade), backgroundColor: '#161B33', borderRadius: 4 }] },
-                options: {
-                    responsive: true, plugins: { legend: { display: false },
-                    datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start', offset: 10 },
-                    tooltip: { backgroundColor: '#1E293B', padding: 10, cornerRadius: 4 }
-                    }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold' } } } }
-                }
-            });
+            chartTop = new Chart(document.getElementById('chartTopItems'), { type: 'bar', data: { labels: topItems.map(i => i.Componente.substring(0, 15)), datasets: [{ data: topItems.map(i => i.Quantidade), backgroundColor: '#161B33', borderRadius: 4 }] }, options: { responsive: true, plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start', offset: 10 }, tooltip: { backgroundColor: '#1E293B', padding: 10, cornerRadius: 4 } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold' } } } } } });
         }
 
-        // RELATÓRIOS E IMPRESSÃO (NOVO FORMATO)
+        // RELATÓRIOS OFICIAIS
         function prepararRelatorioImpressao() {
             const tbody = document.getElementById('print-tbody'); tbody.innerHTML = '';
-            const dataAtual = new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR');
-            document.getElementById('print-date').innerText = "Gerado em: " + dataAtual;
-            
-            [...estoqueLocal].sort((a,b) => a.Categoria.localeCompare(b.Categoria)).forEach(i => {
-                tbody.innerHTML += `<tr><td style="border: 1px solid #000; padding: 5px;">${i.Categoria}</td>
-                                    <td style="border: 1px solid #000; padding: 5px;">${i.Componente}</td>
-                                    <td style="border: 1px solid #000; padding: 5px;">${i.Modelo} / ${i.Especificação}</td>
-                                    <td style="border: 1px solid #000; padding: 5px; text-align: center; font-weight: bold;">${i.Quantidade}</td></tr>`;
-            });
+            document.getElementById('print-date').innerText = "Gerado em: " + new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR');
+            [...estoqueLocal].sort((a,b) => a.Categoria.localeCompare(b.Categoria)).forEach(i => { tbody.innerHTML += `<tr><td style="border: 1px solid #000; padding: 5px;">${i.Categoria}</td><td style="border: 1px solid #000; padding: 5px;">${i.Componente}</td><td style="border: 1px solid #000; padding: 5px;">${i.Modelo} / ${i.Especificação}</td><td style="border: 1px solid #000; padding: 5px; text-align: center; font-weight: bold;">${i.Quantidade}</td></tr>`; });
         }
         document.getElementById('btn-print-pdf').addEventListener('click', () => { window.print(); });
 
-        // COMPORTAMENTOS GERAIS
+        // NAVEGAÇÃO
         document.getElementById('btn-theme').addEventListener('click', () => document.body.classList.toggle('dark'));
-        const modal = document.getElementById('tools-modal');
-        document.getElementById('btn-tools').addEventListener('click', () => modal.classList.remove('hidden'));
-        document.querySelectorAll('.close-modal').forEach(b => b.addEventListener('click', () => modal.classList.add('hidden')));
-
-        const tabsBtns = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
-        tabsBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                tabsBtns.forEach(b => { b.classList.remove('bg-blue-100', 'text-blue-800'); b.classList.add('text-slate-600'); });
-                e.currentTarget.classList.remove('text-slate-600'); e.currentTarget.classList.add('bg-blue-100', 'text-blue-800');
-                tabContents.forEach(tc => tc.classList.add('hidden'));
-                document.getElementById(e.currentTarget.getAttribute('data-target')).classList.remove('hidden');
-            });
-        });
-        document.getElementById('search-table').addEventListener('input', e => {
-            const term = e.target.value.toLowerCase(), rows = document.getElementById('inventory-tbody').getElementsByTagName('tr');
-            for(let row of rows) row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none';
-        });
-        document.getElementById('btn-export-csv').addEventListener('click', () => {
-            let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Quantidade\n";
-            estoqueLocal.forEach(r => csv += `"${r.Categoria}","${r.Componente}","${r.Modelo}","${r.Especificação}","${r.Quantidade}"\n`);
-            const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv");
-            document.body.appendChild(link); link.click();
-        });
+        const modal = document.getElementById('tools-modal'); document.getElementById('btn-tools').addEventListener('click', () => modal.classList.remove('hidden')); document.querySelectorAll('.close-modal').forEach(b => b.addEventListener('click', () => modal.classList.add('hidden')));
+        const tabsBtns = document.querySelectorAll('.tab-btn'), tabContents = document.querySelectorAll('.tab-content');
+        tabsBtns.forEach(btn => { btn.addEventListener('click', (e) => { tabsBtns.forEach(b => { b.classList.remove('bg-blue-100', 'text-blue-800'); b.classList.add('text-slate-600'); }); e.currentTarget.classList.remove('text-slate-600'); e.currentTarget.classList.add('bg-blue-100', 'text-blue-800'); tabContents.forEach(tc => tc.classList.add('hidden')); document.getElementById(e.currentTarget.getAttribute('data-target')).classList.remove('hidden'); }); });
+        document.getElementById('search-table').addEventListener('input', e => { const term = e.target.value.toLowerCase(), rows = document.getElementById('inventory-tbody').getElementsByTagName('tr'); for(let row of rows) row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; });
+        document.getElementById('btn-export-csv').addEventListener('click', () => { let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Quantidade\n"; estoqueLocal.forEach(r => csv += `"${r.Categoria}","${r.Componente}","${r.Modelo}","${r.Especificação}","${r.Quantidade}"\n`); const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); });
     </script>
 </body>
 </html>
