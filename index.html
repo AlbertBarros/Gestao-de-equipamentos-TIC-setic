@@ -245,7 +245,6 @@
                 <ul class="space-y-2 flex-1">
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg bg-blue-100 text-blue-800 font-bold transition flex items-center text-sm" data-target="tab-entrada"><i class="fas fa-plus-circle w-6"></i> Entrada Estoque</button></li>
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-saida"><i class="fas fa-minus-circle w-6"></i> Baixa / Saída</button></li>
-                    <!-- NOVA ABA: RASTREIO E LOCAIS -->
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-indigo-100 hover:text-indigo-800 font-semibold transition flex items-center text-sm border-l-4 border-transparent hover:border-indigo-500" data-target="tab-localidade"><i class="fas fa-map-marker-alt w-6 text-indigo-500"></i> Locais / Rastreio</button></li>
                     
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm mt-4" data-target="tab-relatorio"><i class="fas fa-file-pdf w-6"></i> Exportações</button></li>
@@ -292,13 +291,12 @@
                     <p id="msg-saida" class="text-center mt-3 font-bold hidden"></p>
                 </div>
 
-                <!-- NOVA TAB LOCALIDADE / RASTREIO -->
+                <!-- TAB LOCALIDADE / RASTREIO -->
                 <div id="tab-localidade" class="tab-content hidden h-full flex flex-col">
                     <h2 class="text-2xl font-bold text-indigo-900 mb-2"><i class="fas fa-map-marker-alt mr-2 text-indigo-600"></i>Gestão de Localidades e Rastreio</h2>
                     <p class="text-sm text-slate-500 mb-6 border-b pb-4">Mapeie fisicamente os equipamentos registrando número de série e patrimônio.</p>
                     
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
-                        
                         <!-- Coluna 1: Cadastro Manual -->
                         <div class="bg-indigo-50/50 p-6 rounded-xl border border-indigo-100 shadow-sm">
                             <h3 class="font-bold text-indigo-800 mb-4"><i class="fas fa-keyboard mr-2"></i>Cadastro Manual</h3>
@@ -357,7 +355,6 @@
                             </button>
                             <p id="msg-loc-upload" class="text-center mt-2 font-bold text-sm hidden"></p>
                         </div>
-
                     </div>
                 </div>
 
@@ -437,24 +434,32 @@
                             <!-- Criar Usuário -->
                             <div class="border border-blue-200 rounded-xl p-5 bg-blue-50 shadow-sm">
                                 <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-user-plus text-blue-600 mr-2"></i> Novo Usuário</h3>
-                                <input type="email" id="new-user-email" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="E-mail (ex: novo@prf.gov.br)">
+                                <input type="email" id="new-user-email" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="E-mail corporativo">
                                 <input type="password" id="new-user-pass" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="Senha (mín. 6 chars)">
                                 <button id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 px-2 rounded hover:bg-blue-700 transition text-sm shadow"><i class="fas fa-save mr-1"></i> Cadastrar</button>
                                 <p id="msg-create-user" class="text-center mt-2 font-bold text-xs hidden"></p>
                             </div>
 
-                            <!-- Zona de Perigo -->
+                            <!-- Zona de Perigo ATUALIZADA -->
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between">
                                 <div>
                                     <h3 class="font-bold text-red-800 mb-1"><i class="fas fa-exclamation-triangle text-red-600 mr-2"></i> Zona de Perigo</h3>
-                                    <p class="text-xs text-red-600 mb-3">Apaga todo o estoque e o histórico permanentemente.</p>
+                                    <p class="text-xs text-red-600 mb-3">Apague bases de dados.<br><b>Aviso:</b> Logs de auditoria são imutáveis e nunca são apagados.</p>
                                 </div>
-                                <button id="btn-delete-db" class="w-full bg-red-600 text-white font-bold py-2 px-2 rounded hover:bg-red-700 transition text-sm shadow"><i class="fas fa-trash-alt mr-1"></i> Apagar Tudo</button>
+                                <div class="space-y-2 mt-auto">
+                                    <!-- Botão Laranja: Apagar Rastreio -->
+                                    <button id="btn-delete-loc" class="w-full bg-orange-600 text-white font-bold py-2 px-2 rounded hover:bg-orange-700 transition text-sm shadow"><i class="fas fa-eraser mr-1"></i> Apagar Rastreio</button>
+                                    <!-- Botão Vermelho: Apagar Estoque -->
+                                    <button id="btn-delete-estoque" class="w-full bg-red-600 text-white font-bold py-2 px-2 rounded hover:bg-red-700 transition text-sm shadow"><i class="fas fa-trash-alt mr-1"></i> Apagar Estoque</button>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Auditoria (Logs) -->
-                        <h3 class="font-bold text-slate-800 mb-2"><i class="fas fa-history text-blue-600 mr-2"></i> Auditoria de Movimentações (Logs)</h3>
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-slate-800"><i class="fas fa-history text-blue-600 mr-2"></i> Auditoria de Movimentações (Logs)</h3>
+                            <button id="btn-export-logs-pdf" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition"><i class="fas fa-file-pdf mr-1"></i> Exportar Logs PDF</button>
+                        </div>
                         <div class="flex-1 overflow-y-auto border rounded bg-slate-50 shadow-inner">
                             <table class="min-w-full divide-y divide-gray-200 text-sm">
                                 <thead class="bg-slate-200 sticky top-0">
@@ -498,6 +503,7 @@
         const db = getFirestore(app);
         let estoqueLocal = []; 
         let localidadesLocais = []; 
+        let logsLocal = []; // Array global para exportar os logs
         let userEmail = "";
 
         // ================= PREFERÊNCIAS =================
@@ -546,23 +552,24 @@
         });
 
         function iniciarSistema() {
-            // Monitora Estoque
             onSnapshot(collection(db, "estoque"), (snapshot) => {
                 estoqueLocal = []; snapshot.forEach((doc) => { estoqueLocal.push({ id: doc.id, ...doc.data() }); });
                 atualizarInterfaceEstoque(); atualizarDatalists(); atualizarSelectSaida(); prepararRelatorioImpressao(); gerarInsights();
             });
 
-            // Monitora Localidades (Novo Módulo Rastreio)
             onSnapshot(collection(db, "localidades"), (snapshot) => {
                 localidadesLocais = []; snapshot.forEach((doc) => { localidadesLocais.push({ id: doc.id, ...doc.data() }); });
                 atualizarInterfaceRastreio();
             });
 
-            // Monitora Logs
             onSnapshot(query(collection(db, "logs"), orderBy("dataHora", "desc"), limit(100)), (snapshot) => {
                 const tbody = document.getElementById('logs-tbody'); tbody.innerHTML = '';
+                logsLocal = []; // Reseta o array global
                 snapshot.forEach((docSnap) => {
-                    const log = docSnap.data(); let dateStr = "N/A";
+                    const log = docSnap.data(); 
+                    logsLocal.push(log); // Armazena para PDF
+                    
+                    let dateStr = "N/A";
                     if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
                     let corAcao = log.tipo === 'ENTRADA' ? 'text-emerald-600' : 'text-orange-600', iconAcao = log.tipo === 'ENTRADA' ? 'fa-arrow-down' : 'fa-arrow-up';
                     if(log.tipo.includes('LOCAL')) { corAcao = 'text-indigo-600'; iconAcao = 'fa-map-marker-alt'; }
@@ -583,18 +590,62 @@
 
         document.getElementById('btn-admin-lock').addEventListener('click', () => { document.getElementById('admin-content-section').classList.add('hidden'); document.getElementById('admin-login-section').classList.remove('hidden'); });
 
-        document.getElementById('btn-delete-db').addEventListener('click', async () => {
-            const confirmacao = prompt("⚠️ ZONA DE PERIGO!\nIsso apagará TODO o estoque e TODAS as localidades.\nPara confirmar, digite: APAGAR");
-            if(confirmacao === "APAGAR") {
-                const btn = document.getElementById('btn-delete-db'); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
+        // APAGAR APENAS RASTREIO (Sem Senha)
+        document.getElementById('btn-delete-loc').addEventListener('click', async () => {
+            if(confirm("Deseja realmente apagar toda a base de Rastreamento de Ativos? Esta ação é irreversível.")) {
+                const btn = document.getElementById('btn-delete-loc'); 
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
                 try {
-                    const estSnap = await getDocs(collection(db, "estoque")); estSnap.forEach((d) => deleteDoc(d.ref));
-                    const logSnap = await getDocs(collection(db, "logs")); logSnap.forEach((d) => deleteDoc(d.ref));
-                    const locSnap = await getDocs(collection(db, "localidades")); locSnap.forEach((d) => deleteDoc(d.ref));
-                    alert("Banco de dados completamente apagado.");
-                } catch(e) {}
-                btn.innerHTML = '<i class="fas fa-trash-alt mr-1"></i> Apagar Tudo';
+                    const locSnap = await getDocs(collection(db, "localidades"));
+                    locSnap.forEach((d) => deleteDoc(d.ref));
+                    alert("Base de rastreamento apagada com sucesso.");
+                } catch(e) { alert("Erro ao apagar: " + e.message); }
+                btn.innerHTML = originalText;
             }
+        });
+
+        // APAGAR APENAS ESTOQUE (Com Senha, Logs Protegidos)
+        document.getElementById('btn-delete-estoque').addEventListener('click', async () => {
+            const confirmacao = prompt("⚠️ ZONA DE PERIGO!\nIsso apagará TODO o Estoque Consolidado permanentemente.\nOs Logs de Auditoria NÃO serão apagados.\nPara confirmar, digite: APAGAR");
+            if(confirmacao === "APAGAR") {
+                const btn = document.getElementById('btn-delete-estoque'); 
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
+                try {
+                    const estSnap = await getDocs(collection(db, "estoque")); 
+                    estSnap.forEach((d) => deleteDoc(d.ref));
+                    alert("Estoque Consolidado apagado com sucesso.");
+                } catch(e) { alert("Erro ao apagar: " + e.message); }
+                btn.innerHTML = originalText;
+            } else if (confirmacao !== null) { 
+                alert("Palavra incorreta. Ação cancelada."); 
+            }
+        });
+
+        // EXPORTAR LOGS PARA PDF
+        document.getElementById('btn-export-logs-pdf').addEventListener('click', () => {
+            const tbody = document.getElementById('print-tbody'); 
+            tbody.innerHTML = '';
+            document.getElementById('print-title-doc').textContent = "Relatório de Auditoria de Movimentações (Logs)";
+            document.getElementById('print-date').innerText = "Gerado em: " + new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR');
+            
+            document.querySelector('#print-table thead').innerHTML = `<tr><th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Data</th><th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Ação</th><th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Item</th><th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Qtd</th><th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Usuário / Ref.</th></tr>`;
+
+            logsLocal.forEach(log => {
+                let dateStr = "N/A";
+                if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
+                let userInfo = log.usuario ? log.usuario : '';
+                let refInfo = log.chamado ? log.chamado : '';
+                let fullRef = refInfo + (userInfo ? ` (${userInfo})` : '');
+                tbody.innerHTML += `<tr><td style="border: 1px solid #000; padding: 5px;">${dateStr}</td><td style="border: 1px solid #000; padding: 5px;">${log.tipo}</td><td style="border: 1px solid #000; padding: 5px;">${log.itemNome}</td><td style="border: 1px solid #000; padding: 5px; text-align: center;">${log.qtd}</td><td style="border: 1px solid #000; padding: 5px;">${fullRef}</td></tr>`;
+            });
+            window.print();
+            
+            // Restaura o layout padrão de impressão após 1 segundo
+            setTimeout(() => {
+                prepararRelatorioImpressao();
+            }, 1000);
         });
 
         document.getElementById('btn-process-upload').addEventListener('click', () => {
@@ -635,89 +686,43 @@
         });
 
         // ================= MÓDULO: RASTREIO E LOCALIDADES =================
-        // Cadastro Manual
         document.getElementById('btn-save-loc').addEventListener('click', async () => {
-            const equip = document.getElementById('loc-equip').value.trim();
-            const local = document.getElementById('loc-local').value.trim();
-            const marca = document.getElementById('loc-marca').value.trim() || 'N/A';
-            const serie = document.getElementById('loc-serie').value.trim() || 'N/A';
-            const patrim = document.getElementById('loc-patrimonio').value.trim() || 'N/A';
-            const qtd = parseInt(document.getElementById('loc-qtd').value);
-
+            const equip = document.getElementById('loc-equip').value.trim(), local = document.getElementById('loc-local').value.trim(), marca = document.getElementById('loc-marca').value.trim() || 'N/A', serie = document.getElementById('loc-serie').value.trim() || 'N/A', patrim = document.getElementById('loc-patrimonio').value.trim() || 'N/A', qtd = parseInt(document.getElementById('loc-qtd').value);
             if(!equip || !local || isNaN(qtd) || qtd <= 0) return alert("Preencha Nome do Equipamento, Local e Quantidade corretamente.");
-
             try {
-                await addDoc(collection(db, "localidades"), {
-                    Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd
-                });
+                await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
                 await registrarLog("MAP_LOCAL", `${equip} (Local: ${local})`, qtd, `Série: ${serie}`);
-                document.getElementById('msg-loc-manual').classList.remove('hidden');
-                setTimeout(() => document.getElementById('msg-loc-manual').classList.add('hidden'), 3000);
-                
-                // Limpa campos
-                ['loc-equip','loc-local','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = '');
-                document.getElementById('loc-qtd').value = 1;
-            } catch (e) { alert("Erro ao mapear ativo: " + e.message); }
+                document.getElementById('msg-loc-manual').classList.remove('hidden'); setTimeout(() => document.getElementById('msg-loc-manual').classList.add('hidden'), 3000);
+                ['loc-equip','loc-local','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1;
+            } catch (e) { alert("Erro ao mapear: " + e.message); }
         });
 
-        // Upload em Lote Localidades
         document.getElementById('btn-loc-upload').addEventListener('click', () => {
-            const fileInput = document.getElementById('loc-file-upload');
-            const msgLabel = document.getElementById('msg-loc-upload');
-            const btn = document.getElementById('btn-loc-upload');
-
+            const fileInput = document.getElementById('loc-file-upload'), msgLabel = document.getElementById('msg-loc-upload'), btn = document.getElementById('btn-loc-upload');
             if (!fileInput.files.length) return alert("Selecione um arquivo Excel.");
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mapeando...';
-            msgLabel.classList.add('hidden');
-
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mapeando...'; msgLabel.classList.add('hidden');
             const reader = new FileReader();
             reader.onload = async (e) => {
                 try {
-                    const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
-                    const json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                    const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' }), json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
                     let cont = 0;
                     for (let row of json) {
-                        const equip = row['EQUIPAMENTO'] || row['Equipamento'] || row['Nome'] || 'Equipamento Indefinido';
-                        const local = row['LOCAL FISICO'] || row['Local Físico'] || row['Local'] || 'N/A';
-                        const marca = row['MARCA'] || row['Marca'] || 'N/A';
-                        const serie = row['Nº DE SÉRIE'] || row['N Serie'] || row['Série'] || 'N/A';
-                        const patrim = row['Nº PATRIMONIO'] || row['Patrimônio'] || row['Patrimonio'] || 'N/A';
-                        const qtd = parseInt(row['QUANTIDADE'] || row['Quantidade'] || row['Qtd'] || 1);
-
-                        await addDoc(collection(db, "localidades"), {
-                            Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd
-                        });
+                        const equip = row['EQUIPAMENTO'] || row['Equipamento'] || row['Nome'] || 'Equipamento Indefinido', local = row['LOCAL FISICO'] || row['Local Físico'] || row['Local'] || 'N/A', marca = row['MARCA'] || row['Marca'] || 'N/A', serie = row['Nº DE SÉRIE'] || row['N Serie'] || row['Série'] || 'N/A', patrim = row['Nº PATRIMONIO'] || row['Patrimônio'] || row['Patrimonio'] || 'N/A', qtd = parseInt(row['QUANTIDADE'] || row['Quantidade'] || row['Qtd'] || 1);
+                        await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
                         cont++;
                     }
                     await registrarLog("MAP_LOCAL", `Importação em Lote (Excel)`, cont, "");
-                    msgLabel.textContent = `Sucesso! ${cont} locais mapeados.`;
-                    msgLabel.className = "text-center mt-2 font-bold text-sm text-emerald-600 block";
-                    fileInput.value = "";
-                } catch (error) {
-                    msgLabel.textContent = "Erro na leitura.";
-                    msgLabel.className = "text-center mt-2 font-bold text-sm text-red-600 block";
-                }
+                    msgLabel.textContent = `Sucesso! ${cont} locais mapeados.`; msgLabel.className = "text-center mt-2 font-bold text-sm text-emerald-600 block"; fileInput.value = "";
+                } catch (error) { msgLabel.textContent = "Erro na leitura."; msgLabel.className = "text-center mt-2 font-bold text-sm text-red-600 block"; }
                 btn.innerHTML = 'Iniciar Importação';
             };
             reader.readAsArrayBuffer(fileInput.files[0]);
         });
 
-        // Função para atualizar a nova tabela do painel principal (Rastreio)
         function atualizarInterfaceRastreio() {
-            const tbody = document.getElementById('rastreio-tbody'); 
-            tbody.innerHTML = '';
-            
-            // Ordenar por local físico
+            const tbody = document.getElementById('rastreio-tbody'); tbody.innerHTML = '';
             [...localidadesLocais].sort((a,b) => a.Local.localeCompare(b.Local)).forEach(loc => {
-                tbody.innerHTML += `
-                <tr class="hover:bg-indigo-50/30 transition border-b border-gray-100">
-                    <td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento}</td>
-                    <td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local}</td>
-                    <td class="px-6 py-4 text-sm text-slate-500">${loc.Marca}</td>
-                    <td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie}</td>
-                    <td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio}</td>
-                    <td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade}</td>
-                </tr>`;
+                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade}</td></tr>`;
             });
         }
         // =================================================================
@@ -818,7 +823,11 @@
 
         function prepararRelatorioImpressao() {
             const tbody = document.getElementById('print-tbody'); tbody.innerHTML = '';
+            const title = localStorage.getItem('pref_title') || 'Painel de Gestão de Estoque - SETIC';
+            document.getElementById('print-title-doc').textContent = "Relatório Geral - " + title;
             document.getElementById('print-date').innerText = "Gerado em: " + new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR');
+            document.querySelector('#print-table thead').innerHTML = `<tr><th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Categoria</th><th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Componente</th><th style="border: 1px solid #000; padding: 5px; background-color: #eee;">Especificação</th><th style="border: 1px solid #000; padding: 5px; background-color: #eee; text-align: center;">Qtd</th></tr>`;
+            
             [...estoqueLocal].sort((a,b) => a.Categoria.localeCompare(b.Categoria)).forEach(i => { tbody.innerHTML += `<tr><td style="border: 1px solid #000; padding: 5px;">${i.Categoria}</td><td style="border: 1px solid #000; padding: 5px;">${i.Componente}</td><td style="border: 1px solid #000; padding: 5px;">${i.Modelo} / ${i.Especificação}</td><td style="border: 1px solid #000; padding: 5px; text-align: center; font-weight: bold;">${i.Quantidade}</td></tr>`; });
         }
         document.getElementById('btn-print-pdf').addEventListener('click', () => { window.print(); });
