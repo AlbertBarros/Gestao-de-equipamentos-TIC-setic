@@ -59,14 +59,17 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700">Senha</label>
                     <input type="password" id="login-password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2.5 border focus:ring-blue-500 focus:border-blue-500" placeholder="••••••••">
+                    <div class="text-right mt-1.5">
+                        <button id="btn-forgot-password" class="text-xs text-blue-600 hover:text-blue-800 hover:underline transition font-medium">Esqueci minha senha</button>
+                    </div>
                 </div>
-                <button id="btn-login" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:opacity-90 transition shadow-lg">
+                <button id="btn-login" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:opacity-90 transition shadow-lg mt-2">
                     <i class="fas fa-sign-in-alt mr-2"></i> Autenticar
                 </button>
             </div>
-            <!-- MENSAGEM DE ERRO MELHORADA -->
-            <div id="login-error-container" class="mt-4 p-3 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm font-medium hidden rounded shadow-sm">
-                <p id="login-error"></p>
+            <!-- Container Dinâmico para Mensagens (Erro ou Sucesso) -->
+            <div id="login-msg-container" class="mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm hidden">
+                <p id="login-msg-text"></p>
             </div>
         </div>
     </div>
@@ -387,12 +390,12 @@
                     <p id="msg-pref" class="text-emerald-600 text-center mt-4 font-bold hidden"><i class="fas fa-check-circle"></i> Personalização aplicada com sucesso!</p>
                 </div>
 
-                <!-- TAB ADMINISTRADOR -->
+                <!-- TAB ADMINISTRADOR (ATUALIZADA) -->
                 <div id="tab-admin" class="tab-content hidden h-full">
                     <div id="admin-login-section" class="flex flex-col items-center justify-center h-full">
                         <i class="fas fa-user-shield text-7xl text-slate-300 mb-4"></i>
                         <h2 class="text-2xl font-bold text-slate-800 mb-2">Acesso Administrativo</h2>
-                        <p class="text-sm text-slate-500 mb-6">Área restrita. Ferramentas sensíveis do banco de dados.</p>
+                        <p class="text-sm text-slate-500 mb-6">Área restrita. Ferramentas sensíveis do banco de dados e usuários.</p>
                         <input type="password" id="admin-pass-input" class="rounded-md border-gray-300 border p-3 w-64 mb-4 text-center tracking-widest" placeholder="••••••••">
                         <button id="btn-admin-login" class="btn-primary bg-[#161B33] text-white font-bold py-3 px-8 rounded-md hover:opacity-90 transition shadow-lg"><i class="fas fa-unlock-alt mr-2"></i> Desbloquear</button>
                         <p id="admin-error" class="text-red-600 font-bold text-sm mt-3 hidden">Senha Incorreta.</p>
@@ -400,34 +403,49 @@
 
                     <div id="admin-content-section" class="hidden h-full flex flex-col">
                         <div class="flex justify-between items-center mb-4 border-b pb-4">
-                            <div><h2 class="text-2xl font-bold text-slate-800">Painel do Administrador</h2><p class="text-sm text-slate-500">Gestão de banco de dados e usuários.</p></div>
+                            <div><h2 class="text-2xl font-bold text-slate-800">Painel do Administrador</h2><p class="text-sm text-slate-500">Gestão de banco de dados e credenciais.</p></div>
                             <button id="btn-admin-lock" class="text-slate-400 hover:text-slate-800 transition" title="Bloquear Sessão"><i class="fas fa-lock text-xl"></i></button>
                         </div>
 
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-                            <!-- Importar Planilha -->
-                            <div class="border rounded-xl p-5 bg-slate-50 shadow-sm">
+                        <!-- 4 CARDS NO PAINEL ADMIN -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+                            
+                            <!-- Card 1: Importar Planilha -->
+                            <div class="border rounded-xl p-5 bg-slate-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-slate-800 mb-2"><i class="fas fa-file-excel text-emerald-600 mr-2"></i> Alimentar Base</h3>
-                                <p class="text-xs text-slate-500 mb-3">Carregue um arquivo .xlsx estruturado.</p>
+                                <p class="text-[11px] text-slate-500 mb-3">Carregue arquivo .xlsx estruturado.</p>
                                 <input type="file" id="file-upload" accept=".xlsx, .xls, .csv" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-blue-50 file:text-blue-700 cursor-pointer mb-2">
-                                <button id="btn-process-upload" class="btn-primary w-full bg-[#161B33] text-white font-bold py-2 px-2 rounded hover:opacity-90 transition text-sm"><i class="fas fa-cloud-upload-alt mr-1"></i> Processar</button>
+                                <button id="btn-process-upload" class="btn-primary w-full bg-[#161B33] text-white font-bold py-2 px-2 rounded hover:opacity-90 transition text-sm mt-auto"><i class="fas fa-cloud-upload-alt mr-1"></i> Processar</button>
                                 <p id="msg-upload" class="text-center mt-2 font-bold text-xs hidden"></p>
                             </div>
 
-                            <!-- Criar Usuário -->
-                            <div class="border border-blue-200 rounded-xl p-5 bg-blue-50 shadow-sm">
+                            <!-- Card 2: Criar Usuário -->
+                            <div class="border border-blue-200 rounded-xl p-5 bg-blue-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-user-plus text-blue-600 mr-2"></i> Novo Usuário</h3>
+                                <p class="text-[11px] text-blue-600 mb-2">Atenção: Cadastrar um novo logará você nele.</p>
                                 <input type="email" id="new-user-email" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="E-mail corporativo">
                                 <input type="password" id="new-user-pass" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="Senha (mín. 6 chars)">
-                                <button id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 px-2 rounded hover:bg-blue-700 transition text-sm shadow"><i class="fas fa-save mr-1"></i> Cadastrar</button>
+                                <button id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 px-2 rounded hover:bg-blue-700 transition text-sm shadow mt-auto"><i class="fas fa-save mr-1"></i> Cadastrar</button>
                                 <p id="msg-create-user" class="text-center mt-2 font-bold text-xs hidden"></p>
                             </div>
 
-                            <!-- Zona de Perigo -->
+                            <!-- NOVO Card 3: Excluir Usuário -->
+                            <div class="border border-orange-200 rounded-xl p-5 bg-orange-50 shadow-sm flex flex-col">
+                                <h3 class="font-bold text-orange-800 mb-2"><i class="fas fa-user-minus text-orange-600 mr-2"></i> Gerir Acessos</h3>
+                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">
+                                    Para evitar ataques ao sistema, o Firebase bloqueia a exclusão de usuários pelo painel web.<br><br>
+                                    A demissão/exclusão definitiva deve ser feita diretamente no seu Console Oficial.
+                                </p>
+                                <a href="https://console.firebase.google.com/project/gestao-de-equipamentos-tic/authentication/users" target="_blank" class="w-full bg-orange-600 text-white font-bold py-2.5 px-2 rounded hover:bg-orange-700 transition text-sm shadow mt-auto flex items-center justify-center text-center">
+                                    <i class="fas fa-external-link-alt mr-2"></i> Abrir Firebase Console
+                                </a>
+                            </div>
+
+                            <!-- Card 4: Zona de Perigo -->
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between">
                                 <div>
                                     <h3 class="font-bold text-red-800 mb-1"><i class="fas fa-exclamation-triangle text-red-600 mr-2"></i> Zona de Perigo</h3>
-                                    <p class="text-xs text-red-600 mb-3">Apague bases de dados.<br><b>Aviso:</b> Logs de auditoria são imutáveis e nunca são apagados.</p>
+                                    <p class="text-[11px] text-red-600 mb-3">Apague as bases físicas do sistema. Logs são imutáveis.</p>
                                 </div>
                                 <div class="space-y-2 mt-auto">
                                     <button id="btn-delete-loc" class="w-full bg-orange-600 text-white font-bold py-2 px-2 rounded hover:bg-orange-700 transition text-sm shadow"><i class="fas fa-eraser mr-1"></i> Apagar Rastreio</button>
@@ -465,7 +483,8 @@
     <!-- FIREBASE E SCRIPTS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        // Importação atualizada incluindo sendPasswordResetEmail
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, addDoc, serverTimestamp, query, orderBy, limit, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         Chart.register(ChartDataLabels);
@@ -489,7 +508,7 @@
         let userEmail = "";
         let tempBgBase64 = null; 
 
-        // ================= PREFERÊNCIAS COM UPLOAD DE BACKGROUND E TÍTULO =================
+        // ================= PREFERÊNCIAS COM UPLOAD DE BACKGROUND E TÍTULO LOGIN =================
         function carregarPreferencias() {
             const title = localStorage.getItem('pref_title') || 'Painel de Gestão de Estoque - SETIC';
             const color = localStorage.getItem('pref_color') || '#161B33';
@@ -522,7 +541,10 @@
         });
 
         document.getElementById('btn-clear-bg').addEventListener('click', () => {
-            localStorage.removeItem('pref_bg'); tempBgBase64 = null; document.getElementById('pref-bg-upload').value = ''; carregarPreferencias();
+            localStorage.removeItem('pref_bg');
+            tempBgBase64 = null;
+            document.getElementById('pref-bg-upload').value = '';
+            carregarPreferencias();
             alert("Imagem de fundo restaurada para o padrão da PRF!");
         });
 
@@ -530,8 +552,15 @@
             localStorage.setItem('pref_title', document.getElementById('pref-title').value);
             localStorage.setItem('pref_color', document.getElementById('pref-color').value);
             localStorage.setItem('pref_icon', document.getElementById('pref-icon').value);
-            if(tempBgBase64) { try { localStorage.setItem('pref_bg', tempBgBase64); } catch(e) { alert("A imagem é muito grande para ser salva na memória (limite: 2MB)."); } }
-            carregarPreferencias(); document.getElementById('msg-pref').classList.remove('hidden'); setTimeout(() => document.getElementById('msg-pref').classList.add('hidden'), 3000);
+            
+            if(tempBgBase64) {
+                try { localStorage.setItem('pref_bg', tempBgBase64); } 
+                catch(e) { alert("A imagem escolhida é muito grande para ser salva na memória do navegador. Escolha uma imagem menor (limite ideal: 2MB)."); }
+            }
+
+            carregarPreferencias();
+            document.getElementById('msg-pref').classList.remove('hidden'); 
+            setTimeout(() => document.getElementById('msg-pref').classList.add('hidden'), 3000);
         });
 
         document.getElementById('pref-color').addEventListener('input', (e) => document.getElementById('pref-color-text').value = e.target.value.toUpperCase());
@@ -539,15 +568,48 @@
 
         carregarPreferencias(); 
 
+        // ================= SISTEMA DE MENSAGENS DO LOGIN =================
+        function showLoginMessage(msg, isError = true) {
+            const container = document.getElementById('login-msg-container');
+            const textObj = document.getElementById('login-msg-text');
+            textObj.innerText = msg;
+            
+            if(isError) {
+                container.className = "mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm block bg-red-50 border-red-500 text-red-700";
+            } else {
+                container.className = "mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm block bg-emerald-50 border-emerald-500 text-emerald-700";
+            }
+        }
+
+        // ================= ESQUECI MINHA SENHA =================
+        document.getElementById('btn-forgot-password').addEventListener('click', () => {
+            const email = document.getElementById('login-email').value.trim();
+            if (!email) {
+                showLoginMessage("Por favor, digite seu e-mail corporativo no campo acima para recuperar a senha.", true);
+                return;
+            }
+            
+            sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    showLoginMessage(`E-mail de redefinição enviado para: ${email}. Verifique sua caixa de entrada (ou spam).`, false);
+                })
+                .catch((error) => {
+                    let msg = "Erro: " + error.message;
+                    if(error.code === 'auth/user-not-found' || error.code === 'auth/invalid-email') {
+                        msg = "E-mail não encontrado no sistema.";
+                    }
+                    showLoginMessage(msg, true);
+                });
+        });
+
         // ================= LOGIN INTELIGENTE (Trim, Enter e Erros) =================
         function fazerLogin() {
-            const email = document.getElementById('login-email').value.trim(); // .trim() resolve problema de espaços em branco
+            const email = document.getElementById('login-email').value.trim(); 
             const pass = document.getElementById('login-password').value;
             const btn = document.getElementById('btn-login');
             
             if(!email || !pass) {
-                document.getElementById('login-error').innerText = "Preencha e-mail e senha.";
-                document.getElementById('login-error-container').classList.remove('hidden');
+                showLoginMessage("Preencha e-mail e senha para autenticar.", true);
                 return;
             }
 
@@ -555,31 +617,21 @@
             
             signInWithEmailAndPassword(auth, email, pass).catch((error) => {
                 let msg = "Credenciais inválidas ou acesso não autorizado.";
-                
-                // Tratamento de erros específicos do Firebase
                 if(error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
                     msg = "Usuário não encontrado. Verifique se o e-mail está correto.";
                 } else if(error.code === 'auth/wrong-password') {
-                    msg = "Senha incorreta. Tente novamente.";
+                    msg = "Senha incorreta. Tente novamente ou recupere a senha.";
                 } else if(error.code === 'auth/invalid-email') {
                     msg = "Formato de e-mail inválido.";
                 }
-
-                document.getElementById('login-error').innerText = msg;
-                document.getElementById('login-error-container').classList.remove('hidden'); 
+                showLoginMessage(msg, true);
                 btn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Autenticar';
             });
         }
 
         document.getElementById('btn-login').addEventListener('click', fazerLogin);
-
-        // Permite logar apertando ENTER
-        document.getElementById('login-password').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') fazerLogin();
-        });
-        document.getElementById('login-email').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') document.getElementById('login-password').focus();
-        });
+        document.getElementById('login-password').addEventListener('keypress', function (e) { if (e.key === 'Enter') fazerLogin(); });
+        document.getElementById('login-email').addEventListener('keypress', function (e) { if (e.key === 'Enter') document.getElementById('login-password').focus(); });
 
         document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
         onAuthStateChanged(auth, (user) => {
@@ -589,7 +641,7 @@
                 document.getElementById('main-system').classList.remove('hidden'); 
                 document.getElementById('login-email').value = '';
                 document.getElementById('login-password').value = '';
-                document.getElementById('login-error-container').classList.add('hidden');
+                document.getElementById('login-msg-container').classList.add('hidden');
                 iniciarSistema(); 
             } else { 
                 document.getElementById('login-screen').classList.remove('hidden'); 
@@ -601,7 +653,7 @@
         function iniciarSistema() {
             onSnapshot(collection(db, "estoque"), (snapshot) => {
                 estoqueLocal = []; snapshot.forEach((doc) => { estoqueLocal.push({ id: doc.id, ...doc.data() }); });
-                atualizarInterfaceEstoque(); atualizarDatalists(); atualizarSelectSaida(); gerarInsights();
+                atualizarInterfaceEstoque(); atualizarDatalists(); atualizarSelectSaida(); prepararRelatorioImpressao(); gerarInsights();
             });
 
             onSnapshot(collection(db, "localidades"), (snapshot) => {
