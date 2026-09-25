@@ -43,7 +43,7 @@
     <div id="login-screen" class="fixed inset-0 bg-slate-900 flex justify-center items-center z-50">
         <div class="bg-white rounded-xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500">
             <div class="text-center mb-8">
-                <!-- LOGO COM FALLBACK AUTOMÁTICO PARA WIKIPEDIA SE O SEU ARQUIVO FALHAR -->
+                <!-- LOGO -->
                 <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
                 <h2 class="text-2xl font-bold text-slate-800">Almoxarifado TIC</h2>
                 <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p>
@@ -57,7 +57,7 @@
                     <label class="block text-sm font-semibold text-slate-700">Senha</label>
                     <input type="password" id="login-password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2.5 border focus:ring-blue-500 focus:border-blue-500" placeholder="••••••••">
                 </div>
-                <button id="btn-login" class="w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:bg-slate-800 transition shadow-lg">
+                <button id="btn-login" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:opacity-90 transition shadow-lg">
                     <i class="fas fa-sign-in-alt mr-2"></i> Autenticar
                 </button>
             </div>
@@ -69,22 +69,22 @@
     <div id="main-system" class="hidden">
         
         <!-- NAVBAR -->
-        <nav class="bg-[#161B33] text-white shadow-md border-b-4 border-yellow-500 no-print">
+        <nav id="navbar-main" class="bg-[#161B33] text-white shadow-md border-b-4 border-yellow-500 no-print transition-colors">
             <div class="px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center space-x-3">
                         <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" class="h-10">
-                        <i class="fas fa-chart-line text-xl ml-2"></i>
-                        <span class="font-bold text-lg tracking-wide hidden sm:block">Painel de Gestão de Estoque - SETIC</span>
+                        <i id="navbar-icon" class="fas fa-chart-line text-xl ml-2"></i>
+                        <span id="navbar-title" class="font-bold text-lg tracking-wide hidden sm:block">Painel de Gestão de Estoque - SETIC</span>
                     </div>
                     <div class="flex items-center space-x-4">
                         <span class="bg-green-500 text-white text-xs px-2.5 py-1.5 rounded flex items-center font-bold shadow-sm hidden md:flex">
                             <i class="fas fa-check-circle mr-1.5"></i> Sincronizado
                         </span>
-                        <button id="btn-theme" class="p-2 rounded-full hover:bg-slate-700 transition" title="Modo Noturno">
+                        <button id="btn-theme" class="p-2 rounded-full hover:bg-black hover:bg-opacity-20 transition" title="Modo Noturno">
                             <i class="fas fa-moon text-lg"></i>
                         </button>
-                        <button id="btn-tools" class="bg-[#2A314D] border border-slate-600 hover:bg-[#3B4468] px-4 py-2 rounded text-sm font-semibold transition shadow-sm flex items-center">
+                        <button id="btn-tools" class="bg-black bg-opacity-20 hover:bg-opacity-40 border border-white border-opacity-20 px-4 py-2 rounded text-sm font-semibold transition shadow-sm flex items-center">
                             <i class="fas fa-toolbox mr-2"></i> <span class="hidden md:inline">Painel de Ferramentas</span>
                         </button>
                         <button id="btn-logout" class="bg-[#E53935] hover:bg-red-700 px-4 py-2 rounded text-sm font-semibold transition shadow-sm flex items-center">
@@ -101,15 +101,15 @@
             <!-- KPIS -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex items-center justify-between hover:shadow-md transition">
-                    <div><p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Total de Ativos</p><p id="kpi-total" class="text-3xl font-black text-[#161B33]">0</p></div>
+                    <div><p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Total de Ativos</p><p id="kpi-total" class="text-3xl font-black text-slate-800">0</p></div>
                     <div class="p-3 bg-blue-50 rounded-full"><i class="fas fa-cubes text-blue-600 text-2xl"></i></div>
                 </div>
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex items-center justify-between hover:shadow-md transition">
-                    <div><p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Armazenamento (SSDs)</p><p id="kpi-armazenamento" class="text-3xl font-black text-[#161B33]">0</p></div>
+                    <div><p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Armazenamento (SSDs)</p><p id="kpi-armazenamento" class="text-3xl font-black text-slate-800">0</p></div>
                     <div class="p-3 bg-green-50 rounded-full"><i class="fas fa-hdd text-green-600 text-2xl"></i></div>
                 </div>
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex items-center justify-between hover:shadow-md transition">
-                    <div><p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Energia (Fontes/Bat)</p><p id="kpi-energia" class="text-3xl font-black text-[#161B33]">0</p></div>
+                    <div><p class="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Energia (Fontes/Bat)</p><p id="kpi-energia" class="text-3xl font-black text-slate-800">0</p></div>
                     <div class="p-3 bg-yellow-50 rounded-full"><i class="fas fa-plug text-yellow-600 text-2xl"></i></div>
                 </div>
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex items-center justify-between hover:shadow-md transition">
@@ -173,7 +173,7 @@
             <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png';" alt="PRF Logo" style="height: 80px; margin-bottom: 10px;">
             <h2 style="margin: 0; font-family: Arial, sans-serif; font-size: 18px; text-transform: uppercase;">Ministério da Justiça e Segurança Pública</h2>
             <h3 style="margin: 5px 0; font-family: Arial, sans-serif; font-size: 16px;">Polícia Rodoviária Federal</h3>
-            <p style="margin: 5px 0; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold;">Relatório Geral de Estoque - SETIC</p>
+            <p style="margin: 5px 0; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold;" id="print-title-doc">Relatório Geral de Estoque - SETIC</p>
             <p id="print-date" style="margin: 0; font-family: Arial, sans-serif; font-size: 12px; color: #555;"></p>
         </div>
         <table id="print-table" style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 12px;">
@@ -196,13 +196,14 @@
             
             <div class="w-full md:w-64 bg-slate-50 border-r border-gray-200 p-6 flex flex-col h-full">
                 <div class="flex items-center mb-8 border-b pb-4">
-                    <i class="fas fa-toolbox text-[#161B33] text-2xl mr-3"></i>
+                    <i class="fas fa-toolbox text-[#161B33] text-2xl mr-3 btn-primary-text"></i>
                     <h3 class="text-lg font-bold text-slate-800">Ferramentas</h3>
                 </div>
                 <ul class="space-y-3 flex-1">
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg bg-blue-100 text-blue-800 font-bold transition flex items-center" data-target="tab-entrada"><i class="fas fa-plus-circle w-6"></i> Entrada</button></li>
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center" data-target="tab-saida"><i class="fas fa-minus-circle w-6"></i> Baixa / Saída</button></li>
                     <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center" data-target="tab-relatorio"><i class="fas fa-file-pdf w-6"></i> Exportações</button></li>
+                    <li><button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center" data-target="tab-pref"><i class="fas fa-sliders-h w-6"></i> Preferências</button></li>
                 </ul>
                 <div class="border-t pt-4 mt-auto">
                     <button class="tab-btn w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-purple-100 hover:text-purple-800 font-semibold transition flex items-center" data-target="tab-admin"><i class="fas fa-user-shield w-6 text-purple-600"></i> Administrador</button>
@@ -210,6 +211,7 @@
             </div>
 
             <div class="flex-1 p-8 overflow-y-auto">
+                
                 <!-- TAB ENTRADA -->
                 <div id="tab-entrada" class="tab-content">
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Entrada de Ativos</h2>
@@ -255,6 +257,42 @@
                     </div>
                 </div>
 
+                <!-- TAB PREFERÊNCIAS (NOVA) -->
+                <div id="tab-pref" class="tab-content hidden">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Preferências do Sistema</h2>
+                    <p class="text-sm text-slate-500 mb-8 border-b pb-4">Personalize a aparência do painel oficial.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Título do Painel Oficial</label>
+                            <input type="text" id="pref-title" class="block w-full rounded-md border-gray-300 border p-2.5 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Cor Primária (Claro)</label>
+                            <div class="flex items-center">
+                                <input type="color" id="pref-color" class="h-11 w-12 rounded border border-gray-300 cursor-pointer p-0.5">
+                                <input type="text" id="pref-color-text" class="ml-2 block w-full rounded-md border-gray-300 border p-2.5 shadow-sm uppercase font-mono text-sm">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Ícone do Cabeçalho</label>
+                            <select id="pref-icon" class="block w-full rounded-md border-gray-300 border p-2.5 shadow-sm bg-white focus:ring-blue-500 focus:border-blue-500">
+                                <option value="fa-chart-line">Gráfico de Linhas</option>
+                                <option value="fa-boxes">Caixas / Estoque</option>
+                                <option value="fa-server">Servidor</option>
+                                <option value="fa-laptop-code">TI / Computador</option>
+                                <option value="fa-tools">Ferramentas</option>
+                                <option value="fa-shield-alt">Escudo / Segurança</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button id="btn-save-pref" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:opacity-90 transition shadow mt-4">
+                        <i class="fas fa-save mr-2"></i> Salvar Preferências
+                    </button>
+                    <p id="msg-pref" class="text-emerald-600 text-center mt-4 font-bold hidden"><i class="fas fa-check-circle"></i> Personalização aplicada com sucesso!</p>
+                </div>
+
                 <!-- TAB ADMINISTRADOR -->
                 <div id="tab-admin" class="tab-content hidden h-full">
                     
@@ -264,7 +302,7 @@
                         <h2 class="text-2xl font-bold text-slate-800 mb-2">Acesso Administrativo</h2>
                         <p class="text-sm text-slate-500 mb-6">Área restrita. Ferramentas sensíveis do banco de dados.</p>
                         <input type="password" id="admin-pass-input" class="rounded-md border-gray-300 border p-3 w-64 mb-4 text-center tracking-widest" placeholder="••••••••">
-                        <button id="btn-admin-login" class="bg-[#161B33] text-white font-bold py-3 px-8 rounded-md hover:bg-slate-800 transition shadow-lg"><i class="fas fa-unlock-alt mr-2"></i> Desbloquear</button>
+                        <button id="btn-admin-login" class="btn-primary bg-[#161B33] text-white font-bold py-3 px-8 rounded-md hover:opacity-90 transition shadow-lg"><i class="fas fa-unlock-alt mr-2"></i> Desbloquear</button>
                         <p id="admin-error" class="text-red-600 font-bold text-sm mt-3 hidden">Senha Incorreta.</p>
                     </div>
 
@@ -281,7 +319,7 @@
                                 <h3 class="font-bold text-slate-800 mb-2"><i class="fas fa-file-excel text-emerald-600 mr-2"></i> Alimentar Base</h3>
                                 <p class="text-xs text-slate-500 mb-3">Carregue um arquivo .xlsx estruturado.</p>
                                 <input type="file" id="file-upload" accept=".xlsx, .xls, .csv" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-blue-50 file:text-blue-700 cursor-pointer mb-2">
-                                <button id="btn-process-upload" class="w-full bg-[#161B33] text-white font-bold py-2 px-2 rounded hover:bg-slate-800 transition text-sm"><i class="fas fa-cloud-upload-alt mr-1"></i> Processar</button>
+                                <button id="btn-process-upload" class="btn-primary w-full bg-[#161B33] text-white font-bold py-2 px-2 rounded hover:opacity-90 transition text-sm"><i class="fas fa-cloud-upload-alt mr-1"></i> Processar</button>
                                 <p id="msg-upload" class="text-center mt-2 font-bold text-xs hidden"></p>
                             </div>
 
@@ -330,7 +368,6 @@
     <!-- FIREBASE E SCRIPTS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        // Importação atualizada para incluir a função de criar usuário
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, addDoc, serverTimestamp, query, orderBy, limit, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
@@ -349,6 +386,48 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         let estoqueLocal = []; let userEmail = "";
+
+        // ================= PREFERÊNCIAS (PERSONALIZAÇÃO) =================
+        function carregarPreferencias() {
+            const title = localStorage.getItem('pref_title') || 'Painel de Gestão de Estoque - SETIC';
+            const color = localStorage.getItem('pref_color') || '#161B33';
+            const icon = localStorage.getItem('pref_icon') || 'fa-chart-line';
+
+            // Aplica Titulo
+            document.getElementById('navbar-title').innerText = title;
+            document.title = title;
+            document.getElementById('pref-title').value = title;
+            document.getElementById('print-title-doc').innerText = "Relatório Geral - " + title;
+
+            // Aplica Cor Primária
+            document.getElementById('navbar-main').style.backgroundColor = color;
+            document.querySelectorAll('.btn-primary').forEach(el => el.style.backgroundColor = color);
+            document.querySelectorAll('.btn-primary-text').forEach(el => el.style.color = color);
+            
+            document.getElementById('pref-color').value = color;
+            document.getElementById('pref-color-text').value = color.toUpperCase();
+
+            // Aplica Ícone
+            document.getElementById('navbar-icon').className = `fas ${icon} text-xl ml-2`;
+            document.getElementById('pref-icon').value = icon;
+        }
+
+        document.getElementById('btn-save-pref').addEventListener('click', () => {
+            localStorage.setItem('pref_title', document.getElementById('pref-title').value);
+            localStorage.setItem('pref_color', document.getElementById('pref-color').value);
+            localStorage.setItem('pref_icon', document.getElementById('pref-icon').value);
+            carregarPreferencias();
+            document.getElementById('msg-pref').classList.remove('hidden');
+            setTimeout(() => document.getElementById('msg-pref').classList.add('hidden'), 3000);
+        });
+
+        // Sincroniza inputs de cor
+        document.getElementById('pref-color').addEventListener('input', (e) => document.getElementById('pref-color-text').value = e.target.value.toUpperCase());
+        document.getElementById('pref-color-text').addEventListener('input', (e) => { if(/^#[0-9A-F]{6}$/i.test(e.target.value)) document.getElementById('pref-color').value = e.target.value; });
+
+        carregarPreferencias(); // Aplica ao abrir a página
+        // =================================================================
+
 
         // LOGIN DO SISTEMA
         document.getElementById('btn-login').addEventListener('click', () => {
@@ -378,7 +457,6 @@
                     const log = docSnap.data(); let dateStr = "N/A";
                     if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
                     let corAcao = log.tipo === 'ENTRADA' ? 'text-emerald-600' : 'text-orange-600', iconAcao = log.tipo === 'ENTRADA' ? 'fa-arrow-down' : 'fa-arrow-up';
-                    // Incluindo o e-mail de quem fez a alteração nos logs
                     let userLogInfo = log.usuario ? `<br><span class="text-xs text-gray-400">Por: ${log.usuario}</span>` : '';
                     tbody.innerHTML += `<tr class="hover:bg-slate-100 transition"><td class="px-4 py-3 whitespace-nowrap text-slate-500 font-medium">${dateStr}</td><td class="px-4 py-3 whitespace-nowrap font-bold ${corAcao}"><i class="fas ${iconAcao} mr-1"></i> ${log.tipo}</td><td class="px-4 py-3 text-slate-800 font-semibold">${log.itemNome}</td><td class="px-4 py-3 font-black text-slate-800">${log.qtd}</td><td class="px-4 py-3 text-slate-500 font-medium">${log.chamado || '-'}${userLogInfo}</td></tr>`;
                 });
@@ -390,12 +468,10 @@
         // ================= ABA ADMINISTRADOR =================
         document.getElementById('btn-admin-login').addEventListener('click', () => {
             const input = document.getElementById('admin-pass-input').value;
-            // Validação de senha por Hash Ofuscado (senha: seticadmin)
             if(btoa(input) === "c2V0aWNhZG1pbg==") {
                 document.getElementById('admin-login-section').classList.add('hidden');
                 document.getElementById('admin-content-section').classList.remove('hidden');
-                document.getElementById('admin-error').classList.add('hidden');
-                document.getElementById('admin-pass-input').value = "";
+                document.getElementById('admin-error').classList.add('hidden'); document.getElementById('admin-pass-input').value = "";
             } else { document.getElementById('admin-error').classList.remove('hidden'); }
         });
 
@@ -404,12 +480,10 @@
             document.getElementById('admin-login-section').classList.remove('hidden');
         });
 
-        // DELETAR BANCO DE DADOS
         document.getElementById('btn-delete-db').addEventListener('click', async () => {
             const confirmacao = prompt("⚠️ ZONA DE PERIGO!\nIsso apagará TODO o estoque e TODO o histórico permanentemente.\n\nPara confirmar, digite a palavra: APAGAR");
             if(confirmacao === "APAGAR") {
-                const btn = document.getElementById('btn-delete-db');
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
+                const btn = document.getElementById('btn-delete-db'); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...';
                 try {
                     const estSnap = await getDocs(collection(db, "estoque")); estSnap.forEach((d) => deleteDoc(d.ref));
                     const logSnap = await getDocs(collection(db, "logs")); logSnap.forEach((d) => deleteDoc(d.ref));
@@ -419,7 +493,6 @@
             } else if (confirmacao) { alert("Palavra incorreta. Ação cancelada."); }
         });
 
-        // IMPORTAR PLANILHA
         document.getElementById('btn-process-upload').addEventListener('click', () => {
             const fileInput = document.getElementById('file-upload'), msgLabel = document.getElementById('msg-upload'), btn = document.getElementById('btn-process-upload');
             if (!fileInput.files.length) return alert("Selecione um arquivo Excel.");
@@ -445,33 +518,18 @@
             reader.readAsArrayBuffer(fileInput.files[0]);
         });
 
-        // CRIAR NOVO USUÁRIO
         document.getElementById('btn-create-user').addEventListener('click', async () => {
-            const email = document.getElementById('new-user-email').value.trim();
-            const pass = document.getElementById('new-user-pass').value.trim();
-            const msg = document.getElementById('msg-create-user');
-
-            if(!email || pass.length < 6) {
-                msg.textContent = "Erro: Preencha e-mail e senha (mínimo 6 caracteres).";
-                msg.className = "text-center mt-2 font-bold text-xs text-red-600 block";
-                return;
-            }
-
-            const btn = document.getElementById('btn-create-user');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Criando...';
-
+            const email = document.getElementById('new-user-email').value.trim(), pass = document.getElementById('new-user-pass').value.trim(), msg = document.getElementById('msg-create-user');
+            if(!email || pass.length < 6) { msg.textContent = "Erro: Mínimo 6 caracteres."; msg.className = "text-center mt-2 font-bold text-xs text-red-600 block"; return; }
+            const btn = document.getElementById('btn-create-user'); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Criando...';
             try {
                 await createUserWithEmailAndPassword(auth, email, pass);
-                msg.textContent = "Usuário criado! (Você foi logado na nova conta).";
-                msg.className = "text-center mt-2 font-bold text-xs text-emerald-600 block";
-                document.getElementById('new-user-email').value = "";
-                document.getElementById('new-user-pass').value = "";
-            } catch (error) {
-                msg.textContent = "Erro: " + error.message;
-                msg.className = "text-center mt-2 font-bold text-xs text-red-600 block";
-            }
+                msg.textContent = "Usuário criado! (Você foi logado na nova conta)."; msg.className = "text-center mt-2 font-bold text-xs text-emerald-600 block";
+                document.getElementById('new-user-email').value = ""; document.getElementById('new-user-pass').value = "";
+            } catch (error) { msg.textContent = "Erro: " + error.message; msg.className = "text-center mt-2 font-bold text-xs text-red-600 block"; }
             btn.innerHTML = '<i class="fas fa-save mr-1"></i> Cadastrar';
         });
+
         // =====================================================
 
         // AÇÕES ENTRADA E SAÍDA
@@ -540,7 +598,11 @@
             const catLabels = Object.keys(mapCat).sort((a,b) => mapCat[b] - mapCat[a]), catData = catLabels.map(k => mapCat[k]), catColors = ['#4F46E5', '#3B82F6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
             chartCat = new Chart(document.getElementById('chartCategoria'), { type: 'bar', data: { labels: catLabels, datasets: [{ data: catData, backgroundColor: catColors, borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start', offset: 10 }, tooltip: { backgroundColor: '#1E293B', titleFont: { size: 14 }, bodyFont: { size: 13, weight: 'bold' }, padding: 10, cornerRadius: 4 } }, scales: { x: { display: false, grid: { display: false } }, y: { grid: { display: false }, ticks: { font: { weight: 'bold' } } } } } });
             const topItems = [...dados].sort((a, b) => b.Quantidade - a.Quantidade).slice(0, 5);
-            chartTop = new Chart(document.getElementById('chartTopItems'), { type: 'bar', data: { labels: topItems.map(i => i.Componente.substring(0, 15)), datasets: [{ data: topItems.map(i => i.Quantidade), backgroundColor: '#161B33', borderRadius: 4 }] }, options: { responsive: true, plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start', offset: 10 }, tooltip: { backgroundColor: '#1E293B', padding: 10, cornerRadius: 4 } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold' } } } } } });
+            
+            // Usar a cor primária dinâmica para o gráfico também
+            const primColor = localStorage.getItem('pref_color') || '#161B33';
+
+            chartTop = new Chart(document.getElementById('chartTopItems'), { type: 'bar', data: { labels: topItems.map(i => i.Componente.substring(0, 15)), datasets: [{ data: topItems.map(i => i.Quantidade), backgroundColor: primColor, borderRadius: 4 }] }, options: { responsive: true, plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold' }, anchor: 'end', align: 'start', offset: 10 }, tooltip: { backgroundColor: '#1E293B', padding: 10, cornerRadius: 4 } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold' } } } } } });
         }
 
         function prepararRelatorioImpressao() {
