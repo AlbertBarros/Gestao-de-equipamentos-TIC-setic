@@ -67,7 +67,7 @@
         <div class="absolute inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm"></div>
         <div class="bg-white rounded-xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500 relative z-10">
             <div class="text-center mb-8">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png/320px-Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
                 <h2 id="login-title" class="text-2xl font-bold text-slate-800">Almoxarifado TIC</h2>
                 <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p>
             </div>
@@ -98,7 +98,7 @@
             <div class="px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center space-x-3">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png/320px-Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-10">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-10">
                         <i id="navbar-icon" class="fas fa-chart-line text-xl ml-2"></i>
                         <span id="navbar-title" class="font-bold text-lg tracking-wide whitespace-nowrap">Painel de Gestão de Estoque - SETIC</span>
                     </div>
@@ -145,12 +145,15 @@
 
             <!-- GRÁFICOS: Layout 3 Colunas -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Gráfico 1: Componentes Ampliado -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 md:col-span-2">
                     <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center justify-between">
                         <span><i class="fas fa-chart-bar text-blue-600 mr-2"></i> Panorama Geral de Componentes em Estoque</span>
                     </h3>
                     <div class="h-64"><canvas id="chartComponentesAmpliado"></canvas></div>
                 </div>
+
+                <!-- Gráfico 2: Top 5 Equipamentos que Mais Saem -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
                     <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center">
                         <i class="fas fa-fire text-red-500 mr-2"></i> Top 5 Mais Retirados (Saídas)
@@ -159,6 +162,7 @@
                 </div>
             </div>
 
+            <!-- Linha Inferior de Gráficos (Pizza Colorida de Categorias) -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
                     <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center">
@@ -167,6 +171,7 @@
                     <div class="h-64 flex justify-center items-center"><canvas id="chartPizzaCategorias"></canvas></div>
                 </div>
                 
+                <!-- Cards Resumo Auxiliares para preencher diagramação -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 flex flex-col justify-between">
                     <div>
                         <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3"><i class="fas fa-shield-alt text-yellow-600 mr-2"></i> Conformidade SETIC</h3>
@@ -193,7 +198,9 @@
                 <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center">
                     <i class="fas fa-robot text-blue-500 mr-2 text-lg"></i> Análise Inteligente de Estoque
                 </h3>
-                <div id="insights-container" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
+                <div id="insights-container" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <!-- Injetado via JavaScript de forma segura -->
+                </div>
             </div>
 
             <!-- NAVEGAÇÃO DE TABELAS PRINCIPAIS -->
@@ -210,11 +217,11 @@
                     <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center gap-4">
                         <div class="flex items-center gap-4">
                             <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Inventário Consolidado</h3>
+                            <!-- BOTÃO DE EXPORTAÇÃO ESTOQUE -->
                             <button id="btn-print-estoque-main" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
                                 <i class="fas fa-print mr-1.5"></i> Gerar PDF
                             </button>
                         </div>
-                        <!-- Filtros Avançados -->
                         <div class="flex items-center gap-3">
                             <select id="filter-cat-estoque" class="border border-gray-300 rounded text-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
                                 <option value="">Todas as Categorias</option>
@@ -232,7 +239,7 @@
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Categoria</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Componente / Espec.</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider text-blue-600">Local</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nº Série</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nº Série / Patr.</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider text-center">Quantidade</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
                                 </tr>
@@ -255,6 +262,7 @@
                     <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center bg-indigo-50/30 gap-4">
                         <div class="flex items-center gap-4">
                             <h3 class="text-sm font-bold text-indigo-800 uppercase tracking-wider"><i class="fas fa-map-pin mr-2"></i>Mapa de Ativos Físicos</h3>
+                            <!-- BOTÃO DE EXPORTAÇÃO RASTREIO -->
                             <button id="btn-print-rastreio-main" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
                                 <i class="fas fa-print mr-1.5"></i> Gerar PDF
                             </button>
@@ -302,7 +310,8 @@
                 <p class="text-sm mt-1 text-slate-300">Polícia Rodoviária Federal - Diretoria de Tecnologia da Informação e Comunicação (DTIC)</p>
                 <p class="text-lg font-bold mt-3 text-white" id="print-title-doc">Relatório Gerencial Analítico - Gestão de Estoque (SETIC)</p>
             </div>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png/320px-Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-20">
+            <!-- LOGO OFICIAL -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-20">
         </div>
         <div class="px-6">
             <h2 class="text-xl font-bold text-slate-800">Parecer e Metodologia de Cálculo</h2>
@@ -312,6 +321,7 @@
             <div class="grid grid-cols-4 gap-4 mb-8" id="print-kpis"></div>
             
             <h2 class="text-xl font-bold text-slate-800 mb-3" id="print-visual-title">Análise Visual</h2>
+            <!-- Gráficos no PDF agora suportam os 3 painéis -->
             <div class="grid grid-cols-3 gap-4 mb-8" id="print-charts-container">
                 <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center">Panorama Geral de Componentes</p><img id="print-chart-1" src="" class="w-full border p-2 bg-white"></div>
                 <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center">Top 5 Mais Retirados</p><img id="print-chart-2" src="" class="w-full border p-2 bg-white"></div>
@@ -337,7 +347,8 @@
                 <p style="margin: 0; font-size: 12px; font-weight: bold; font-family: Arial, sans-serif;" id="print-simple-title">Extrato de Ativos</p>
                 <p style="margin: 2px 0 0 0; font-size: 10px; color: #555; font-family: Arial, sans-serif;" id="print-simple-date"></p>
             </div>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png/320px-Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" style="height: 65px;">
+            <!-- LOGO FIXA INSTITUCIONAL -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" style="height: 65px;">
         </div>
         <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif;">
             <thead id="print-simple-thead"></thead>
@@ -462,7 +473,7 @@
                     </div>
                 </div>
 
-                <!-- TAB RELATORIOS E EXPORTAÇÕES OFICIAIS -->
+                <!-- TAB RELATORIOS E EXPORTAÇÕES OFICIAIS (ANALÍTICO) -->
                 <div id="tab-relatorio" class="tab-content hidden h-full flex flex-col justify-center items-center">
                     <i class="fas fa-file-contract text-6xl text-slate-300 mb-6"></i>
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Exportações e Relatórios Oficiais</h2>
@@ -511,6 +522,7 @@
                         <p class="text-sm text-slate-500 mb-6">Área restrita. Ferramentas sensíveis do banco de dados.</p>
                         <input type="password" id="admin-pass-input" class="rounded-md border-gray-300 border p-3 w-64 mb-4 text-center tracking-widest" placeholder="••••••••">
                         <button id="btn-admin-login" class="btn-primary bg-[#161B33] text-white font-bold py-3 px-8 rounded-md hover:opacity-90 transition shadow-lg"><i class="fas fa-unlock-alt mr-2"></i> Desbloquear</button>
+                        <p id="admin-error" class="text-red-600 font-bold text-sm mt-3 hidden">Senha Incorreta.</p>
                     </div>
 
                     <div id="admin-content-section" class="hidden h-full flex flex-col">
@@ -528,14 +540,14 @@
                             </div>
                             <div class="border border-blue-200 rounded-xl p-5 bg-blue-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-user-plus text-blue-600 mr-2"></i> Novo Usuário</h3>
-                                <p class="text-[11px] text-blue-600 mb-2">Atenção: Cadastrar logará você nele.</p>
+                                <p class="text-[11px] text-blue-600 mb-2">Atenção: Cadastrar um novo logará você nele.</p>
                                 <input type="email" id="new-user-email" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="E-mail corporativo">
                                 <input type="password" id="new-user-pass" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="Senha (mín. 6 chars)">
                                 <button id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 px-2 rounded hover:bg-blue-700 transition text-sm shadow mt-auto"><i class="fas fa-save mr-1"></i> Cadastrar</button>
                             </div>
                             <div class="border border-orange-200 rounded-xl p-5 bg-orange-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-orange-800 mb-2"><i class="fas fa-user-minus text-orange-600 mr-2"></i> Gerir Acessos</h3>
-                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">O Firebase bloqueia exclusão via web.<br><br>A exclusão deve ser feita no Console Oficial.</p>
+                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">Para evitar ataques, o Firebase bloqueia exclusão via web.<br><br>A exclusão deve ser feita no Console Oficial.</p>
                                 <a href="https://console.firebase.google.com/project/gestao-de-equipamentos-tic/authentication/users" target="_blank" class="w-full bg-orange-600 text-white font-bold py-2.5 px-2 rounded hover:bg-orange-700 transition text-sm shadow mt-auto flex items-center justify-center text-center"><i class="fas fa-external-link-alt mr-2"></i> Abrir Console</a>
                             </div>
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between">
@@ -613,7 +625,7 @@
         let currentPageRastreio = 1;
         let currentSearchRastreio = '';
         
-        // VARIÁVEIS GLOBAIS DOS GRÁFICOS (BLINDAGEM)
+        // DECLARAÇÃO GLOBAL DOS GRÁFICOS (BLINDAGEM)
         let chartComponentesAmpliado = null; 
         let chartTopSaidas = null; 
         let chartPizzaCategorias = null; 
@@ -631,10 +643,8 @@
             
             container.appendChild(toast);
             
-            // Trigger animation
             setTimeout(() => toast.classList.remove('translate-x-full'), 10);
             
-            // Remove after 3 seconds
             setTimeout(() => {
                 toast.classList.add('translate-x-full');
                 setTimeout(() => toast.remove(), 300);
@@ -724,7 +734,7 @@
                 sendPasswordResetEmail(auth, email)
                     .then(() => showLoginMessage(`E-mail de redefinição enviado para: ${email}.`, false))
                     .catch((error) => {
-                        let msg = "Erro: E-mail não encontrado.";
+                        let msg = "Erro: E-mail não encontrado ou falha de conexão.";
                         if(error.code === 'auth/invalid-api-key') msg = "ERRO: Chave API do Firebase inválida. Atualize o código fonte.";
                         showLoginMessage(msg, true);
                     });
@@ -799,7 +809,7 @@
 
         async function registrarLog(tipo, itemNome, qtd, chamado = "") { try { await addDoc(collection(db, "logs"), { tipo, itemNome, qtd: Number(qtd), chamado, usuario: userEmail, dataHora: serverTimestamp() }); } catch(e) {} }
 
-        // ================= GERAÇÃO DE RELATÓRIO ANALÍTICO =================
+        // ================= GERAÇÃO DE RELATÓRIO ANALÍTICO (COMPLETO) =================
         function gerarRelatorioAnalitico(tipoRelatorio) {
             document.getElementById('printable-simple-table').classList.remove('active-print');
             document.getElementById('printable-report').classList.add('active-print');
@@ -829,7 +839,7 @@
                     <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade de Itens</p><p class="text-2xl font-black text-slate-800">${estoqueLocal.length}</p></div>
                     <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde do Estoque</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>
                     <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Taxa de Criticidade</p><p class="text-2xl font-black text-slate-800">${taxaCritica}%</p></div>
-                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Em Alerta</p><p class="text-2xl font-black text-orange-500">${tBaixos}</p></div>
+                    <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Em Alerta (≤5)</p><p class="text-2xl font-black text-orange-500">${tBaixos}</p></div>
                     <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Rupturas (Qtd 0)</p><p class="text-2xl font-black text-red-600">${tZerados}</p></div>
                     <div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Status Sistêmico</p><p class="text-2xl font-black text-blue-600">ATIVO</p></div>
                 `;
@@ -866,6 +876,8 @@
             }
             
             window.print();
+            
+            // Restaura
             setTimeout(() => { document.getElementById('printable-report').classList.remove('active-print'); }, 1000);
         }
 
@@ -982,7 +994,7 @@
         if(document.getElementById('btn-process-upload')) {
             document.getElementById('btn-process-upload').addEventListener('click', () => {
                 const fileInput = document.getElementById('file-upload'), btn = document.getElementById('btn-process-upload');
-                if (!fileInput.files.length) return alert("Selecione um arquivo Excel.");
+                if (!fileInput.files.length) return showToast("Selecione um arquivo Excel.", "error");
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Aguarde...';
                 const reader = new FileReader();
                 reader.onload = async (e) => {
@@ -1018,6 +1030,70 @@
                 } catch (error) { showToast("Erro: " + error.message, "error"); }
                 btn.innerHTML = '<i class="fas fa-save mr-1"></i> Cadastrar';
             });
+        }
+
+        // ================= MÓDULO: RASTREIO E LOCALIDADES =================
+        if(document.getElementById('btn-save-loc')) {
+            document.getElementById('btn-save-loc').addEventListener('click', async () => {
+                const equip = document.getElementById('loc-equip').value.trim(), local = document.getElementById('loc-local').value.trim(), marca = document.getElementById('loc-marca').value.trim() || 'N/A', serie = document.getElementById('loc-serie').value.trim() || 'N/A', patrim = document.getElementById('loc-patrimonio').value.trim() || 'N/A', qtd = parseInt(document.getElementById('loc-qtd').value);
+                if(!equip || !local || isNaN(qtd) || qtd <= 0) return showToast("Preencha Equipamento, Local e Quantidade.", "error");
+                const btn = document.getElementById('btn-save-loc'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+                try {
+                    await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
+                    await registrarLog("MAP_LOCAL", `${equip} (Local: ${local})`, qtd, `Série: ${serie}`);
+                    showToast("Equipamento mapeado com sucesso!");
+                    ['loc-equip','loc-local','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1;
+                } catch (e) { showToast("Erro ao mapear: " + e.message, "error"); }
+                btn.innerHTML = 'Mapear Equipamento';
+            });
+        }
+
+        if(document.getElementById('btn-loc-upload')) {
+            document.getElementById('btn-loc-upload').addEventListener('click', () => {
+                const fileInput = document.getElementById('loc-file-upload'), btn = document.getElementById('btn-loc-upload');
+                if (!fileInput.files.length) return showToast("Selecione um arquivo Excel.", "error");
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mapeando...'; 
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    try {
+                        const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' }), json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                        let cont = 0;
+                        for (let row of json) {
+                            const equip = row['EQUIPAMENTO'] || row['Equipamento'] || row['Nome'] || 'Equipamento Indefinido', local = row['LOCAL FISICO'] || row['Local Físico'] || row['Local'] || 'N/A', marca = row['MARCA'] || row['Marca'] || 'N/A', serie = row['Nº DE SÉRIE'] || row['N Serie'] || row['Série'] || 'N/A', patrim = row['Nº PATRIMONIO'] || row['Patrimônio'] || row['Patrimonio'] || 'N/A', qtd = parseInt(row['QUANTIDADE'] || row['Quantidade'] || row['Qtd'] || 1);
+                            await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
+                            cont++;
+                        }
+                        await registrarLog("MAP_LOCAL", `Importação em Lote (Excel)`, cont, "");
+                        showToast(`Sucesso! ${cont} locais mapeados.`); fileInput.value = "";
+                    } catch (error) { showToast("Erro na leitura.", "error"); }
+                    btn.innerHTML = 'Iniciar Importação';
+                };
+                reader.readAsArrayBuffer(fileInput.files[0]);
+            });
+        }
+
+        function atualizarInterfaceRastreio() {
+            const tbody = document.getElementById('rastreio-tbody'); 
+            if(!tbody) return;
+
+            let filtrados = localidadesLocais.filter(item => {
+                return !currentSearchRastreio || (item.Equipamento+item.Local+item.Marca+item.Serie+item.Patrimonio).toLowerCase().includes(currentSearchRastreio.toLowerCase());
+            });
+
+            // Paginação Rastreio
+            const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1;
+            if(currentPageRastreio > totalPaginas) currentPageRastreio = totalPaginas;
+            const inicio = (currentPageRastreio - 1) * itemsPerPage;
+            const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
+
+            tbody.innerHTML = '';
+            dadosPagina.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
+                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||'-'}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
+            });
+
+            if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
+            if(document.getElementById('btn-prev-rastreio')) document.getElementById('btn-prev-rastreio').disabled = currentPageRastreio === 1;
+            if(document.getElementById('btn-next-rastreio')) document.getElementById('btn-next-rastreio').disabled = currentPageRastreio === totalPaginas;
         }
 
         // ================= CADASTRO ESTOQUE (MANUAL E LOTE) =================
@@ -1096,292 +1172,7 @@
             });
         }
 
-        // ================= MÓDULO: RASTREIO E LOCALIDADES =================
-        if(document.getElementById('btn-save-loc')) {
-            document.getElementById('btn-save-loc').addEventListener('click', async () => {
-                const equip = document.getElementById('loc-equip').value.trim(), local = document.getElementById('loc-local').value.trim(), marca = document.getElementById('loc-marca').value.trim() || 'N/A', serie = document.getElementById('loc-serie').value.trim() || 'N/A', patrim = document.getElementById('loc-patrimonio').value.trim() || 'N/A', qtd = parseInt(document.getElementById('loc-qtd').value);
-                if(!equip || !local || isNaN(qtd) || qtd <= 0) return alert("Preencha Nome do Equipamento, Local e Quantidade corretamente.");
-                try {
-                    await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
-                    await registrarLog("MAP_LOCAL", `${equip} (Local: ${local})`, qtd, `Série: ${serie}`);
-                    showToast("Equipamento mapeado com sucesso!");
-                    ['loc-equip','loc-local','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1;
-                } catch (e) { showToast("Erro ao mapear: " + e.message, "error"); }
-            });
-        }
-
-        if(document.getElementById('btn-loc-upload')) {
-            document.getElementById('btn-loc-upload').addEventListener('click', () => {
-                const fileInput = document.getElementById('loc-file-upload'), btn = document.getElementById('btn-loc-upload');
-                if (!fileInput.files.length) return showToast("Selecione um arquivo Excel.", "error");
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mapeando...'; 
-                const reader = new FileReader();
-                reader.onload = async (e) => {
-                    try {
-                        const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' }), json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-                        let cont = 0;
-                        for (let row of json) {
-                            const equip = row['EQUIPAMENTO'] || row['Equipamento'] || row['Nome'] || 'Equipamento Indefinido', local = row['LOCAL FISICO'] || row['Local Físico'] || row['Local'] || 'N/A', marca = row['MARCA'] || row['Marca'] || 'N/A', serie = row['Nº DE SÉRIE'] || row['N Serie'] || row['Série'] || 'N/A', patrim = row['Nº PATRIMONIO'] || row['Patrimônio'] || row['Patrimonio'] || 'N/A', qtd = parseInt(row['QUANTIDADE'] || row['Quantidade'] || row['Qtd'] || 1);
-                            await addDoc(collection(db, "localidades"), { Equipamento: equip, Local: local, Marca: marca, Serie: serie, Patrimonio: patrim, Quantidade: qtd });
-                            cont++;
-                        }
-                        await registrarLog("MAP_LOCAL", `Importação em Lote (Excel)`, cont, "");
-                        showToast(`Sucesso! ${cont} locais mapeados.`); fileInput.value = "";
-                    } catch (error) { showToast("Erro na leitura.", "error"); }
-                    btn.innerHTML = 'Iniciar Importação';
-                };
-                reader.readAsArrayBuffer(fileInput.files[0]);
-            });
-        }
-
-        // ================= ATUALIZAÇÃO DE INTERFACE E PAGINAÇÃO =================
-        
-        function gerarInsights() {
-            const container = document.getElementById('insights-container'); 
-            if(!container) return;
-            container.innerHTML = ''; 
-            let zerados = [], baixos = [], maiorVolume = null, totalItens = 0, hdCount = 0, ssdCount = 0;
-
-            if (!estoqueLocal || estoqueLocal.length === 0) {
-                container.innerHTML = `<div class="col-span-3 bg-gray-50 border-l-4 border-gray-400 p-4 rounded-xl shadow-sm text-gray-500 font-medium flex items-center"><i class="fas fa-info-circle mr-2 text-xl"></i> Sem dados no estoque.</div>`;
-                return;
-            }
-
-            estoqueLocal.forEach(item => {
-                const qtd = item.Quantidade || 0; totalItens += qtd;
-                const minEstoque = item.EstoqueMinimo || 5;
-                
-                if (qtd === 0) zerados.push(item); else if (qtd <= minEstoque) baixos.push(item);
-                const compUpper = (item.Componente || '').toUpperCase();
-                if (compUpper.includes('HD INTERNO') || compUpper.includes('DISCO RÍGIDO') || compUpper.includes('HD ')) hdCount += qtd;
-                if (compUpper.includes('SSD')) ssdCount += qtd;
-                if (!maiorVolume || qtd > maiorVolume.Quantidade) maiorVolume = item;
-            });
-
-            let alertHtml = '';
-            if (zerados.length > 0 || baixos.length > 0) {
-                let desc = '';
-                if (zerados.length > 0) desc += `<span class="text-red-600 font-bold">${zerados.length} itens esgotados.</span> `;
-                if (baixos.length > 0) desc += `<span class="text-orange-600 font-bold">${baixos.length} itens em alerta.</span>`;
-                let exemplos = [...zerados, ...baixos].slice(0, 2).map(i => i.Componente || 'Item').join(', ');
-                alertHtml = `<div class="bg-red-50 border-l-4 border-red-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-exclamation-triangle text-red-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-red-800 uppercase tracking-wide">Reposição Prioritária</h4><p class="text-xs text-red-700 mt-2 leading-relaxed">${desc}</p><p class="text-[11px] text-red-500 mt-1 font-semibold">Ex: ${exemplos}...</p></div></div>`;
-            } else { alertHtml = `<div class="bg-emerald-50 border-l-4 border-emerald-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-check-circle text-emerald-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wide">Estoque Saudável</h4><p class="text-xs text-emerald-700 mt-2 leading-relaxed">Nenhum equipamento em nível crítico ou zerado no momento.</p></div></div>`; }
-
-            let acumuloHtml = '';
-            if (maiorVolume && maiorVolume.Quantidade > 0) {
-                let pct = totalItens > 0 ? ((maiorVolume.Quantidade / totalItens) * 100).toFixed(1) : 0;
-                let corBg = maiorVolume.Quantidade > 80 ? 'bg-yellow-50 border-yellow-500' : 'bg-blue-50 border-blue-500', corTexto = maiorVolume.Quantidade > 80 ? 'text-yellow-800' : 'text-blue-800', corDesc = maiorVolume.Quantidade > 80 ? 'text-yellow-700' : 'text-blue-700', icon = maiorVolume.Quantidade > 80 ? 'fa-boxes text-yellow-500' : 'fa-chart-pie text-blue-500';
-                acumuloHtml = `<div class="${corBg} border-l-4 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas ${icon} text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold ${corTexto} uppercase tracking-wide">Concentração de Volume</h4><p class="text-xs ${corDesc} mt-2 leading-relaxed"><b>${maiorVolume.Componente || 'Item'}</b> possui ${maiorVolume.Quantidade} und.</p><p class="text-[11px] ${corDesc} mt-1 font-semibold opacity-80">Representa ${pct}% do volume físico total.</p></div></div>`;
-            } else { acumuloHtml = `<div class="bg-gray-50 border-l-4 border-gray-300 p-5 rounded-xl shadow-sm flex items-start"><p class="text-xs text-gray-500 mt-2">Sem dados de volume.</p></div>`; }
-
-            let techHtml = '';
-            if (hdCount > 0 && ssdCount > 0) {
-                techHtml = `<div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-rocket text-blue-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-blue-800 uppercase tracking-wide">Sugestão de Modernização</h4><p class="text-xs text-blue-700 mt-2 leading-relaxed">Existem ${hdCount} HDs antigos e ${ssdCount} SSDs em estoque.</p><p class="text-[11px] text-blue-600 mt-1 font-semibold">Considere Força-Tarefa de upgrade preventivo no parque.</p></div></div>`;
-            } else {
-                const numCat = [...new Set(estoqueLocal.map(i => i.Categoria || 'Geral'))].length;
-                techHtml = `<div class="bg-purple-50 border-l-4 border-purple-500 p-5 rounded-xl shadow-sm flex items-start hover:shadow-md transition-shadow"><i class="fas fa-sitemap text-purple-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-purple-800 uppercase tracking-wide">Diversidade de Ativos</h4><p class="text-xs text-purple-700 mt-2 leading-relaxed">Gestão ativa de ${numCat} categorias distintas.</p><p class="text-[11px] text-purple-500 mt-1 font-semibold">Portfólio estruturado e centralizado.</p></div></div>`;
-            }
-            container.innerHTML = alertHtml + acumuloHtml + techHtml;
-        }
-
-        function atualizarDatalists() { 
-            if(document.getElementById('lista-componentes')) document.getElementById('lista-componentes').innerHTML = [...new Set(estoqueLocal.map(i => i.Componente||''))].map(c => `<option value="${c}">`).join(''); 
-            
-            // Popula Dropdown de Filtro de Categoria
-            const filterCat = document.getElementById('filter-cat-estoque');
-            if(filterCat) {
-                const categoriasUnicas = [...new Set(estoqueLocal.map(i => i.Categoria || 'Sem Categoria'))].sort();
-                filterCat.innerHTML = '<option value="">Todas as Categorias</option>';
-                categoriasUnicas.forEach(cat => filterCat.innerHTML += `<option value="${cat}">${cat}</option>`);
-            }
-        }
-
-        function atualizarSelectSaida() {
-            const sel = document.getElementById('saida-select-item'); 
-            if(!sel) return;
-            sel.innerHTML = '<option value="">-- Selecione o equipamento --</option>';
-            [...estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { sel.innerHTML += `<option value="${i.id}">[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||'N/A'}) - (Qtd: ${i.Quantidade||0})</option>`; });
-        }
-        
-        function atualizarInterfaceEstoque() {
-            const tbody = document.getElementById('inventory-tbody'); 
-            if(!tbody) return;
-            
-            let tTotal = 0, tArmaz = 0, tEnergia = 0, tZerado = 0; const mapCat = {};
-            
-            // Calcula KPIs Globais
-            estoqueLocal.forEach(item => {
-                const cat = item.Categoria || 'Sem Categoria'; const qtd = item.Quantidade || 0;
-                tTotal += qtd;
-                if(cat === 'Armazenamento') tArmaz += qtd; if(cat === 'Fonte de Alimentação' || cat === 'Bateria') tEnergia += qtd; if(qtd === 0) tZerado++;
-                mapCat[cat] = (mapCat[cat] || 0) + qtd;
-            });
-            if(document.getElementById('kpi-total')) document.getElementById('kpi-total').innerText = tTotal; 
-            if(document.getElementById('kpi-armazenamento')) document.getElementById('kpi-armazenamento').innerText = tArmaz; 
-            if(document.getElementById('kpi-energia')) document.getElementById('kpi-energia').innerText = tEnergia; 
-            if(document.getElementById('kpi-zerado')) document.getElementById('kpi-zerado').innerText = tZerado;
-
-            // Filtros Dinâmicos
-            let filtrados = estoqueLocal.filter(item => {
-                let matchBusca = !currentSearchText || (item.Componente+item.Modelo+item.Especificação+item.Local+item.Série+item.Patrimonio).toLowerCase().includes(currentSearchText.toLowerCase());
-                let matchCat = !currentFilterCat || (item.Categoria || 'Sem Categoria') === currentFilterCat;
-                return matchBusca && matchCat;
-            });
-
-            // Paginação Matemática
-            const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1;
-            if(currentPageEstoque > totalPaginas) currentPageEstoque = totalPaginas;
-            const inicio = (currentPageEstoque - 1) * itemsPerPage;
-            const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
-
-            tbody.innerHTML = '';
-            dadosPagina.forEach(item => {
-                const qtd = item.Quantidade || 0;
-                const minEstoque = item.EstoqueMinimo || 5;
-                let badge = qtd === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' : qtd <= minEstoque ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>' : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${item.Categoria||'Sem Categoria'}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente||'-'}<br><span class="text-xs font-normal text-slate-500">${item.Modelo||''} / ${item.Especificação||''}</span></td><td class="px-6 py-4 text-sm text-blue-600">${item.Local||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${item.Série||item.Patrimonio||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
-            });
-
-            if(document.getElementById('estoque-page-info')) document.getElementById('estoque-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
-            if(document.getElementById('btn-prev-estoque')) document.getElementById('btn-prev-estoque').disabled = currentPageEstoque === 1;
-            if(document.getElementById('btn-next-estoque')) document.getElementById('btn-next-estoque').disabled = currentPageEstoque === totalPaginas;
-
-            renderChartsUIUX(mapCat, estoqueLocal, logsLocal);
-        }
-
-        function atualizarInterfaceRastreio() {
-            const tbody = document.getElementById('rastreio-tbody'); 
-            if(!tbody) return;
-
-            let filtrados = localidadesLocais.filter(item => {
-                return !currentSearchRastreio || (item.Equipamento+item.Local+item.Marca+item.Serie+item.Patrimonio).toLowerCase().includes(currentSearchRastreio.toLowerCase());
-            });
-
-            // Paginação Rastreio
-            const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1;
-            if(currentPageRastreio > totalPaginas) currentPageRastreio = totalPaginas;
-            const inicio = (currentPageRastreio - 1) * itemsPerPage;
-            const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
-
-            tbody.innerHTML = '';
-            dadosPagina.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
-                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||'-'}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||'-'}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||'-'}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
-            });
-
-            if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
-            if(document.getElementById('btn-prev-rastreio')) document.getElementById('btn-prev-rastreio').disabled = currentPageRastreio === 1;
-            if(document.getElementById('btn-next-rastreio')) document.getElementById('btn-next-rastreio').disabled = currentPageRastreio === totalPaginas;
-        }
-
-        // ================= RENDERIZAÇÃO DOS GRÁFICOS =================
-        function renderChartsUIUX(mapCat, dados, logs) {
-            if(chartComponentesAmpliado) { chartComponentesAmpliado.destroy(); }
-            if(chartTopSaidas) { chartTopSaidas.destroy(); }
-            if(chartPizzaCategorias) { chartPizzaCategorias.destroy(); }
-            
-            const primColor = localStorage.getItem('pref_color') || '#161B33';
-
-            const topItensEstoque = [...dados].sort((a, b) => (b.Quantidade||0) - (a.Quantidade||0)).slice(0, 8);
-            if(document.getElementById('chartComponentesAmpliado')) {
-                chartComponentesAmpliado = new Chart(document.getElementById('chartComponentesAmpliado'), {
-                    type: 'bar',
-                    data: {
-                        labels: topItensEstoque.map(i => (i.Componente || '').substring(0, 18)),
-                        datasets: [{ data: topItensEstoque.map(i => i.Quantidade || 0), backgroundColor: primColor, borderRadius: 6 }]
-                    },
-                    options: {
-                        responsive: true, maintainAspectRatio: false,
-                        plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold', size: 11 }, anchor: 'end', align: 'start', offset: 8 } },
-                        scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 } } } }
-                    }
-                });
-            }
-
-            const saidasMap = {};
-            logs.forEach(log => {
-                if (log.tipo === 'SAÍDA' && log.itemNome) { saidasMap[log.itemNome] = (saidasMap[log.itemNome] || 0) + (log.qtd || 0); }
-            });
-            const topSaidasKeys = Object.keys(saidasMap).sort((a,b) => saidasMap[b] - saidasMap[a]).slice(0, 5);
-            const saidasLabels = topSaidasKeys.map(k => k.split(' - ')[0].substring(0, 12));
-            const saidasValues = topSaidasKeys.map(k => saidasMap[k]);
-            if(saidasLabels.length === 0) { saidasLabels.push('Sem Baixas'); saidasValues.push(0); }
-
-            if(document.getElementById('chartTopSaidas')) {
-                chartTopSaidas = new Chart(document.getElementById('chartTopSaidas'), {
-                    type: 'bar',
-                    data: {
-                        labels: saidasLabels,
-                        datasets: [{ data: saidasValues, backgroundColor: '#EF4444', borderRadius: 6 }]
-                    },
-                    options: {
-                        responsive: true, maintainAspectRatio: false,
-                        plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold', size: 11 }, anchor: 'end', align: 'start', offset: 8 } },
-                        scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 } } } }
-                    }
-                });
-            }
-
-            const catLabels = Object.keys(mapCat);
-            const catData = catLabels.map(k => mapCat[k]);
-            const coresVibrantes = ['#4F46E5', '#EC4899', '#10B981', '#F59E0B', '#3B82F6', '#8B5CF6', '#EF4444', '#06B6D4'];
-
-            if(document.getElementById('chartPizzaCategorias')) {
-                chartPizzaCategorias = new Chart(document.getElementById('chartPizzaCategorias'), {
-                    type: 'doughnut',
-                    data: {
-                        labels: catLabels.length > 0 ? catLabels : ['Sem Dados'],
-                        datasets: [{ data: catData.length > 0 ? catData : [1], backgroundColor: coresVibrantes, borderWidth: 2, borderColor: '#ffffff' }]
-                    },
-                    options: {
-                        responsive: true, maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: true, position: 'bottom', labels: { boxWidth: 12, font: { size: 10, weight: 'bold' } } },
-                            datalabels: { color: '#ffffff', font: { weight: 'bold', size: 10 } }
-                        }
-                    }
-                });
-            }
-        }
-
-        // ================= COMPORTAMENTO DE ABAS E NAVEGAÇÃO =================
-        if(document.getElementById('btn-theme')) document.getElementById('btn-theme').addEventListener('click', () => document.body.classList.toggle('dark'));
-        const modal = document.getElementById('tools-modal'); 
-        if(document.getElementById('btn-tools')) document.getElementById('btn-tools').addEventListener('click', () => modal.classList.remove('hidden')); 
-        document.querySelectorAll('.close-modal').forEach(b => b.addEventListener('click', () => modal.classList.add('hidden')));
-        
-        const tabsBtns = document.querySelectorAll('.tab-btn'), tabContents = document.querySelectorAll('.tab-content');
-        tabsBtns.forEach(btn => { 
-            btn.addEventListener('click', (e) => { 
-                tabsBtns.forEach(b => { b.classList.remove('bg-blue-100', 'text-blue-800', 'bg-purple-100', 'text-purple-800', 'bg-indigo-100', 'text-indigo-800', 'border-indigo-500'); b.classList.add('text-slate-600', 'border-transparent'); }); 
-                e.currentTarget.classList.remove('text-slate-600', 'border-transparent'); 
-                
-                const target = e.currentTarget.getAttribute('data-target');
-                if(target === 'tab-admin') e.currentTarget.classList.add('bg-purple-100', 'text-purple-800');
-                else if(target === 'tab-localidade') e.currentTarget.classList.add('bg-indigo-100', 'text-indigo-800', 'border-indigo-500');
-                else e.currentTarget.classList.add('bg-blue-100', 'text-blue-800');
-                
-                tabContents.forEach(tc => tc.classList.add('hidden')); 
-                if(document.getElementById(target)) document.getElementById(target).classList.remove('hidden'); 
-            }); 
-        });
-
-        if(document.getElementById('view-estoque-btn')) {
-            document.getElementById('view-estoque-btn').addEventListener('click', (e) => {
-                e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600');
-                const otherBtn = document.getElementById('view-rastreio-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500');
-                document.getElementById('view-estoque-content').classList.remove('hidden'); document.getElementById('view-rastreio-content').classList.add('hidden');
-            });
-        }
-
-        if(document.getElementById('view-rastreio-btn')) {
-            document.getElementById('view-rastreio-btn').addEventListener('click', (e) => {
-                e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600');
-                const otherBtn = document.getElementById('view-estoque-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500');
-                document.getElementById('view-rastreio-content').classList.remove('hidden'); document.getElementById('view-estoque-content').classList.add('hidden');
-            });
-        }
-
-        // Eventos de Busca e Filtros Dinâmicos
+        // ================= EVENTOS DE BUSCA E NAVEGAÇÃO =================
         if(document.getElementById('search-table-estoque')) {
             document.getElementById('search-table-estoque').addEventListener('input', e => { 
                 currentSearchText = e.target.value; currentPageEstoque = 1; atualizarInterfaceEstoque(); 
@@ -1398,15 +1189,12 @@
             });
         }
 
-        // Eventos Paginação Estoque
         if(document.getElementById('btn-prev-estoque')) document.getElementById('btn-prev-estoque').addEventListener('click', () => { if(currentPageEstoque > 1) { currentPageEstoque--; atualizarInterfaceEstoque(); } });
         if(document.getElementById('btn-next-estoque')) document.getElementById('btn-next-estoque').addEventListener('click', () => { currentPageEstoque++; atualizarInterfaceEstoque(); });
 
-        // Eventos Paginação Rastreio
         if(document.getElementById('btn-prev-rastreio')) document.getElementById('btn-prev-rastreio').addEventListener('click', () => { if(currentPageRastreio > 1) { currentPageRastreio--; atualizarInterfaceRastreio(); } });
         if(document.getElementById('btn-next-rastreio')) document.getElementById('btn-next-rastreio').addEventListener('click', () => { currentPageRastreio++; atualizarInterfaceRastreio(); });
 
-        
         if(document.getElementById('btn-export-csv')) {
             document.getElementById('btn-export-csv').addEventListener('click', () => { 
                 let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Local,Patrimonio,Quantidade\n"; 
