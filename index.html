@@ -229,15 +229,13 @@
                         </div>
                     </div>
                     <div class="overflow-x-auto min-h-[300px]">
-                        <!-- TABELA DE ESTOQUE ATUALIZADA (7 COLUNAS SEPARADAS) -->
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Categoria</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Componente / Espec.</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider text-blue-600">Local</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nº Série</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nº Patrimônio</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Série/Patrimônio</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider text-center">Quantidade</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
                                 </tr>
@@ -246,7 +244,7 @@
                         </table>
                     </div>
                     <div class="px-6 py-3 border-t border-gray-100 flex items-center justify-between bg-gray-50">
-                        <span class="text-sm text-gray-500" id="estoque-page-info">Mostrando 0 registros</span>
+                        <span class="text-sm text-gray-500" id="estoque-page-info">Mostrando 0 registos</span>
                         <div class="flex gap-2">
                             <button id="btn-prev-estoque" class="px-3 py-1 border border-gray-300 rounded bg-white text-gray-600 hover:bg-gray-100 text-sm font-medium transition disabled:opacity-50"><i class="fas fa-chevron-left"></i> Anterior</button>
                             <button id="btn-next-estoque" class="px-3 py-1 border border-gray-300 rounded bg-white text-gray-600 hover:bg-gray-100 text-sm font-medium transition disabled:opacity-50">Próxima <i class="fas fa-chevron-right"></i></button>
@@ -269,7 +267,6 @@
                         </div>
                     </div>
                     <div class="overflow-x-auto min-h-[300px]">
-                        <!-- TABELA DE RASTREIO ATUALIZADA (7 COLUNAS SEPARADAS) -->
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-indigo-50/50">
                                 <tr>
@@ -277,8 +274,7 @@
                                     <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Local Físico</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider text-indigo-600">Local SIPAC</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Marca/Modelo</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Nº de Série</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Nº Patrimônio</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider">Série/Patrimônio</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-indigo-800 uppercase tracking-wider text-center">Qtd</th>
                                 </tr>
                             </thead>
@@ -286,7 +282,7 @@
                         </table>
                     </div>
                     <div class="px-6 py-3 border-t border-gray-100 flex items-center justify-between bg-indigo-50/20">
-                        <span class="text-sm text-indigo-600" id="rastreio-page-info">Mostrando 0 registros</span>
+                        <span class="text-sm text-indigo-600" id="rastreio-page-info">Mostrando 0 registos</span>
                         <div class="flex gap-2">
                             <button id="btn-prev-rastreio" class="px-3 py-1 border border-indigo-200 rounded bg-white text-indigo-700 hover:bg-indigo-50 text-sm font-medium transition disabled:opacity-50"><i class="fas fa-chevron-left"></i> Anterior</button>
                             <button id="btn-next-rastreio" class="px-3 py-1 border border-indigo-200 rounded bg-white text-indigo-700 hover:bg-indigo-50 text-sm font-medium transition disabled:opacity-50">Próxima <i class="fas fa-chevron-right"></i></button>
@@ -305,7 +301,6 @@
                 <p class="text-sm mt-1 text-slate-300">Polícia Rodoviária Federal - Diretoria de Tecnologia da Informação e Comunicação (DTIC)</p>
                 <p class="text-lg font-bold mt-3 text-white" id="print-title-doc">Relatório Gerencial Analítico - Gestão de Estoque (SETIC)</p>
             </div>
-            <!-- LOGO OFICIAL BLINDADA -->
             <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" class="h-20">
         </div>
         <div class="px-6">
@@ -339,7 +334,6 @@
                 <p style="margin: 0; font-size: 12px; font-weight: bold; font-family: Arial, sans-serif;" id="print-simple-title">Extrato de Ativos</p>
                 <p style="margin: 2px 0 0 0; font-size: 10px; color: #555; font-family: Arial, sans-serif;" id="print-simple-date"></p>
             </div>
-            <!-- LOGO FIXA INSTITUCIONAL BLINDADA -->
             <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" style="height: 65px;">
         </div>
         <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif;">
@@ -387,6 +381,7 @@
                                 </select>
                             </div>
                             
+                            <!-- PESQUISA INTELIGENTE ESTOQUE -->
                             <div id="estoque-edit-container" class="relative hidden mb-4">
                                 <i class="fas fa-search absolute left-3 top-3 text-orange-500"></i>
                                 <input list="lista-edit-estoque" id="estoque-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500" placeholder="Pesquise Equipamento, Marca, Série ou Patr...">
@@ -420,7 +415,7 @@
                         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                             <h3 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-excel mr-2 text-emerald-600"></i>Importação em Lote (Excel/CSV)</h3>
                             <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800">
-                                <strong>Colunas flexíveis:</strong> O sistema lê automaticamente variações como MARCA, MARCA/MODELO, Nº DE SÉRIE, SÉRIE, PATRIMÔNIO, etc. Se a célula estiver vazia, ficará em branco no sistema.
+                                <strong>Colunas flexíveis:</strong> O sistema lê variações como MARCA, MARCA/MODELO, Nº DE SÉRIE, SÉRIE, PATRIMÔNIO. <br><b>Células em branco agora ficarão perfeitamente em branco no sistema (Fim do N/A forçado).</b>
                             </div>
                             <div class="flex-1 flex flex-col justify-center items-center border-2 border-dashed border-slate-300 rounded-lg p-6 hover:bg-slate-100 transition">
                                 <i class="fas fa-cloud-upload-alt text-4xl text-slate-400 mb-3"></i>
@@ -440,6 +435,7 @@
                     
                     <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex-1">
                         <div class="space-y-5 mb-8">
+                            <!-- PESQUISA INTELIGENTE SAÍDA -->
                             <div>
                                 <label class="block text-sm font-semibold text-slate-700">Pesquisar Equipamento (Digite Nome, Modelo, Local, Série ou Patr...)</label>
                                 <div class="relative">
@@ -475,6 +471,7 @@
                                 </select>
                             </div>
                             
+                            <!-- PESQUISA INTELIGENTE LOCAIS -->
                             <div id="loc-edit-container" class="relative hidden mb-4">
                                 <i class="fas fa-search absolute left-3 top-3 text-orange-500"></i>
                                 <input list="lista-edit-locais" id="loc-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500" placeholder="Pesquise Equipamento, Local, Série ou Patr...">
@@ -503,7 +500,7 @@
                         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                             <h3 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-excel mr-2 text-emerald-600"></i>Importação em Lote (Excel)</h3>
                             <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800">
-                                <strong>Colunas flexíveis:</strong> O sistema procura automaticamente por colunas como MARCA, MODELO, Nº DE SÉRIE, PATRIMÔNIO, LOCAL SIPAC. Células em branco ficam em branco.
+                                <strong>Colunas flexíveis:</strong> O sistema procura por MARCA, MODELO, Nº DE SÉRIE, PATRIMÔNIO, LOCAL SIPAC. Células vazias ou contendo "N/A" na sua planilha ficarão perfeitamente em branco no sistema.
                             </div>
                             <div class="flex-1 flex flex-col justify-center items-center border-2 border-dashed border-slate-300 rounded-lg p-6 hover:bg-slate-100 transition">
                                 <i class="fas fa-cloud-upload-alt text-4xl text-slate-400 mb-3"></i>
@@ -514,7 +511,7 @@
                     </div>
                 </div>
 
-                <!-- TAB RELATORIOS E EXPORTAÇÕES OFICIAIS -->
+                <!-- TAB RELATORIOS -->
                 <div id="tab-relatorio" class="tab-content hidden h-full flex flex-col justify-center items-center">
                     <i class="fas fa-file-contract text-6xl text-slate-300 mb-6"></i>
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Exportações e Relatórios Oficiais</h2>
@@ -573,12 +570,26 @@
                         </div>
 
                         <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-                            <div class="border rounded-xl p-5 bg-slate-50 shadow-sm flex flex-col">
-                                <h3 class="font-bold text-slate-800 mb-2"><i class="fas fa-file-excel text-emerald-600 mr-2"></i> Alimentar Base</h3>
-                                <p class="text-[11px] text-slate-500 mb-3">Carregue arquivo .xlsx estruturado.</p>
-                                <input type="file" id="file-upload" accept=".xlsx, .xls, .csv" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:font-bold file:bg-blue-50 file:text-blue-700 cursor-pointer mb-2">
-                                <button id="btn-process-upload" class="btn-primary w-full bg-[#161B33] text-white font-bold py-2 px-2 rounded hover:opacity-90 transition text-sm mt-auto"><i class="fas fa-cloud-upload-alt mr-1"></i> Processar</button>
+                            <!-- EXCLUSÃO CIRÚRGICA DE DADOS (NOVO MOTOR) -->
+                            <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between col-span-1 lg:col-span-2">
+                                <div>
+                                    <h3 class="font-bold text-red-800 mb-1"><i class="fas fa-exclamation-triangle text-red-600 mr-2"></i> Zona de Perigo (Exclusão Cirúrgica)</h3>
+                                    <p class="text-[11px] text-red-600 mb-3">Apague itens específicos. Ação irreversível.</p>
+                                </div>
+                                <div class="space-y-3 mt-auto">
+                                    <div class="relative">
+                                        <input list="admin-del-loc-list" id="admin-del-loc-input" class="w-full text-[11px] p-2 border border-orange-300 rounded mb-1 focus:ring-orange-500 focus:outline-none pr-8" placeholder="🔍 Rastreio: digite nome, local, série para buscar e apagar...">
+                                        <datalist id="admin-del-loc-list"></datalist>
+                                        <button id="btn-delete-loc" class="w-full bg-orange-600 text-white font-bold py-2 px-2 rounded hover:bg-orange-700 transition text-[11px] shadow flex items-center justify-center"><i class="fas fa-eraser mr-1"></i> Apagar do Rastreio</button>
+                                    </div>
+                                    <div class="relative border-t border-red-200 pt-3">
+                                        <input list="admin-del-est-list" id="admin-del-est-input" class="w-full text-[11px] p-2 border border-red-300 rounded mb-1 focus:ring-red-500 focus:outline-none pr-8" placeholder="🔍 Estoque: digite componente, modelo, série para buscar e apagar...">
+                                        <datalist id="admin-del-est-list"></datalist>
+                                        <button id="btn-delete-estoque" class="w-full bg-red-600 text-white font-bold py-2 px-2 rounded hover:bg-red-700 transition text-[11px] shadow flex items-center justify-center"><i class="fas fa-trash-alt mr-1"></i> Apagar do Estoque</button>
+                                    </div>
+                                </div>
                             </div>
+
                             <div class="border border-blue-200 rounded-xl p-5 bg-blue-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-user-plus text-blue-600 mr-2"></i> Novo Usuário</h3>
                                 <p class="text-[11px] text-blue-600 mb-2">Atenção: Cadastrar um novo logará você nele.</p>
@@ -590,16 +601,6 @@
                                 <h3 class="font-bold text-orange-800 mb-2"><i class="fas fa-user-minus text-orange-600 mr-2"></i> Gerir Acessos</h3>
                                 <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">O Firebase bloqueia exclusão via web.<br><br>A exclusão deve ser feita no Console Oficial.</p>
                                 <a href="https://console.firebase.google.com/project/gestao-de-equipamentos-tic/authentication/users" target="_blank" class="w-full bg-orange-600 text-white font-bold py-2.5 px-2 rounded hover:bg-orange-700 transition text-sm shadow mt-auto flex items-center justify-center text-center"><i class="fas fa-external-link-alt mr-2"></i> Abrir Console</a>
-                            </div>
-                            <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between">
-                                <div>
-                                    <h3 class="font-bold text-red-800 mb-1"><i class="fas fa-exclamation-triangle text-red-600 mr-2"></i> Zona de Perigo</h3>
-                                    <p class="text-[11px] text-red-600 mb-3">Apague as bases físicas do sistema. Logs são imutáveis.</p>
-                                </div>
-                                <div class="space-y-2 mt-auto">
-                                    <button id="btn-delete-loc" class="w-full bg-orange-600 text-white font-bold py-2 px-2 rounded hover:bg-orange-700 transition text-sm shadow"><i class="fas fa-eraser mr-1"></i> Apagar Rastreio</button>
-                                    <button id="btn-delete-estoque" class="w-full bg-red-600 text-white font-bold py-2 px-2 rounded hover:bg-red-700 transition text-sm shadow"><i class="fas fa-trash-alt mr-1"></i> Apagar Estoque</button>
-                                </div>
                             </div>
                         </div>
 
@@ -636,7 +637,6 @@
 
         Chart.register(ChartDataLabels);
 
-        // ATENÇÃO: Substituir pelas chaves válidas do Firebase.
         const firebaseConfig = {
             apiKey: "AIzaSyBRCRThFRIEGYQ8ukI8IzJ78AyqSEyspsc",
             authDomain: "gestao-de-equipamentos-tic.firebaseapp.com",
@@ -667,6 +667,9 @@
         let mapEditLocais = {};
         let mapEditEstoque = {};
         
+        let mapAdminDelLoc = {};
+        let mapAdminDelEst = {};
+        
         let chartComponentesAmpliado = null; 
         let chartTopSaidas = null; 
         let chartPizzaCategorias = null; 
@@ -685,16 +688,22 @@
             setTimeout(() => { toast.classList.add('translate-x-full'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
-        // ================= LEITOR DE EXCEL ROBUSTO =================
+        // ================= SANITIZADOR UNIVERSAL (FIM DO N/A) =================
+        function sanitizeVal(val) {
+            if (val === undefined || val === null) return '';
+            let strVal = String(val).trim();
+            let upper = strVal.toUpperCase();
+            if (upper === 'N/A' || upper === 'NAN' || upper === '-' || upper === 'N/D') return '';
+            return strVal;
+        }
+
         function getVal(row, possibleKeys) {
             for (let rawKey in row) {
                 let cleanKey = rawKey.toString().toUpperCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                 for (let pKey of possibleKeys) {
                     let cleanPKey = pKey.toUpperCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                     if (cleanKey === cleanPKey || cleanKey.indexOf(cleanPKey) !== -1) {
-                        let val = String(row[rawKey]).trim();
-                        if(val.toLowerCase() === 'n/a' || val.toLowerCase() === 'nan' || val === '-') return '';
-                        return val;
+                        return sanitizeVal(row[rawKey]);
                     }
                 }
             }
@@ -799,13 +808,18 @@
                 [...estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => {
                     tTotal += (i.Quantidade || 0); categorias.add(i.Categoria || 'Geral'); let minEstoque = i.EstoqueMinimo || 5;
                     if(i.Quantidade === 0) tZerados++; else if(i.Quantidade <= minEstoque) tBaixos++;
-                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||''}</td><td class="border px-2 py-1">${i.Componente||''}</td><td class="border px-2 py-1">${i.Modelo||''} / ${i.Especificação||''}</td><td class="border px-2 py-1">${i.Local||''}</td><td class="border px-2 py-1 font-mono">${i.Série||''}</td><td class="border px-2 py-1 font-mono">${i.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`;
+                    
+                    let strS = i.Série ? `S: ${i.Série}` : '';
+                    let strP = i.Patrimonio ? `P: ${i.Patrimonio}` : '';
+                    let separator = (strS && strP) ? '<br>' : '';
+                    
+                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||''}</td><td class="border px-2 py-1">${i.Componente||''}</td><td class="border px-2 py-1">${i.Modelo||''} / ${i.Especificação||''}</td><td class="border px-2 py-1">${i.Local||''}</td><td class="border px-2 py-1 font-mono">${strS}${separator}${strP}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`;
                 });
                 let taxaCritica = estoqueLocal.length > 0 ? (((tZerados + tBaixos) / estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1);
                 parecer.innerHTML = `Extração consolidou <b>${estoqueLocal.length}</b> registos de estoque físico. Emitido por ${userEmail} em ${dataAtual}.`;
                 resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. Saúde: ${saude}%. ${tZerados} zerados e ${tBaixos} em risco (Criticidade: ${taxaCritica}%).`;
                 kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`;
-                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
+                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Série/Patr.</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
                 visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid';
                 if(chartComponentesAmpliado) document.getElementById('print-chart-1').src = document.getElementById('chartComponentesAmpliado').toDataURL('image/png');
                 if(chartTopSaidas) document.getElementById('print-chart-2').src = document.getElementById('chartTopSaidas').toDataURL('image/png');
@@ -816,12 +830,17 @@
                 let tLocaisUnicos = new Set(), tVolumeRastreado = 0, tEquipsUnicos = new Set(); tbody.innerHTML = '';
                 [...localidadesLocais].sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
                     tLocaisUnicos.add(loc.Local || 'N/A'); tVolumeRastreado += (loc.Quantidade||0); tEquipsUnicos.add(loc.Equipamento || 'N/A');
-                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento||''}</td><td class="border px-2 py-1">${loc.Local||''}</td><td class="border px-2 py-1">${loc.LocalSipac||''}</td><td class="border px-2 py-1">${loc.Marca||''}</td><td class="border px-2 py-1 font-mono">${loc.Serie||''}</td><td class="border px-2 py-1 font-mono">${loc.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`;
+                    
+                    let strS = loc.Serie ? `S: ${loc.Serie}` : '';
+                    let strP = loc.Patrimonio ? `P: ${loc.Patrimonio}` : '';
+                    let separator = (strS && strP) ? '<br>' : '';
+                    
+                    tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento||''}</td><td class="border px-2 py-1">${loc.Local||''}</td><td class="border px-2 py-1">${loc.LocalSipac||''}</td><td class="border px-2 py-1">${loc.Marca||''}</td><td class="border px-2 py-1 font-mono">${strS}${separator}${strP}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`;
                 });
                 parecer.innerHTML = `A extração consolidou <b>${localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${userEmail} em ${dataAtual}.`;
                 resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades, com ${tEquipsUnicos.size} modelos distintos.`;
                 kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros</p><p class="text-2xl font-black text-slate-800">${localidadesLocais.length}</p></div>`;
-                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Património</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
+                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Série/Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
                 visualTitle.style.display = 'none'; chartsContainer.style.display = 'none';
             }
             window.print(); setTimeout(() => { document.getElementById('printable-report').classList.remove('active-print'); }, 1000);
@@ -874,11 +893,91 @@
         if(document.getElementById('btn-relatorio-analitico-estoque')) document.getElementById('btn-relatorio-analitico-estoque').addEventListener('click', () => gerarRelatorioAnalitico('estoque'));
         if(document.getElementById('btn-relatorio-analitico-rastreio')) document.getElementById('btn-relatorio-analitico-rastreio').addEventListener('click', () => gerarRelatorioAnalitico('rastreio'));
 
-        // ================= ABA ADMIN =================
+        // ================= ABA ADMIN (EXCLUSÃO CIRÚRGICA) =================
         if(document.getElementById('btn-admin-login')) document.getElementById('btn-admin-login').addEventListener('click', () => { const input = document.getElementById('admin-pass-input').value; if(btoa(input) === "c2V0aWNhZG1pbg==") { document.getElementById('admin-login-section').classList.add('hidden'); document.getElementById('admin-content-section').classList.remove('hidden'); document.getElementById('admin-error').classList.add('hidden'); document.getElementById('admin-pass-input').value = ""; } else { document.getElementById('admin-error').classList.remove('hidden'); } });
         if(document.getElementById('btn-admin-lock')) document.getElementById('btn-admin-lock').addEventListener('click', () => { document.getElementById('admin-content-section').classList.add('hidden'); document.getElementById('admin-login-section').classList.remove('hidden'); });
-        if(document.getElementById('btn-delete-loc')) document.getElementById('btn-delete-loc').addEventListener('click', async () => { if(confirm("Deseja realmente apagar toda a base de Rastreamento de Ativos? Esta ação é irreversível.")) { const btn = document.getElementById('btn-delete-loc'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...'; try { const locSnap = await getDocs(collection(db, "localidades")); locSnap.forEach((d) => deleteDoc(d.ref)); showToast("Base apagada."); } catch(e) {} btn.innerHTML = originalText; } });
-        if(document.getElementById('btn-delete-estoque')) document.getElementById('btn-delete-estoque').addEventListener('click', async () => { if(prompt("⚠️ ZONA DE PERIGO!\nIsso apagará TODO o Estoque Consolidado.\nPara confirmar, digite: APAGAR") === "APAGAR") { const btn = document.getElementById('btn-delete-estoque'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Excluindo...'; try { const estSnap = await getDocs(collection(db, "estoque")); estSnap.forEach((d) => deleteDoc(d.ref)); showToast("Estoque apagado."); } catch(e) {} btn.innerHTML = originalText; } });
+        
+        if(document.getElementById('admin-del-loc-input')) {
+            document.getElementById('admin-del-loc-input').addEventListener('input', (e) => {
+                const text = e.target.value;
+                const dl = document.getElementById('admin-del-loc-list');
+                dl.innerHTML = ''; 
+                if(text.length >= 3) {
+                    const search = text.toLowerCase().split(' ');
+                    let count = 0;
+                    localidadesLocais.forEach(item => {
+                        let display = `[RASTREIO] ${item.Equipamento} | Loc: ${item.Local} | Patr: ${item.Patrimonio||'Vazio'} | Série: ${item.Serie||'Vazio'}`;
+                        if(search.every(term => display.toLowerCase().includes(term))) {
+                            mapAdminDelLoc[display] = item.id;
+                            let option = document.createElement('option');
+                            option.value = display;
+                            dl.appendChild(option);
+                            count++;
+                            if(count > 40) return;
+                        }
+                    });
+                }
+            });
+        }
+
+        if(document.getElementById('admin-del-est-input')) {
+            document.getElementById('admin-del-est-input').addEventListener('input', (e) => {
+                const text = e.target.value;
+                const dl = document.getElementById('admin-del-est-list');
+                dl.innerHTML = ''; 
+                if(text.length >= 3) {
+                    const search = text.toLowerCase().split(' ');
+                    let count = 0;
+                    estoqueLocal.forEach(item => {
+                        let display = `[ESTOQUE] ${item.Componente} | Loc: ${item.Local} | Patr: ${item.Patrimonio||'Vazio'} | Série: ${item.Série||'Vazio'}`;
+                        if(search.every(term => display.toLowerCase().includes(term))) {
+                            mapAdminDelEst[display] = item.id;
+                            let option = document.createElement('option');
+                            option.value = display;
+                            dl.appendChild(option);
+                            count++;
+                            if(count > 40) return;
+                        }
+                    });
+                }
+            });
+        }
+
+        if(document.getElementById('btn-delete-loc')) {
+            document.getElementById('btn-delete-loc').addEventListener('click', async () => {
+                const inputVal = document.getElementById('admin-del-loc-input').value;
+                const idToDelete = mapAdminDelLoc[inputVal];
+                if(!idToDelete) return showToast("Item não encontrado. Selecione na lista.", "error");
+                
+                if(confirm("Deseja apagar permanentemente este item do Rastreio? Esta ação é irreversível.")) {
+                    const btn = document.getElementById('btn-delete-loc'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...';
+                    try { 
+                        await deleteDoc(doc(db, "localidades", idToDelete)); 
+                        showToast("Item apagado da base Rastreio."); 
+                        document.getElementById('admin-del-loc-input').value = '';
+                    } catch(e) { showToast("Erro: " + e.message, "error"); }
+                    btn.innerHTML = originalText;
+                }
+            });
+        }
+
+        if(document.getElementById('btn-delete-estoque')) {
+            document.getElementById('btn-delete-estoque').addEventListener('click', async () => {
+                const inputVal = document.getElementById('admin-del-est-input').value;
+                const idToDelete = mapAdminDelEst[inputVal];
+                if(!idToDelete) return showToast("Item não encontrado. Selecione na lista.", "error");
+                
+                if(confirm("Deseja apagar permanentemente este item do Estoque Consolidado? Esta ação é irreversível.")) {
+                    const btn = document.getElementById('btn-delete-estoque'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...';
+                    try { 
+                        await deleteDoc(doc(db, "estoque", idToDelete)); 
+                        showToast("Item apagado da base Estoque."); 
+                        document.getElementById('admin-del-est-input').value = '';
+                    } catch(e) { showToast("Erro: " + e.message, "error"); }
+                    btn.innerHTML = originalText;
+                }
+            });
+        }
         
         if(document.getElementById('btn-export-logs-pdf')) document.getElementById('btn-export-logs-pdf').addEventListener('click', () => {
             document.getElementById('printable-report').classList.remove('active-print'); document.getElementById('printable-simple-table').classList.add('active-print');
@@ -898,9 +997,12 @@
 
         // ================= GESTÃO DE LOCALIDADES E EDIÇÃO / MOVIMENTAÇÃO =================
         function atualizarSelectEdicaoLocais() {
+            const dl = document.getElementById('lista-edit-locais');
+            if(!dl) return;
+            dl.innerHTML = '';
             mapEditLocais = {};
             [...localidadesLocais].sort((a,b) => (a.Equipamento||'').localeCompare(b.Equipamento||'')).forEach(loc => {
-                const text = `${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio || ''} | Série: ${loc.Serie || ''}`;
+                const text = `${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio || 'Vazio'} | Série: ${loc.Serie || 'Vazio'}`;
                 mapEditLocais[text] = loc;
             });
         }
@@ -932,10 +1034,10 @@
                 dl.innerHTML = ''; 
                 
                 if(text.length >= 3) {
-                    const search = text.toLowerCase();
+                    const search = text.toLowerCase().split(' ');
                     let count = 0;
                     for(let key in mapEditLocais) {
-                        if(key.toLowerCase().includes(search)) {
+                        if(search.every(term => key.toLowerCase().includes(term))) {
                             let option = document.createElement('option');
                             option.value = key;
                             dl.appendChild(option);
@@ -969,10 +1071,10 @@
                 
                 const equip = document.getElementById('loc-equip').value.trim();
                 const local = document.getElementById('loc-local').value.trim();
-                const sipac = document.getElementById('loc-sipac').value.trim();
-                const marca = document.getElementById('loc-marca').value.trim();
-                const serie = document.getElementById('loc-serie').value.trim();
-                const patrim = document.getElementById('loc-patrimonio').value.trim();
+                const sipac = sanitizeVal(document.getElementById('loc-sipac').value);
+                const marca = sanitizeVal(document.getElementById('loc-marca').value);
+                const serie = sanitizeVal(document.getElementById('loc-serie').value);
+                const patrim = sanitizeVal(document.getElementById('loc-patrimonio').value);
                 const qtd = parseInt(document.getElementById('loc-qtd').value);
                 
                 if(!equip || !local || isNaN(qtd) || qtd <= 0) return showToast("Preencha Equipamento, Local Físico e Quantidade.", "error");
@@ -1011,10 +1113,10 @@
                     const json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let cont = 0;
                     for (let row of json) {
                         const sipac = getVal(row, ['LOCAL SIPAC', 'SIPAC']);
-                        const serie = getVal(row, ['N DE SERIE', 'SERIE', 'NUMERO DE SERIE', 'NSERIE', 'SN']);
-                        const patrim = getVal(row, ['N PATRIMONIO', 'PATRIMONIO', 'TOMBAMENTO', 'NPATRIMONIO']);
+                        const serie = getVal(row, ['N DE SERIE', 'SERIE', 'NUMERO DE SERIE', 'NSERIE', 'SN', 'Nº DE SÉRIE']);
+                        const patrim = getVal(row, ['N PATRIMONIO', 'PATRIMONIO', 'TOMBAMENTO', 'NPATRIMONIO', 'Nº PATRIMÔNIO']);
                         const equip = getVal(row, ['EQUIPAMENTO', 'NOME', 'ITEM', 'COMPONENTE']);
-                        const local = getVal(row, ['LOCAL FISICO', 'LOCAL', 'SALA', 'LOCALIZACAO']);
+                        const local = getVal(row, ['LOCAL FISICO', 'LOCAL', 'SALA', 'LOCALIZACAO', 'LOCAL FÍSICO']);
                         const marca = getVal(row, ['MARCA', 'MODELO', 'MARCA MODELO', 'MARCA/MODELO']);
                         const qtd = parseInt(getVal(row, ['QUANTIDADE', 'QTD'])) || 1;
                         
@@ -1027,9 +1129,12 @@
 
         // ================= CADASTRO ESTOQUE (MANUAL E LOTE) =================
         function atualizarSelectEdicaoEstoque() {
+            const dl = document.getElementById('lista-edit-estoque');
+            if(!dl) return;
+            dl.innerHTML = '';
             mapEditEstoque = {};
             [...estoqueLocal].sort((a,b) => (a.Componente||'').localeCompare(b.Componente||'')).forEach(item => {
-                const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || item.Série || ''}`;
+                const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || 'Vazio'} | Série: ${item.Série || 'Vazio'}`;
                 mapEditEstoque[text] = item;
             });
         }
@@ -1062,10 +1167,10 @@
                 dl.innerHTML = ''; 
                 
                 if(text.length >= 3) {
-                    const search = text.toLowerCase();
+                    const search = text.toLowerCase().split(' ');
                     let count = 0;
                     for(let key in mapEditEstoque) {
-                        if(key.toLowerCase().includes(search)) {
+                        if(search.every(term => key.toLowerCase().includes(term))) {
                             let option = document.createElement('option');
                             option.value = key;
                             dl.appendChild(option);
@@ -1100,11 +1205,11 @@
             
             const cat = document.getElementById('form-cat').value.trim();
             const comp = document.getElementById('form-comp').value.trim();
-            const mod = document.getElementById('form-mod').value.trim();
-            const esp = document.getElementById('form-esp').value.trim();
+            const mod = sanitizeVal(document.getElementById('form-mod').value);
+            const esp = sanitizeVal(document.getElementById('form-esp').value);
             const local = document.getElementById('form-local').value.trim();
-            const serie = document.getElementById('form-serie-estoque').value.trim();
-            const patrim = document.getElementById('form-patrimonio-estoque').value.trim();
+            const serie = sanitizeVal(document.getElementById('form-serie-estoque').value);
+            const patrim = sanitizeVal(document.getElementById('form-patrimonio-estoque').value);
             const qtd = parseInt(document.getElementById('form-qtd').value);
             const minEstoque = parseInt(document.getElementById('form-minimo').value) || 5; 
             
@@ -1121,8 +1226,8 @@
                     showToast("Alteração gravada com sucesso!");
                 } else {
                     const existente = estoqueLocal.find(i => {
-                        let matchPatr = (patrim && (i.Patrimonio === patrim || i.Série === patrim));
-                        let matchSerie = (serie && (i.Série === serie || i.Patrimonio === serie));
+                        let matchPatr = patrim && (i.Patrimonio === patrim || i.Série === patrim);
+                        let matchSerie = serie && (i.Série === serie || i.Patrimonio === serie);
                         if(matchPatr || matchSerie) return true;
                         return (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'') === local;
                     });
@@ -1154,11 +1259,11 @@
                         const cat = getVal(row, ['CATEGORIA', 'TIPO', 'GRUPO']) || 'Geral';
                         const comp = getVal(row, ['COMPONENTE', 'EQUIPAMENTO', 'NOME', 'ITEM']);
                         const mod = getVal(row, ['MODELO', 'MARCA/MODELO', 'MARCA MODELO', 'MARCA']);
-                        const esp = getVal(row, ['ESPECIFICACAO', 'DESCRIÇÃO', 'DETALHES', 'CONFIGURACAO']);
-                        const local = getVal(row, ['LOCAL FISICO', 'LOCAL', 'LOCALIZACAO']);
-                        const serie = getVal(row, ['N DE SERIE', 'SERIE', 'NUMERO DE SERIE']);
-                        const patrim = getVal(row, ['N PATRIMONIO', 'PATRIMONIO', 'TOMBAMENTO']);
-                        const minEst = parseInt(getVal(row, ['ESTOQUE MINIMO', 'MINIMO', 'ALERTA'])) || 5;
+                        const esp = getVal(row, ['ESPECIFICACAO', 'DESCRIÇÃO', 'DETALHES', 'CONFIGURACAO', 'ESPECIFICAÇÃO']);
+                        const local = getVal(row, ['LOCAL FISICO', 'LOCAL', 'LOCALIZACAO', 'LOCAL FÍSICO']);
+                        const serie = getVal(row, ['N DE SERIE', 'SERIE', 'NUMERO DE SERIE', 'Nº DE SÉRIE', 'SÉRIE']);
+                        const patrim = getVal(row, ['N PATRIMONIO', 'PATRIMONIO', 'TOMBAMENTO', 'Nº PATRIMÔNIO', 'PATRIMÔNIO']);
+                        const minEst = parseInt(getVal(row, ['ESTOQUE MINIMO', 'MINIMO', 'ALERTA', 'ESTOQUE MÍNIMO'])) || 5;
                         const qtd = parseInt(getVal(row, ['QUANTIDADE', 'QTD'])) || 1;
                         
                         if(!comp) continue;
@@ -1181,6 +1286,9 @@
 
         // ================= ABA SAÍDA (AUTO-COMPLETAR INTELIGENTE) =================
         function atualizarDatalistSaida() {
+            const dl = document.getElementById('lista-saida-items'); 
+            if(!dl) return;
+            dl.innerHTML = '';
             mapItensSaida = {};
             [...estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { 
                 const text = `[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||''}) - Qtd: ${i.Quantidade||0}`;
@@ -1195,10 +1303,10 @@
                 dl.innerHTML = ''; 
                 
                 if(text.length >= 3) {
-                    const search = text.toLowerCase();
+                    const search = text.toLowerCase().split(' ');
                     let count = 0;
                     for(let key in mapItensSaida) {
-                        if(key.toLowerCase().includes(search)) {
+                        if(search.every(term => key.toLowerCase().includes(term))) {
                             let option = document.createElement('option');
                             option.value = key;
                             dl.appendChild(option);
@@ -1308,10 +1416,16 @@
             dadosPagina.forEach(item => {
                 const qtd = item.Quantidade || 0; const minEstoque = item.EstoqueMinimo || 5;
                 let badge = qtd === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' : qtd <= minEstoque ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>' : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${item.Categoria||''}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente||''}<br><span class="text-xs font-normal text-slate-500">${item.Modelo||''} / ${item.Especificação||''}</span></td><td class="px-6 py-4 text-sm text-blue-600">${item.Local||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${item.Série||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${item.Patrimonio||''}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
+                
+                let badgesPatr = [];
+                if(item.Série) badgesPatr.push(`<span class="text-xs bg-gray-100 rounded px-1 border border-gray-200">S: ${item.Série}</span>`);
+                if(item.Patrimonio) badgesPatr.push(`<span class="text-xs bg-gray-100 rounded px-1 border border-gray-200">P: ${item.Patrimonio}</span>`);
+                let strPatr = badgesPatr.length > 0 ? `<div class="flex flex-col gap-1">${badgesPatr.join('')}</div>` : '-';
+                
+                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${item.Categoria||''}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente||''}<br><span class="text-xs font-normal text-slate-500">${item.Modelo||''} / ${item.Especificação||''}</span></td><td class="px-6 py-4 text-sm text-blue-600">${item.Local||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600 text-center">${strPatr}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
             });
 
-            if(document.getElementById('estoque-page-info')) document.getElementById('estoque-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length}`;
+            if(document.getElementById('estoque-page-info')) document.getElementById('estoque-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
             if(document.getElementById('btn-prev-estoque')) document.getElementById('btn-prev-estoque').disabled = currentPageEstoque === 1;
             if(document.getElementById('btn-next-estoque')) document.getElementById('btn-next-estoque').disabled = currentPageEstoque === totalPaginas;
 
@@ -1334,7 +1448,12 @@
 
             tbody.innerHTML = '';
             dadosPagina.sort((a,b) => (a.Local||'').localeCompare(b.Local||'')).forEach(loc => {
-                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||''}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.LocalSipac||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||''}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
+                let badgesPatr = [];
+                if(loc.Serie) badgesPatr.push(`<span class="text-xs bg-indigo-50 rounded px-1 border border-indigo-100">S: ${loc.Serie}</span>`);
+                if(loc.Patrimonio) badgesPatr.push(`<span class="text-xs bg-indigo-50 rounded px-1 border border-indigo-100">P: ${loc.Patrimonio}</span>`);
+                let strPatr = badgesPatr.length > 0 ? `<div class="flex flex-col gap-1">${badgesPatr.join('')}</div>` : '-';
+                
+                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||''}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.LocalSipac||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600 text-center">${strPatr}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
             });
 
             if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
