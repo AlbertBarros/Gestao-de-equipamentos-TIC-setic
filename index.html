@@ -29,7 +29,16 @@
         @media print {
             body * { visibility: hidden; }
             #printable-simple-table, #printable-simple-table * { visibility: visible; }
-            #printable-simple-table { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 20px; background: white; color: black; }
+            #printable-simple-table { 
+                display: block !important; 
+                position: absolute; 
+                left: 0; 
+                top: 0; 
+                width: 100%; 
+                padding: 20px; 
+                background: white; 
+                color: black; 
+            }
             .no-print { display: none !important; }
             table { border-collapse: collapse; width: 100%; font-size: 10pt; }
             th, td { border: 1px solid #cbd5e1; padding: 6px; text-align: left; }
@@ -45,6 +54,7 @@
         <div class="absolute inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm"></div>
         <div class="bg-white rounded-xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500 relative z-10">
             <div class="text-center mb-8">
+                <!-- LOGO BLINDADA (WIKIMEDIA) -->
                 <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
                 <h2 id="login-title" class="text-2xl font-bold text-slate-800">Almoxarifado TIC</h2>
                 <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p>
@@ -124,24 +134,31 @@
                 </div>
             </div>
 
-            <!-- GRÁFICOS -->
+            <!-- GRÁFICOS: Diagramação solicitada (Ampliado, Top 5 Saídas, Pizza Colorida) -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <!-- Gráfico 1: Componentes Ampliado -->
+                <!-- Gráfico 1: Componentes (Ampliado em Extensão) -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 md:col-span-2">
-                    <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-4"><i class="fas fa-chart-bar text-blue-600 mr-2"></i> Panorama Geral de Componentes em Estoque</h3>
+                    <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center justify-between">
+                        <span><i class="fas fa-chart-bar text-blue-600 mr-2"></i> Panorama Geral de Componentes em Estoque</span>
+                    </h3>
                     <div class="h-64"><canvas id="chartComponentesAmpliado"></canvas></div>
                 </div>
-                <!-- Gráfico 2: Top 5 Saídas -->
+
+                <!-- Gráfico 2: Top 5 Equipamentos que Mais Saem -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-                    <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-4"><i class="fas fa-fire text-red-500 mr-2"></i> Top 5 Mais Retirados (Saídas)</h3>
+                    <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center">
+                        <i class="fas fa-fire text-red-500 mr-2"></i> Top 5 Mais Retirados (Saídas)
+                    </h3>
                     <div class="h-64"><canvas id="chartTopSaidas"></canvas></div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <!-- Gráfico 3: Pizza Colorida de Categorias -->
+                <!-- Gráfico 3: Pizza Colorida -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-                    <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-4"><i class="fas fa-chart-pie text-purple-600 mr-2"></i> Distribuição por Categoria</h3>
+                    <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center">
+                        <i class="fas fa-chart-pie text-purple-600 mr-2"></i> Distribuição por Categoria
+                    </h3>
                     <div class="h-64 flex justify-center items-center"><canvas id="chartPizzaCategorias"></canvas></div>
                 </div>
                 
@@ -150,7 +167,9 @@
                         <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3"><i class="fas fa-shield-alt text-yellow-600 mr-2"></i> Conformidade SETIC</h3>
                         <p class="text-xs text-slate-500 leading-relaxed">O almoxarifado opera em regime de auditoria em tempo real, garantindo rastreabilidade de ponta a ponta com carimbo digital de segurança em cada log gerado.</p>
                     </div>
-                    <div class="bg-slate-50 p-3 rounded border text-center"><span class="text-xs font-bold text-slate-600">Sincronização Nuvem Ativa</span></div>
+                    <div class="bg-slate-50 p-3 rounded border text-center">
+                        <span class="text-xs font-bold text-slate-600">Sincronização Nuvem Ativa</span>
+                    </div>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 flex flex-col justify-between">
@@ -187,7 +206,7 @@
                         <div class="flex items-center gap-4">
                             <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Inventário Consolidado</h3>
                             <button id="btn-print-estoque-main" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
-                                <i class="fas fa-file-pdf mr-1.5"></i> Gerar PDF
+                                <i class="fas fa-print mr-1.5"></i> Gerar PDF
                             </button>
                         </div>
                         <div class="relative">
@@ -203,7 +222,8 @@
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Componente</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Modelo / Espec.</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider text-blue-600">Local</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Quantidade</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Patrimônio</th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider text-center">Quantidade</th>
                                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
                                 </tr>
                             </thead>
@@ -218,7 +238,7 @@
                         <div class="flex items-center gap-4">
                             <h3 class="text-sm font-bold text-indigo-800 uppercase tracking-wider"><i class="fas fa-map-pin mr-2"></i>Mapa de Ativos Físicos</h3>
                             <button id="btn-print-rastreio-main" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition flex items-center">
-                                <i class="fas fa-file-pdf mr-1.5"></i> Gerar PDF
+                                <i class="fas fa-print mr-1.5"></i> Gerar PDF
                             </button>
                         </div>
                         <div class="relative">
@@ -246,7 +266,7 @@
         </div>
     </div>
 
-    <!-- ESTRUTURA OCULTA PARA IMPRESSÃO SIMPLIFICADA (COM LOGO FIXA) -->
+    <!-- ESTRUTURA OCULTA PARA IMPRESSÃO SIMPLIFICADA (FOTO DA TABELA COM LOGO FIXA) -->
     <div id="printable-simple-table" class="hidden">
         <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
             <div style="text-align: left;">
@@ -255,7 +275,7 @@
                 <p style="margin: 0; font-size: 12px; font-weight: bold; font-family: Arial, sans-serif;" id="print-simple-title">Extrato de Ativos</p>
                 <p style="margin: 2px 0 0 0; font-size: 10px; color: #555; font-family: Arial, sans-serif;" id="print-simple-date"></p>
             </div>
-            <!-- LOGO FIXA INSTITUCIONAL -->
+            <!-- LOGO FIXA DA PRF -->
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Bras%C3%A3o_da_Pol%C3%ADcia_Rodovi%C3%A1ria_Federal.png" alt="PRF Logo" style="height: 65px;">
         </div>
         <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif;">
@@ -291,7 +311,7 @@
                 <!-- TAB ENTRADA -->
                 <div id="tab-entrada" class="tab-content h-full flex flex-col">
                     <h2 class="text-2xl font-bold text-blue-900 mb-2"><i class="fas fa-boxes mr-2 text-blue-600"></i>Entrada de Ativos (Estoque Geral)</h2>
-                    <p class="text-sm text-slate-500 mb-6 border-b pb-4">Adicione estoque manualmente com o local ou importe em lote por planilha.</p>
+                    <p class="text-sm text-slate-500 mb-6 border-b pb-4">Adicione estoque manualmente ou importe em lote por planilha.</p>
                     
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
                         <div class="bg-blue-50/50 p-6 rounded-xl border border-blue-100 shadow-sm">
@@ -305,8 +325,10 @@
                                     <div><label class="block text-xs font-bold text-slate-700 uppercase">Modelo</label><input type="text" id="form-mod" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div>
                                     <div><label class="block text-xs font-bold text-slate-700 uppercase">Especificação</label><input type="text" id="form-esp" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div>
                                 </div>
-                                <div class="grid grid-cols-2 gap-3">
+                                <!-- NOVO CAMPO DE PATRIMÔNIO (BLINDADO NA ENTRADA) -->
+                                <div class="grid grid-cols-3 gap-3">
                                     <div><label class="block text-xs font-bold text-slate-700 uppercase text-blue-600">Local Físico</label><input type="text" id="form-local" class="mt-1 block w-full rounded border-blue-300 border p-2 text-sm bg-white" placeholder="Ex: Armazém A"></div>
+                                    <div><label class="block text-xs font-bold text-slate-700 uppercase">Nº Patrimônio</label><input type="text" id="form-patrimonio-estoque" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" placeholder="Opcional"></div>
                                     <div><label class="block text-xs font-bold text-slate-700 uppercase">Quantidade</label><input type="number" id="form-qtd" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" min="1" value="1"></div>
                                 </div>
                                 <button id="btn-save-item" class="w-full bg-blue-600 text-white font-bold py-2.5 px-4 rounded hover:bg-blue-700 transition shadow mt-2">Registrar Entrada no Estoque</button>
@@ -316,7 +338,7 @@
                         
                         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                             <h3 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-excel mr-2 text-emerald-600"></i>Importação em Lote (Excel/CSV)</h3>
-                            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800"><strong>Colunas exigidas:</strong> CATEGORIA, COMPONENTE, MODELO, ESPECIFICAÇÃO, LOCAL, QUANTIDADE.</div>
+                            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800"><strong>Colunas exigidas na planilha:</strong><br>CATEGORIA, COMPONENTE, MODELO, ESPECIFICAÇÃO, LOCAL, PATRIMÔNIO (Opcional), QUANTIDADE.</div>
                             <div class="flex-1 flex flex-col justify-center items-center border-2 border-dashed border-slate-300 rounded-lg p-6 hover:bg-slate-100 transition">
                                 <i class="fas fa-cloud-upload-alt text-4xl text-slate-400 mb-3"></i>
                                 <input type="file" id="estoque-file-upload" accept=".xlsx, .xls, .csv" class="block w-full max-w-xs text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:font-bold file:bg-blue-50 file:text-blue-700 cursor-pointer">
@@ -368,7 +390,7 @@
                         </div>
                         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                             <h3 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-excel mr-2 text-emerald-600"></i>Importação em Lote (Excel)</h3>
-                            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800"><strong>Colunas exigidas:</strong> EQUIPAMENTO, LOCAL FISICO, QUANTIDADE, MARCA, Nº DE SÉRIE, Nº PATRIMONIO.</div>
+                            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded text-xs text-blue-800"><strong>Colunas exigidas na planilha:</strong><br>EQUIPAMENTO, LOCAL FISICO, QUANTIDADE, MARCA, Nº DE SÉRIE, Nº PATRIMONIO.</div>
                             <div class="flex-1 flex flex-col justify-center items-center border-2 border-dashed border-slate-300 rounded-lg p-6 hover:bg-slate-100 transition">
                                 <i class="fas fa-cloud-upload-alt text-4xl text-slate-400 mb-3"></i>
                                 <input type="file" id="loc-file-upload" accept=".xlsx, .xls, .csv" class="block w-full max-w-xs text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:font-bold file:bg-indigo-50 file:text-indigo-700 cursor-pointer">
@@ -383,7 +405,7 @@
                 <div id="tab-relatorio" class="tab-content hidden h-full flex flex-col justify-center items-center">
                     <i class="fas fa-file-csv text-6xl text-slate-300 mb-6"></i>
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Exportações em CSV</h2>
-                    <p class="text-slate-500 mb-8 max-w-lg text-center">Utilize o botão abaixo para extrair os dados consolidados do estoque diretamente para uma planilha em formato Excel (CSV).</p>
+                    <p class="text-slate-500 mb-8 max-w-lg text-center">Os relatórios em PDF estão nos painéis principais. Utilize o botão abaixo para extrair os dados brutos do estoque para uma planilha Excel (CSV).</p>
                     <button id="btn-export-csv" class="bg-emerald-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-emerald-700 transition flex items-center shadow-md"><i class="fas fa-file-excel mr-2 text-xl"></i> Exportar Estoque em Excel (CSV)</button>
                 </div>
 
@@ -443,7 +465,7 @@
                             </div>
                             <div class="border border-orange-200 rounded-xl p-5 bg-orange-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-orange-800 mb-2"><i class="fas fa-user-minus text-orange-600 mr-2"></i> Gerir Acessos</h3>
-                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">Para evitar ataques, o Firebase bloqueia a exclusão de usuários pelo painel web.<br><br>A demissão/exclusão deve ser feita diretamente no seu Console Oficial.</p>
+                                <p class="text-[11px] text-orange-700 mb-3 leading-relaxed">Para evitar ataques, o Firebase bloqueia exclusão via web.<br><br>A exclusão definitiva deve ser feita no Console Oficial.</p>
                                 <a href="https://console.firebase.google.com/project/gestao-de-equipamentos-tic/authentication/users" target="_blank" class="w-full bg-orange-600 text-white font-bold py-2.5 px-2 rounded hover:bg-orange-700 transition text-sm shadow mt-auto flex items-center justify-center text-center"><i class="fas fa-external-link-alt mr-2"></i> Abrir Console</a>
                             </div>
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between">
@@ -491,6 +513,7 @@
 
         Chart.register(ChartDataLabels);
 
+        // ATENÇÃO: As chaves abaixo devem ser as suas chaves válidas do Firebase. Sem elas, o login continuará a falhar (Erro 400).
         const firebaseConfig = {
             apiKey: "AIzaSyBRCRThFRIEGYQ8ukI8IzJ78AyqSEyspsc",
             authDomain: "gestao-de-equipamentos-tic.firebaseapp.com",
@@ -510,7 +533,7 @@
         let userEmail = "";
         let tempBgBase64 = null; 
         
-        // VARIÁVEIS GLOBAIS DOS GRÁFICOS
+        // DECLARAÇÃO GLOBAL DOS GRÁFICOS
         let chartComponentesAmpliado = null; 
         let chartTopSaidas = null; 
         let chartPizzaCategorias = null; 
@@ -664,9 +687,9 @@
 
             if(tipo === 'estoque') {
                 titleObj.innerText = "Extrato: Inventário Consolidado de Estoque";
-                theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente</th><th>Modelo / Especificação</th><th>Local</th><th style="text-align:center;">Qtd</th></tr>`;
+                theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente</th><th>Modelo / Especificação</th><th>Local</th><th>Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
                 [...estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => {
-                    tbodyObj.innerHTML += `<tr><td>${i.Categoria||'-'}</td><td><b>${i.Componente||'-'}</b></td><td>${i.Modelo||'-'} / ${i.Especificação||'-'}</td><td>${i.Local||'N/A'}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`;
+                    tbodyObj.innerHTML += `<tr><td>${i.Categoria||'-'}</td><td><b>${i.Componente||'-'}</b></td><td>${i.Modelo||'-'} / ${i.Especificação||'-'}</td><td>${i.Local||'-'}</td><td style="font-family:monospace;">${i.Patrimonio||'-'}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`;
                 });
             } else {
                 titleObj.innerText = "Extrato: Rastreamento de Ativos (Mapa Físico)";
@@ -708,6 +731,7 @@
             }
         });
 
+        // Impressão especial para a Tabela de Logs (Audit Trail)
         document.getElementById('btn-export-logs-pdf').addEventListener('click', () => {
             const titleObj = document.getElementById('print-simple-title');
             const dateObj = document.getElementById('print-simple-date');
@@ -807,12 +831,12 @@
 
         // ================= CADASTRO ESTOQUE (MANUAL E LOTE) =================
         document.getElementById('btn-save-item').addEventListener('click', async () => {
-            const cat = document.getElementById('form-cat').value.trim(), comp = document.getElementById('form-comp').value.trim(), mod = document.getElementById('form-mod').value.trim(), esp = document.getElementById('form-esp').value.trim(), local = document.getElementById('form-local').value.trim() || 'N/A', qtd = parseInt(document.getElementById('form-qtd').value);
+            const cat = document.getElementById('form-cat').value.trim(), comp = document.getElementById('form-comp').value.trim(), mod = document.getElementById('form-mod').value.trim(), esp = document.getElementById('form-esp').value.trim(), local = document.getElementById('form-local').value.trim() || 'N/A', patrim = document.getElementById('form-patrimonio-estoque').value.trim() || 'N/A', qtd = parseInt(document.getElementById('form-qtd').value);
             if(!cat || !comp || isNaN(qtd) || qtd <= 0) return alert("Preencha os campos obrigatórios.");
-            const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local);
+            const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local && (i.Patrimonio||'N/A') === patrim);
             try {
                 if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd });
-                else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Quantidade: qtd });
+                else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Patrimonio: patrim, Quantidade: qtd });
                 await registrarLog("ENTRADA", `${comp} - ${mod} (${esp})`, qtd, `Local: ${local}`);
                 document.getElementById('msg-entrada').classList.remove('hidden'); setTimeout(() => document.getElementById('msg-entrada').classList.add('hidden'), 3000); document.getElementById('form-qtd').value = 1;
             } catch (e) {}
@@ -834,13 +858,14 @@
                         const mod = row['MODELO'] || row['Modelo'] || 'N/A';
                         const esp = row['ESPECIFICAÇÃO'] || row['ESPECIFICACAO'] || row['Especificação'] || 'N/A';
                         const local = row['LOCAL FISICO'] || row['LOCAL'] || row['Local'] || 'N/A';
+                        const patrim = row['PATRIMÔNIO'] || row['PATRIMONIO'] || row['Patrimônio'] || row['Patrimonio'] || 'N/A';
                         const qtd = parseInt(row['QUANTIDADE'] || row['Quantidade'] || row['Qtd'] || 1);
                         
                         if(comp === 'Desc') continue;
                         
-                        const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local);
+                        const existente = estoqueLocal.find(i => (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'N/A') === local && (i.Patrimonio||'N/A') === patrim);
                         if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd });
-                        else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Quantidade: qtd });
+                        else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Patrimonio: patrim, Quantidade: qtd });
                         cont++;
                     }
                     await registrarLog("ENTRADA", `Importação Lote Estoque (Excel)`, cont, "");
@@ -863,7 +888,7 @@
             } catch(e) {}
         });
 
-        // ================= INSIGHTS =================
+        // ================= INSIGHTS COM PROTEÇÃO =================
         function gerarInsights() {
             const container = document.getElementById('insights-container'); container.innerHTML = ''; 
             let zerados = [], baixos = [], maiorVolume = null, totalItens = 0, hdCount = 0, ssdCount = 0;
@@ -923,13 +948,13 @@
                 if(cat === 'Armazenamento') tArmaz += qtd; if(cat === 'Fonte de Alimentação' || cat === 'Bateria') tEnergia += qtd; if(qtd === 0) tZerado++;
                 mapCat[cat] = (mapCat[cat] || 0) + qtd;
                 let badge = qtd === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' : qtd <= 5 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>' : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${cat}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${item.Modelo||'-'} / ${item.Especificação||'-'}</td><td class="px-6 py-4 text-sm text-blue-600">${item.Local||'N/A'}</td><td class="px-6 py-4 text-sm font-black text-slate-800">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
+                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${cat}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente||'-'}</td><td class="px-6 py-4 text-sm text-slate-500">${item.Modelo||'-'} / ${item.Especificação||'-'}</td><td class="px-6 py-4 text-sm text-blue-600">${item.Local||'N/A'}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${item.Patrimonio||'N/A'}</td><td class="px-6 py-4 text-sm font-black text-slate-800">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
             });
             document.getElementById('kpi-total').innerText = tTotal; document.getElementById('kpi-armazenamento').innerText = tArmaz; document.getElementById('kpi-energia').innerText = tEnergia; document.getElementById('kpi-zerado').innerText = tZerado;
             renderChartsUIUX(mapCat, estoqueLocal, logsLocal);
         }
 
-        // ================= RENDERIZAÇÃO DOS GRÁFICOS =================
+        // ================= RENDERIZAÇÃO DOS GRÁFICOS (ATUALIZADA) =================
         function renderChartsUIUX(mapCat, dados, logs) {
             if(chartComponentesAmpliado) chartComponentesAmpliado.destroy(); 
             if(chartTopSaidas) chartTopSaidas.destroy(); 
@@ -1035,7 +1060,7 @@
 
         document.getElementById('search-table-estoque').addEventListener('input', e => { const term = e.target.value.toLowerCase(), rows = document.getElementById('inventory-tbody').getElementsByTagName('tr'); for(let row of rows) row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; });
         document.getElementById('search-table-rastreio').addEventListener('input', e => { const term = e.target.value.toLowerCase(), rows = document.getElementById('rastreio-tbody').getElementsByTagName('tr'); for(let row of rows) row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; });
-        document.getElementById('btn-export-csv').addEventListener('click', () => { let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Local,Quantidade\n"; estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Local||'N/A'}","${r.Quantidade||0}"\n`); const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); });
+        document.getElementById('btn-export-csv').addEventListener('click', () => { let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Local,Patrimonio,Quantidade\n"; estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Local||'N/A'}","${r.Patrimonio||'N/A'}","${r.Quantidade||0}"\n`); const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); });
     </script>
 </body>
 </html>
