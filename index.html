@@ -94,7 +94,6 @@
 
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
             
-            <!-- KPIS GLOBAIS -->
             <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                 <div class="modern-card p-4 flex items-start justify-between relative overflow-hidden group border-l-4 border-l-blue-500">
                     <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-boxes text-5xl text-blue-600"></i></div>
@@ -118,7 +117,6 @@
                 </div>
             </div>
 
-            <!-- GRÁFICOS PARTE 1 -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div class="modern-card p-6 md:col-span-2 flex flex-col">
                     <div class="flex justify-between items-center mb-4">
@@ -135,7 +133,6 @@
                 </div>
             </div>
 
-            <!-- GRÁFICOS PARTE 2 -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div class="modern-card p-6 flex flex-col justify-center items-center relative">
                     <h3 class="text-sm font-bold text-slate-800 absolute top-6 left-6 flex items-center"><i class="fas fa-sitemap text-indigo-500 mr-2"></i> Divisão Estrutural</h3>
@@ -159,15 +156,11 @@
                 </div>
             </div>
 
-            <!-- MOTOR DE INSIGHTS E ALERTAS -->
             <div class="mb-8">
-                <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center">
-                    <i class="fas fa-lightbulb text-yellow-500 mr-2 text-lg"></i> Análise Inteligente de Estoque
-                </h3>
+                <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center"><i class="fas fa-lightbulb text-yellow-500 mr-2 text-lg"></i> Análise Inteligente de Estoque</h3>
                 <div id="insights-container" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
             </div>
 
-            <!-- TABELAS E NAVEGAÇÃO -->
             <div class="modern-card overflow-hidden mb-8" id="tabelas-ancora">
                 <div class="border-b border-gray-100 bg-gray-50/50 pt-2 px-2 overflow-x-auto">
                     <ul class="flex flex-nowrap text-sm font-medium text-center text-gray-500 gap-1 whitespace-nowrap min-w-max">
@@ -342,6 +335,7 @@
                             <button id="btn-estoque-upload" class="w-full bg-slate-800 text-white font-bold py-3 px-4 rounded hover:bg-slate-700 transition shadow mt-4">Processar Planilha de Estoque</button>
                         </div>
                     </div>
+                    <datalist id="lista-categorias"></datalist><datalist id="lista-componentes"></datalist>
                 </div>
 
                 <div id="tab-saida" class="tab-tool-content hidden h-full flex flex-col">
@@ -384,7 +378,7 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
                         <div class="bg-indigo-50/50 p-6 rounded-xl border border-indigo-100 shadow-sm flex flex-col">
                             <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-indigo-800"><i class="fas fa-keyboard mr-2"></i>Gestão Manual</h3><select id="voip-action-type" class="border-indigo-300 rounded text-xs py-1 px-2 focus:ring-indigo-500 bg-white font-bold text-indigo-700 shadow-sm cursor-pointer outline-none"><option value="new">Novo Registo</option><option value="edit">Editar Ramal</option></select></div>
-                            <div id="voip-edit-container" class="relative hidden mb-4"><i class="fas fa-search absolute left-3 top-3 text-orange-500"></i><input list="lista-edit-voip" id="voip-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500" placeholder="Pesquise Ramal..."><datalist id="lista-edit-voip"></datalist></div>
+                            <div id="voip-edit-container" class="relative hidden mb-4"><i class="fas fa-search absolute left-3 top-3 text-orange-500"></i><input list="lista-edit-voip" id="voip-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500"><datalist id="lista-edit-voip"></datalist></div>
                             <input type="hidden" id="voip-edit-id">
                             <div class="space-y-4 flex-1">
                                 <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-700 uppercase">Ramal *</label><input type="text" id="voip-ramal" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div><div><label class="block text-xs font-bold text-slate-700 uppercase">Setor *</label><input type="text" id="voip-setor" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div></div>
@@ -537,7 +531,6 @@
         </table>
     </div>
 
-    <!-- SCRIPT GERAL -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -572,7 +565,6 @@
         let chartComponentesAmpliado = null, chartTopSaidas = null, chartPizzaCategorias = null, chartStatusVoip = null, chartRastreio = null; 
         let estoqueCarregado = false, locaisCarregados = false, logsCarregados = false, voipCarregado = false;
 
-        // BOTÕES DE PDF REPARADOS E BLINDADOS DIRETAMENTE (BUG RESOLVIDO)
         document.getElementById('btn-print-estoque-main-aba')?.addEventListener('click', () => window.gerarPDFSimples('estoque'));
         document.getElementById('btn-print-rastreio-main-aba')?.addEventListener('click', () => window.gerarPDFSimples('rastreio'));
         document.getElementById('btn-print-voip-main-aba')?.addEventListener('click', () => window.gerarPDFSimples('voip'));
@@ -588,7 +580,6 @@
             window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
         });
 
-        // ================= FUNÇÕES UTILITÁRIAS GERAIS =================
         function showToast(msg, type = 'success') {
             const container = document.getElementById('toast-container'); if(!container) return;
             const toast = document.createElement('div');
@@ -787,6 +778,7 @@
             if(document.getElementById('btn-next-voip')) document.getElementById('btn-next-voip').disabled = window.currentPageVoip === totalPaginas;
         }
 
+        // ================= GRÁFICOS =================
         function renderChartsUIUX() {
             if(chartComponentesAmpliado) { chartComponentesAmpliado.destroy(); }
             if(chartTopSaidas) { chartTopSaidas.destroy(); }
@@ -794,7 +786,6 @@
             if(chartStatusVoip) { chartStatusVoip.destroy(); }
             if(chartRastreio) { chartRastreio.destroy(); }
             
-            const primColor = localStorage.getItem('pref_color') || '#161B33';
             const topItensEstoque = [...window.estoqueLocal].sort((a, b) => (b.Quantidade||0) - (a.Quantidade||0)).slice(0, 8);
             const ctxComp = document.getElementById('chartComponentesAmpliado');
             if(ctxComp) {
@@ -902,7 +893,10 @@
                 
                 if(window.imgChartVoip) { document.getElementById('print-chart-3').src = window.imgChartVoip; document.getElementById('print-chart-3-title').innerText = "Status de Disponibilidade VoIP"; }
             }
-            window.print(); setTimeout(() => { document.getElementById('printable-report').classList.remove('active-print'); }, 1000);
+            window.print(); setTimeout(() => { document.getElementById('printable-report').classList.remove('active-print'); 
+                if(document.getElementById('print-chart-1')) document.getElementById('print-chart-1').parentElement.style.display = 'block';
+                if(document.getElementById('print-chart-2')) document.getElementById('print-chart-2').parentElement.style.display = 'block';
+            }, 1000);
         }
 
         window.gerarPDFSimples = function(tipo) {
@@ -955,6 +949,7 @@
 
         if(document.getElementById('btn-export-csv')) document.getElementById('btn-export-csv').addEventListener('click', () => { let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Local,Serie,Patrimonio,Quantidade\n"; window.estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Local||''}","${r.Série||''}","${r.Patrimonio||''}","${r.Quantidade||0}"\n`); const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); });
 
+        }); // FIM DO DOMContentLoaded
     </script>
 </body>
 </html>
