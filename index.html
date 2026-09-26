@@ -94,7 +94,6 @@
 
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
             
-            <!-- KPIS -->
             <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                 <div class="modern-card p-4 flex items-start justify-between relative overflow-hidden group border-l-4 border-l-blue-500">
                     <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-boxes text-5xl text-blue-600"></i></div>
@@ -486,53 +485,6 @@
         </div>
     </div>
 
-    <!-- MODALS E RELATORIOS PDF (HIDDEN STRUCTURES) -->
-    <div id="printable-report" class="hidden font-sans">
-        <div class="bg-[#161B33] text-white p-6 flex justify-between items-center print-bg mb-6">
-            <div>
-                <h1 class="text-2xl font-bold uppercase tracking-wide">MINISTÉRIO DA JUSTIÇA E SEGURANÇA PÚBLICA</h1>
-                <p class="text-sm mt-1 text-slate-300">Polícia Rodoviária Federal - Diretoria de Tecnologia da Informação e Comunicação (DTIC)</p>
-                <p class="text-lg font-bold mt-3 text-white" id="print-title-doc">Relatório Gerencial Analítico - Gestão de Estoque</p>
-            </div>
-            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" class="h-20">
-        </div>
-        <div class="px-6">
-            <h2 class="text-xl font-bold text-slate-800">Parecer e Metodologia de Cálculo</h2>
-            <p class="text-sm text-slate-700 mt-1 mb-6 leading-relaxed" id="print-parecer"></p>
-            <h2 class="text-xl font-bold text-slate-800" id="print-resumo-title">Resumo de Totais por Equipamento</h2>
-            <p class="text-sm text-slate-700 mt-1 mb-6 leading-relaxed" id="print-resumo"></p>
-            <div class="grid grid-cols-4 gap-4 mb-8" id="print-kpis"></div>
-            <h2 class="text-xl font-bold text-slate-800 mb-3" id="print-visual-title">Análise Visual</h2>
-            <div class="grid grid-cols-3 gap-4 mb-8" id="print-charts-container">
-                <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center" id="print-chart-1-title">Panorama Geral de Componentes</p><img id="print-chart-1" src="" class="w-full border p-2 bg-white"></div>
-                <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center" id="print-chart-2-title">Top 5 Mais Retirados</p><img id="print-chart-2" src="" class="w-full border p-2 bg-white"></div>
-                <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center" id="print-chart-3-title">Distribuição por Categoria</p><img id="print-chart-3" src="" class="w-full border p-2 bg-white"></div>
-            </div>
-            <h2 class="text-xl font-bold text-slate-800 mb-3">Detalhamento Analítico</h2>
-            <table class="w-full text-left text-sm border-collapse">
-                <thead id="print-thead"></thead>
-                <tbody id="print-tbody" class="border-b"></tbody>
-            </table>
-        </div>
-    </div>
-
-    <div id="printable-simple-table" class="hidden">
-        <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
-            <div style="text-align: left;">
-                <h2 style="margin: 0; font-size: 16px; text-transform: uppercase; font-family: Arial, sans-serif;">Ministério da Justiça e Segurança Pública</h2>
-                <h3 style="margin: 3px 0; font-size: 14px; font-family: Arial, sans-serif;">Polícia Rodoviária Federal - SETIC</h3>
-                <p style="margin: 0; font-size: 12px; font-weight: bold; font-family: Arial, sans-serif;" id="print-simple-title">Extrato de Ativos</p>
-                <p style="margin: 2px 0 0 0; font-size: 10px; color: #555; font-family: Arial, sans-serif;" id="print-simple-date"></p>
-            </div>
-            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" style="height: 65px;">
-        </div>
-        <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif;">
-            <thead id="print-simple-thead"></thead>
-            <tbody id="print-simple-tbody"></tbody>
-        </table>
-    </div>
-
-    <!-- SCRIPT GERAL -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -554,8 +506,8 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         
-        window.estoqueLocal = []; window.localidadesLocais = []; window.logsLocal = []; window.voipLocal = []; 
-        window.userEmail = ""; window.tempBgBase64 = null; 
+        window.estoqueLocal = []; window.localidadesLocais = []; window.logsLocal = []; window.voipLocal = [];
+        window.userEmail = ""; window.tempBgBase64 = null;
         window.currentPageEstoque = 1; window.currentPageRastreio = 1; window.currentPageVoip = 1;
         window.itemsPerPage = 10;
         window.currentFilterCat = ''; window.currentSearchText = ''; window.currentSearchRastreio = ''; window.currentSearchVoip = '';
@@ -567,16 +519,13 @@
         let chartComponentesAmpliado = null, chartTopSaidas = null, chartPizzaCategorias = null, chartStatusVoip = null, chartRastreio = null; 
         let estoqueCarregado = false, locaisCarregados = false, logsCarregados = false, voipCarregado = false;
 
-        // BOTÕES DE PDF REPARADOS E BLINDADOS (LIGAÇÃO DIRETA)
-        document.getElementById('btn-print-estoque-main-aba').addEventListener('click', () => gerarPDFSimples('estoque'));
-        document.getElementById('btn-print-rastreio-main-aba').addEventListener('click', () => gerarPDFSimples('rastreio'));
-        document.getElementById('btn-print-voip-main-aba').addEventListener('click', () => gerarPDFSimples('voip'));
-        
-        document.getElementById('btn-relatorio-analitico-estoque').addEventListener('click', () => gerarRelatorioAnalitico('estoque'));
-        document.getElementById('btn-relatorio-analitico-rastreio').addEventListener('click', () => gerarRelatorioAnalitico('rastreio'));
-        document.getElementById('btn-relatorio-analitico-voip').addEventListener('click', () => gerarRelatorioAnalitico('voip'));
-        
-        document.getElementById('btn-export-logs-pdf').addEventListener('click', () => {
+        document.getElementById('btn-print-estoque-main-aba')?.addEventListener('click', () => window.gerarPDFSimples('estoque'));
+        document.getElementById('btn-print-rastreio-main-aba')?.addEventListener('click', () => window.gerarPDFSimples('rastreio'));
+        document.getElementById('btn-print-voip-main-aba')?.addEventListener('click', () => window.gerarPDFSimples('voip'));
+        document.getElementById('btn-relatorio-analitico-estoque')?.addEventListener('click', () => window.gerarRelatorioAnalitico('estoque'));
+        document.getElementById('btn-relatorio-analitico-rastreio')?.addEventListener('click', () => window.gerarRelatorioAnalitico('rastreio'));
+        document.getElementById('btn-relatorio-analitico-voip')?.addEventListener('click', () => window.gerarRelatorioAnalitico('voip'));
+        document.getElementById('btn-export-logs-pdf')?.addEventListener('click', () => {
             document.getElementById('printable-report').classList.remove('active-print'); document.getElementById('printable-simple-table').classList.add('active-print');
             document.getElementById('print-simple-title').innerText = "Auditoria de Movimentações"; document.getElementById('print-simple-date').innerText = `Gerado por: ${window.userEmail} em ${new Date().toLocaleDateString('pt-BR')}`;
             document.getElementById('print-simple-thead').innerHTML = `<tr><th>Data/Hora</th><th>Ação</th><th>Item</th><th style="text-align:center;">Qtd</th><th>Usuário / Ref.</th></tr>`;
@@ -585,7 +534,6 @@
             window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
         });
 
-        // ================= FUNÇÕES UTILITÁRIAS GERAIS =================
         function showToast(msg, type = 'success') {
             const container = document.getElementById('toast-container'); if(!container) return;
             const toast = document.createElement('div');
@@ -593,7 +541,9 @@
             const iconClass = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-times-circle' : 'fa-info-circle');
             toast.className = `${colorClass} text-white px-4 py-3 rounded shadow-lg flex items-center gap-3 transform transition-transform duration-300 translate-x-full`;
             toast.innerHTML = `<i class="fas ${iconClass} text-lg"></i><span class="text-sm font-bold">${msg}</span>`;
-            container.appendChild(toast); setTimeout(() => toast.classList.remove('translate-x-full'), 10); setTimeout(() => { toast.classList.add('translate-x-full'); setTimeout(() => toast.remove(), 300); }, 3000);
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.remove('translate-x-full'), 10);
+            setTimeout(() => { toast.classList.add('translate-x-full'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
         function sanitizeVal(val) {
@@ -614,6 +564,7 @@
             const icon = localStorage.getItem('pref_icon') || 'fa-chart-line';
             const bgImage = localStorage.getItem('pref_bg') || "https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg";
             if(document.getElementById('navbar-title')) document.getElementById('navbar-title').textContent = title; document.title = title;
+            if(document.getElementById('login-title')) document.getElementById('login-title').textContent = title;
             if(document.getElementById('navbar-main')) document.getElementById('navbar-main').style.backgroundColor = color;
             document.querySelectorAll('.btn-primary').forEach(el => el.style.backgroundColor = color);
             if(document.getElementById('navbar-icon')) document.getElementById('navbar-icon').className = `fas ${icon} text-xl ml-2`; 
@@ -781,7 +732,6 @@
             if(document.getElementById('btn-next-voip')) document.getElementById('btn-next-voip').disabled = window.currentPageVoip === totalPaginas;
         }
 
-        // ================= GRÁFICOS =================
         function renderChartsUIUX() {
             if(chartComponentesAmpliado) { chartComponentesAmpliado.destroy(); }
             if(chartTopSaidas) { chartTopSaidas.destroy(); }
@@ -789,6 +739,7 @@
             if(chartStatusVoip) { chartStatusVoip.destroy(); }
             if(chartRastreio) { chartRastreio.destroy(); }
             
+            const primColor = localStorage.getItem('pref_color') || '#161B33';
             const topItensEstoque = [...window.estoqueLocal].sort((a, b) => (b.Quantidade||0) - (a.Quantidade||0)).slice(0, 8);
             const ctxComp = document.getElementById('chartComponentesAmpliado');
             if(ctxComp) {
@@ -859,59 +810,205 @@
             container.innerHTML = alertHtml + acumuloHtml + techHtml;
         }
 
-        // ================= FUNÇÕES DOS RELATÓRIOS EM PDF (CORRIGIDAS) =================
-        window.gerarRelatorioAnalitico = function(tipoRelatorio) {
-            document.getElementById('printable-simple-table').classList.remove('active-print'); document.getElementById('printable-report').classList.add('active-print'); const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5); const titleDoc = document.getElementById('print-title-doc'), parecer = document.getElementById('print-parecer'), resumo = document.getElementById('print-resumo'), kpisContainer = document.getElementById('print-kpis'), thead = document.getElementById('print-thead'), tbody = document.getElementById('print-tbody'), chartsContainer = document.getElementById('print-charts-container'), visualTitle = document.getElementById('print-visual-title');
-            if(tipoRelatorio === 'estoque') {
-                titleDoc.textContent = `Relatório Consolidado - ${localStorage.getItem('pref_title') || 'SETIC'}`; let tTotal = 0, tZerados = 0, tBaixos = 0; let categorias = new Set(); tbody.innerHTML = ''; let totaisEquip = {}; document.getElementById('print-resumo-title').innerText = "Resumo de Totais por Equipamento";
-                [...window.estoqueLocal].sort((a, b) => { let cmp = (a.Componente || '').localeCompare(b.Componente || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(i => { tTotal += (i.Quantidade || 0); categorias.add(i.Categoria || 'Geral'); let minEstoque = i.EstoqueMinimo || 5; if(i.Quantidade === 0) tZerados++; else if(i.Quantidade <= minEstoque) tBaixos++; let eqName = i.Componente || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (i.Quantidade || 0); tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||''}</td><td class="border px-2 py-1">${i.Componente||''}</td><td class="border px-2 py-1">${i.Modelo||''} / ${i.Especificação||''}</td><td class="border px-2 py-1">${i.Local||''}</td><td class="border px-2 py-1 font-mono">${i.Série||''}</td><td class="border px-2 py-1 font-mono">${i.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`; });
-                let taxaCritica = window.estoqueLocal.length > 0 ? (((tZerados + tBaixos) / window.estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1); parecer.innerHTML = `Extração consolidou <b>${window.estoqueLocal.length}</b> registos de estoque físico. Emitido por ${window.userEmail} em ${dataAtual}.`; let listTotais = Object.keys(totaisEquip).sort().map(k => `<li><b>${k}:</b> ${totaisEquip[k]} und.</li>`).join(''); resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. <br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${window.estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`; visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid'; 
-                
-                // Utilizando as Imagens em Cache para não falhar
-                if(window.imgChart1 && document.getElementById('print-chart-1')) document.getElementById('print-chart-1').src = window.imgChart1; 
-                if(window.imgChart2 && document.getElementById('print-chart-2')) document.getElementById('print-chart-2').src = window.imgChart2; 
-                if(window.imgChart3 && document.getElementById('print-chart-3')) { document.getElementById('print-chart-3').src = window.imgChart3; if(document.getElementById('print-chart-3-title')) document.getElementById('print-chart-3-title').innerText = "Distribuição por Categoria"; }
-                if(document.getElementById('print-chart-1')) document.getElementById('print-chart-1').parentElement.style.display = 'block';
-                if(document.getElementById('print-chart-2')) document.getElementById('print-chart-2').parentElement.style.display = 'block';
-
-            } else if (tipoRelatorio === 'rastreio') {
-                titleDoc.textContent = `Relatório de Rastreio - ${localStorage.getItem('pref_title') || 'SETIC'}`; let tLocaisUnicos = new Set(), tVolumeRastreado = 0, tEquipsUnicos = new Set(); tbody.innerHTML = ''; let totaisEquip = {}; document.getElementById('print-resumo-title').innerText = "Resumo de Totais por Equipamento";
-                [...window.localidadesLocais].sort((a, b) => { let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(loc => { tLocaisUnicos.add(loc.Local || 'N/A'); tVolumeRastreado += (loc.Quantidade||0); tEquipsUnicos.add(loc.Equipamento || 'N/A'); let eqName = loc.Equipamento || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (loc.Quantidade || 0); tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento||''}</td><td class="border px-2 py-1">${loc.Local||''}</td><td class="border px-2 py-1">${loc.LocalSipac||''}</td><td class="border px-2 py-1">${loc.Marca||''}</td><td class="border px-2 py-1 font-mono">${loc.Serie||''}</td><td class="border px-2 py-1 font-mono">${loc.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`; });
-                parecer.innerHTML = `A extração consolidou <b>${window.localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${window.userEmail} em ${dataAtual}.`; let listTotais = Object.keys(totaisEquip).sort().map(k => `<li><b>${k}:</b> ${totaisEquip[k]} und.</li>`).join(''); resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades.<br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros</p><p class="text-2xl font-black text-slate-800">${window.localidadesLocais.length}</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`; visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid';
-                
-                // Mostrar Imagem do Rastreio
-                if(document.getElementById('print-chart-1')) document.getElementById('print-chart-1').parentElement.style.display = 'none';
-                if(document.getElementById('print-chart-2')) document.getElementById('print-chart-2').parentElement.style.display = 'none';
-                if(window.imgChartRastreio && document.getElementById('print-chart-3')) { document.getElementById('print-chart-3').src = window.imgChartRastreio; if(document.getElementById('print-chart-3-title')) document.getElementById('print-chart-3-title').innerText = "Rastreamento de Ativos"; }
-
-            } else if (tipoRelatorio === 'voip') {
-                titleDoc.textContent = `Relatório de Telefonia VoIP - ${localStorage.getItem('pref_title') || 'SETIC'}`; tbody.innerHTML = ''; document.getElementById('print-resumo-title').innerText = "Visão Geral de Disponibilidade"; let tTotal = window.voipLocal.length; let tLivres = 0; let tOcupados = 0;
-                [...window.voipLocal].sort((a,b) => (a.Ramal||'').localeCompare(b.Ramal||'')).forEach(v => { let ipStr = v.Ip || ''; if(ipStr.toUpperCase() === 'DESATIVADO') { tLivres++; ipStr = 'LIVRE (DESATIVADO)'; } else { tOcupados++; } tbody.innerHTML += `<tr><td class="border px-2 py-1 font-bold text-center">${v.Ramal||''}</td><td class="border px-2 py-1">${v.Setor||''}</td><td class="border px-2 py-1 font-mono">${ipStr}</td><td class="border px-2 py-1">${v.Equipamento||'-'}</td></tr>`; });
-                parecer.innerHTML = `A extração consolidou <b>${tTotal}</b> ramais VoIP na base de dados. Emitido por ${window.userEmail} em ${dataAtual}.`; resumo.innerHTML = `Atualmente, o painel monitoriza <b>${tTotal}</b> linhas VoIP. Destas, <b>${tOcupados}</b> estão atribuídas/em uso, e <b>${tLivres}</b> estão registadas como desativadas/livres.`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Total de Ramais</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Em Uso</p><p class="text-2xl font-black text-blue-600">${tOcupados}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Livres</p><p class="text-2xl font-black text-emerald-600">${tLivres}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Status</p><p class="text-2xl font-black text-slate-800">OK</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-center">Ramal</th><th class="border px-2 py-1 text-left">Setor</th><th class="border px-2 py-1 text-left">Endereço IP</th><th class="border px-2 py-1 text-left">Equipamento/Obs</th></tr>`; visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid'; 
-                
-                if(document.getElementById('print-chart-1')) document.getElementById('print-chart-1').parentElement.style.display = 'none';
-                if(document.getElementById('print-chart-2')) document.getElementById('print-chart-2').parentElement.style.display = 'none';
-                if(window.imgChartVoip && document.getElementById('print-chart-3')) { document.getElementById('print-chart-3').src = window.imgChartVoip; if(document.getElementById('print-chart-3-title')) document.getElementById('print-chart-3-title').innerText = "Status Telefonia VoIP"; }
-            }
-            window.print(); setTimeout(() => { document.getElementById('printable-report').classList.remove('active-print'); 
-                if(document.getElementById('print-chart-1')) document.getElementById('print-chart-1').parentElement.style.display = 'block';
-                if(document.getElementById('print-chart-2')) document.getElementById('print-chart-2').parentElement.style.display = 'block';
-            }, 1000);
+        function atualizarDatalists() { 
+            const lc = document.getElementById('lista-componentes'); if(lc) lc.innerHTML = [...new Set(window.estoqueLocal.map(i => i.Componente||''))].map(c => `<option value="${c}">`).join(''); 
+            const filterCat = document.getElementById('filter-cat-estoque');
+            if(filterCat) { const categoriasUnicas = [...new Set(window.estoqueLocal.map(i => i.Categoria || 'Sem Categoria'))].sort(); filterCat.innerHTML = '<option value="">Todas as Categorias</option>'; categoriasUnicas.forEach(cat => filterCat.innerHTML += `<option value="${cat}">${cat}</option>`); }
         }
 
-        window.gerarPDFSimples = function(tipo) {
-            document.getElementById('printable-report').classList.remove('active-print'); document.getElementById('printable-simple-table').classList.add('active-print'); const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5); const titleObj = document.getElementById('print-simple-title'), dateObj = document.getElementById('print-simple-date'), theadObj = document.getElementById('print-simple-thead'), tbodyObj = document.getElementById('print-simple-tbody'); tbodyObj.innerHTML = '';
-            if(tipo === 'estoque') {
-                titleObj.innerText = "Extrato: Inventário Consolidado"; theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente / Espec.</th><th>Local</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`; let filtrados = window.estoqueLocal.filter(item => { let matchBusca = true; if (window.currentSearchText) { const searchTerms = window.currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !window.currentFilterCat || item.Categoria === window.currentFilterCat; return matchBusca && matchCat; }); let totaisEquip = {}; filtrados.sort((a, b) => { let cmp = (a.Componente || '').localeCompare(b.Componente || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(i => { let eqName = i.Componente || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (i.Quantidade || 0); tbodyObj.innerHTML += `<tr><td>${i.Categoria||''}</td><td><b>${i.Componente||''}</b><br><span style="font-size:10px; color:#555;">${i.Modelo||''} / ${i.Especificação||''}</span></td><td>${i.Local||''}</td><td style="font-family:monospace;">${i.Série||''}</td><td style="font-family:monospace;">${i.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`; }); let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${k}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${window.userEmail} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
-            } else if(tipo === 'rastreio') {
-                titleObj.innerText = "Extrato: Rastreamento Físico"; theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Local SIPAC</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`; let filtradosRastreio = window.localidadesLocais.filter(item => { if (!window.currentSearchRastreio) return true; const searchTerms = window.currentSearchRastreio.toLowerCase().split(' '); const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); }); let totaisEquip = {}; filtradosRastreio.sort((a, b) => { let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(loc => { let eqName = loc.Equipamento || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (loc.Quantidade || 0); tbodyObj.innerHTML += `<tr><td><b>${loc.Equipamento||''}</b></td><td>${loc.Local||''}</td><td>${loc.LocalSipac||''}</td><td>${loc.Marca||''}</td><td style="font-family:monospace;">${loc.Serie||''}</td><td style="font-family:monospace;">${loc.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${loc.Quantidade||0}</td></tr>`; }); let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${k}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${window.userEmail} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
-            } else if(tipo === 'voip') {
-                titleObj.innerText = "Extrato: Telefonia VoIP"; theadObj.innerHTML = `<tr><th>Ramal</th><th>Setor</th><th>Endereço IP</th><th>Equipamento / Obs</th></tr>`; let filtrados = window.voipLocal.filter(item => { if (!window.currentSearchVoip) return true; if (window.currentSearchVoip === '[Livres]') return (item.Ip || '').toUpperCase() === 'DESATIVADO'; if (window.currentSearchVoip === '[Em Uso]') return (item.Ip || '').toUpperCase() !== 'DESATIVADO' && (item.Ip || '').trim() !== ''; const searchTerms = window.currentSearchVoip.toLowerCase().split(' '); const itemText = [item.Ramal, item.Setor, item.Ip, item.Equipamento].map(v => (v || '').toString()).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); }); let tLivres = 0; filtrados.sort((a, b) => (a.Ramal||'').localeCompare(b.Ramal||'')).forEach(v => { let ipStr = v.Ip || ''; if(ipStr.toUpperCase() === 'DESATIVADO') { tLivres++; ipStr = 'LIVRE (DESATIVADO)'; } tbodyObj.innerHTML += `<tr><td style="text-align:center; font-weight:bold;">${v.Ramal||''}</td><td>${v.Setor||''}</td><td style="font-family:monospace;">${ipStr}</td><td>${v.Equipamento||'-'}</td></tr>`; }); dateObj.innerHTML = `Emitido por: ${window.userEmail} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Total de Ramais:</b> ${filtrados.length} &nbsp;|&nbsp; <b>Livres:</b> ${tLivres}</span>`;
-            }
-            window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
+        // ================= EXCLUSÃO EM LOTE NO ADMIN =================
+        if(document.getElementById('btn-admin-login')) document.getElementById('btn-admin-login').addEventListener('click', () => { const input = document.getElementById('admin-pass-input').value; if(btoa(input) === "c2V0aWNhZG1pbg==") { document.getElementById('admin-login-section').classList.add('hidden'); document.getElementById('admin-content-section').classList.remove('hidden'); document.getElementById('admin-error').classList.add('hidden'); document.getElementById('admin-pass-input').value = ""; } else { document.getElementById('admin-error').classList.remove('hidden'); } });
+        if(document.getElementById('btn-admin-lock')) document.getElementById('btn-admin-lock').addEventListener('click', () => { document.getElementById('admin-content-section').classList.add('hidden'); document.getElementById('admin-login-section').classList.remove('hidden'); });
+        
+        let currentFilteredLocsForDelete = [];
+        if (document.getElementById('admin-search-loc')) {
+            document.getElementById('admin-search-loc').addEventListener('input', (e) => {
+                const text = e.target.value.toLowerCase().trim(); const container = document.getElementById('admin-loc-list-container'); const itemsDiv = document.getElementById('admin-loc-items'); const btn = document.getElementById('btn-delete-loc-batch'); const selectAllCb = document.getElementById('admin-loc-select-all');
+                itemsDiv.innerHTML = ''; currentFilteredLocsForDelete = []; selectAllCb.checked = false; btn.disabled = true; btn.innerHTML = `<i class="fas fa-eraser mr-1"></i> Apagar Selecionados (0)`;
+                if (text.length >= 3) {
+                    const searchTerms = text.split(' ');
+                    window.localidadesLocais.forEach(item => {
+                        let display = `[RASTREIO] ${item.Equipamento} | Loc: ${item.Local} | Patr: ${item.Patrimonio||''} | Série: ${item.Serie||''}`;
+                        if (searchTerms.every(term => display.toLowerCase().includes(term))) { currentFilteredLocsForDelete.push(item.id); const div = document.createElement('div'); div.className = "flex items-start gap-2 border-b border-gray-200 pb-1"; div.innerHTML = `<input type="checkbox" class="cb-del-loc mt-0.5 rounded border-gray-400 cursor-pointer" value="${item.id}"> <label class="text-slate-600 leading-tight">${display}</label>`; itemsDiv.appendChild(div); }
+                    });
+                    if (currentFilteredLocsForDelete.length > 0) { container.classList.remove('hidden'); container.classList.add('flex'); } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+                    document.querySelectorAll('.cb-del-loc').forEach(cb => { cb.addEventListener('change', updateDelLocBtn); });
+                } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+            });
+        }
+        function updateDelLocBtn() { const checked = document.querySelectorAll('.cb-del-loc:checked').length; const btn = document.getElementById('btn-delete-loc-batch'); document.getElementById('admin-loc-select-all').checked = (checked === document.querySelectorAll('.cb-del-loc').length && checked > 0); if (checked > 0) { btn.disabled = false; btn.innerHTML = `<i class="fas fa-eraser mr-1"></i> Apagar Selecionados (${checked})`; } else { btn.disabled = true; btn.innerHTML = `<i class="fas fa-eraser mr-1"></i> Apagar Selecionados (0)`; } }
+        if (document.getElementById('admin-loc-select-all')) document.getElementById('admin-loc-select-all').addEventListener('change', (e) => { document.querySelectorAll('.cb-del-loc').forEach(cb => { cb.checked = e.target.checked; cb.dispatchEvent(new Event('change')); }); });
+        if (document.getElementById('btn-delete-loc-batch')) {
+            document.getElementById('btn-delete-loc-batch').addEventListener('click', async () => {
+                const idsToDelete = Array.from(document.querySelectorAll('.cb-del-loc:checked')).map(cb => cb.value);
+                if (idsToDelete.length === 0) return;
+                if (confirm(`Atenção! Vai apagar ${idsToDelete.length} item(ns) do Rastreio.\nAção irreversível. Confirmar?`)) {
+                    const btn = document.getElementById('btn-delete-loc-batch'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...'; btn.disabled = true;
+                    try { for(let id of idsToDelete) await deleteDoc(doc(db, "localidades", id)); showToast(`${idsToDelete.length} item(ns) apagado(s).`); document.getElementById('admin-search-loc').value = ''; document.getElementById('admin-search-loc').dispatchEvent(new Event('input')); } catch (error) { showToast("Erro: " + error.message, "error"); btn.innerHTML = originalText; btn.disabled = false; }
+                }
+            });
         }
 
-        // ================= DEMAIS SCRIPTS E NAVEGAÇÃO =================
+        let currentFilteredEstForDelete = [];
+        if (document.getElementById('admin-search-est')) {
+            document.getElementById('admin-search-est').addEventListener('input', (e) => {
+                const text = e.target.value.toLowerCase().trim(); const container = document.getElementById('admin-est-list-container'); const itemsDiv = document.getElementById('admin-est-items'); const btn = document.getElementById('btn-delete-est-batch'); const selectAllCb = document.getElementById('admin-est-select-all');
+                itemsDiv.innerHTML = ''; currentFilteredEstForDelete = []; selectAllCb.checked = false; btn.disabled = true; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)`;
+                if (text.length >= 3) {
+                    const searchTerms = text.split(' ');
+                    window.estoqueLocal.forEach(item => {
+                        let display = `[ESTOQUE] ${item.Componente} | Loc: ${item.Local} | Patr: ${item.Patrimonio||''} | Série: ${item.Série||''}`;
+                        if (searchTerms.every(term => display.toLowerCase().includes(term))) { currentFilteredEstForDelete.push(item.id); const div = document.createElement('div'); div.className = "flex items-start gap-2 border-b border-gray-200 pb-1"; div.innerHTML = `<input type="checkbox" class="cb-del-est mt-0.5 rounded border-gray-400 cursor-pointer" value="${item.id}"> <label class="text-slate-600 leading-tight">${display}</label>`; itemsDiv.appendChild(div); }
+                    });
+                    if (currentFilteredEstForDelete.length > 0) { container.classList.remove('hidden'); container.classList.add('flex'); } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+                    document.querySelectorAll('.cb-del-est').forEach(cb => { cb.addEventListener('change', updateDelEstBtn); });
+                } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+            });
+        }
+        function updateDelEstBtn() { const checked = document.querySelectorAll('.cb-del-est:checked').length; const btn = document.getElementById('btn-delete-est-batch'); document.getElementById('admin-est-select-all').checked = (checked === document.querySelectorAll('.cb-del-est').length && checked > 0); if (checked > 0) { btn.disabled = false; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (${checked})`; } else { btn.disabled = true; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)`; } }
+        if (document.getElementById('admin-est-select-all')) document.getElementById('admin-est-select-all').addEventListener('change', (e) => { document.querySelectorAll('.cb-del-est').forEach(cb => { cb.checked = e.target.checked; cb.dispatchEvent(new Event('change')); }); });
+        if (document.getElementById('btn-delete-est-batch')) {
+            document.getElementById('btn-delete-est-batch').addEventListener('click', async () => {
+                const idsToDelete = Array.from(document.querySelectorAll('.cb-del-est:checked')).map(cb => cb.value);
+                if (idsToDelete.length === 0) return;
+                if (confirm(`Atenção! Vai apagar ${idsToDelete.length} item(ns) do Estoque.\nAção irreversível. Confirmar?`)) {
+                    const btn = document.getElementById('btn-delete-est-batch'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...'; btn.disabled = true;
+                    try { for(let id of idsToDelete) await deleteDoc(doc(db, "estoque", id)); showToast(`${idsToDelete.length} item(ns) apagado(s) do Estoque.`); document.getElementById('admin-search-est').value = ''; document.getElementById('admin-search-est').dispatchEvent(new Event('input')); } catch (error) { showToast("Erro: " + error.message, "error"); btn.innerHTML = originalText; btn.disabled = false; }
+                }
+            });
+        }
+
+        let currentFilteredVoipForDelete = [];
+        if (document.getElementById('admin-search-voip')) {
+            document.getElementById('admin-search-voip').addEventListener('input', (e) => {
+                const text = e.target.value.toLowerCase().trim(); const container = document.getElementById('admin-voip-list-container'); const itemsDiv = document.getElementById('admin-voip-items'); const btn = document.getElementById('btn-delete-voip-batch'); const selectAllCb = document.getElementById('admin-voip-select-all');
+                itemsDiv.innerHTML = ''; currentFilteredVoipForDelete = []; selectAllCb.checked = false; btn.disabled = true; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)`;
+                if (text.length >= 2) {
+                    const searchTerms = text.split(' ');
+                    window.voipLocal.forEach(item => {
+                        let display = `[VOIP] Ramal: ${item.Ramal} | Setor: ${item.Setor} | IP: ${item.Ip}`;
+                        if (searchTerms.every(term => display.toLowerCase().includes(term))) { currentFilteredVoipForDelete.push(item.id); const div = document.createElement('div'); div.className = "flex items-start gap-2 border-b border-gray-200 pb-1"; div.innerHTML = `<input type="checkbox" class="cb-del-voip mt-0.5 rounded border-gray-400 cursor-pointer" value="${item.id}"> <label class="text-slate-600 leading-tight">${display}</label>`; itemsDiv.appendChild(div); }
+                    });
+                    if (currentFilteredVoipForDelete.length > 0) { container.classList.remove('hidden'); container.classList.add('flex'); } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+                    document.querySelectorAll('.cb-del-voip').forEach(cb => { cb.addEventListener('change', updateDelVoipBtn); });
+                } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+            });
+        }
+        function updateDelVoipBtn() { const checked = document.querySelectorAll('.cb-del-voip:checked').length; const btn = document.getElementById('btn-delete-voip-batch'); document.getElementById('admin-voip-select-all').checked = (checked === document.querySelectorAll('.cb-del-voip').length && checked > 0); if (checked > 0) { btn.disabled = false; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (${checked})`; } else { btn.disabled = true; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)`; } }
+        if (document.getElementById('admin-voip-select-all')) document.getElementById('admin-voip-select-all').addEventListener('change', (e) => { document.querySelectorAll('.cb-del-voip').forEach(cb => { cb.checked = e.target.checked; cb.dispatchEvent(new Event('change')); }); });
+        if (document.getElementById('btn-delete-voip-batch')) {
+            document.getElementById('btn-delete-voip-batch').addEventListener('click', async () => {
+                const idsToDelete = Array.from(document.querySelectorAll('.cb-del-voip:checked')).map(cb => cb.value);
+                if (idsToDelete.length === 0) return;
+                if (confirm(`Atenção! Vai apagar ${idsToDelete.length} Ramais VoIP.\nAção irreversível. Confirmar?`)) {
+                    const btn = document.getElementById('btn-delete-voip-batch'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...'; btn.disabled = true;
+                    try { for(let id of idsToDelete) await deleteDoc(doc(db, "voip", id)); showToast(`${idsToDelete.length} ramais apagados.`); document.getElementById('admin-search-voip').value = ''; document.getElementById('admin-search-voip').dispatchEvent(new Event('input')); } catch (error) { showToast("Erro: " + error.message, "error"); btn.innerHTML = originalText; btn.disabled = false; }
+                }
+            });
+        }
+
+        if(document.getElementById('btn-create-user')) document.getElementById('btn-create-user').addEventListener('click', async () => {
+            const email = document.getElementById('new-user-email').value.trim(), pass = document.getElementById('new-user-pass').value.trim();
+            if(!email || pass.length < 6) return showToast("Mínimo 6 chars.", "error"); document.getElementById('btn-create-user').innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Criando...';
+            try { await createUserWithEmailAndPassword(auth, email, pass); showToast("Usuário criado!"); document.getElementById('new-user-email').value = ""; document.getElementById('new-user-pass').value = ""; } catch (e) { showToast("Erro: " + e.message, "error"); } document.getElementById('btn-create-user').innerHTML = '<i class="fas fa-save mr-1"></i> Cadastrar';
+        });
+
+        // ================= GESTÃO DE DADOS FORMS =================
+        function atualizarSelectEdicaoLocais() { const dl = document.getElementById('lista-edit-locais'); if(!dl) return; dl.innerHTML = ''; mapEditLocais = {}; [...window.localidadesLocais].sort((a,b) => (a.Equipamento||'').localeCompare(b.Equipamento||'')).forEach(loc => { const text = `${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio || ''} | Série: ${loc.Serie || ''}`; mapEditLocais[text] = loc; }); }
+        function atualizarSelectEdicaoEstoque() { const dl = document.getElementById('lista-edit-estoque'); if(!dl) return; dl.innerHTML = ''; mapEditEstoque = {}; [...window.estoqueLocal].sort((a,b) => (a.Componente||'').localeCompare(b.Componente||'')).forEach(item => { const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || ''} | Série: ${item.Série || ''}`; mapEditEstoque[text] = item; }); }
+        function atualizarDatalistSaida() { const dl = document.getElementById('lista-saida-items'); if(!dl) return; dl.innerHTML = ''; mapItensSaida = {}; [...window.estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { const text = `[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||''}) - Qtd: ${i.Quantidade||0}`; mapItensSaida[text] = i; }); }
+        function atualizarSelectEdicaoVoip() { const dl = document.getElementById('lista-edit-voip'); if(!dl) return; dl.innerHTML = ''; mapEditVoip = {}; [...window.voipLocal].sort((a,b) => (a.Ramal||'').localeCompare(b.Ramal||'')).forEach(v => { const text = `Ramal: ${v.Ramal} | Setor: ${v.Setor} | IP: ${v.Ip}`; mapEditVoip[text] = v; }); }
+
+        if(document.getElementById('loc-action-type')) document.getElementById('loc-action-type').addEventListener('change', (e) => { const isE = e.target.value === 'edit'; const c = document.getElementById('loc-edit-container'), i = document.getElementById('loc-edit-input'), b = document.getElementById('btn-save-loc'); if(isE) { c.classList.remove('hidden'); b.innerText = 'Gravar Alterações'; b.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; } else { c.classList.add('hidden'); i.value = ''; b.innerText = 'Mapear Equipamento'; b.className = 'w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; ['loc-equip','loc-local', 'loc-sipac', 'loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; } });
+        if(document.getElementById('estoque-action-type')) document.getElementById('estoque-action-type').addEventListener('change', (e) => { const isE = e.target.value === 'edit'; const c = document.getElementById('estoque-edit-container'), i = document.getElementById('estoque-edit-input'), b = document.getElementById('btn-save-item'); if(isE) { c.classList.remove('hidden'); b.innerText = 'Gravar Alterações'; b.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; } else { c.classList.add('hidden'); i.value = ''; b.innerText = 'Registar Entrada no Estoque'; b.className = 'w-full bg-blue-600 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; ['form-cat','form-comp','form-mod','form-esp','form-local','form-patrimonio-estoque', 'form-serie-estoque', 'estoque-edit-id'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5; } });
+        if(document.getElementById('voip-action-type')) document.getElementById('voip-action-type').addEventListener('change', (e) => { const isE = e.target.value === 'edit'; const c = document.getElementById('voip-edit-container'), i = document.getElementById('voip-edit-input'), b = document.getElementById('btn-save-voip'); if(isE) { c.classList.remove('hidden'); b.innerText = 'Gravar Alterações'; b.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; } else { c.classList.add('hidden'); i.value = ''; b.innerText = 'Registrar Ramal'; b.className = 'w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; ['voip-ramal','voip-setor', 'voip-ip', 'voip-equip','voip-edit-id'].forEach(id => document.getElementById(id).value = ''); } });
+
+        if(document.getElementById('loc-edit-input')) document.getElementById('loc-edit-input').addEventListener('input', (e) => { const t = e.target.value; const dl = document.getElementById('lista-edit-locais'); dl.innerHTML = ''; if(t.length >= 3) { const s = t.toLowerCase().split(' '); let c = 0; for(let k in mapEditLocais) { if(s.every(term => k.toLowerCase().includes(term))) { let o = document.createElement('option'); o.value = k; dl.appendChild(o); c++; if(c > 40) break; } } } const item = mapEditLocais[t]; if(item) { document.getElementById('loc-edit-id').value = item.id; document.getElementById('loc-equip').value = item.Equipamento || ''; document.getElementById('loc-local').value = item.Local || ''; document.getElementById('loc-sipac').value = item.LocalSipac || ''; document.getElementById('loc-marca').value = item.Marca || ''; document.getElementById('loc-qtd').value = item.Quantidade || 1; document.getElementById('loc-serie').value = item.Serie || ''; document.getElementById('loc-patrimonio').value = item.Patrimonio || ''; } else { ['loc-edit-id','loc-equip','loc-local','loc-sipac','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; } });
+        if(document.getElementById('estoque-edit-input')) document.getElementById('estoque-edit-input').addEventListener('input', (e) => { const t = e.target.value; const dl = document.getElementById('lista-edit-estoque'); dl.innerHTML = ''; if(t.length >= 3) { const s = t.toLowerCase().split(' '); let c = 0; for(let k in mapEditEstoque) { if(s.every(term => k.toLowerCase().includes(term))) { let o = document.createElement('option'); o.value = k; dl.appendChild(o); c++; if(c > 40) break; } } } const item = mapEditEstoque[t]; if(item) { document.getElementById('estoque-edit-id').value = item.id; document.getElementById('form-cat').value = item.Categoria || ''; document.getElementById('form-comp').value = item.Componente || ''; document.getElementById('form-mod').value = item.Modelo || ''; document.getElementById('form-esp').value = item.Especificação || ''; document.getElementById('form-local').value = item.Local || ''; document.getElementById('form-serie-estoque').value = item.Série || ''; document.getElementById('form-patrimonio-estoque').value = item.Patrimonio || ''; document.getElementById('form-qtd').value = item.Quantidade || 1; document.getElementById('form-minimo').value = item.EstoqueMinimo || 5; } else { ['estoque-edit-id','form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5; } });
+        if(document.getElementById('saida-item-input')) document.getElementById('saida-item-input').addEventListener('input', (e) => { const t = e.target.value; const dl = document.getElementById('lista-saida-items'); dl.innerHTML = ''; if(t.length >= 3) { const s = t.toLowerCase().split(' '); let c = 0; for(let k in mapItensSaida) { if(s.every(term => k.toLowerCase().includes(term))) { let o = document.createElement('option'); o.value = k; dl.appendChild(o); c++; if(c > 40) break; } } } });
+        if(document.getElementById('voip-edit-input')) document.getElementById('voip-edit-input').addEventListener('input', (e) => { const t = e.target.value; const dl = document.getElementById('lista-edit-voip'); dl.innerHTML = ''; if(t.length >= 3) { const s = t.toLowerCase().split(' '); let c = 0; for(let k in mapEditVoip) { if(s.every(term => k.toLowerCase().includes(term))) { let o = document.createElement('option'); o.value = k; dl.appendChild(o); c++; if(c > 40) break; } } } const item = mapEditVoip[t]; if(item) { document.getElementById('voip-edit-id').value = item.id; document.getElementById('voip-ramal').value = item.Ramal || ''; document.getElementById('voip-setor').value = item.Setor || ''; document.getElementById('voip-ip').value = item.Ip || ''; document.getElementById('voip-equip').value = item.Equipamento || ''; } else { ['voip-edit-id','voip-ramal','voip-setor','voip-ip','voip-equip'].forEach(id => document.getElementById(id).value = ''); } });
+
+        if(document.getElementById('btn-save-loc')) {
+            document.getElementById('btn-save-loc').addEventListener('click', async () => {
+                const action = document.getElementById('loc-action-type').value, eId = document.getElementById('loc-edit-id').value;
+                const eq = document.getElementById('loc-equip').value.trim(), loc = document.getElementById('loc-local').value.trim(), sip = sanitizeVal(document.getElementById('loc-sipac').value), mar = sanitizeVal(document.getElementById('loc-marca').value), ser = sanitizeVal(document.getElementById('loc-serie').value), pat = sanitizeVal(document.getElementById('loc-patrimonio').value), qt = parseInt(document.getElementById('loc-qtd').value);
+                if(!eq || !loc || isNaN(qt) || qt <= 0) return showToast("Preencha Equipamento, Local Físico e Quantidade.", "error");
+                const b = document.getElementById('btn-save-loc'); const o = b.innerText; b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+                try { if(action === 'edit' && eId) { await updateDoc(doc(db, "localidades", eId), { Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: qt }); await registrarLog("MOVIMENTAÇÃO", `${eq} (Novo: ${loc})`, qt, `SIPAC: ${sip || '-'} | Série: ${ser || '-'}`); showToast("Alteração gravada e movimentada com sucesso!"); } else { await addDoc(collection(db, "localidades"), { Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: qt }); await registrarLog("MAP_LOCAL", `${eq} (${loc})`, qt, `SIPAC: ${sip || '-'} | Série: ${ser || '-'}`); showToast("Equipamento mapeado com sucesso!"); } ['loc-equip','loc-local', 'loc-sipac','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id', 'loc-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; document.getElementById('loc-action-type').value = 'new'; document.getElementById('loc-action-type').dispatchEvent(new Event('change')); } catch (e) { showToast("Erro: " + e.message, "error"); } b.innerText = o;
+            });
+        }
+
+        if(document.getElementById('btn-loc-upload')) document.getElementById('btn-loc-upload').addEventListener('click', () => {
+            const fi = document.getElementById('loc-file-upload'), b = document.getElementById('btn-loc-upload'); if (!fi.files.length) return showToast("Selecione planilha.", "error"); b.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mapeando...'; 
+            const r = new FileReader(); r.onload = async (e) => {
+                try {
+                    const js = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let c = 0;
+                    for (let row of js) { const sip = getVal(row, ['LOCAL SIPAC', 'Local SIPAC', 'Local Sipac', 'LOCAL_SIPAC']); const ser = getVal(row, ['Nº DE SÉRIE', 'N DE SERIE', 'Nº DE SERIE', 'Nº Série', 'N Serie', 'SÉRIE', 'Série', 'SERIE', 'NUMERO DE SERIE']); const pat = getVal(row, ['Nº PATRIMÔNIO', 'Nº PATRIMONIO', 'N Patrimônio', 'N Patrimonio', 'PATRIMÔNIO', 'PATRIMONIO', 'Patrimônio', 'Patrimonio']); const eq = getVal(row, ['EQUIPAMENTO', 'Equipamento', 'Nome']); const loc = getVal(row, ['LOCAL FISICO', 'Local Físico', 'LOCAL FÍSICO', 'Local']); const mar = getVal(row, ['MARCA/MODELO', 'Marca/Modelo', 'MARCA', 'Marca', 'MODELO', 'Modelo']); await addDoc(collection(db, "localidades"), { Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: parseInt(row['QUANTIDADE']||row['Quantidade']||1) }); c++; }
+                    await registrarLog("MAP_LOCAL", `Upload Excel`, c, ""); showToast(`Sucesso! ${c} locais mapeados.`); fi.value = "";
+                } catch (error) { showToast("Erro leitura.", "error"); } b.innerHTML = 'Iniciar Importação';
+            }; r.readAsArrayBuffer(fi.files[0]);
+        });
+
+        if(document.getElementById('btn-save-item')) {
+            document.getElementById('btn-save-item').addEventListener('click', async () => {
+                const actionType = document.getElementById('estoque-action-type') ? document.getElementById('estoque-action-type').value : 'new'; const editId = document.getElementById('estoque-edit-id') ? document.getElementById('estoque-edit-id').value : '';
+                const cat = document.getElementById('form-cat').value.trim(); const comp = document.getElementById('form-comp').value.trim(); const mod = sanitizeVal(document.getElementById('form-mod').value); const esp = sanitizeVal(document.getElementById('form-esp').value); const local = document.getElementById('form-local').value.trim(); const serie = sanitizeVal(document.getElementById('form-serie-estoque').value); const patrim = sanitizeVal(document.getElementById('form-patrimonio-estoque').value); const qtd = parseInt(document.getElementById('form-qtd').value); const minEstoque = parseInt(document.getElementById('form-minimo').value) || 5; 
+                if(!cat || !comp || !local || isNaN(qtd) || qtd <= 0) return showToast("Preencha Categoria, Componente, Local e Qtd.", "error");
+                const btn = document.getElementById('btn-save-item'); const originalText = btn.innerText; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+                try {
+                    if(actionType === 'edit' && editId) { await updateDoc(doc(db, "estoque", editId), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque }); await registrarLog("MOVIMENTAÇÃO (ESTOQUE)", `${comp} - ${mod}`, qtd, `Local: ${local}`); showToast("Alteração gravada com sucesso!"); } 
+                    else { const ex = window.estoqueLocal.find(i => { let mP = (patrim && (i.Patrimonio === patrim || i.Série === patrim)); let mS = (serie && (i.Série === serie || i.Patrimonio === serie)); if(mP || mS) return true; return (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'') === local; }); if(ex) await updateDoc(doc(db, "estoque", ex.id), { Quantidade: (ex.Quantidade||0) + qtd, EstoqueMinimo: minEstoque }); else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque }); await registrarLog("ENTRADA", `${comp} (${esp})`, qtd, local); showToast("Entrada registada!"); }
+                    ['form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque', 'estoque-edit-id', 'estoque-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5; if(document.getElementById('estoque-action-type')) { document.getElementById('estoque-action-type').value = 'new'; document.getElementById('estoque-action-type').dispatchEvent(new Event('change')); }
+                } catch (e) { showToast("Erro: " + e.message, "error");} btn.innerText = originalText;
+            });
+        }
+
+        if(document.getElementById('btn-estoque-upload')) document.getElementById('btn-estoque-upload').addEventListener('click', () => {
+            const fileInput = document.getElementById('estoque-file-upload'), btn = document.getElementById('btn-estoque-upload'); if (!fileInput.files.length) return showToast("Selecione Excel.", "error"); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Importando...'; const reader = new FileReader();
+            reader.onload = async (e) => {
+                try {
+                    const json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let cont = 0;
+                    for (let row of json) {
+                        const cat = getVal(row, ['CATEGORIA', 'TIPO', 'GRUPO']) || 'Geral'; const comp = getVal(row, ['COMPONENTE', 'EQUIPAMENTO', 'NOME', 'ITEM']); const mod = getVal(row, ['MODELO', 'MARCA/MODELO', 'MARCA MODELO', 'MARCA']); const esp = getVal(row, ['ESPECIFICAÇÃO', 'ESPECIFICACAO', 'Especificação', 'Especificacao']); const local = getVal(row, ['LOCAL FISICO', 'LOCAL', 'Local', 'LOCAL FÍSICO']); const serie = getVal(row, ['Nº DE SÉRIE', 'N DE SERIE', 'Nº DE SERIE', 'Nº Série', 'N Serie', 'SÉRIE', 'Série', 'SERIE', 'NUMERO DE SERIE']); const patrim = getVal(row, ['Nº PATRIMÔNIO', 'Nº PATRIMONIO', 'N Patrimônio', 'N Patrimonio', 'PATRIMÔNIO', 'PATRIMONIO', 'Patrimônio', 'Patrimonio']); const minEst = parseInt(getVal(row, ['ESTOQUE MÍNIMO', 'ESTOQUE MINIMO', 'Estoque Minimo', 'ESTOQUE MÍNIMO'])) || 5; const qtd = parseInt(getVal(row, ['QUANTIDADE', 'Quantidade', 'QTD', 'Qtd'])) || 1;
+                        if(!comp) continue; const existente = window.estoqueLocal.find(i => { let matchPatr = (patrim && (i.Patrimonio === patrim || i.Série === patrim)); let matchSerie = (serie && (i.Série === serie || i.Patrimonio === serie)); if(matchPatr || matchSerie) return true; return (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'') === local; });
+                        if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd, EstoqueMinimo: minEst }); else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, EstoqueMinimo: minEst, Quantidade: qtd }); cont++;
+                    }
+                    await registrarLog("ENTRADA", `Upload Lote`, cont, ""); showToast(`Sucesso! ${cont} importados.`); fileInput.value = "";
+                } catch (error) { showToast("Erro leitura.", "error"); } btn.innerHTML = 'Processar Planilha de Estoque';
+            }; reader.readAsArrayBuffer(fileInput.files[0]);
+        });
+
+        if(document.getElementById('btn-register-saida')) document.getElementById('btn-register-saida').addEventListener('click', async () => { const inputTexto = document.getElementById('saida-item-input').value; const qtdSaida = parseInt(document.getElementById('saida-qtd').value); const chamado = document.getElementById('saida-chamado').value.trim(); const itemDB = mapItensSaida[inputTexto]; if(!itemDB) return showToast("Equipamento não encontrado ou seleção inválida.", "error"); if(isNaN(qtdSaida) || qtdSaida <= 0) return showToast("Quantidade inválida.", "error"); const btn = document.getElementById('btn-register-saida'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...'; if(qtdSaida > (itemDB.Quantidade||0)) { showToast("Estoque insuficiente para esta saída!", "error"); btn.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa'; return; } try { await updateDoc(doc(db, "estoque", itemDB.id), { Quantidade: (itemDB.Quantidade||0) - qtdSaida }); await registrarLog("SAÍDA", `${itemDB.Componente} (${itemDB.Especificação})`, qtdSaida, chamado); showToast("Baixa processada!"); document.getElementById('saida-item-input').value = ""; document.getElementById('saida-qtd').value = 1; document.getElementById('saida-chamado').value = ""; } catch(e) { showToast("Erro baixa.", "error"); } btn.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa'; });
+
+        if(document.getElementById('btn-save-voip')) {
+            document.getElementById('btn-save-voip').addEventListener('click', async () => {
+                const action = document.getElementById('voip-action-type').value, eId = document.getElementById('voip-edit-id').value;
+                const ramal = document.getElementById('voip-ramal').value.trim(), setor = document.getElementById('voip-setor').value.trim(), ip = document.getElementById('voip-ip').value.trim(), equip = document.getElementById('voip-equip').value.trim();
+                if(!ramal || !setor || !ip) return showToast("Preencha Ramal, Setor e IP.", "error");
+                const b = document.getElementById('btn-save-voip'); const o = b.innerText; b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+                try {
+                    if(action === 'edit' && eId) { await updateDoc(doc(db, "voip", eId), { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: equip }); await registrarLog("MOVIMENTAÇÃO (VOIP)", `Ramal ${ramal}`, 1, `Setor: ${setor}`); showToast("Alteração gravada!"); } 
+                    else { await addDoc(collection(db, "voip"), { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: equip }); await registrarLog("ENTRADA (VOIP)", `Ramal ${ramal}`, 1, `Setor: ${setor}`); showToast("Ramal registado!"); }
+                    ['voip-ramal','voip-setor','voip-ip','voip-equip','voip-edit-id','voip-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('voip-action-type').value = 'new'; document.getElementById('voip-action-type').dispatchEvent(new Event('change'));
+                } catch (e) { showToast("Erro: " + e.message, "error"); } b.innerText = o;
+            });
+        }
+
+        if(document.getElementById('btn-voip-upload')) document.getElementById('btn-voip-upload').addEventListener('click', () => {
+            const fi = document.getElementById('voip-file-upload'), b = document.getElementById('btn-voip-upload'); if (!fi.files.length) return showToast("Selecione planilha.", "error"); b.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Lendo...'; 
+            const r = new FileReader(); r.onload = async (e) => {
+                try {
+                    const js = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let c = 0;
+                    for (let row of js) {
+                        const ramal = getVal(row, ['RAMAL', 'Ramal', 'NÚMERO']); const setor = getVal(row, ['SETOR', 'Setor', 'LOCAL']); const ip = getVal(row, ['IP', 'Ip', 'ENDEREÇO IP']); const eq = getVal(row, ['EQUIPAMENTO', 'Equipamento', 'OBSERVAÇÃO', 'MODELO']);
+                        if(!ramal) continue; await addDoc(collection(db, "voip"), { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: eq }); c++;
+                    }
+                    await registrarLog("MAP_LOCAL (VOIP)", `Upload Excel`, c, ""); showToast(`Sucesso! ${c} ramais importados.`); fi.value = "";
+                } catch (er) { showToast("Erro leitura.", "error"); } b.innerHTML = 'Iniciar Importação';
+            }; r.readAsArrayBuffer(fi.files[0]);
+        });
+
+        // ================= BOTÕES E TABS NAVEGAÇÃO =================
         const tabsBtns = document.querySelectorAll('.tab-btn-tool'), tabContents = document.querySelectorAll('.tab-tool-content');
         tabsBtns.forEach(btn => { 
             btn.addEventListener('click', (e) => { 
@@ -949,7 +1046,6 @@
 
         if(document.getElementById('btn-export-csv')) document.getElementById('btn-export-csv').addEventListener('click', () => { let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Local,Serie,Patrimonio,Quantidade\n"; window.estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Local||''}","${r.Série||''}","${r.Patrimonio||''}","${r.Quantidade||0}"\n`); const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); });
 
-        }); // FIM DO DOMContentLoaded
     </script>
 </body>
 </html>
