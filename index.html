@@ -94,6 +94,7 @@
 
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
             
+            <!-- KPIS -->
             <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                 <div class="modern-card p-4 flex items-start justify-between relative overflow-hidden group border-l-4 border-l-blue-500">
                     <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-boxes text-5xl text-blue-600"></i></div>
@@ -161,6 +162,7 @@
                 <div id="insights-container" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
             </div>
 
+            <!-- TABELAS E NAVEGAÇÃO -->
             <div class="modern-card overflow-hidden mb-8" id="tabelas-ancora">
                 <div class="border-b border-gray-100 bg-gray-50/50 pt-2 px-2 overflow-x-auto">
                     <ul class="flex flex-nowrap text-sm font-medium text-center text-gray-500 gap-1 whitespace-nowrap min-w-max">
@@ -174,7 +176,7 @@
                     <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center gap-4 bg-white">
                         <div class="flex items-center gap-4">
                             <h3 class="text-sm font-bold text-slate-800 tracking-wide">Base de Inventário Físico</h3>
-                            <button id="btn-print-estoque-main" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-1.5 px-3 rounded-md border border-slate-300 transition flex items-center"><i class="fas fa-print mr-1.5 text-blue-600"></i> Gerar Relatório</button>
+                            <button id="btn-print-estoque-main-aba" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-1.5 px-3 rounded-md border border-slate-300 transition flex items-center"><i class="fas fa-print mr-1.5 text-blue-600"></i> Gerar Relatório</button>
                         </div>
                         <div class="flex items-center gap-3">
                             <select id="filter-cat-estoque" class="border border-gray-200 rounded-lg text-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 font-medium text-slate-600 cursor-pointer"><option value="">Todas as Categorias</option></select>
@@ -210,7 +212,7 @@
                     <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center bg-indigo-50/10 gap-4">
                         <div class="flex items-center gap-4">
                             <h3 class="text-sm font-bold text-indigo-900 tracking-wide"><i class="fas fa-location-dot mr-2 text-indigo-500"></i>Mapa de Distribuição de Ativos</h3>
-                            <button id="btn-print-rastreio-main" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-1.5 px-3 rounded-md border border-indigo-200 transition flex items-center"><i class="fas fa-print mr-1.5"></i> Gerar Relatório</button>
+                            <button id="btn-print-rastreio-main-aba" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-1.5 px-3 rounded-md border border-indigo-200 transition flex items-center"><i class="fas fa-print mr-1.5"></i> Gerar Relatório</button>
                         </div>
                         <div class="relative"><i class="fas fa-search absolute left-3 top-2.5 text-indigo-300 text-sm"></i><input type="text" id="search-table-rastreio" placeholder="Pesquisar Equipamento, Local..." class="pl-9 pr-3 py-2 border border-indigo-100 rounded-lg text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm transition-shadow"></div>
                     </div>
@@ -243,7 +245,7 @@
                     <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center bg-indigo-50/10 gap-4">
                         <div class="flex items-center gap-4">
                             <h3 class="text-sm font-bold text-indigo-900 tracking-wide"><i class="fas fa-phone-volume mr-2 text-indigo-500"></i>Gestão de Telefonia VoIP</h3>
-                            <button id="btn-print-voip-main" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-1.5 px-3 rounded-md border border-indigo-200 transition flex items-center"><i class="fas fa-print mr-1.5"></i> Gerar Relatório</button>
+                            <button id="btn-print-voip-main-aba" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-1.5 px-3 rounded-md border border-indigo-200 transition flex items-center"><i class="fas fa-print mr-1.5"></i> Gerar Relatório</button>
                         </div>
                         <div class="relative"><i class="fas fa-search absolute left-3 top-2.5 text-indigo-300 text-sm"></i><input type="text" id="search-table-voip" placeholder="Pesquisar Ramal, Setor ou IP..." class="pl-9 pr-3 py-2 border border-indigo-100 rounded-lg text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm transition-shadow"></div>
                     </div>
@@ -335,7 +337,6 @@
                             <button id="btn-estoque-upload" class="w-full bg-slate-800 text-white font-bold py-3 px-4 rounded hover:bg-slate-700 transition shadow mt-4">Processar Planilha de Estoque</button>
                         </div>
                     </div>
-                    <datalist id="lista-categorias"></datalist><datalist id="lista-componentes"></datalist>
                 </div>
 
                 <div id="tab-saida" class="tab-tool-content hidden h-full flex flex-col">
@@ -355,7 +356,7 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
                         <div class="bg-indigo-50/50 p-6 rounded-xl border border-indigo-100 shadow-sm flex flex-col">
                             <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-indigo-800"><i class="fas fa-keyboard mr-2"></i>Gestão Manual</h3><select id="loc-action-type" class="border-indigo-300 rounded text-xs py-1 px-2 focus:ring-indigo-500 bg-white font-bold text-indigo-700 shadow-sm cursor-pointer outline-none"><option value="new">Novo Registo</option><option value="edit">Editar / Mover</option></select></div>
-                            <div id="loc-edit-container" class="relative hidden mb-4"><i class="fas fa-search absolute left-3 top-3 text-orange-500"></i><input list="lista-edit-locais" id="loc-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500"><datalist id="lista-edit-locais"></datalist></div>
+                            <div id="loc-edit-container" class="relative hidden mb-4"><i class="fas fa-search absolute left-3 top-3 text-orange-500"></i><input list="lista-edit-locais" id="loc-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500" placeholder="Pesquise Equipamento..."><datalist id="lista-edit-locais"></datalist></div>
                             <input type="hidden" id="loc-edit-id">
                             <div class="space-y-4 flex-1">
                                 <div><label class="block text-xs font-bold text-slate-700 uppercase">Equipamento / Nome *</label><input type="text" id="loc-equip" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div>
@@ -503,8 +504,8 @@
             <div class="grid grid-cols-4 gap-4 mb-8" id="print-kpis"></div>
             <h2 class="text-xl font-bold text-slate-800 mb-3" id="print-visual-title">Análise Visual</h2>
             <div class="grid grid-cols-3 gap-4 mb-8" id="print-charts-container">
-                <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center">Panorama Geral de Componentes</p><img id="print-chart-1" src="" class="w-full border p-2 bg-white"></div>
-                <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center">Top 5 Mais Retirados</p><img id="print-chart-2" src="" class="w-full border p-2 bg-white"></div>
+                <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center" id="print-chart-1-title">Panorama Geral de Componentes</p><img id="print-chart-1" src="" class="w-full border p-2 bg-white"></div>
+                <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center" id="print-chart-2-title">Top 5 Mais Retirados</p><img id="print-chart-2" src="" class="w-full border p-2 bg-white"></div>
                 <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center" id="print-chart-3-title">Distribuição por Categoria</p><img id="print-chart-3" src="" class="w-full border p-2 bg-white"></div>
             </div>
             <h2 class="text-xl font-bold text-slate-800 mb-3">Detalhamento Analítico</h2>
@@ -553,25 +554,29 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         
-        // VARIÁVEIS GLOBAIS DE ESTADO
-        window.estoqueLocal = []; window.localidadesLocais = []; window.logsLocal = []; window.voipLocal = [];
-        window.userEmail = ""; window.tempBgBase64 = null;
+        window.estoqueLocal = []; window.localidadesLocais = []; window.logsLocal = []; window.voipLocal = []; 
+        window.userEmail = ""; window.tempBgBase64 = null; 
         window.currentPageEstoque = 1; window.currentPageRastreio = 1; window.currentPageVoip = 1;
         window.itemsPerPage = 10;
         window.currentFilterCat = ''; window.currentSearchText = ''; window.currentSearchRastreio = ''; window.currentSearchVoip = '';
         
+        // Memória das Imagens (BLINDAGEM DO PDF)
+        window.imgChart1 = null; window.imgChart2 = null; window.imgChart3 = null; window.imgChartVoip = null; window.imgChartRastreio = null;
+
         let mapItensSaida = {}, mapEditLocais = {}, mapEditEstoque = {}, mapEditVoip = {};
         let chartComponentesAmpliado = null, chartTopSaidas = null, chartPizzaCategorias = null, chartStatusVoip = null, chartRastreio = null; 
         let estoqueCarregado = false, locaisCarregados = false, logsCarregados = false, voipCarregado = false;
 
-        // BIND DE EVENTOS DE PDF DIRETAMENTE NO ESCOPO (RESOLVE O BUG)
-        document.getElementById('btn-print-estoque-main')?.addEventListener('click', () => gerarPDFSimples('estoque'));
-        document.getElementById('btn-print-rastreio-main')?.addEventListener('click', () => gerarPDFSimples('rastreio'));
-        document.getElementById('btn-print-voip-main')?.addEventListener('click', () => gerarPDFSimples('voip'));
-        document.getElementById('btn-relatorio-analitico-estoque')?.addEventListener('click', () => gerarRelatorioAnalitico('estoque'));
-        document.getElementById('btn-relatorio-analitico-rastreio')?.addEventListener('click', () => gerarRelatorioAnalitico('rastreio'));
-        document.getElementById('btn-relatorio-analitico-voip')?.addEventListener('click', () => gerarRelatorioAnalitico('voip'));
-        document.getElementById('btn-export-logs-pdf')?.addEventListener('click', () => {
+        // BOTÕES DE PDF REPARADOS E BLINDADOS (LIGAÇÃO DIRETA)
+        document.getElementById('btn-print-estoque-main-aba').addEventListener('click', () => gerarPDFSimples('estoque'));
+        document.getElementById('btn-print-rastreio-main-aba').addEventListener('click', () => gerarPDFSimples('rastreio'));
+        document.getElementById('btn-print-voip-main-aba').addEventListener('click', () => gerarPDFSimples('voip'));
+        
+        document.getElementById('btn-relatorio-analitico-estoque').addEventListener('click', () => gerarRelatorioAnalitico('estoque'));
+        document.getElementById('btn-relatorio-analitico-rastreio').addEventListener('click', () => gerarRelatorioAnalitico('rastreio'));
+        document.getElementById('btn-relatorio-analitico-voip').addEventListener('click', () => gerarRelatorioAnalitico('voip'));
+        
+        document.getElementById('btn-export-logs-pdf').addEventListener('click', () => {
             document.getElementById('printable-report').classList.remove('active-print'); document.getElementById('printable-simple-table').classList.add('active-print');
             document.getElementById('print-simple-title').innerText = "Auditoria de Movimentações"; document.getElementById('print-simple-date').innerText = `Gerado por: ${window.userEmail} em ${new Date().toLocaleDateString('pt-BR')}`;
             document.getElementById('print-simple-thead').innerHTML = `<tr><th>Data/Hora</th><th>Ação</th><th>Item</th><th style="text-align:center;">Qtd</th><th>Usuário / Ref.</th></tr>`;
@@ -580,6 +585,7 @@
             window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
         });
 
+        // ================= FUNÇÕES UTILITÁRIAS GERAIS =================
         function showToast(msg, type = 'success') {
             const container = document.getElementById('toast-container'); if(!container) return;
             const toast = document.createElement('div');
@@ -587,9 +593,7 @@
             const iconClass = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-times-circle' : 'fa-info-circle');
             toast.className = `${colorClass} text-white px-4 py-3 rounded shadow-lg flex items-center gap-3 transform transition-transform duration-300 translate-x-full`;
             toast.innerHTML = `<i class="fas ${iconClass} text-lg"></i><span class="text-sm font-bold">${msg}</span>`;
-            container.appendChild(toast);
-            setTimeout(() => toast.classList.remove('translate-x-full'), 10);
-            setTimeout(() => { toast.classList.add('translate-x-full'); setTimeout(() => toast.remove(), 300); }, 3000);
+            container.appendChild(toast); setTimeout(() => toast.classList.remove('translate-x-full'), 10); setTimeout(() => { toast.classList.add('translate-x-full'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
         function sanitizeVal(val) {
@@ -698,7 +702,7 @@
                 window.estoqueLocal.forEach(i => { let comp = (i.Componente || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); let cat = (i.Categoria || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); if(comp.includes(itemBuscado) || cat.includes(itemBuscado)) totalEstoque += (i.Quantidade || 0); });
                 window.localidadesLocais.forEach(i => { let eq = (i.Equipamento || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); let marca = (i.Marca || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); if(eq.includes(itemBuscado) || marca.includes(itemBuscado)) totalRastreio += (i.Quantidade || 0); });
                 if (totalEstoque === 0 && totalRastreio === 0) return `Não encontrei nenhum registro de "<b>${mOriginal.replace(/(quantos|quantas|temos|\?)/gi, '').trim()}</b>" nas bases físicas.`;
-                let resp = `Resultados para "<b>${mOriginal.replace(/(quantos|quantas|temos|no estoque|no rastreio|\?)/gi, '').trim()}</b>":<br>`; if (isEstoque) resp += `• No Estoque: <b>${totalEstoque}</b> und.<br>`; if (isRastreio) resp += `• No Rastreio (Físico): <b>${totalRastreio}</b> und.`; return resp;
+                let resp = `Resultados para "<b>${mOriginal.replace(/(quantos|quantas|temos|no estoque|no rastreio|\?)/gi, '').trim()}</b>":<br>• No Estoque: <b>${totalEstoque}</b> und.<br>• No Rastreio (Físico): <b>${totalRastreio}</b> und.`; return resp;
             }
             if(m.includes('onde fica o ramal') || m.includes('de quem e o ramal') || m.includes('qual o ip do ramal') || (m.includes('ramal') && m.match(/\d{4}/))) {
                 let numeroRamal = m.match(/\d{4}/);
@@ -777,6 +781,7 @@
             if(document.getElementById('btn-next-voip')) document.getElementById('btn-next-voip').disabled = window.currentPageVoip === totalPaginas;
         }
 
+        // ================= GRÁFICOS =================
         function renderChartsUIUX() {
             if(chartComponentesAmpliado) { chartComponentesAmpliado.destroy(); }
             if(chartTopSaidas) { chartTopSaidas.destroy(); }
@@ -784,12 +789,10 @@
             if(chartStatusVoip) { chartStatusVoip.destroy(); }
             if(chartRastreio) { chartRastreio.destroy(); }
             
-            const primColor = localStorage.getItem('pref_color') || '#161B33';
-
             const topItensEstoque = [...window.estoqueLocal].sort((a, b) => (b.Quantidade||0) - (a.Quantidade||0)).slice(0, 8);
             const ctxComp = document.getElementById('chartComponentesAmpliado');
             if(ctxComp) {
-                chartComponentesAmpliado = new Chart(ctxComp, { type: 'line', data: { labels: topItensEstoque.length > 0 ? topItensEstoque.map(i => (i.Componente || '').substring(0, 18)) : ['Nenhum item'], datasets: [{ data: topItensEstoque.length > 0 ? topItensEstoque.map(i => i.Quantidade || 0) : [0], borderColor: '#3B82F6', backgroundColor: 'rgba(59, 130, 246, 0.2)', borderWidth: 3, fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#ffffff', pointBorderColor: '#3B82F6' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false, drawBorder: false }, ticks: { font: { weight: 'bold', size: 10 } } } } } });
+                chartComponentesAmpliado = new Chart(ctxComp, { type: 'line', data: { labels: topItensEstoque.length > 0 ? topItensEstoque.map(i => (i.Componente || '').substring(0, 18)) : ['Nenhum item'], datasets: [{ data: topItensEstoque.length > 0 ? topItensEstoque.map(i => i.Quantidade || 0) : [0], borderColor: '#3B82F6', backgroundColor: 'rgba(59, 130, 246, 0.2)', borderWidth: 3, fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#ffffff', pointBorderColor: '#3B82F6' }] }, options: { responsive: true, maintainAspectRatio: false, animation: { onComplete: function() { window.imgChart1 = this.toBase64Image(); } }, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false, drawBorder: false }, ticks: { font: { weight: 'bold', size: 10 } } } } } });
             }
 
             const saidasMap = {}; window.logsLocal.forEach(log => { if (log.tipo === 'SAÍDA' && log.itemNome) { saidasMap[log.itemNome] = (saidasMap[log.itemNome] || 0) + (log.qtd || 0); } });
@@ -799,14 +802,14 @@
             const ctxSaidas = document.getElementById('chartTopSaidas');
             if(ctxSaidas) {
                 let backgroundColors = saidasValues.map((val, idx) => idx === 0 ? '#3B82F6' : '#E2E8F0');
-                chartTopSaidas = new Chart(ctxSaidas, { type: 'bar', data: { labels: saidasLabels, datasets: [{ data: saidasValues, backgroundColor: backgroundColors, borderRadius: 8, barThickness: 24 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { color: (ctx) => ctx.dataIndex === 0 ? 'white' : '#64748B', font: { weight: 'bold', size: 11 }, anchor: 'end', align: 'start', offset: 8 } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 }, color: '#94A3B8' } } } } });
+                chartTopSaidas = new Chart(ctxSaidas, { type: 'bar', data: { labels: saidasLabels, datasets: [{ data: saidasValues, backgroundColor: backgroundColors, borderRadius: 8, barThickness: 24 }] }, options: { responsive: true, maintainAspectRatio: false, animation: { onComplete: function() { window.imgChart2 = this.toBase64Image(); } }, plugins: { legend: { display: false }, datalabels: { color: (ctx) => ctx.dataIndex === 0 ? 'white' : '#64748B', font: { weight: 'bold', size: 11 }, anchor: 'end', align: 'start', offset: 8 } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 }, color: '#94A3B8' } } } } });
             }
 
             const mapCat = {}; window.estoqueLocal.forEach(item => { const cat = item.Categoria || 'Geral'; mapCat[cat] = (mapCat[cat] || 0) + (item.Quantidade || 0); });
             const catLabels = Object.keys(mapCat); const catData = catLabels.map(k => mapCat[k]); const coresVibrantes = ['#10B981', '#F59E0B', '#3B82F6', '#6366F1', '#EC4899', '#8B5CF6', '#EF4444', '#06B6D4'];
             const ctxPizza = document.getElementById('chartPizzaCategorias');
             if(ctxPizza) {
-                chartPizzaCategorias = new Chart(ctxPizza, { type: 'doughnut', data: { labels: catLabels.length > 0 ? catLabels : ['Sem Dados'], datasets: [{ data: catData.length > 0 ? catData : [1], backgroundColor: coresVibrantes, borderWidth: 0, cutout: '75%' }] }, options: { responsive: true, maintainAspectRatio: false, rotation: -90, circumference: 180, plugins: { legend: { display: false }, datalabels: { display: false } } } });
+                chartPizzaCategorias = new Chart(ctxPizza, { type: 'doughnut', data: { labels: catLabels.length > 0 ? catLabels : ['Sem Dados'], datasets: [{ data: catData.length > 0 ? catData : [1], backgroundColor: coresVibrantes, borderWidth: 0, cutout: '75%' }] }, options: { responsive: true, maintainAspectRatio: false, rotation: -90, circumference: 180, animation: { onComplete: function() { window.imgChart3 = this.toBase64Image(); } }, plugins: { legend: { display: false }, datalabels: { display: false } } } });
             }
 
             let livres = 0, emUso = 0;
@@ -818,7 +821,7 @@
             if(ctxVoip) {
                 chartStatusVoip = new Chart(ctxVoip, {
                     type: 'doughnut', data: { labels: vLabels, datasets: [{ data: vData, backgroundColor: vColors, borderWidth: 0, cutout: '75%', hoverOffset: 4 }] },
-                    options: { responsive: true, maintainAspectRatio: false, rotation: -90, circumference: 180, plugins: { legend: { display: true, position: 'bottom', labels: { usePointStyle: true, boxWidth: 8, font: { weight: 'bold', size: 11 } } }, datalabels: { display: false } },
+                    options: { responsive: true, maintainAspectRatio: false, rotation: -90, circumference: 180, animation: { onComplete: function() { window.imgChartVoip = this.toBase64Image(); } }, plugins: { legend: { display: true, position: 'bottom', labels: { usePointStyle: true, boxWidth: 8, font: { weight: 'bold', size: 11 } } }, datalabels: { display: false } },
                         onClick: (e, elements) => { if (elements.length > 0 && (livres > 0 || emUso > 0)) { const index = elements[0].index; const targetFilter = index === 0 ? '[Em Uso]' : '[Livres]'; document.querySelector('[data-target="view-voip-content"]').click(); const searchInput = document.getElementById('search-table-voip'); searchInput.value = targetFilter; searchInput.dispatchEvent(new Event('input')); document.getElementById('tabelas-ancora').scrollIntoView({ behavior: 'smooth' }); } },
                         onHover: (e, elements) => { e.native.target.style.cursor = (elements.length && (livres > 0 || emUso > 0)) ? 'pointer' : 'default'; }
                     }
@@ -835,7 +838,7 @@
                 if (rLabels.length > 5) ctxRastreio.parentElement.style.height = `${rLabels.length * 30}px`;
                 chartRastreio = new Chart(ctxRastreio, { 
                     type: 'bar', data: { labels: rLabels, datasets: [{ data: rData, backgroundColor: '#F97316', borderRadius: 4, barThickness: 12, hoverBackgroundColor: '#C2410C' }] }, 
-                    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { color: '#ffffff', font: { weight: 'bold', size: 10 }, anchor: 'end', align: 'left' } }, scales: { x: { display: false, grid: { display: false } }, y: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 }, color: '#475569' } } },
+                    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, animation: { onComplete: function() { window.imgChartRastreio = this.toBase64Image(); } }, plugins: { legend: { display: false }, datalabels: { color: '#ffffff', font: { weight: 'bold', size: 10 }, anchor: 'end', align: 'left' } }, scales: { x: { display: false, grid: { display: false } }, y: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 }, color: '#475569' } } },
                         onClick: (e, elements) => { if (elements.length > 0 && rLabels[0] !== 'Sem Rastreio') { const index = elements[0].index; const labelClicado = rLabels[index]; document.querySelector('[data-target="view-rastreio-content"]').click(); const searchInput = document.getElementById('search-table-rastreio'); searchInput.value = labelClicado; searchInput.dispatchEvent(new Event('input')); document.getElementById('tabelas-ancora').scrollIntoView({ behavior: 'smooth' }); } },
                         onHover: (e, elements) => { e.native.target.style.cursor = (elements.length && rLabels[0] !== 'Sem Rastreio') ? 'pointer' : 'default'; }
                     } 
@@ -856,125 +859,39 @@
             container.innerHTML = alertHtml + acumuloHtml + techHtml;
         }
 
-        function atualizarDatalists() { 
-            const lc = document.getElementById('lista-componentes'); if(lc) lc.innerHTML = [...new Set(window.estoqueLocal.map(i => i.Componente||''))].map(c => `<option value="${c}">`).join(''); 
-            const filterCat = document.getElementById('filter-cat-estoque');
-            if(filterCat) { const categoriasUnicas = [...new Set(window.estoqueLocal.map(i => i.Categoria || 'Sem Categoria'))].sort(); filterCat.innerHTML = '<option value="">Todas as Categorias</option>'; categoriasUnicas.forEach(cat => filterCat.innerHTML += `<option value="${cat}">${cat}</option>`); }
-        }
-
-        // ================= GESTÃO MANUAL E UPLOADS =================
-        function atualizarSelectEdicaoLocais() { const dl = document.getElementById('lista-edit-locais'); if(!dl) return; dl.innerHTML = ''; mapEditLocais = {}; [...window.localidadesLocais].sort((a,b) => (a.Equipamento||'').localeCompare(b.Equipamento||'')).forEach(loc => { const text = `${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio || ''} | Série: ${loc.Serie || ''}`; mapEditLocais[text] = loc; }); }
-        function atualizarSelectEdicaoEstoque() { const dl = document.getElementById('lista-edit-estoque'); if(!dl) return; dl.innerHTML = ''; mapEditEstoque = {}; [...window.estoqueLocal].sort((a,b) => (a.Componente||'').localeCompare(b.Componente||'')).forEach(item => { const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || ''} | Série: ${item.Série || ''}`; mapEditEstoque[text] = item; }); }
-        function atualizarDatalistSaida() { const dl = document.getElementById('lista-saida-items'); if(!dl) return; dl.innerHTML = ''; mapItensSaida = {}; [...window.estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { const text = `[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||''}) - Qtd: ${i.Quantidade||0}`; mapItensSaida[text] = i; }); }
-        function atualizarSelectEdicaoVoip() { const dl = document.getElementById('lista-edit-voip'); if(!dl) return; dl.innerHTML = ''; mapEditVoip = {}; [...window.voipLocal].sort((a,b) => (a.Ramal||'').localeCompare(b.Ramal||'')).forEach(v => { const text = `Ramal: ${v.Ramal} | Setor: ${v.Setor} | IP: ${v.Ip}`; mapEditVoip[text] = v; }); }
-
-        if(document.getElementById('loc-action-type')) document.getElementById('loc-action-type').addEventListener('change', (e) => { const isE = e.target.value === 'edit'; const c = document.getElementById('loc-edit-container'), i = document.getElementById('loc-edit-input'), b = document.getElementById('btn-save-loc'); if(isE) { c.classList.remove('hidden'); b.innerText = 'Gravar Alterações'; b.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; } else { c.classList.add('hidden'); i.value = ''; b.innerText = 'Mapear Equipamento'; b.className = 'w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; ['loc-equip','loc-local', 'loc-sipac', 'loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; } });
-        if(document.getElementById('estoque-action-type')) document.getElementById('estoque-action-type').addEventListener('change', (e) => { const isE = e.target.value === 'edit'; const c = document.getElementById('estoque-edit-container'), i = document.getElementById('estoque-edit-input'), b = document.getElementById('btn-save-item'); if(isE) { c.classList.remove('hidden'); b.innerText = 'Gravar Alterações'; b.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; } else { c.classList.add('hidden'); i.value = ''; b.innerText = 'Registar Entrada no Estoque'; b.className = 'w-full bg-blue-600 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; ['form-cat','form-comp','form-mod','form-esp','form-local','form-patrimonio-estoque', 'form-serie-estoque', 'estoque-edit-id'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5; } });
-        if(document.getElementById('voip-action-type')) document.getElementById('voip-action-type').addEventListener('change', (e) => { const isE = e.target.value === 'edit'; const c = document.getElementById('voip-edit-container'), i = document.getElementById('voip-edit-input'), b = document.getElementById('btn-save-voip'); if(isE) { c.classList.remove('hidden'); b.innerText = 'Gravar Alterações'; b.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; } else { c.classList.add('hidden'); i.value = ''; b.innerText = 'Registrar Ramal'; b.className = 'w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; ['voip-ramal','voip-setor', 'voip-ip', 'voip-equip','voip-edit-id'].forEach(id => document.getElementById(id).value = ''); } });
-
-        if(document.getElementById('loc-edit-input')) document.getElementById('loc-edit-input').addEventListener('input', (e) => { const t = e.target.value; const dl = document.getElementById('lista-edit-locais'); dl.innerHTML = ''; if(t.length >= 3) { const s = t.toLowerCase().split(' '); let c = 0; for(let k in mapEditLocais) { if(s.every(term => k.toLowerCase().includes(term))) { let o = document.createElement('option'); o.value = k; dl.appendChild(o); c++; if(c > 40) break; } } } const item = mapEditLocais[t]; if(item) { document.getElementById('loc-edit-id').value = item.id; document.getElementById('loc-equip').value = item.Equipamento || ''; document.getElementById('loc-local').value = item.Local || ''; document.getElementById('loc-sipac').value = item.LocalSipac || ''; document.getElementById('loc-marca').value = item.Marca || ''; document.getElementById('loc-qtd').value = item.Quantidade || 1; document.getElementById('loc-serie').value = item.Serie || ''; document.getElementById('loc-patrimonio').value = item.Patrimonio || ''; } else { ['loc-edit-id','loc-equip','loc-local','loc-sipac','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; } });
-        if(document.getElementById('estoque-edit-input')) document.getElementById('estoque-edit-input').addEventListener('input', (e) => { const t = e.target.value; const dl = document.getElementById('lista-edit-estoque'); dl.innerHTML = ''; if(t.length >= 3) { const s = t.toLowerCase().split(' '); let c = 0; for(let k in mapEditEstoque) { if(s.every(term => k.toLowerCase().includes(term))) { let o = document.createElement('option'); o.value = k; dl.appendChild(o); c++; if(c > 40) break; } } } const item = mapEditEstoque[t]; if(item) { document.getElementById('estoque-edit-id').value = item.id; document.getElementById('form-cat').value = item.Categoria || ''; document.getElementById('form-comp').value = item.Componente || ''; document.getElementById('form-mod').value = item.Modelo || ''; document.getElementById('form-esp').value = item.Especificação || ''; document.getElementById('form-local').value = item.Local || ''; document.getElementById('form-serie-estoque').value = item.Série || ''; document.getElementById('form-patrimonio-estoque').value = item.Patrimonio || ''; document.getElementById('form-qtd').value = item.Quantidade || 1; document.getElementById('form-minimo').value = item.EstoqueMinimo || 5; } else { ['estoque-edit-id','form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5; } });
-        if(document.getElementById('saida-item-input')) document.getElementById('saida-item-input').addEventListener('input', (e) => { const t = e.target.value; const dl = document.getElementById('lista-saida-items'); dl.innerHTML = ''; if(t.length >= 3) { const s = t.toLowerCase().split(' '); let c = 0; for(let k in mapItensSaida) { if(s.every(term => k.toLowerCase().includes(term))) { let o = document.createElement('option'); o.value = k; dl.appendChild(o); c++; if(c > 40) break; } } } });
-        if(document.getElementById('voip-edit-input')) document.getElementById('voip-edit-input').addEventListener('input', (e) => { const t = e.target.value; const dl = document.getElementById('lista-edit-voip'); dl.innerHTML = ''; if(t.length >= 3) { const s = t.toLowerCase().split(' '); let c = 0; for(let k in mapEditVoip) { if(s.every(term => k.toLowerCase().includes(term))) { let o = document.createElement('option'); o.value = k; dl.appendChild(o); c++; if(c > 40) break; } } } const item = mapEditVoip[t]; if(item) { document.getElementById('voip-edit-id').value = item.id; document.getElementById('voip-ramal').value = item.Ramal || ''; document.getElementById('voip-setor').value = item.Setor || ''; document.getElementById('voip-ip').value = item.Ip || ''; document.getElementById('voip-equip').value = item.Equipamento || ''; } else { ['voip-edit-id','voip-ramal','voip-setor','voip-ip','voip-equip'].forEach(id => document.getElementById(id).value = ''); } });
-
-        if(document.getElementById('btn-save-loc')) {
-            document.getElementById('btn-save-loc').addEventListener('click', async () => {
-                const action = document.getElementById('loc-action-type').value, eId = document.getElementById('loc-edit-id').value;
-                const eq = document.getElementById('loc-equip').value.trim(), loc = document.getElementById('loc-local').value.trim(), sip = sanitizeVal(document.getElementById('loc-sipac').value), mar = sanitizeVal(document.getElementById('loc-marca').value), ser = sanitizeVal(document.getElementById('loc-serie').value), pat = sanitizeVal(document.getElementById('loc-patrimonio').value), qt = parseInt(document.getElementById('loc-qtd').value);
-                if(!eq || !loc || isNaN(qt) || qt <= 0) return showToast("Preencha Equipamento, Local Físico e Quantidade.", "error");
-                const b = document.getElementById('btn-save-loc'); const o = b.innerText; b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-                try { if(action === 'edit' && eId) { await updateDoc(doc(db, "localidades", eId), { Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: qt }); await registrarLog("MOVIMENTAÇÃO", `${eq} (Novo: ${loc})`, qt, `SIPAC: ${sip || '-'} | Série: ${ser || '-'}`); showToast("Alteração gravada e movimentada com sucesso!"); } else { await addDoc(collection(db, "localidades"), { Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: qt }); await registrarLog("MAP_LOCAL", `${eq} (${loc})`, qt, `SIPAC: ${sip || '-'} | Série: ${ser || '-'}`); showToast("Equipamento mapeado com sucesso!"); } ['loc-equip','loc-local', 'loc-sipac','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id', 'loc-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; document.getElementById('loc-action-type').value = 'new'; document.getElementById('loc-action-type').dispatchEvent(new Event('change')); } catch (e) { showToast("Erro: " + e.message, "error"); } b.innerText = o;
-            });
-        }
-
-        if(document.getElementById('btn-loc-upload')) document.getElementById('btn-loc-upload').addEventListener('click', () => {
-            const fi = document.getElementById('loc-file-upload'), b = document.getElementById('btn-loc-upload'); if (!fi.files.length) return showToast("Selecione planilha.", "error"); b.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mapeando...'; 
-            const r = new FileReader(); r.onload = async (e) => {
-                try {
-                    const js = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let c = 0;
-                    for (let row of js) { const sip = getVal(row, ['LOCAL SIPAC', 'Local SIPAC', 'Local Sipac', 'LOCAL_SIPAC']); const ser = getVal(row, ['Nº DE SÉRIE', 'N DE SERIE', 'Nº DE SERIE', 'Nº Série', 'N Serie', 'SÉRIE', 'Série', 'SERIE', 'NUMERO DE SERIE']); const pat = getVal(row, ['Nº PATRIMÔNIO', 'Nº PATRIMONIO', 'N Patrimônio', 'N Patrimonio', 'PATRIMÔNIO', 'PATRIMONIO', 'Patrimônio', 'Patrimonio']); const eq = getVal(row, ['EQUIPAMENTO', 'Equipamento', 'Nome']); const loc = getVal(row, ['LOCAL FISICO', 'Local Físico', 'LOCAL FÍSICO', 'Local']); const mar = getVal(row, ['MARCA/MODELO', 'Marca/Modelo', 'MARCA', 'Marca', 'MODELO', 'Modelo']); await addDoc(collection(db, "localidades"), { Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: parseInt(row['QUANTIDADE']||row['Quantidade']||1) }); c++; }
-                    await registrarLog("MAP_LOCAL", `Upload Excel`, c, ""); showToast(`Sucesso! ${c} locais mapeados.`); fi.value = "";
-                } catch (error) { showToast("Erro leitura.", "error"); } b.innerHTML = 'Iniciar Importação';
-            }; r.readAsArrayBuffer(fi.files[0]);
-        });
-
-        if(document.getElementById('btn-save-item')) {
-            document.getElementById('btn-save-item').addEventListener('click', async () => {
-                const actionType = document.getElementById('estoque-action-type') ? document.getElementById('estoque-action-type').value : 'new'; const editId = document.getElementById('estoque-edit-id') ? document.getElementById('estoque-edit-id').value : '';
-                const cat = document.getElementById('form-cat').value.trim(); const comp = document.getElementById('form-comp').value.trim(); const mod = sanitizeVal(document.getElementById('form-mod').value); const esp = sanitizeVal(document.getElementById('form-esp').value); const local = document.getElementById('form-local').value.trim(); const serie = sanitizeVal(document.getElementById('form-serie-estoque').value); const patrim = sanitizeVal(document.getElementById('form-patrimonio-estoque').value); const qtd = parseInt(document.getElementById('form-qtd').value); const minEstoque = parseInt(document.getElementById('form-minimo').value) || 5; 
-                if(!cat || !comp || !local || isNaN(qtd) || qtd <= 0) return showToast("Preencha Categoria, Componente, Local e Qtd.", "error");
-                const btn = document.getElementById('btn-save-item'); const originalText = btn.innerText; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-                try {
-                    if(actionType === 'edit' && editId) { await updateDoc(doc(db, "estoque", editId), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque }); await registrarLog("MOVIMENTAÇÃO (ESTOQUE)", `${comp} - ${mod}`, qtd, `Local: ${local}`); showToast("Alteração gravada com sucesso!"); } 
-                    else { const ex = window.estoqueLocal.find(i => { let mP = (patrim && (i.Patrimonio === patrim || i.Série === patrim)); let mS = (serie && (i.Série === serie || i.Patrimonio === serie)); if(mP || mS) return true; return (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'') === local; }); if(ex) await updateDoc(doc(db, "estoque", ex.id), { Quantidade: (ex.Quantidade||0) + qtd, EstoqueMinimo: minEstoque }); else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque }); await registrarLog("ENTRADA", `${comp} (${esp})`, qtd, local); showToast("Entrada registada!"); }
-                    ['form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque', 'estoque-edit-id', 'estoque-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5; if(document.getElementById('estoque-action-type')) { document.getElementById('estoque-action-type').value = 'new'; document.getElementById('estoque-action-type').dispatchEvent(new Event('change')); }
-                } catch (e) { showToast("Erro: " + e.message, "error");} btn.innerText = originalText;
-            });
-        }
-
-        if(document.getElementById('btn-estoque-upload')) document.getElementById('btn-estoque-upload').addEventListener('click', () => {
-            const fileInput = document.getElementById('estoque-file-upload'), btn = document.getElementById('btn-estoque-upload'); if (!fileInput.files.length) return showToast("Selecione Excel.", "error"); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Importando...'; const reader = new FileReader();
-            reader.onload = async (e) => {
-                try {
-                    const json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let cont = 0;
-                    for (let row of json) {
-                        const cat = getVal(row, ['CATEGORIA', 'TIPO', 'GRUPO']) || 'Geral'; const comp = getVal(row, ['COMPONENTE', 'EQUIPAMENTO', 'NOME', 'ITEM']); const mod = getVal(row, ['MODELO', 'MARCA/MODELO', 'MARCA MODELO', 'MARCA']); const esp = getVal(row, ['ESPECIFICAÇÃO', 'ESPECIFICACAO', 'Especificação', 'Especificacao']); const local = getVal(row, ['LOCAL FISICO', 'LOCAL', 'Local', 'LOCAL FÍSICO']); const serie = getVal(row, ['Nº DE SÉRIE', 'N DE SERIE', 'Nº DE SERIE', 'Nº Série', 'N Serie', 'SÉRIE', 'Série', 'SERIE', 'NUMERO DE SERIE']); const patrim = getVal(row, ['Nº PATRIMÔNIO', 'Nº PATRIMONIO', 'N Patrimônio', 'N Patrimonio', 'PATRIMÔNIO', 'PATRIMONIO', 'Patrimônio', 'Patrimonio']); const minEst = parseInt(getVal(row, ['ESTOQUE MÍNIMO', 'ESTOQUE MINIMO', 'Estoque Minimo', 'ESTOQUE MÍNIMO'])) || 5; const qtd = parseInt(getVal(row, ['QUANTIDADE', 'Quantidade', 'QTD', 'Qtd'])) || 1;
-                        if(!comp) continue; const existente = window.estoqueLocal.find(i => { let matchPatr = (patrim && (i.Patrimonio === patrim || i.Série === patrim)); let matchSerie = (serie && (i.Série === serie || i.Patrimonio === serie)); if(matchPatr || matchSerie) return true; return (i.Componente||'') === comp && (i.Modelo||'') === mod && (i.Especificação||'') === esp && (i.Local||'') === local; });
-                        if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (existente.Quantidade||0) + qtd, EstoqueMinimo: minEst }); else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, EstoqueMinimo: minEst, Quantidade: qtd }); cont++;
-                    }
-                    await registrarLog("ENTRADA", `Upload Lote`, cont, ""); showToast(`Sucesso! ${cont} importados.`); fileInput.value = "";
-                } catch (error) { showToast("Erro leitura.", "error"); } btn.innerHTML = 'Processar Planilha de Estoque';
-            }; reader.readAsArrayBuffer(fileInput.files[0]);
-        });
-
-        if(document.getElementById('btn-register-saida')) document.getElementById('btn-register-saida').addEventListener('click', async () => { const inputTexto = document.getElementById('saida-item-input').value; const qtdSaida = parseInt(document.getElementById('saida-qtd').value); const chamado = document.getElementById('saida-chamado').value.trim(); const itemDB = mapItensSaida[inputTexto]; if(!itemDB) return showToast("Equipamento não encontrado ou seleção inválida.", "error"); if(isNaN(qtdSaida) || qtdSaida <= 0) return showToast("Quantidade inválida.", "error"); const btn = document.getElementById('btn-register-saida'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...'; if(qtdSaida > (itemDB.Quantidade||0)) { showToast("Estoque insuficiente para esta saída!", "error"); btn.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa'; return; } try { await updateDoc(doc(db, "estoque", itemDB.id), { Quantidade: (itemDB.Quantidade||0) - qtdSaida }); await registrarLog("SAÍDA", `${itemDB.Componente} (${itemDB.Especificação})`, qtdSaida, chamado); showToast("Baixa processada!"); document.getElementById('saida-item-input').value = ""; document.getElementById('saida-qtd').value = 1; document.getElementById('saida-chamado').value = ""; } catch(e) { showToast("Erro baixa.", "error"); } btn.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa'; });
-
-        if(document.getElementById('btn-save-voip')) {
-            document.getElementById('btn-save-voip').addEventListener('click', async () => {
-                const action = document.getElementById('voip-action-type').value, eId = document.getElementById('voip-edit-id').value;
-                const ramal = document.getElementById('voip-ramal').value.trim(), setor = document.getElementById('voip-setor').value.trim(), ip = document.getElementById('voip-ip').value.trim(), equip = document.getElementById('voip-equip').value.trim();
-                if(!ramal || !setor || !ip) return showToast("Preencha Ramal, Setor e IP.", "error");
-                const b = document.getElementById('btn-save-voip'); const o = b.innerText; b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-                try {
-                    if(action === 'edit' && eId) { await updateDoc(doc(db, "voip", eId), { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: equip }); await registrarLog("MOVIMENTAÇÃO (VOIP)", `Ramal ${ramal}`, 1, `Setor: ${setor}`); showToast("Alteração gravada!"); } 
-                    else { await addDoc(collection(db, "voip"), { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: equip }); await registrarLog("ENTRADA (VOIP)", `Ramal ${ramal}`, 1, `Setor: ${setor}`); showToast("Ramal registado!"); }
-                    ['voip-ramal','voip-setor','voip-ip','voip-equip','voip-edit-id','voip-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('voip-action-type').value = 'new'; document.getElementById('voip-action-type').dispatchEvent(new Event('change'));
-                } catch (e) { showToast("Erro: " + e.message, "error"); } b.innerText = o;
-            });
-        }
-
-        if(document.getElementById('btn-voip-upload')) document.getElementById('btn-voip-upload').addEventListener('click', () => {
-            const fi = document.getElementById('voip-file-upload'), b = document.getElementById('btn-voip-upload'); if (!fi.files.length) return showToast("Selecione planilha.", "error"); b.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Lendo...'; 
-            const r = new FileReader(); r.onload = async (e) => {
-                try {
-                    const js = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let c = 0;
-                    for (let row of js) {
-                        const ramal = getVal(row, ['RAMAL', 'Ramal', 'NÚMERO']); const setor = getVal(row, ['SETOR', 'Setor', 'LOCAL']); const ip = getVal(row, ['IP', 'Ip', 'ENDEREÇO IP']); const eq = getVal(row, ['EQUIPAMENTO', 'Equipamento', 'OBSERVAÇÃO', 'MODELO']);
-                        if(!ramal) continue; await addDoc(collection(db, "voip"), { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: eq }); c++;
-                    }
-                    await registrarLog("MAP_LOCAL (VOIP)", `Upload Excel`, c, ""); showToast(`Sucesso! ${c} ramais importados.`); fi.value = "";
-                } catch (er) { showToast("Erro leitura.", "error"); } b.innerHTML = 'Iniciar Importação';
-            }; r.readAsArrayBuffer(fi.files[0]);
-        });
-
-        // ================= FUNÇÕES DOS RELATÓRIOS EM PDF (BLINDADAS GLOBAIS) =================
+        // ================= FUNÇÕES DOS RELATÓRIOS EM PDF (CORRIGIDAS) =================
         window.gerarRelatorioAnalitico = function(tipoRelatorio) {
             document.getElementById('printable-simple-table').classList.remove('active-print'); document.getElementById('printable-report').classList.add('active-print'); const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5); const titleDoc = document.getElementById('print-title-doc'), parecer = document.getElementById('print-parecer'), resumo = document.getElementById('print-resumo'), kpisContainer = document.getElementById('print-kpis'), thead = document.getElementById('print-thead'), tbody = document.getElementById('print-tbody'), chartsContainer = document.getElementById('print-charts-container'), visualTitle = document.getElementById('print-visual-title');
             if(tipoRelatorio === 'estoque') {
                 titleDoc.textContent = `Relatório Consolidado - ${localStorage.getItem('pref_title') || 'SETIC'}`; let tTotal = 0, tZerados = 0, tBaixos = 0; let categorias = new Set(); tbody.innerHTML = ''; let totaisEquip = {}; document.getElementById('print-resumo-title').innerText = "Resumo de Totais por Equipamento";
                 [...window.estoqueLocal].sort((a, b) => { let cmp = (a.Componente || '').localeCompare(b.Componente || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(i => { tTotal += (i.Quantidade || 0); categorias.add(i.Categoria || 'Geral'); let minEstoque = i.EstoqueMinimo || 5; if(i.Quantidade === 0) tZerados++; else if(i.Quantidade <= minEstoque) tBaixos++; let eqName = i.Componente || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (i.Quantidade || 0); tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||''}</td><td class="border px-2 py-1">${i.Componente||''}</td><td class="border px-2 py-1">${i.Modelo||''} / ${i.Especificação||''}</td><td class="border px-2 py-1">${i.Local||''}</td><td class="border px-2 py-1 font-mono">${i.Série||''}</td><td class="border px-2 py-1 font-mono">${i.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`; });
-                let taxaCritica = window.estoqueLocal.length > 0 ? (((tZerados + tBaixos) / window.estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1); parecer.innerHTML = `Extração consolidou <b>${window.estoqueLocal.length}</b> registos de estoque físico. Emitido por ${window.userEmail} em ${dataAtual}.`; let listTotais = Object.keys(totaisEquip).sort().map(k => `<li><b>${k}:</b> ${totaisEquip[k]} und.</li>`).join(''); resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. <br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${window.estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`; visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid'; if(chartComponentesAmpliado) document.getElementById('print-chart-1').src = document.getElementById('chartComponentesAmpliado').toDataURL('image/png'); if(chartTopSaidas) document.getElementById('print-chart-2').src = document.getElementById('chartTopSaidas').toDataURL('image/png'); if(chartPizzaCategorias && document.getElementById('print-chart-3')) { document.getElementById('print-chart-3').src = document.getElementById('chartPizzaCategorias').toDataURL('image/png'); if(document.getElementById('print-chart-3-title')) document.getElementById('print-chart-3-title').innerText = "Distribuição por Categoria"; }
+                let taxaCritica = window.estoqueLocal.length > 0 ? (((tZerados + tBaixos) / window.estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1); parecer.innerHTML = `Extração consolidou <b>${window.estoqueLocal.length}</b> registos de estoque físico. Emitido por ${window.userEmail} em ${dataAtual}.`; let listTotais = Object.keys(totaisEquip).sort().map(k => `<li><b>${k}:</b> ${totaisEquip[k]} und.</li>`).join(''); resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. <br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${window.estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`; visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid'; 
+                
+                // Utilizando as Imagens em Cache para não falhar
+                if(window.imgChart1 && document.getElementById('print-chart-1')) document.getElementById('print-chart-1').src = window.imgChart1; 
+                if(window.imgChart2 && document.getElementById('print-chart-2')) document.getElementById('print-chart-2').src = window.imgChart2; 
+                if(window.imgChart3 && document.getElementById('print-chart-3')) { document.getElementById('print-chart-3').src = window.imgChart3; if(document.getElementById('print-chart-3-title')) document.getElementById('print-chart-3-title').innerText = "Distribuição por Categoria"; }
+                if(document.getElementById('print-chart-1')) document.getElementById('print-chart-1').parentElement.style.display = 'block';
+                if(document.getElementById('print-chart-2')) document.getElementById('print-chart-2').parentElement.style.display = 'block';
+
             } else if (tipoRelatorio === 'rastreio') {
                 titleDoc.textContent = `Relatório de Rastreio - ${localStorage.getItem('pref_title') || 'SETIC'}`; let tLocaisUnicos = new Set(), tVolumeRastreado = 0, tEquipsUnicos = new Set(); tbody.innerHTML = ''; let totaisEquip = {}; document.getElementById('print-resumo-title').innerText = "Resumo de Totais por Equipamento";
                 [...window.localidadesLocais].sort((a, b) => { let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(loc => { tLocaisUnicos.add(loc.Local || 'N/A'); tVolumeRastreado += (loc.Quantidade||0); tEquipsUnicos.add(loc.Equipamento || 'N/A'); let eqName = loc.Equipamento || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (loc.Quantidade || 0); tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento||''}</td><td class="border px-2 py-1">${loc.Local||''}</td><td class="border px-2 py-1">${loc.LocalSipac||''}</td><td class="border px-2 py-1">${loc.Marca||''}</td><td class="border px-2 py-1 font-mono">${loc.Serie||''}</td><td class="border px-2 py-1 font-mono">${loc.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`; });
-                parecer.innerHTML = `A extração consolidou <b>${window.localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${window.userEmail} em ${dataAtual}.`; let listTotais = Object.keys(totaisEquip).sort().map(k => `<li><b>${k}:</b> ${totaisEquip[k]} und.</li>`).join(''); resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades.<br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros</p><p class="text-2xl font-black text-slate-800">${window.localidadesLocais.length}</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`; visualTitle.style.display = 'none'; chartsContainer.style.display = 'none';
+                parecer.innerHTML = `A extração consolidou <b>${window.localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${window.userEmail} em ${dataAtual}.`; let listTotais = Object.keys(totaisEquip).sort().map(k => `<li><b>${k}:</b> ${totaisEquip[k]} und.</li>`).join(''); resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades.<br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros</p><p class="text-2xl font-black text-slate-800">${window.localidadesLocais.length}</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`; visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid';
+                
+                // Mostrar Imagem do Rastreio
+                if(document.getElementById('print-chart-1')) document.getElementById('print-chart-1').parentElement.style.display = 'none';
+                if(document.getElementById('print-chart-2')) document.getElementById('print-chart-2').parentElement.style.display = 'none';
+                if(window.imgChartRastreio && document.getElementById('print-chart-3')) { document.getElementById('print-chart-3').src = window.imgChartRastreio; if(document.getElementById('print-chart-3-title')) document.getElementById('print-chart-3-title').innerText = "Rastreamento de Ativos"; }
+
             } else if (tipoRelatorio === 'voip') {
                 titleDoc.textContent = `Relatório de Telefonia VoIP - ${localStorage.getItem('pref_title') || 'SETIC'}`; tbody.innerHTML = ''; document.getElementById('print-resumo-title').innerText = "Visão Geral de Disponibilidade"; let tTotal = window.voipLocal.length; let tLivres = 0; let tOcupados = 0;
                 [...window.voipLocal].sort((a,b) => (a.Ramal||'').localeCompare(b.Ramal||'')).forEach(v => { let ipStr = v.Ip || ''; if(ipStr.toUpperCase() === 'DESATIVADO') { tLivres++; ipStr = 'LIVRE (DESATIVADO)'; } else { tOcupados++; } tbody.innerHTML += `<tr><td class="border px-2 py-1 font-bold text-center">${v.Ramal||''}</td><td class="border px-2 py-1">${v.Setor||''}</td><td class="border px-2 py-1 font-mono">${ipStr}</td><td class="border px-2 py-1">${v.Equipamento||'-'}</td></tr>`; });
                 parecer.innerHTML = `A extração consolidou <b>${tTotal}</b> ramais VoIP na base de dados. Emitido por ${window.userEmail} em ${dataAtual}.`; resumo.innerHTML = `Atualmente, o painel monitoriza <b>${tTotal}</b> linhas VoIP. Destas, <b>${tOcupados}</b> estão atribuídas/em uso, e <b>${tLivres}</b> estão registadas como desativadas/livres.`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Total de Ramais</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Em Uso</p><p class="text-2xl font-black text-blue-600">${tOcupados}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Livres</p><p class="text-2xl font-black text-emerald-600">${tLivres}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Status</p><p class="text-2xl font-black text-slate-800">OK</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-center">Ramal</th><th class="border px-2 py-1 text-left">Setor</th><th class="border px-2 py-1 text-left">Endereço IP</th><th class="border px-2 py-1 text-left">Equipamento/Obs</th></tr>`; visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid'; 
+                
                 if(document.getElementById('print-chart-1')) document.getElementById('print-chart-1').parentElement.style.display = 'none';
                 if(document.getElementById('print-chart-2')) document.getElementById('print-chart-2').parentElement.style.display = 'none';
-                if(chartStatusVoip && document.getElementById('print-chart-3')) { document.getElementById('print-chart-3').src = document.getElementById('chartStatusVoip').toDataURL('image/png'); if(document.getElementById('print-chart-3-title')) document.getElementById('print-chart-3-title').innerText = "Status Telefonia VoIP"; }
+                if(window.imgChartVoip && document.getElementById('print-chart-3')) { document.getElementById('print-chart-3').src = window.imgChartVoip; if(document.getElementById('print-chart-3-title')) document.getElementById('print-chart-3-title').innerText = "Status Telefonia VoIP"; }
             }
             window.print(); setTimeout(() => { document.getElementById('printable-report').classList.remove('active-print'); 
                 if(document.getElementById('print-chart-1')) document.getElementById('print-chart-1').parentElement.style.display = 'block';
@@ -994,13 +911,13 @@
             window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
         }
 
-        // ================= BOTÕES E TABS NAVEGAÇÃO =================
+        // ================= DEMAIS SCRIPTS E NAVEGAÇÃO =================
         const tabsBtns = document.querySelectorAll('.tab-btn-tool'), tabContents = document.querySelectorAll('.tab-tool-content');
         tabsBtns.forEach(btn => { 
             btn.addEventListener('click', (e) => { 
                 tabsBtns.forEach(b => { b.classList.remove('bg-blue-100', 'text-blue-800', 'bg-purple-100', 'text-purple-800', 'bg-indigo-100', 'text-indigo-800', 'border-indigo-500'); b.classList.add('text-slate-600', 'border-transparent'); }); 
                 e.currentTarget.classList.remove('text-slate-600', 'border-transparent'); const target = e.currentTarget.getAttribute('data-target');
-                if(target === 'tab-admin') e.currentTarget.classList.add('bg-purple-100', 'text-purple-800'); else if(target === 'tab-localidade') e.currentTarget.classList.add('bg-indigo-100', 'text-indigo-800', 'border-indigo-500'); else if(target === 'tab-voip') e.currentTarget.classList.add('bg-indigo-100', 'text-indigo-800', 'border-indigo-500'); else e.currentTarget.classList.add('bg-blue-100', 'text-blue-800');
+                if(target === 'tab-admin') e.currentTarget.classList.add('bg-purple-100', 'text-purple-800'); else if(target === 'tab-localidade') e.currentTarget.classList.add('bg-indigo-100', 'text-indigo-800', 'border-indigo-500'); else if(target === 'tab-voip-tool') e.currentTarget.classList.add('bg-indigo-100', 'text-indigo-800', 'border-indigo-500'); else e.currentTarget.classList.add('bg-blue-100', 'text-blue-800');
                 tabContents.forEach(tc => tc.classList.add('hidden')); if(document.getElementById(target)) document.getElementById(target).classList.remove('hidden'); 
             }); 
         });
@@ -1032,6 +949,7 @@
 
         if(document.getElementById('btn-export-csv')) document.getElementById('btn-export-csv').addEventListener('click', () => { let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Local,Serie,Patrimonio,Quantidade\n"; window.estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Local||''}","${r.Série||''}","${r.Patrimonio||''}","${r.Quantidade||0}"\n`); const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); });
 
+        }); // FIM DO DOMContentLoaded
     </script>
 </body>
 </html>
