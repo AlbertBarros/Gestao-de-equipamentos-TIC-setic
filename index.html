@@ -179,7 +179,7 @@
                     <ul class="flex flex-nowrap text-sm font-medium text-center text-gray-500 gap-1 whitespace-nowrap min-w-max">
                         <li><button id="view-estoque-btn" class="tab-btn-main inline-block px-5 py-3 text-blue-600 border-b-2 border-blue-600 rounded-t-lg transition-colors bg-white font-bold" data-target="view-estoque-content"><i class="fas fa-boxes mr-2"></i>Estoque Consolidado</button></li>
                         <li><button id="view-rastreio-btn" class="tab-btn-main inline-block px-5 py-3 border-b-2 border-transparent hover:text-gray-600 hover:bg-gray-100 rounded-t-lg transition-colors font-medium" data-target="view-rastreio-content"><i class="fas fa-map-marker-alt mr-2"></i>Rastreamento de Ativos (Mapa Físico)</button></li>
-                        <li><button id="view-voip-btn" class="tab-btn-main inline-block px-5 py-3 border-b-2 border-transparent hover:text-gray-600 hover:bg-gray-100 rounded-t-lg transition-colors font-medium" data-target="view-voip-content"><i class="fas fa-phone-volume mr-2"></i>Telefonia VoIP</button></li>
+                        <li><button id="view-voip-btn" class="tab-btn-main inline-block px-5 py-3 border-b-2 border-transparent hover:text-gray-600 hover:bg-gray-100 rounded-t-lg transition-colors font-medium" data-target="view-voip-content"><i class="fas fa-phone-volume mr-2"></i>Ramais</button></li>
                     </ul>
                 </div>
 
@@ -255,7 +255,7 @@
                 <div id="view-voip-content" class="tab-main-content hidden">
                     <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center bg-indigo-50/10 gap-4">
                         <div class="flex items-center gap-4">
-                            <h3 class="text-sm font-bold text-indigo-900 tracking-wide"><i class="fas fa-phone-volume mr-2 text-indigo-500"></i>Gestão de Telefonia VoIP</h3>
+                            <h3 class="text-sm font-bold text-indigo-900 tracking-wide"><i class="fas fa-phone-volume mr-2 text-indigo-500"></i>Gestão de Ramais</h3>
                             <button id="btn-print-voip-main-aba" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-1.5 px-3 rounded-md border border-indigo-200 transition flex items-center cursor-pointer"><i class="fas fa-print mr-1.5"></i> Gerar Relatório</button>
                         </div>
                         <div class="relative"><i class="fas fa-search absolute left-3 top-2.5 text-indigo-300 text-sm"></i><input type="text" id="search-table-voip" placeholder="Pesquisar Ramal, Setor ou IP..." class="pl-9 pr-3 py-2 border border-indigo-100 rounded-lg text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm transition-shadow"></div>
@@ -375,11 +375,11 @@
                 <button id="btn-close-ai" class="text-white hover:text-red-300 transition" aria-label="Fechar assistente"><i class="fas fa-times"></i></button>
             </div>
             <div id="ai-chat-body" class="flex-1 p-4 overflow-y-auto bg-slate-50 flex flex-col">
-                <div class="chat-bubble-ai shadow-sm border border-gray-100">Olá! Sou o Assistente Virtual da SETIC. 🤖<br><br>Tenho acesso <b>somente dentro deste navegador</b> aos dados carregados de:<br>• Estoque<br>• Rastreamento físico<br>• Telefonia VoIP<br>• Movimentações e logs<br><br>Pergunte, por exemplo:<br><i>“Detalhes do patrimônio 12345”</i><br><i>“Onde está o equipamento X?”</i><br><i>“Quais monitores temos?”</i><br><i>“Mostre os ramais do setor X”</i></div>
+                <div class="chat-bubble-ai shadow-sm border border-gray-100">Olá! Sou o Assistente Virtual da SETIC. 🤖<br><br>Tenho acesso <b>somente dentro deste navegador</b> aos dados carregados de:<br>• Estoque<br>• Rastreamento físico<br>• Ramais Sede<br>• Movimentações e logs<br><br>Pergunte, por exemplo:<br><i>“Detalhes do patrimônio 12345”</i><br><i>“Onde está o equipamento X?”</i><br><i>“Quais monitores temos?”</i><br><i>“Mostre os ramais do setor X”</i></div>
             </div>
             <div class="p-3 bg-white border-t border-gray-200">
                 <div class="relative">
-                    <input type="text" id="ai-input" autocomplete="off" class="w-full bg-gray-100 border-transparent rounded-full py-2.5 pl-4 pr-12 text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all outline-none" placeholder="Pergunte sobre estoque, rastreio ou VoIP...">
+                    <input type="text" id="ai-input" autocomplete="off" class="w-full bg-gray-100 border-transparent rounded-full py-2.5 pl-4 pr-12 text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all outline-none" placeholder="Pergunte sobre estoque, rastreio ou Ramais Sede...">
                     <button id="btn-ai-send" class="absolute right-1 top-1 w-8 h-8 bg-blue-600 text-white rounded-full flex justify-center items-center hover:bg-blue-700 transition" aria-label="Enviar"><i class="fas fa-paper-plane text-xs"></i></button>
                 </div>
                 <div id="ai-data-summary" class="text-[9px] text-slate-400 text-center mt-2">Sincronizando base de dados...</div>
@@ -397,7 +397,7 @@
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg bg-blue-100 text-blue-800 font-bold transition flex items-center text-sm" data-target="tab-entrada"><i class="fas fa-plus-circle w-6"></i> Entrada Estoque</button></li>
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-saida"><i class="fas fa-minus-circle w-6"></i> Baixa / Saída</button></li>
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-indigo-100 hover:text-indigo-800 font-semibold transition flex items-center text-sm border-l-4 border-transparent hover:border-indigo-500" data-target="tab-localidade"><i class="fas fa-map-marker-alt w-6 text-indigo-500"></i> Locais / Rastreio</button></li>
-                    <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-indigo-100 hover:text-indigo-800 font-semibold transition flex items-center text-sm border-l-4 border-transparent hover:border-indigo-500" data-target="tab-voip-tool"><i class="fas fa-phone-volume w-6 text-indigo-500"></i> Gestão VoIP</button></li>
+                    <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-indigo-100 hover:text-indigo-800 font-semibold transition flex items-center text-sm border-l-4 border-transparent hover:border-indigo-500" data-target="tab-voip-tool"><i class="fas fa-phone-volume w-6 text-indigo-500"></i> Gestão de Ramais</button></li>
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm mt-4" data-target="tab-relatorio"><i class="fas fa-file-contract w-6"></i> Exportações / Relatórios</button></li>
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-pref"><i class="fas fa-sliders-h w-6"></i> Preferências</button></li>
                 </ul>
@@ -468,7 +468,7 @@
                 </div>
 
                 <div id="tab-voip-tool" class="tab-tool-content hidden h-full flex flex-col">
-                    <h2 class="text-2xl font-bold text-indigo-900 mb-2"><i class="fas fa-phone-volume mr-2 text-indigo-600"></i>Gestão de Telefonia VoIP</h2>
+                    <h2 class="text-2xl font-bold text-indigo-900 mb-2"><i class="fas fa-phone-volume mr-2 text-indigo-600"></i>Gestão de Ramais</h2>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
                         <div class="bg-indigo-50/50 p-6 rounded-xl border border-indigo-100 shadow-sm flex flex-col">
                             <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-indigo-800"><i class="fas fa-keyboard mr-2"></i>Gestão Manual</h3><select id="voip-action-type" class="border-indigo-300 rounded text-xs py-1 px-2 focus:ring-indigo-500 bg-white font-bold text-indigo-700 shadow-sm cursor-pointer outline-none"><option value="new">Novo Registo</option><option value="edit">Editar Ramal</option></select></div>
@@ -1089,42 +1089,64 @@ const SETIC_AI = (() => {
             }
 
             const firebaseToken = await user.getIdToken(true);
+            const WORKER_URL = 'https://plain-surf-c0ef.albertbarros18.workers.dev/';
 
-            const response = await fetch(
-                'https://plain-surf-c0ef.albertbarros18.workers.dev/',
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${firebaseToken}`
-                    },
-                    body: JSON.stringify({ pergunta: text })
-                }
-            );
+            const response = await fetch(WORKER_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${firebaseToken}`
+                },
+                body: JSON.stringify({ pergunta: text })
+            });
 
-            const data = await response.json();
+            let data;
+            try {
+                data = await response.json();
+            } catch(error) {
+                console.error('SETIC AI: resposta inválida do Worker', error);
+                document.getElementById(loadingId)?.remove();
+                append('O Assistente SETIC retornou uma resposta inválida.', 'ai');
+                return;
+            }
+
             document.getElementById(loadingId)?.remove();
 
             if(!response.ok || !data.ok){
                 console.error('SETIC AI Worker:', data);
+
                 let mensagem = data?.erro || 'Não foi possível consultar o Assistente SETIC.';
+
                 if(data?.codigo === 'FIREBASE_AUTH_REQUIRED'){
                     mensagem = 'Sua sessão não foi reconhecida para consultar as bases da SETIC. Faça login novamente.';
                 }
+
+                if(data?.status_gemini === 503){
+                    mensagem = 'O serviço de IA está temporariamente indisponível. O sistema tentou novamente automaticamente. Aguarde alguns segundos e tente novamente.';
+                }
+
                 append(esc(mensagem), 'ai');
                 return;
             }
 
-            append(data.resposta || 'Não recebi uma resposta do Assistente.', 'ai');
+            const resposta = data.resposta || 'Não recebi uma resposta do Assistente SETIC.';
+            append(esc(resposta).replace(/\n/g, '<br>'), 'ai');
 
             const status = document.getElementById('ai-status');
             if(status){
                 status.innerHTML = `<i class="fas fa-circle text-green-400 text-[8px] mr-1 animate-pulse"></i> Assistente online`;
             }
+
+            console.log('SETIC AI:', {
+                worker: data.worker_version,
+                modelo: data.modelo_utilizado,
+                ferramentas: data.ferramenta_utilizada
+            });
+
         } catch(error) {
             console.error('SETIC_AI_WORKER:', error);
             document.getElementById(loadingId)?.remove();
-            append('Não foi possível conectar ao Assistente SETIC neste momento.', 'ai');
+            append('Não foi possível conectar ao Assistente SETIC neste momento. Verifique sua conexão e tente novamente.', 'ai');
         }
     }
     function init(){
