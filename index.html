@@ -52,7 +52,6 @@
 <body class="transition-colors duration-200">
     <div id="toast-container" class="fixed top-5 right-5 z-[9999] flex flex-col gap-3 pointer-events-none"></div>
 
-    <!-- TELA DE LOGIN -->
     <div id="login-screen" class="fixed inset-0 flex justify-center items-center z-50 bg-cover bg-center bg-no-repeat" style="background-image: url('https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg'); transition: background-image 0.5s ease;">
         <div class="absolute inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm"></div>
         <div class="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500 relative z-10">
@@ -63,15 +62,17 @@
             </div>
             <div class="space-y-5">
                 <div><label class="block text-sm font-semibold text-slate-700">E-mail Corporativo</label><input type="email" id="login-email" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-blue-500 focus:border-blue-500 transition"></div>
-                <div><label class="block text-sm font-semibold text-slate-700">Senha</label><input type="password" id="login-password" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-blue-500 focus:border-blue-500 transition">
-                <div class="text-right mt-1.5"><button id="btn-forgot-password" class="text-xs text-blue-600 hover:text-blue-800 hover:underline transition font-medium">Esqueci minha senha</button></div></div>
-                <button id="btn-login" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3.5 px-4 rounded-lg hover:opacity-90 transition shadow-lg mt-2 flex justify-center items-center"><i class="fas fa-sign-in-alt mr-2"></i> Autenticar</button>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700">Senha</label>
+                    <input type="password" id="login-password" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-blue-500 focus:border-blue-500 transition">
+                    <div class="text-right mt-1.5"><button id="btn-forgot-password" class="text-xs text-blue-600 hover:text-blue-800 hover:underline transition font-medium">Esqueci minha senha</button></div>
+                </div>
+                <button id="btn-login" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3.5 px-4 rounded-lg hover:opacity-90 transition shadow-lg mt-2 pointer-events-auto flex justify-center items-center"><i class="fas fa-sign-in-alt mr-2"></i> Autenticar</button>
             </div>
             <div id="login-msg-container" class="mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm hidden"><p id="login-msg-text"></p></div>
         </div>
     </div>
 
-    <!-- SISTEMA PRINCIPAL -->
     <div id="main-system" class="hidden relative">
         <nav id="navbar-main" class="bg-[#161B33] text-white shadow-md border-b-4 border-yellow-500 no-print transition-colors sticky top-0 z-40">
             <div class="px-4 sm:px-6 lg:px-8">
@@ -180,8 +181,7 @@
                     <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center gap-4 bg-white">
                         <div class="flex items-center gap-4">
                             <h3 class="text-sm font-bold text-slate-800 tracking-wide">Base de Inventário Físico</h3>
-                            <!-- ATENÇÃO: BOTÃO BLINDADO AQUI (ONCLICK DIRETO) -->
-                            <button onclick="window.gerarPDFSimples('estoque')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-1.5 px-3 rounded-md border border-slate-300 transition flex items-center cursor-pointer"><i class="fas fa-print mr-1.5 text-blue-600"></i> Gerar Relatório</button>
+                            <button id="btn-print-estoque-main-aba" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-1.5 px-3 rounded-md border border-slate-300 transition flex items-center cursor-pointer"><i class="fas fa-print mr-1.5 text-blue-600"></i> Gerar Relatório</button>
                         </div>
                         <div class="flex items-center gap-3">
                             <select id="filter-cat-estoque" class="border border-gray-200 rounded-lg text-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 font-medium text-slate-600 cursor-pointer"><option value="">Todas as Categorias</option></select>
@@ -217,8 +217,7 @@
                     <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center bg-indigo-50/10 gap-4">
                         <div class="flex items-center gap-4">
                             <h3 class="text-sm font-bold text-indigo-900 tracking-wide"><i class="fas fa-location-dot mr-2 text-indigo-500"></i>Mapa de Distribuição de Ativos</h3>
-                            <!-- ATENÇÃO: BOTÃO BLINDADO AQUI (ONCLICK DIRETO) -->
-                            <button onclick="window.gerarPDFSimples('rastreio')" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-1.5 px-3 rounded-md border border-indigo-200 transition flex items-center cursor-pointer"><i class="fas fa-print mr-1.5"></i> Gerar Relatório</button>
+                            <button id="btn-print-rastreio-main-aba" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-1.5 px-3 rounded-md border border-indigo-200 transition flex items-center cursor-pointer"><i class="fas fa-print mr-1.5"></i> Gerar Relatório</button>
                         </div>
                         <div class="relative"><i class="fas fa-search absolute left-3 top-2.5 text-indigo-300 text-sm"></i><input type="text" id="search-table-rastreio" placeholder="Pesquisar Equipamento, Local..." class="pl-9 pr-3 py-2 border border-indigo-100 rounded-lg text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm transition-shadow"></div>
                     </div>
@@ -251,8 +250,7 @@
                     <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center bg-indigo-50/10 gap-4">
                         <div class="flex items-center gap-4">
                             <h3 class="text-sm font-bold text-indigo-900 tracking-wide"><i class="fas fa-phone-volume mr-2 text-indigo-500"></i>Gestão de Telefonia VoIP</h3>
-                            <!-- ATENÇÃO: BOTÃO BLINDADO AQUI (ONCLICK DIRETO) -->
-                            <button onclick="window.gerarPDFSimples('voip')" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-1.5 px-3 rounded-md border border-indigo-200 transition flex items-center cursor-pointer"><i class="fas fa-print mr-1.5"></i> Gerar Relatório</button>
+                            <button id="btn-print-voip-main-aba" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-1.5 px-3 rounded-md border border-indigo-200 transition flex items-center cursor-pointer"><i class="fas fa-print mr-1.5"></i> Gerar Relatório</button>
                         </div>
                         <div class="relative"><i class="fas fa-search absolute left-3 top-2.5 text-indigo-300 text-sm"></i><input type="text" id="search-table-voip" placeholder="Pesquisar Ramal, Setor ou IP..." class="pl-9 pr-3 py-2 border border-indigo-100 rounded-lg text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm transition-shadow"></div>
                     </div>
@@ -344,7 +342,6 @@
                             <button id="btn-estoque-upload" class="w-full bg-slate-800 text-white font-bold py-3 px-4 rounded hover:bg-slate-700 transition shadow mt-4">Processar Planilha de Estoque</button>
                         </div>
                     </div>
-                    <datalist id="lista-categorias"></datalist><datalist id="lista-componentes"></datalist>
                 </div>
 
                 <div id="tab-saida" class="tab-tool-content hidden h-full flex flex-col">
@@ -408,13 +405,11 @@
                     <i class="fas fa-file-contract text-6xl text-slate-300 mb-6"></i>
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Exportações e Relatórios Oficiais</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl mb-8">
-                        <!-- ATENÇÃO: BOTÕES DE RELATÓRIO BLINDADOS AQUI (ONCLICK DIRETO) -->
-                        <div class="border rounded-xl p-6 bg-blue-50 shadow-sm text-center"><i class="fas fa-boxes text-blue-500 text-3xl mb-3"></i><h3 class="font-bold text-slate-800 mb-4">Relatório Consolidado</h3><button onclick="window.gerarRelatorioAnalitico('estoque')" class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700 transition shadow flex justify-center items-center cursor-pointer"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF Estoque</button></div>
-                        <div class="border rounded-xl p-6 bg-indigo-50 shadow-sm text-center"><i class="fas fa-map-marker-alt text-indigo-500 text-3xl mb-3"></i><h3 class="font-bold text-slate-800 mb-4">Relatório de Rastreio</h3><button onclick="window.gerarRelatorioAnalitico('rastreio')" class="w-full bg-indigo-600 text-white font-bold py-3 rounded hover:bg-indigo-700 transition shadow flex justify-center items-center cursor-pointer"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF Locais</button></div>
-                        <div class="border rounded-xl p-6 bg-purple-50 shadow-sm text-center"><i class="fas fa-phone-volume text-purple-500 text-3xl mb-3"></i><h3 class="font-bold text-slate-800 mb-4">Relatório VoIP</h3><button onclick="window.gerarRelatorioAnalitico('voip')" class="w-full bg-purple-600 text-white font-bold py-3 rounded hover:bg-purple-700 transition shadow flex justify-center items-center cursor-pointer"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF Ramais</button></div>
+                        <div class="border rounded-xl p-6 bg-blue-50 shadow-sm text-center"><i class="fas fa-boxes text-blue-500 text-3xl mb-3"></i><h3 class="font-bold text-slate-800 mb-4">Relatório Consolidado</h3><button id="btn-relatorio-analitico-estoque" class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700 transition shadow flex justify-center items-center cursor-pointer"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF Estoque</button></div>
+                        <div class="border rounded-xl p-6 bg-indigo-50 shadow-sm text-center"><i class="fas fa-map-marker-alt text-indigo-500 text-3xl mb-3"></i><h3 class="font-bold text-slate-800 mb-4">Relatório de Rastreio</h3><button id="btn-relatorio-analitico-rastreio" class="w-full bg-indigo-600 text-white font-bold py-3 rounded hover:bg-indigo-700 transition shadow flex justify-center items-center cursor-pointer"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF Locais</button></div>
+                        <div class="border rounded-xl p-6 bg-purple-50 shadow-sm text-center"><i class="fas fa-phone-volume text-purple-500 text-3xl mb-3"></i><h3 class="font-bold text-slate-800 mb-4">Relatório VoIP</h3><button id="btn-relatorio-analitico-voip" class="w-full bg-purple-600 text-white font-bold py-3 rounded hover:bg-purple-700 transition shadow flex justify-center items-center cursor-pointer"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF Ramais</button></div>
                     </div>
-                    <!-- CSV BUTTON -->
-                    <button onclick="window.exportarCSV()" class="text-slate-500 hover:text-slate-800 font-bold transition flex items-center underline cursor-pointer"><i class="fas fa-file-csv mr-2"></i> Ou exportar dados brutos em CSV</button>
+                    <button id="btn-export-csv" class="text-slate-500 hover:text-slate-800 font-bold transition flex items-center underline"><i class="fas fa-file-csv mr-2"></i> Ou exportar dados brutos em CSV</button>
                 </div>
 
                 <div id="tab-pref" class="tab-tool-content hidden">
@@ -481,8 +476,7 @@
 
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="font-bold text-slate-800"><i class="fas fa-history text-blue-600 mr-2"></i> Auditoria de Movimentações</h3>
-                            <!-- ATENÇÃO: BOTÃO LOGS BLINDADO AQUI (ONCLICK DIRETO) -->
-                            <button onclick="window.gerarPDFLogs()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition cursor-pointer"><i class="fas fa-file-pdf mr-1"></i> Exportar Logs PDF</button>
+                            <button id="btn-export-logs-pdf" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded shadow transition"><i class="fas fa-file-pdf mr-1"></i> Exportar Logs PDF</button>
                         </div>
                         <div class="flex-1 overflow-y-auto border rounded bg-slate-50 shadow-inner">
                             <table class="min-w-full divide-y divide-gray-200 text-sm">
@@ -497,7 +491,7 @@
         </div>
     </div>
 
-    <!-- MODALS E RELATORIOS PDF -->
+    <!-- MODALS E RELATORIOS PDF (HIDDEN STRUCTURES) -->
     <div id="printable-report" class="hidden font-sans">
         <div class="bg-[#161B33] text-white p-6 flex justify-between items-center print-bg mb-6">
             <div>
@@ -571,127 +565,40 @@
         window.itemsPerPage = 10;
         window.currentFilterCat = ''; window.currentSearchText = ''; window.currentSearchRastreio = ''; window.currentSearchVoip = '';
         
-        window.chartComponentesAmpliado = null; window.chartTopSaidas = null; window.chartPizzaCategorias = null; window.chartStatusVoip = null; window.chartRastreio = null; 
+        // Memória das Imagens (BLINDAGEM DO PDF)
         window.imgChart1 = null; window.imgChart2 = null; window.imgChart3 = null; window.imgChartVoip = null; window.imgChartRastreio = null;
 
         let mapItensSaida = {}, mapEditLocais = {}, mapEditEstoque = {}, mapEditVoip = {};
+        let chartComponentesAmpliado = null, chartTopSaidas = null, chartPizzaCategorias = null, chartStatusVoip = null, chartRastreio = null; 
         let estoqueCarregado = false, locaisCarregados = false, logsCarregados = false, voipCarregado = false;
 
-        // ================= EXPORTAÇÕES PDF BLINDADAS =================
-        // Se a "foto" do gráfico não tiver sido tirada automaticamente pela animação, ele tira à força na hora de gerar o PDF.
-        window.gerarPDFLogs = function() {
-            try {
-                document.getElementById('printable-report').classList.remove('active-print'); 
-                document.getElementById('printable-simple-table').classList.add('active-print');
-                document.getElementById('print-simple-title').innerText = "Auditoria de Movimentações"; 
-                document.getElementById('print-simple-date').innerText = `Gerado por: ${window.userEmail} em ${new Date().toLocaleDateString('pt-BR')}`;
-                document.getElementById('print-simple-thead').innerHTML = `<tr><th>Data/Hora</th><th>Ação</th><th>Item</th><th style="text-align:center;">Qtd</th><th>Usuário / Ref.</th></tr>`;
-                const tb = document.getElementById('print-simple-tbody'); tb.innerHTML = '';
-                window.logsLocal.forEach(log => { 
-                    let dateStr = log.dataHora ? log.dataHora.toDate().toLocaleDateString('pt-BR') + ' ' + log.dataHora.toDate().toLocaleTimeString('pt-BR').substring(0,5) : "N/A"; 
-                    tb.innerHTML += `<tr><td>${dateStr}</td><td><b>${log.tipo}</b></td><td>${log.itemNome}</td><td style="text-align:center;">${log.qtd}</td><td>${(log.chamado||'') + (log.usuario ? ` (${log.usuario})` : '')}</td></tr>`; 
-                });
-                setTimeout(() => { window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000); }, 100);
-            } catch(e) { alert("Erro ao gerar PDF de Logs: " + e.message); console.error(e); }
-        };
+        // BOTÕES DE PDF REPARADOS E BLINDADOS DIRETAMENTE (BUG RESOLVIDO)
+        document.getElementById('btn-print-estoque-main-aba')?.addEventListener('click', () => window.gerarPDFSimples('estoque'));
+        document.getElementById('btn-print-rastreio-main-aba')?.addEventListener('click', () => window.gerarPDFSimples('rastreio'));
+        document.getElementById('btn-print-voip-main-aba')?.addEventListener('click', () => window.gerarPDFSimples('voip'));
+        document.getElementById('btn-relatorio-analitico-estoque')?.addEventListener('click', () => window.gerarRelatorioAnalitico('estoque'));
+        document.getElementById('btn-relatorio-analitico-rastreio')?.addEventListener('click', () => window.gerarRelatorioAnalitico('rastreio'));
+        document.getElementById('btn-relatorio-analitico-voip')?.addEventListener('click', () => window.gerarRelatorioAnalitico('voip'));
+        document.getElementById('btn-export-logs-pdf')?.addEventListener('click', () => {
+            document.getElementById('printable-report').classList.remove('active-print'); document.getElementById('printable-simple-table').classList.add('active-print');
+            document.getElementById('print-simple-title').innerText = "Auditoria de Movimentações"; document.getElementById('print-simple-date').innerText = `Gerado por: ${window.userEmail} em ${new Date().toLocaleDateString('pt-BR')}`;
+            document.getElementById('print-simple-thead').innerHTML = `<tr><th>Data/Hora</th><th>Ação</th><th>Item</th><th style="text-align:center;">Qtd</th><th>Usuário / Ref.</th></tr>`;
+            const tb = document.getElementById('print-simple-tbody'); tb.innerHTML = '';
+            window.logsLocal.forEach(log => { let dateStr = log.dataHora ? log.dataHora.toDate().toLocaleDateString('pt-BR') + ' ' + log.dataHora.toDate().toLocaleTimeString('pt-BR').substring(0,5) : "N/A"; tb.innerHTML += `<tr><td>dateStr</td><td><b>{log.tipo}</b></td><td>log.itemNome</td><tdstyle="text-align:center;">{log.qtd}</td><td>${(log.chamado||'') + (log.usuario ? ` (${log.usuario})` : '')}</td></tr>`; });
+            window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
+        });
 
-        window.exportarCSV = function() {
-            try {
-                let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Local,Serie,Patrimonio,Quantidade\n"; 
-                window.estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Local||''}","${r.Série||''}","${r.Patrimonio||''}","${r.Quantidade||0}"\n`); 
-                const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); 
-            } catch(e) { alert("Erro ao exportar CSV: " + e.message); console.error(e); }
-        };
-
-        window.gerarRelatorioAnalitico = function(tipoRelatorio) {
-            try {
-                document.getElementById('printable-simple-table').classList.remove('active-print'); 
-                document.getElementById('printable-report').classList.add('active-print'); 
-                const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5); 
-                const titleDoc = document.getElementById('print-title-doc'), parecer = document.getElementById('print-parecer'), resumo = document.getElementById('print-resumo'), kpisContainer = document.getElementById('print-kpis'), thead = document.getElementById('print-thead'), tbody = document.getElementById('print-tbody'), chartsContainer = document.getElementById('print-charts-container'), visualTitle = document.getElementById('print-visual-title');
-                
-                // Força a extração das imagens caso a animação tenha falhado ou estado oculta
-                if (!window.imgChart1 && window.chartComponentesAmpliado) window.imgChart1 = window.chartComponentesAmpliado.toBase64Image();
-                if (!window.imgChart2 && window.chartTopSaidas) window.imgChart2 = window.chartTopSaidas.toBase64Image();
-                if (!window.imgChart3 && window.chartPizzaCategorias) window.imgChart3 = window.chartPizzaCategorias.toBase64Image();
-                if (!window.imgChartRastreio && window.chartRastreio) window.imgChartRastreio = window.chartRastreio.toBase64Image();
-                if (!window.imgChartVoip && window.chartStatusVoip) window.imgChartVoip = window.chartStatusVoip.toBase64Image();
-
-                if(tipoRelatorio === 'estoque') {
-                    titleDoc.textContent = `Relatório Consolidado - ${localStorage.getItem('pref_title') || 'SETIC'}`; let tTotal = 0, tZerados = 0, tBaixos = 0; let categorias = new Set(); tbody.innerHTML = ''; let totaisEquip = {}; document.getElementById('print-resumo-title').innerText = "Resumo de Totais por Equipamento";
-                    [...window.estoqueLocal].sort((a, b) => { let cmp = String(a.Componente || '').localeCompare(String(b.Componente || '')); if (cmp !== 0) return cmp; return String(a.Local || '').localeCompare(String(b.Local || '')); }).forEach(i => { tTotal += (Number(i.Quantidade) || 0); categorias.add(String(i.Categoria || 'Geral')); let minEstoque = Number(i.EstoqueMinimo) || 5; if((Number(i.Quantidade)||0) === 0) tZerados++; else if((Number(i.Quantidade)||0) <= minEstoque) tBaixos++; let eqName = String(i.Componente || 'Geral'); totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (Number(i.Quantidade) || 0); tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||''}</td><td class="border px-2 py-1">${i.Componente||''}</td><td class="border px-2 py-1">${i.Modelo||''} / ${i.Especificação||''}</td><td class="border px-2 py-1">${i.Local||''}</td><td class="border px-2 py-1 font-mono">${i.Série||''}</td><td class="border px-2 py-1 font-mono">${i.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`; });
-                    let taxaCritica = window.estoqueLocal.length > 0 ? (((tZerados + tBaixos) / window.estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1); parecer.innerHTML = `Extração consolidou <b>${window.estoqueLocal.length}</b> registos de estoque físico. Emitido por ${window.userEmail} em ${dataAtual}.`; let listTotais = Object.keys(totaisEquip).sort().map(k => `<li><b>${k}:</b> ${totaisEquip[k]} und.</li>`).join(''); resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. <br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${window.estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`; 
-                    
-                    visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid'; chartsContainer.className = "grid grid-cols-3 gap-4 mb-8";
-                    document.getElementById('print-col-1').style.display = 'block'; document.getElementById('print-col-2').style.display = 'block'; document.getElementById('print-col-3').style.display = 'block'; document.getElementById('print-col-3').className = "";
-                    
-                    if(window.imgChart1) document.getElementById('print-chart-1').src = window.imgChart1; 
-                    if(window.imgChart2) document.getElementById('print-chart-2').src = window.imgChart2; 
-                    if(window.imgChart3) { document.getElementById('print-chart-3').src = window.imgChart3; document.getElementById('print-chart-3-title').innerText = "Distribuição por Categoria"; }
-                    
-                } else if (tipoRelatorio === 'rastreio') {
-                    titleDoc.textContent = `Relatório de Rastreio - ${localStorage.getItem('pref_title') || 'SETIC'}`; let tLocaisUnicos = new Set(), tVolumeRastreado = 0, tEquipsUnicos = new Set(); tbody.innerHTML = ''; let totaisEquip = {}; document.getElementById('print-resumo-title').innerText = "Resumo de Totais por Equipamento";
-                    [...window.localidadesLocais].sort((a, b) => { let cmp = String(a.Equipamento || '').localeCompare(String(b.Equipamento || '')); if (cmp !== 0) return cmp; return String(a.Local || '').localeCompare(String(b.Local || '')); }).forEach(loc => { tLocaisUnicos.add(String(loc.Local || 'N/A')); tVolumeRastreado += (Number(loc.Quantidade)||0); tEquipsUnicos.add(String(loc.Equipamento || 'N/A')); let eqName = String(loc.Equipamento || 'Geral'); totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (Number(loc.Quantidade) || 0); tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento||''}</td><td class="border px-2 py-1">${loc.Local||''}</td><td class="border px-2 py-1">${loc.LocalSipac||''}</td><td class="border px-2 py-1">${loc.Marca||''}</td><td class="border px-2 py-1 font-mono">${loc.Serie||''}</td><td class="border px-2 py-1 font-mono">${loc.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`; });
-                    parecer.innerHTML = `A extração consolidou <b>${window.localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${window.userEmail} em ${dataAtual}.`; let listTotais = Object.keys(totaisEquip).sort().map(k => `<li><b>${k}:</b> ${totaisEquip[k]} und.</li>`).join(''); resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades.<br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros</p><p class="text-2xl font-black text-slate-800">${window.localidadesLocais.length}</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`; 
-                    
-                    visualTitle.style.display = 'block'; chartsContainer.style.display = 'flex'; chartsContainer.className = "flex justify-center mb-8";
-                    document.getElementById('print-col-1').style.display = 'none'; document.getElementById('print-col-2').style.display = 'none';
-                    document.getElementById('print-col-3').style.display = 'block'; document.getElementById('print-col-3').className = "w-1/2";
-                    
-                    if(window.imgChartRastreio) { document.getElementById('print-chart-3').src = window.imgChartRastreio; document.getElementById('print-chart-3-title').innerText = "Mapeamento Físico de Ativos"; }
-                    
-                } else if (tipoRelatorio === 'voip') {
-                    titleDoc.textContent = `Relatório de Telefonia VoIP - ${localStorage.getItem('pref_title') || 'SETIC'}`; tbody.innerHTML = ''; document.getElementById('print-resumo-title').innerText = "Visão Geral de Disponibilidade"; let tTotal = window.voipLocal.length; let tLivres = 0; let tOcupados = 0;
-                    [...window.voipLocal].sort((a,b) => String(a.Ramal||'').localeCompare(String(b.Ramal||''))).forEach(v => { let ipStr = String(v.Ip || ''); if(ipStr.toUpperCase() === 'DESATIVADO') { tLivres++; ipStr = 'LIVRE (DESATIVADO)'; } else { tOcupados++; } tbody.innerHTML += `<tr><td class="border px-2 py-1 font-bold text-center">${v.Ramal||''}</td><td class="border px-2 py-1">${v.Setor||''}</td><td class="border px-2 py-1 font-mono">${ipStr}</td><td class="border px-2 py-1">${v.Equipamento||'-'}</td></tr>`; });
-                    parecer.innerHTML = `A extração consolidou <b>${tTotal}</b> ramais VoIP na base de dados. Emitido por ${window.userEmail} em ${dataAtual}.`; resumo.innerHTML = `Atualmente, o painel monitoriza <b>${tTotal}</b> linhas VoIP. Destas, <b>${tOcupados}</b> estão atribuídas/em uso, e <b>${tLivres}</b> estão registadas como desativadas/livres.`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Total de Ramais</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Em Uso</p><p class="text-2xl font-black text-blue-600">${tOcupados}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Livres</p><p class="text-2xl font-black text-emerald-600">${tLivres}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Status</p><p class="text-2xl font-black text-slate-800">OK</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-center">Ramal</th><th class="border px-2 py-1 text-left">Setor</th><th class="border px-2 py-1 text-left">Endereço IP</th><th class="border px-2 py-1 text-left">Equipamento/Obs</th></tr>`; 
-                    
-                    visualTitle.style.display = 'block'; chartsContainer.style.display = 'flex'; chartsContainer.className = "flex justify-center mb-8";
-                    document.getElementById('print-col-1').style.display = 'none'; document.getElementById('print-col-2').style.display = 'none';
-                    document.getElementById('print-col-3').style.display = 'block'; document.getElementById('print-col-3').className = "w-1/2";
-                    
-                    if(window.imgChartVoip) { document.getElementById('print-chart-3').src = window.imgChartVoip; document.getElementById('print-chart-3-title').innerText = "Status de Disponibilidade VoIP"; }
-                }
-
-                setTimeout(() => {
-                    window.print(); 
-                    setTimeout(() => { 
-                        document.getElementById('printable-report').classList.remove('active-print'); 
-                        if(document.getElementById('print-col-1')) document.getElementById('print-col-1').style.display = 'block';
-                        if(document.getElementById('print-col-2')) document.getElementById('print-col-2').style.display = 'block';
-                    }, 1000);
-                }, 100);
-
-            } catch (err) { alert("Erro ao gerar Relatório Analítico: " + err.message); console.error(err); }
-        };
-
-        window.gerarPDFSimples = function(tipo) {
-            try {
-                document.getElementById('printable-report').classList.remove('active-print'); 
-                document.getElementById('printable-simple-table').classList.add('active-print'); 
-                const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5); 
-                const titleObj = document.getElementById('print-simple-title'), dateObj = document.getElementById('print-simple-date'), theadObj = document.getElementById('print-simple-thead'), tbodyObj = document.getElementById('print-simple-tbody'); 
-                tbodyObj.innerHTML = '';
-                
-                if(tipo === 'estoque') {
-                    titleObj.innerText = "Extrato: Inventário Consolidado"; theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente / Espec.</th><th>Local</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`; let filtrados = window.estoqueLocal.filter(item => { let matchBusca = true; if (window.currentSearchText) { const searchTerms = window.currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !window.currentFilterCat || String(item.Categoria||'') === window.currentFilterCat; return matchBusca && matchCat; }); let totaisEquip = {}; filtrados.sort((a, b) => { let cmp = String(a.Componente || '').localeCompare(String(b.Componente || '')); if (cmp !== 0) return cmp; return String(a.Local || '').localeCompare(String(b.Local || '')); }).forEach(i => { let eqName = String(i.Componente || 'Geral'); totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (Number(i.Quantidade) || 0); tbodyObj.innerHTML += `<tr><td>${i.Categoria||''}</td><td><b>${i.Componente||''}</b><br><span style="font-size:10px; color:#555;">${i.Modelo||''} / ${i.Especificação||''}</span></td><td>${i.Local||''}</td><td style="font-family:monospace;">${i.Série||''}</td><td style="font-family:monospace;">${i.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`; }); let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${k}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${window.userEmail} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
-                } else if(tipo === 'rastreio') {
-                    titleObj.innerText = "Extrato: Rastreamento Físico"; theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Local SIPAC</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`; let filtradosRastreio = window.localidadesLocais.filter(item => { if (!window.currentSearchRastreio) return true; const searchTerms = window.currentSearchRastreio.toLowerCase().split(' '); const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); }); let totaisEquip = {}; filtradosRastreio.sort((a, b) => { let cmp = String(a.Equipamento || '').localeCompare(String(b.Equipamento || '')); if (cmp !== 0) return cmp; return String(a.Local || '').localeCompare(String(b.Local || '')); }).forEach(loc => { let eqName = String(loc.Equipamento || 'Geral'); totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (Number(loc.Quantidade) || 0); tbodyObj.innerHTML += `<tr><td><b>${loc.Equipamento||''}</b></td><td>${loc.Local||''}</td><td>${loc.LocalSipac||''}</td><td>${loc.Marca||''}</td><td style="font-family:monospace;">${loc.Serie||''}</td><td style="font-family:monospace;">${loc.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${loc.Quantidade||0}</td></tr>`; }); let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${k}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${window.userEmail} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
-                } else if(tipo === 'voip') {
-                    titleObj.innerText = "Extrato: Telefonia VoIP"; theadObj.innerHTML = `<tr><th>Ramal</th><th>Setor</th><th>Endereço IP</th><th>Equipamento / Obs</th></tr>`; let filtrados = window.voipLocal.filter(item => { if (!window.currentSearchVoip) return true; if (window.currentSearchVoip === '[Livres]') return String(item.Ip || '').toUpperCase() === 'DESATIVADO'; if (window.currentSearchVoip === '[Em Uso]') return String(item.Ip || '').toUpperCase() !== 'DESATIVADO' && String(item.Ip || '').trim() !== ''; const searchTerms = window.currentSearchVoip.toLowerCase().split(' '); const itemText = [item.Ramal, item.Setor, item.Ip, item.Equipamento].map(v => String(v || '')).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); }); let tLivres = 0; filtrados.sort((a, b) => String(a.Ramal||'').localeCompare(String(b.Ramal||''))).forEach(v => { let ipStr = String(v.Ip || ''); if(ipStr.toUpperCase() === 'DESATIVADO') { tLivres++; ipStr = 'LIVRE (DESATIVADO)'; } tbodyObj.innerHTML += `<tr><td style="text-align:center; font-weight:bold;">${v.Ramal||''}</td><td>${v.Setor||''}</td><td style="font-family:monospace;">${ipStr}</td><td>${v.Equipamento||'-'}</td></tr>`; }); dateObj.innerHTML = `Emitido por: ${window.userEmail} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Total de Ramais:</b> ${filtrados.length} &nbsp;|&nbsp; <b>Livres:</b> ${tLivres}</span>`;
-                }
-                setTimeout(() => { window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000); }, 100);
-            } catch (err) { alert("Erro ao gerar PDF Simples: " + err.message); console.error(err); }
-        };
-
-        // ================= FUNÇÕES DE UTILITÁRIOS GLOBAIS =================
+        // ================= FUNÇÕES UTILITÁRIAS GERAIS =================
         function showToast(msg, type = 'success') {
             const container = document.getElementById('toast-container'); if(!container) return;
             const toast = document.createElement('div');
             const colorClass = type === 'success' ? 'bg-emerald-500' : (type === 'error' ? 'bg-red-500' : 'bg-blue-500');
             const iconClass = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-times-circle' : 'fa-info-circle');
             toast.className = `${colorClass} text-white px-4 py-3 rounded shadow-lg flex items-center gap-3 transform transition-transform duration-300 translate-x-full`;
-            toast.innerHTML = `<i class="fas ${iconClass} text-lg"></i><span class="text-sm font-bold">${msg}</span>`;
-            container.appendChild(toast); setTimeout(() => toast.classList.remove('translate-x-full'), 10); setTimeout(() => { toast.classList.add('translate-x-full'); setTimeout(() => toast.remove(), 300); }, 3000);
+            toast.innerHTML = `<i class="fas iconClasstext-lg"></i><spanclass="text-smfont-bold">{msg}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.remove('translate-x-full'), 10);
+            setTimeout(() => { toast.classList.add('translate-x-full'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
         function sanitizeVal(val) {
@@ -701,22 +608,18 @@
 
         function getVal(row, possibleKeys) {
             for (let rawKey in row) {
-                let cleanKey = String(rawKey).toUpperCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                for (let pKey of possibleKeys) { let cleanPKey = String(pKey).toUpperCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); if (cleanKey === cleanPKey || cleanKey.indexOf(cleanPKey) !== -1) return sanitizeVal(row[rawKey]); }
+                let cleanKey = rawKey.toString().toUpperCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                for (let pKey of possibleKeys) { let cleanPKey = pKey.toUpperCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); if (cleanKey === cleanPKey || cleanKey.indexOf(cleanPKey) !== -1) return sanitizeVal(row[rawKey]); }
             } return '';
         }
 
-        // ================= CONFIGURAÇÃO VISUAL INICIAL =================
         function carregarPreferencias() {
-            const titlePainel = localStorage.getItem('pref_title') || 'Painel de Gestão de Estoque - SETIC';
+            const title = localStorage.getItem('pref_title') || 'Painel de Gestão de Estoque - SETIC';
             const color = localStorage.getItem('pref_color') || '#161B33';
             const icon = localStorage.getItem('pref_icon') || 'fa-chart-line';
             const bgImage = localStorage.getItem('pref_bg') || "https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg";
-            
-            if(document.getElementById('navbar-title')) document.getElementById('navbar-title').textContent = titlePainel; 
-            document.title = titlePainel;
-            if(document.getElementById('login-title')) document.getElementById('login-title').textContent = "Almoxarifado TIC"; // Blindado para não alterar com preferencia
-            
+            if(document.getElementById('navbar-title')) document.getElementById('navbar-title').textContent = title; document.title = title;
+            if(document.getElementById('login-title')) document.getElementById('login-title').textContent = title;
             if(document.getElementById('navbar-main')) document.getElementById('navbar-main').style.backgroundColor = color;
             document.querySelectorAll('.btn-primary').forEach(el => el.style.backgroundColor = color);
             if(document.getElementById('navbar-icon')) document.getElementById('navbar-icon').className = `fas ${icon} text-xl ml-2`; 
@@ -751,7 +654,270 @@
             else { document.getElementById('login-screen').classList.remove('hidden'); document.getElementById('main-system').classList.add('hidden'); }
         });
 
-        // EventListeners de Navegação Menus e Modais
+        function iniciarSistema() {
+            onSnapshot(collection(db, "estoque"), (snapshot) => { window.estoqueLocal = []; snapshot.forEach((doc) => { window.estoqueLocal.push({ id: doc.id, ...doc.data() }); }); estoqueCarregado = true; tentarAtualizarDashboard(); });
+            onSnapshot(collection(db, "localidades"), (snapshot) => { window.localidadesLocais = []; snapshot.forEach((doc) => { window.localidadesLocais.push({ id: doc.id, ...doc.data() }); }); locaisCarregados = true; tentarAtualizarDashboard(); });
+            onSnapshot(collection(db, "voip"), (snapshot) => { window.voipLocal = []; snapshot.forEach((doc) => { window.voipLocal.push({ id: doc.id, ...doc.data() }); }); voipCarregado = true; tentarAtualizarDashboard(); });
+            onSnapshot(query(collection(db, "logs"), orderBy("dataHora", "desc"), limit(100)), (snapshot) => {
+                const tbody = document.getElementById('logs-tbody'); 
+                if(tbody) {
+                    tbody.innerHTML = ''; window.logsLocal = []; 
+                    snapshot.forEach((docSnap) => {
+                        const log = docSnap.data(); window.logsLocal.push(log); let dateStr = "N/A";
+                        if(log.dataHora) { const d = log.dataHora.toDate(); dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR').substring(0,5); }
+                        let corAcao = log.tipo === 'ENTRADA' ? 'text-emerald-600' : 'text-orange-600', iconAcao = log.tipo === 'ENTRADA' ? 'fa-arrow-down' : 'fa-arrow-up';
+                        if(log.tipo.includes('LOCAL') || log.tipo.includes('MOVIMENTAÇÃO')) { corAcao = 'text-indigo-600'; iconAcao = 'fa-map-marker-alt'; }
+                        if(log.tipo.includes('VOIP')) { corAcao = 'text-purple-600'; iconAcao = 'fa-phone'; }
+                        tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b"><td class="px-4 py-3">${dateStr}</td><td class="px-4 py-3 font-bold ${corAcao}"><i class="fas ${iconAcao} mr-1"></i> log.tipo</td><tdclass="px-4py-3">{log.itemNome}</td><td class="px-4 py-3">log.qtd</td><tdclass="px-4py-3text-xstext-gray-500">{log.usuario||''}</td></tr>`;
+                    });
+                }
+                logsCarregados = true; tentarAtualizarDashboard();
+            });
+        }
+        async function registrarLog(tipo, itemNome, qtd, chamado = "") { try { await addDoc(collection(db, "logs"), { tipo, itemNome, qtd: Number(qtd), chamado, usuario: window.userEmail, dataHora: serverTimestamp() }); } catch(e) {} }
+
+        function tentarAtualizarDashboard() {
+            if(estoqueCarregado && locaisCarregados && logsCarregados && voipCarregado) {
+                atualizarInterfaceEstoque(); atualizarInterfaceRastreio(); atualizarInterfaceVoip();
+                atualizarDatalists(); atualizarDatalistSaida(); atualizarSelectEdicaoLocais(); atualizarSelectEdicaoEstoque(); atualizarSelectEdicaoVoip();
+                gerarInsights(); renderChartsUIUX();
+            }
+        }
+
+        const aiInput = document.getElementById('ai-input'); const aiSendBtn = document.getElementById('btn-ai-send'); const aiBody = document.getElementById('ai-chat-body');
+        function appendAI_Msg(text, sender) { const div = document.createElement('div'); div.className = sender === 'ai' ? 'chat-bubble-ai shadow-sm border border-gray-100' : 'chat-bubble-user shadow-sm'; div.innerHTML = text; aiBody.appendChild(div); aiBody.scrollTop = aiBody.scrollHeight; }
+        function processAILogic(msg) {
+            const mOriginal = msg.trim(); const m = mOriginal.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); 
+            if(m.includes('ola') || m.includes('oi ') || m === 'oi' || m.includes('bom dia') || m.includes('boa tarde') || m.includes('boa noite') || m.includes('tudo bem')) return "Olá! Sou o Assistente Virtual SETIC. É um prazer ajudar. Como posso facilitar a gestão do nosso almoxarifado hoje?";
+            if(m.includes('como') && m.includes('pdf')) return "Para gerar um relatório em PDF, clique em 'Exportações / Relatórios' no menu de Ferramentas, ou use o botão 'Gerar Relatório' acima das tabelas.";
+            if(m.includes('como') && (m.includes('cadastrar') || m.includes('entrada'))) return "Vá na aba 'Entrada Estoque' para preencher o formulário manual ou importar uma planilha Excel.";
+            if(m.includes('como') && m.includes('baixa')) return "Acesse 'Baixa / Saída'. Use a busca inteligente digitando as primeiras letras do item, informe a quantidade e confirme.";
+            if(m.includes('maior') || m.includes('mais temos') || m.includes('mais sobra')) { if(window.estoqueLocal.length === 0) return "Ainda não há dados no estoque."; let top = window.estoqueLocal.reduce((prev, current) => ((prev.Quantidade||0) > (current.Quantidade||0)) ? prev : current); return `O item com maior volume no estoque é <b>${top.Componente}</b>, com top.Quantidadeunidades({top.Local}).`; }
+            if(m.includes('alerta') || m.includes('zerado') || m.includes('critico') || m.includes('faltando')) { let alertas = window.estoqueLocal.filter(i => (i.Quantidade||0) <= (i.EstoqueMinimo||5)); if(alertas.length === 0) return "Excelente! Não identifiquei itens críticos no momento."; let resp = `Identifiquei <b>${alertas.length} item(ns)</b> em estado de alerta:<br><br>`; alertas.slice(0, 4).forEach(i => resp += `• ${i.Componente} (Qtd: ${i.Quantidade})<br>`); if(alertas.length > 4) resp += `<i>... e mais ${alertas.length - 4} itens.</i>`; return resp; }
+            if(m.includes('quantos') || m.includes('quantas') || m.includes('temos') || m.includes('quantidade')) {
+                let isTotalGeral = m.replace(/(quantos|quantas|itens|equipamentos|ativos|temos|no total|em|no|estoque|rastreio|mapa|voip|ramais|telefones|\?|\s)/gi, '').length === 0;
+                if (isTotalGeral && (m.includes('rastreio') || m.includes('mapa'))) { let t = 0; window.localidadesLocais.forEach(i => t += i.Quantidade||0); return `Temos um total de <b>${t} equipamentos</b> rastreados nos locais físicos.`; } 
+                else if (isTotalGeral && (m.includes('voip') || m.includes('ramais') || m.includes('telefones'))) { return `Temos um total de <b>${window.voipLocal.length} ramais VoIP</b> cadastrados no sistema.`; }
+                else if (isTotalGeral) { let t = 0; window.estoqueLocal.forEach(i => t += i.Quantidade||0); return `Contabilizo <b>${t} unidades</b> consolidadas fisicamente no nosso estoque geral.`; }
+                let itemBuscado = m.replace(/\b(quantos|quantas|temos|de|do|da|no|na|em|o|a|os|as|estoque|rastreio|mapa|almoxarifado|quantidade|qual|sao)\b/gi, '').replace(/\?/g, '').trim();
+                if (itemBuscado.endsWith('s') && itemBuscado.length > 3) itemBuscado = itemBuscado.slice(0, -1);
+                if (!itemBuscado || itemBuscado.length < 2) return "Poderia especificar o que deseja consultar? (Ex: Quantos Switchs temos? Ou: Onde fica o ramal 1234?)";
+                let isRastreio = m.includes('rastreio') || m.includes('mapa'); let isEstoque = m.includes('estoque') || m.includes('almoxarifado');
+                if(!isRastreio && !isEstoque) { isEstoque = true; isRastreio = true; } 
+                let totalEstoque = 0, totalRastreio = 0;
+                window.estoqueLocal.forEach(i => { let comp = (i.Componente || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); let cat = (i.Categoria || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); if(comp.includes(itemBuscado) || cat.includes(itemBuscado)) totalEstoque += (i.Quantidade || 0); });
+                window.localidadesLocais.forEach(i => { let eq = (i.Equipamento || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); let marca = (i.Marca || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); if(eq.includes(itemBuscado) || marca.includes(itemBuscado)) totalRastreio += (i.Quantidade || 0); });
+                if (totalEstoque === 0 && totalRastreio === 0) return `Não encontrei nenhum registro de "<b>${mOriginal.replace(/(quantos|quantas|temos|\?)/gi, '').trim()}</b>" nas bases físicas.`;
+                let resp = `Resultados para "<b>${mOriginal.replace(/(quantos|quantas|temos|no estoque|no rastreio|\?)/gi, '').trim()}</b>":<br>• No Estoque: <b>${totalEstoque}</b> und.<br>• No Rastreio (Físico): <b>${totalRastreio}</b> und.`; return resp;
+            }
+            if(m.includes('onde fica o ramal') || m.includes('de quem e o ramal') || m.includes('qual o ip do ramal') || (m.includes('ramal') && m.match(/\d{4}/))) {
+                let numeroRamal = m.match(/\d{4}/);
+                if(numeroRamal) { let achou = window.voipLocal.find(v => v.Ramal === numeroRamal[0]); if(achou) return `O ramal <b>achou.Ramal</b>estánosetor<b>{achou.Setor}</b>. O IP dele é: achou.Ip({achou.Equipamento || 'Sem info extra'}).`; else return `Não encontrei o ramal ${numeroRamal[0]} cadastrado na base VoIP.`; }
+            }
+            return "Entendi, mas para consultas tente ser mais direto: <i>'Quantas memórias temos?'</i>, <i>'Onde fica o ramal 1234?'</i> ou <i>'Como gerar um PDF?'</i>.";
+        }
+        function handleAIChat() { const txt = aiInput.value.trim(); if(!txt) return; appendAI_Msg(txt, 'user'); aiInput.value = ''; setTimeout(() => { const response = processAILogic(txt); appendAI_Msg(response, 'ai'); }, 600); }
+        if(aiSendBtn) aiSendBtn.addEventListener('click', handleAIChat);
+        if(aiInput) aiInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') handleAIChat(); });
+
+        function atualizarInterfaceEstoque() {
+            const tbody = document.getElementById('inventory-tbody'); if(!tbody) return;
+            let tTotal = 0, tZerado = 0, tSaidas = 0;
+            window.estoqueLocal.forEach(item => { const qtd = item.Quantidade || 0; tTotal += qtd; if(qtd <= (item.EstoqueMinimo || 5)) tZerado++; });
+            window.logsLocal.forEach(log => { if(log.tipo === 'SAÍDA') tSaidas += (log.qtd || 0); });
+            if(document.getElementById('kpi-total-estoque')) document.getElementById('kpi-total-estoque').innerText = tTotal; 
+            if(document.getElementById('kpi-total-saidas')) document.getElementById('kpi-total-saidas').innerText = tSaidas; 
+            if(document.getElementById('kpi-zerado')) document.getElementById('kpi-zerado').innerText = tZerado;
+
+            let filtrados = window.estoqueLocal.filter(item => { let matchBusca = true; if (window.currentSearchText) { const searchTerms = window.currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !window.currentFilterCat || (item.Categoria || 'Sem Categoria') === window.currentFilterCat; return matchBusca && matchCat; });
+            const totalPaginas = Math.ceil(filtrados.length / window.itemsPerPage) || 1; if(window.currentPageEstoque > totalPaginas) window.currentPageEstoque = totalPaginas;
+            const inicio = (window.currentPageEstoque - 1) * window.itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + window.itemsPerPage);
+
+            tbody.innerHTML = '';
+            dadosPagina.forEach(item => {
+                const qtd = item.Quantidade || 0; const minEstoque = item.EstoqueMinimo || 5;
+                let badge = qtd === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' : qtd <= minEstoque ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>' : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
+                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">item.Categoria||''</td><tdclass="px-6py-4text-smfont-boldtext-slate-900">{item.Componente||''}<br><span class="text-xs font-normal text-slate-500">${item.Modelo||''} / item.Especificação||''</span></td><tdclass="px-6py-4text-smtext-blue-600">{item.Local||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">item.Série||''</td><tdclass="px-6py-4text-smfont-monotext-slate-500">{item.Patrimonio||''}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">qtd</td><tdclass="px-6py-4">{badge}</td></tr>`;
+            });
+            if(document.getElementById('estoque-page-info')) document.getElementById('estoque-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + window.itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
+            if(document.getElementById('btn-prev-estoque')) document.getElementById('btn-prev-estoque').disabled = window.currentPageEstoque === 1;
+            if(document.getElementById('btn-next-estoque')) document.getElementById('btn-next-estoque').disabled = window.currentPageEstoque === totalPaginas;
+        }
+
+        function atualizarInterfaceRastreio() {
+            const tbody = document.getElementById('rastreio-tbody'); if(!tbody) return;
+            let tTotalRastreio = 0; window.localidadesLocais.forEach(item => tTotalRastreio += (item.Quantidade || 0));
+            if(document.getElementById('kpi-total-rastreio')) document.getElementById('kpi-total-rastreio').innerText = tTotalRastreio;
+
+            let filtrados = window.localidadesLocais.filter(item => { if (!window.currentSearchRastreio) return true; const searchTerms = window.currentSearchRastreio.toLowerCase().split(' '); const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); });
+            const totalPaginas = Math.ceil(filtrados.length / window.itemsPerPage) || 1; if(window.currentPageRastreio > totalPaginas) window.currentPageRastreio = totalPaginas;
+            const inicio = (window.currentPageRastreio - 1) * window.itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + window.itemsPerPage);
+
+            tbody.innerHTML = '';
+            dadosPagina.sort((a,b) => { let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(loc => {
+                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">loc.Equipamento||''</td><tdclass="px-6py-4text-smfont-semiboldtext-indigo-700"><iclass="fasfa-map-pinmr-1opacity-50"></i>{loc.Local||''}</td><td class="px-6 py-4 text-sm text-slate-500">loc.LocalSipac||''</td><tdclass="px-6py-4text-smtext-slate-500">{loc.Marca||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">loc.Serie||''</td><tdclass="px-6py-4text-smfont-monotext-slate-600">{loc.Patrimonio||''}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
+            });
+            if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + window.itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
+            if(document.getElementById('btn-prev-rastreio')) document.getElementById('btn-prev-rastreio').disabled = window.currentPageRastreio === 1;
+            if(document.getElementById('btn-next-rastreio')) document.getElementById('btn-next-rastreio').disabled = window.currentPageRastreio === totalPaginas;
+        }
+
+        function atualizarInterfaceVoip() {
+            const tbody = document.getElementById('voip-tbody'); if(!tbody) return;
+            if(document.getElementById('kpi-total-voip')) document.getElementById('kpi-total-voip').innerText = window.voipLocal.length;
+
+            let filtrados = window.voipLocal.filter(item => { 
+                if (!window.currentSearchVoip) return true; 
+                if (window.currentSearchVoip === '[Livres]') return (item.Ip || '').toUpperCase() === 'DESATIVADO';
+                if (window.currentSearchVoip === '[Em Uso]') return (item.Ip || '').toUpperCase() !== 'DESATIVADO' && (item.Ip || '').trim() !== '';
+                const searchTerms = window.currentSearchVoip.toLowerCase().split(' '); const itemText = [item.Ramal, item.Setor, item.Ip, item.Equipamento].map(v => (v || '').toString()).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); 
+            });
+            const totalPaginas = Math.ceil(filtrados.length / window.itemsPerPage) || 1; if(window.currentPageVoip > totalPaginas) window.currentPageVoip = totalPaginas;
+            const inicio = (window.currentPageVoip - 1) * window.itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + window.itemsPerPage);
+
+            tbody.innerHTML = '';
+            dadosPagina.sort((a,b) => (a.Ramal || '').localeCompare(b.Ramal || '')).forEach(v => {
+                let strIp = v.Ip || ''; let badgeIp = '';
+                if(strIp.toUpperCase() === 'DESATIVADO') badgeIp = `<span class="px-2 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700"><i class="fas fa-check-circle mr-1"></i>LIVRE</span>`;
+                else badgeIp = `<span class="px-2 py-1 inline-flex text-xs font-bold rounded bg-blue-50 text-blue-700 font-mono border border-blue-200">${strIp}</span>`;
+                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-black text-indigo-700 text-lg">v.Ramal||''</td><tdclass="px-6py-4text-smfont-boldtext-slate-800">{v.Setor||''}</td><td class="px-6 py-4">badgeIp</td><tdclass="px-6py-4text-smtext-slate-500">{v.Equipamento||'-'}</td></tr>`;
+            });
+            if(document.getElementById('voip-page-info')) document.getElementById('voip-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + window.itemsPerPage, filtrados.length)} de ${filtrados.length} ramais`;
+            if(document.getElementById('btn-prev-voip')) document.getElementById('btn-prev-voip').disabled = window.currentPageVoip === 1;
+            if(document.getElementById('btn-next-voip')) document.getElementById('btn-next-voip').disabled = window.currentPageVoip === totalPaginas;
+        }
+
+        function renderChartsUIUX() {
+            if(chartComponentesAmpliado) { chartComponentesAmpliado.destroy(); }
+            if(chartTopSaidas) { chartTopSaidas.destroy(); }
+            if(chartPizzaCategorias) { chartPizzaCategorias.destroy(); }
+            if(chartStatusVoip) { chartStatusVoip.destroy(); }
+            if(chartRastreio) { chartRastreio.destroy(); }
+            
+            const primColor = localStorage.getItem('pref_color') || '#161B33';
+            const topItensEstoque = [...window.estoqueLocal].sort((a, b) => (b.Quantidade||0) - (a.Quantidade||0)).slice(0, 8);
+            const ctxComp = document.getElementById('chartComponentesAmpliado');
+            if(ctxComp) {
+                chartComponentesAmpliado = new Chart(ctxComp, { type: 'line', data: { labels: topItensEstoque.length > 0 ? topItensEstoque.map(i => (i.Componente || '').substring(0, 18)) : ['Nenhum item'], datasets: [{ data: topItensEstoque.length > 0 ? topItensEstoque.map(i => i.Quantidade || 0) : [0], borderColor: '#3B82F6', backgroundColor: 'rgba(59, 130, 246, 0.2)', borderWidth: 3, fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#ffffff', pointBorderColor: '#3B82F6' }] }, options: { responsive: true, maintainAspectRatio: false, animation: { onComplete: function() { window.imgChart1 = this.toBase64Image(); } }, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false, drawBorder: false }, ticks: { font: { weight: 'bold', size: 10 } } } } } });
+            }
+
+            const saidasMap = {}; window.logsLocal.forEach(log => { if (log.tipo === 'SAÍDA' && log.itemNome) { saidasMap[log.itemNome] = (saidasMap[log.itemNome] || 0) + (log.qtd || 0); } });
+            const topSaidasKeys = Object.keys(saidasMap).sort((a,b) => saidasMap[b] - saidasMap[a]).slice(0, 5);
+            const saidasLabels = topSaidasKeys.length > 0 ? topSaidasKeys.map(k => k.split(' - ')[0].substring(0, 12)) : ['Sem Baixas'];
+            const saidasValues = topSaidasKeys.length > 0 ? topSaidasKeys.map(k => saidasMap[k]) : [0];
+            const ctxSaidas = document.getElementById('chartTopSaidas');
+            if(ctxSaidas) {
+                let backgroundColors = saidasValues.map((val, idx) => idx === 0 ? '#3B82F6' : '#E2E8F0');
+                chartTopSaidas = new Chart(ctxSaidas, { type: 'bar', data: { labels: saidasLabels, datasets: [{ data: saidasValues, backgroundColor: backgroundColors, borderRadius: 8, barThickness: 24 }] }, options: { responsive: true, maintainAspectRatio: false, animation: { onComplete: function() { window.imgChart2 = this.toBase64Image(); } }, plugins: { legend: { display: false }, datalabels: { color: (ctx) => ctx.dataIndex === 0 ? 'white' : '#64748B', font: { weight: 'bold', size: 11 }, anchor: 'end', align: 'start', offset: 8 } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 }, color: '#94A3B8' } } } } });
+            }
+
+            const mapCat = {}; window.estoqueLocal.forEach(item => { const cat = item.Categoria || 'Geral'; mapCat[cat] = (mapCat[cat] || 0) + (item.Quantidade || 0); });
+            const catLabels = Object.keys(mapCat); const catData = catLabels.map(k => mapCat[k]); const coresVibrantes = ['#10B981', '#F59E0B', '#3B82F6', '#6366F1', '#EC4899', '#8B5CF6', '#EF4444', '#06B6D4'];
+            const ctxPizza = document.getElementById('chartPizzaCategorias');
+            if(ctxPizza) {
+                chartPizzaCategorias = new Chart(ctxPizza, { type: 'doughnut', data: { labels: catLabels.length > 0 ? catLabels : ['Sem Dados'], datasets: [{ data: catData.length > 0 ? catData : [1], backgroundColor: coresVibrantes, borderWidth: 0, cutout: '75%' }] }, options: { responsive: true, maintainAspectRatio: false, rotation: -90, circumference: 180, animation: { onComplete: function() { window.imgChart3 = this.toBase64Image(); } }, plugins: { legend: { display: false }, datalabels: { display: false } } } });
+            }
+
+            let livres = 0, emUso = 0;
+            window.voipLocal.forEach(v => { if((v.Ip || '').toUpperCase() === 'DESATIVADO') livres++; else if((v.Ip || '').trim() !== '') emUso++; });
+            let vLabels = (livres === 0 && emUso === 0) ? ['Sem Dados'] : [`Em Uso (emUso)`,`Livres({livres})`];
+            let vData = (livres === 0 && emUso === 0) ? [1] : [emUso, livres];
+            let vColors = (livres === 0 && emUso === 0) ? ['#E2E8F0'] : ['#3B82F6', '#10B981'];
+            const ctxVoip = document.getElementById('chartStatusVoip');
+            if(ctxVoip) {
+                chartStatusVoip = new Chart(ctxVoip, {
+                    type: 'doughnut', data: { labels: vLabels, datasets: [{ data: vData, backgroundColor: vColors, borderWidth: 0, cutout: '75%', hoverOffset: 4 }] },
+                    options: { responsive: true, maintainAspectRatio: false, rotation: -90, circumference: 180, animation: { onComplete: function() { window.imgChartVoip = this.toBase64Image(); } }, plugins: { legend: { display: true, position: 'bottom', labels: { usePointStyle: true, boxWidth: 8, font: { weight: 'bold', size: 11 } } }, datalabels: { display: false } },
+                        onClick: (e, elements) => { if (elements.length > 0 && (livres > 0 || emUso > 0)) { const index = elements[0].index; const targetFilter = index === 0 ? '[Em Uso]' : '[Livres]'; document.querySelector('[data-target="view-voip-content"]').click(); const searchInput = document.getElementById('search-table-voip'); searchInput.value = targetFilter; searchInput.dispatchEvent(new Event('input')); document.getElementById('tabelas-ancora').scrollIntoView({ behavior: 'smooth' }); } },
+                        onHover: (e, elements) => { e.native.target.style.cursor = (elements.length && (livres > 0 || emUso > 0)) ? 'pointer' : 'default'; }
+                    }
+                });
+            }
+
+            let rastreioMap = {}; window.localidadesLocais.forEach(loc => { let eq = loc.Equipamento || 'Geral'; rastreioMap[eq] = (rastreioMap[eq] || 0) + (loc.Quantidade || 0); });
+            const topRastreioKeys = Object.keys(rastreioMap).sort((a,b) => rastreioMap[b] - rastreioMap[a]); 
+            const rLabels = topRastreioKeys.length > 0 ? topRastreioKeys.map(k => k.substring(0, 25)) : ['Sem Rastreio'];
+            const rData = topRastreioKeys.length > 0 ? topRastreioKeys.map(k => rastreioMap[k]) : [0];
+            const ctxRastreio = document.getElementById('chartRastreio');
+            
+            if(ctxRastreio) {
+                if (rLabels.length > 5) ctxRastreio.parentElement.style.height = `${rLabels.length * 30}px`;
+                chartRastreio = new Chart(ctxRastreio, { 
+                    type: 'bar', data: { labels: rLabels, datasets: [{ data: rData, backgroundColor: '#F97316', borderRadius: 4, barThickness: 12, hoverBackgroundColor: '#C2410C' }] }, 
+                    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, animation: { onComplete: function() { window.imgChartRastreio = this.toBase64Image(); } }, plugins: { legend: { display: false }, datalabels: { color: '#ffffff', font: { weight: 'bold', size: 10 }, anchor: 'end', align: 'left' } }, scales: { x: { display: false, grid: { display: false } }, y: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 }, color: '#475569' } } },
+                        onClick: (e, elements) => { if (elements.length > 0 && rLabels[0] !== 'Sem Rastreio') { const index = elements[0].index; const labelClicado = rLabels[index]; document.querySelector('[data-target="view-rastreio-content"]').click(); const searchInput = document.getElementById('search-table-rastreio'); searchInput.value = labelClicado; searchInput.dispatchEvent(new Event('input')); document.getElementById('tabelas-ancora').scrollIntoView({ behavior: 'smooth' }); } },
+                        onHover: (e, elements) => { e.native.target.style.cursor = (elements.length && rLabels[0] !== 'Sem Rastreio') ? 'pointer' : 'default'; }
+                    } 
+                });
+            }
+        }
+
+        function gerarInsights() {
+            const container = document.getElementById('insights-container'); if(!container) return; container.innerHTML = ''; 
+            let zerados = [], baixos = [], maiorVolume = null, totalItens = 0;
+            if (!window.estoqueLocal || window.estoqueLocal.length === 0) { container.innerHTML = `<div class="col-span-3 bg-gray-50 border-l-4 border-gray-400 p-4 rounded-xl shadow-sm text-gray-500 font-medium flex items-center"><i class="fas fa-info-circle mr-2 text-xl"></i> Sem dados no estoque.</div>`; return; }
+            window.estoqueLocal.forEach(item => { const qtd = item.Quantidade || 0; totalItens += qtd; const minEstoque = item.EstoqueMinimo || 5; if (qtd === 0) zerados.push(item); else if (qtd <= minEstoque) baixos.push(item); if (!maiorVolume || qtd > maiorVolume.Quantidade) maiorVolume = item; });
+            let alertHtml = '';
+            if (zerados.length > 0 || baixos.length > 0) { let desc = ''; if (zerados.length > 0) desc += `<span class="text-red-600 font-bold">zerados.lengthitensesgotados.</span>`;if(baixos.length>0)desc+=`<spanclass="text-orange-600font-bold">{baixos.length} em alerta.</span>`; alertHtml = `<div class="bg-red-50 border-l-4 border-red-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-exclamation-triangle text-red-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-red-800 uppercase tracking-wide">Reposição Prioritária</h4><p class="text-xs text-red-700 mt-2">${desc}</p></div></div>`; } 
+            else { alertHtml = `<div class="bg-emerald-50 border-l-4 border-emerald-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-check-circle text-emerald-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wide">Estoque Saudável</h4><p class="text-xs text-emerald-700 mt-2">Nenhum equipamento em nível crítico.</p></div></div>`; }
+            let acumuloHtml = `<div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-boxes text-blue-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-blue-800 uppercase tracking-wide">Concentração</h4><p class="text-xs text-blue-700 mt-2"><b>${maiorVolume ? maiorVolume.Componente : 'Item'}</b> possui o maior volume.</p></div></div>`;
+            let techHtml = `<div class="bg-purple-50 border-l-4 border-purple-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-sitemap text-purple-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-purple-800 uppercase tracking-wide">Diversidade</h4><p class="text-xs text-purple-700 mt-2">Gestão de ${[...new Set(window.estoqueLocal.map(i => i.Categoria || 'Geral'))].length} categorias.</p></div></div>`;
+            container.innerHTML = alertHtml + acumuloHtml + techHtml;
+        }
+
+        window.gerarRelatorioAnalitico = function(tipoRelatorio) {
+            document.getElementById('printable-simple-table').classList.remove('active-print'); document.getElementById('printable-report').classList.add('active-print'); const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5); const titleDoc = document.getElementById('print-title-doc'), parecer = document.getElementById('print-parecer'), resumo = document.getElementById('print-resumo'), kpisContainer = document.getElementById('print-kpis'), thead = document.getElementById('print-thead'), tbody = document.getElementById('print-tbody'), chartsContainer = document.getElementById('print-charts-container'), visualTitle = document.getElementById('print-visual-title');
+            
+            if(tipoRelatorio === 'estoque') {
+                titleDoc.textContent = `Relatório Consolidado - ${localStorage.getItem('pref_title') || 'SETIC'}`; let tTotal = 0, tZerados = 0, tBaixos = 0; let categorias = new Set(); tbody.innerHTML = ''; let totaisEquip = {}; document.getElementById('print-resumo-title').innerText = "Resumo de Totais por Equipamento";
+                [...window.estoqueLocal].sort((a, b) => { let cmp = (a.Componente || '').localeCompare(b.Componente || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(i => { tTotal += (i.Quantidade || 0); categorias.add(i.Categoria || 'Geral'); let minEstoque = i.EstoqueMinimo || 5; if(i.Quantidade === 0) tZerados++; else if(i.Quantidade <= minEstoque) tBaixos++; let eqName = i.Componente || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (i.Quantidade || 0); tbody.innerHTML += `<tr><td class="border px-2 py-1">i.Categoria||''</td><tdclass="borderpx-2py-1">{i.Componente||''}</td><td class="border px-2 py-1">${i.Modelo||''} / i.Especificação||''</td><tdclass="borderpx-2py-1">{i.Local||''}</td><td class="border px-2 py-1 font-mono">i.Série||''</td><tdclass="borderpx-2py-1font-mono">{i.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`; });
+                let taxaCritica = window.estoqueLocal.length > 0 ? (((tZerados + tBaixos) / window.estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1); parecer.innerHTML = `Extração consolidou <b>${window.estoqueLocal.length}</b> registos de estoque físico. Emitido por ${window.userEmail} em dataAtual.`;letlistTotais=Object.keys(totaisEquip).sort().map(k=>`<li><b>{k}:</b> totaisEquip[k]und.</li>`).join('');resumo.innerHTML=`Operíodoaponta<b>{tTotal}</b> unidades, distribuídas em categorias.sizecategorias.<br><br><b>SubtotaisFísicos:</b><ulstyle="column-count:2;font-size:11px;margin-top:5px;list-style-type:square;margin-left:15px;">{listTotais}</ul>`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">tTotal</p></div><divclass="bg-slate-50borderborder-slate-200p-3text-centerprint-bg"><pclass="text-[10px]text-slate-500font-bolduppercase">Categorias</p><pclass="text-2xlfont-blacktext-slate-800">{categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">window.estoqueLocal.length</p></div><divclass="bg-slate-50borderborder-slate-200p-3text-centerprint-bg"><pclass="text-[10px]text-slate-500font-bolduppercase">Saúde</p><pclass="text-2xlfont-blacktext-emerald-600">{saude}%</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`; 
+                
+                visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid'; chartsContainer.className = "grid grid-cols-3 gap-4 mb-8";
+                document.getElementById('print-col-1').style.display = 'block'; document.getElementById('print-col-2').style.display = 'block'; document.getElementById('print-col-3').style.display = 'block'; document.getElementById('print-col-3').className = "";
+                
+                if(window.imgChart1) document.getElementById('print-chart-1').src = window.imgChart1; 
+                if(window.imgChart2) document.getElementById('print-chart-2').src = window.imgChart2; 
+                if(window.imgChart3) { document.getElementById('print-chart-3').src = window.imgChart3; document.getElementById('print-chart-3-title').innerText = "Distribuição por Categoria"; }
+                
+            } else if (tipoRelatorio === 'rastreio') {
+                titleDoc.textContent = `Relatório de Rastreio - ${localStorage.getItem('pref_title') || 'SETIC'}`; let tLocaisUnicos = new Set(), tVolumeRastreado = 0, tEquipsUnicos = new Set(); tbody.innerHTML = ''; let totaisEquip = {}; document.getElementById('print-resumo-title').innerText = "Resumo de Totais por Equipamento";
+                [...window.localidadesLocais].sort((a, b) => { let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(loc => { tLocaisUnicos.add(loc.Local || 'N/A'); tVolumeRastreado += (loc.Quantidade||0); tEquipsUnicos.add(loc.Equipamento || 'N/A'); let eqName = loc.Equipamento || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (loc.Quantidade || 0); tbody.innerHTML += `<tr><td class="border px-2 py-1">loc.Equipamento||''</td><tdclass="borderpx-2py-1">{loc.Local||''}</td><td class="border px-2 py-1">loc.LocalSipac||''</td><tdclass="borderpx-2py-1">{loc.Marca||''}</td><td class="border px-2 py-1 font-mono">loc.Serie||''</td><tdclass="borderpx-2py-1font-mono">{loc.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`; });
+                parecer.innerHTML = `A extração consolidou <b>${window.localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${window.userEmail} em dataAtual.`;letlistTotais=Object.keys(totaisEquip).sort().map(k=>`<li><b>{k}:</b> totaisEquip[k]und.</li>`).join('');resumo.innerHTML=`Omapeamentolocalizou<b>{tVolumeRastreado}</b> ativos em <b>tLocaisUnicos.size</b>localidades.<br><br><b>SubtotaisFísicos:</b><ulstyle="column-count:2;font-size:11px;margin-top:5px;list-style-type:square;margin-left:15px;">{listTotais}</ul>`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">tVolumeRastreado</p></div><divclass="bg-slate-50borderborder-slate-200p-3text-centerprint-bg"><pclass="text-[10px]text-slate-500font-bolduppercase">LocaisMapeados</p><pclass="text-2xlfont-blacktext-indigo-600">{tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">tEquipsUnicos.size</p></div><divclass="bg-slate-50borderborder-slate-200p-3text-centerprint-bg"><pclass="text-[10px]text-slate-500font-bolduppercase">Registros</p><pclass="text-2xlfont-blacktext-slate-800">{window.localidadesLocais.length}</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`; 
+                
+                visualTitle.style.display = 'block'; chartsContainer.style.display = 'flex'; chartsContainer.className = "flex justify-center mb-8";
+                document.getElementById('print-col-1').style.display = 'none'; document.getElementById('print-col-2').style.display = 'none';
+                document.getElementById('print-col-3').style.display = 'block'; document.getElementById('print-col-3').className = "w-1/2";
+                
+                if(window.imgChartRastreio) { document.getElementById('print-chart-3').src = window.imgChartRastreio; document.getElementById('print-chart-3-title').innerText = "Mapeamento Físico de Ativos"; }
+                
+            } else if (tipoRelatorio === 'voip') {
+                titleDoc.textContent = `Relatório de Telefonia VoIP - ${localStorage.getItem('pref_title') || 'SETIC'}`; tbody.innerHTML = ''; document.getElementById('print-resumo-title').innerText = "Visão Geral de Disponibilidade"; let tTotal = window.voipLocal.length; let tLivres = 0; let tOcupados = 0;
+                [...window.voipLocal].sort((a,b) => (a.Ramal||'').localeCompare(b.Ramal||'')).forEach(v => { let ipStr = v.Ip || ''; if(ipStr.toUpperCase() === 'DESATIVADO') { tLivres++; ipStr = 'LIVRE (DESATIVADO)'; } else { tOcupados++; } tbody.innerHTML += `<tr><td class="border px-2 py-1 font-bold text-center">v.Ramal||''</td><tdclass="borderpx-2py-1">{v.Setor||''}</td><td class="border px-2 py-1 font-mono">ipStr</td><tdclass="borderpx-2py-1">{v.Equipamento||'-'}</td></tr>`; });
+                parecer.innerHTML = `A extração consolidou <b>${tTotal}</b> ramais VoIP na base de dados. Emitido por ${window.userEmail} em dataAtual.`;resumo.innerHTML=`Atualmente,opainelmonitoriza<b>{tTotal}</b> linhas VoIP. Destas, <b>tOcupados</b>estãoatribuídas/emuso,e<b>{tLivres}</b> estão registadas como desativadas/livres.`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Total de Ramais</p><p class="text-2xl font-black text-slate-800">tTotal</p></div><divclass="bg-slate-50borderborder-slate-200p-3text-centerprint-bg"><pclass="text-[10px]text-slate-500font-bolduppercase">EmUso</p><pclass="text-2xlfont-blacktext-blue-600">{tOcupados}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Livres</p><p class="text-2xl font-black text-emerald-600">${tLivres}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Status</p><p class="text-2xl font-black text-slate-800">OK</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-center">Ramal</th><th class="border px-2 py-1 text-left">Setor</th><th class="border px-2 py-1 text-left">Endereço IP</th><th class="border px-2 py-1 text-left">Equipamento/Obs</th></tr>`; 
+                
+                visualTitle.style.display = 'block'; chartsContainer.style.display = 'flex'; chartsContainer.className = "flex justify-center mb-8";
+                document.getElementById('print-col-1').style.display = 'none'; document.getElementById('print-col-2').style.display = 'none';
+                document.getElementById('print-col-3').style.display = 'block'; document.getElementById('print-col-3').className = "w-1/2";
+                
+                if(window.imgChartVoip) { document.getElementById('print-chart-3').src = window.imgChartVoip; document.getElementById('print-chart-3-title').innerText = "Status de Disponibilidade VoIP"; }
+            }
+            window.print(); setTimeout(() => { document.getElementById('printable-report').classList.remove('active-print'); }, 1000);
+        }
+
+        window.gerarPDFSimples = function(tipo) {
+            document.getElementById('printable-report').classList.remove('active-print'); document.getElementById('printable-simple-table').classList.add('active-print'); const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5); const titleObj = document.getElementById('print-simple-title'), dateObj = document.getElementById('print-simple-date'), theadObj = document.getElementById('print-simple-thead'), tbodyObj = document.getElementById('print-simple-tbody'); tbodyObj.innerHTML = '';
+            if(tipo === 'estoque') {
+                titleObj.innerText = "Extrato: Inventário Consolidado"; theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente / Espec.</th><th>Local</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`; let filtrados = window.estoqueLocal.filter(item => { let matchBusca = true; if (window.currentSearchText) { const searchTerms = window.currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !window.currentFilterCat || item.Categoria === window.currentFilterCat; return matchBusca && matchCat; }); let totaisEquip = {}; filtrados.sort((a, b) => { let cmp = (a.Componente || '').localeCompare(b.Componente || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(i => { let eqName = i.Componente || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (i.Quantidade || 0); tbodyObj.innerHTML += `<tr><td>i.Categoria||''</td><td><b>{i.Componente||''}</b><br><span style="font-size:10px; color:#555;">${i.Modelo||''} / i.Especificação||''</span></td><td>{i.Local||''}</td><td style="font-family:monospace;">i.Série||''</td><tdstyle="font-family:monospace;">{i.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`; }); let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${k}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${window.userEmail} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
+            } else if(tipo === 'rastreio') {
+                titleObj.innerText = "Extrato: Rastreamento Físico"; theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Local SIPAC</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`; let filtradosRastreio = window.localidadesLocais.filter(item => { if (!window.currentSearchRastreio) return true; const searchTerms = window.currentSearchRastreio.toLowerCase().split(' '); const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); }); let totaisEquip = {}; filtradosRastreio.sort((a, b) => { let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(loc => { let eqName = loc.Equipamento || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (loc.Quantidade || 0); tbodyObj.innerHTML += `<tr><td><b>loc.Equipamento||''</b></td><td>{loc.Local||''}</td><td>loc.LocalSipac||''</td><td>{loc.Marca||''}</td><td style="font-family:monospace;">loc.Serie||''</td><tdstyle="font-family:monospace;">{loc.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${loc.Quantidade||0}</td></tr>`; }); let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${k}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${window.userEmail} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
+            } else if(tipo === 'voip') {
+                titleObj.innerText = "Extrato: Telefonia VoIP"; theadObj.innerHTML = `<tr><th>Ramal</th><th>Setor</th><th>Endereço IP</th><th>Equipamento / Obs</th></tr>`; let filtrados = window.voipLocal.filter(item => { if (!window.currentSearchVoip) return true; if (window.currentSearchVoip === '[Livres]') return (item.Ip || '').toUpperCase() === 'DESATIVADO'; if (window.currentSearchVoip === '[Em Uso]') return (item.Ip || '').toUpperCase() !== 'DESATIVADO' && (item.Ip || '').trim() !== ''; const searchTerms = window.currentSearchVoip.toLowerCase().split(' '); const itemText = [item.Ramal, item.Setor, item.Ip, item.Equipamento].map(v => (v || '').toString()).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); }); let tLivres = 0; filtrados.sort((a, b) => (a.Ramal||'').localeCompare(b.Ramal||'')).forEach(v => { let ipStr = v.Ip || ''; if(ipStr.toUpperCase() === 'DESATIVADO') { tLivres++; ipStr = 'LIVRE (DESATIVADO)'; } tbodyObj.innerHTML += `<tr><td style="text-align:center; font-weight:bold;">v.Ramal||''</td><td>{v.Setor||''}</td><td style="font-family:monospace;">ipStr</td><td>{v.Equipamento||'-'}</td></tr>`; }); dateObj.innerHTML = `Emitido por: ${window.userEmail} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Total de Ramais:</b> ${filtrados.length} &nbsp;|&nbsp; <b>Livres:</b> ${tLivres}</span>`;
+            }
+            window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
+        }
+
+        // ================= BOTÕES E TABS NAVEGAÇÃO =================
         const tabsBtns = document.querySelectorAll('.tab-btn-tool'), tabContents = document.querySelectorAll('.tab-tool-content');
         tabsBtns.forEach(btn => { 
             btn.addEventListener('click', (e) => { 
@@ -775,19 +941,21 @@
         if(document.getElementById('btn-theme')) document.getElementById('btn-theme').addEventListener('click', () => document.body.classList.toggle('dark'));
         const modal = document.getElementById('tools-modal'); if(document.getElementById('btn-tools')) document.getElementById('btn-tools').addEventListener('click', () => modal.classList.remove('hidden')); document.querySelectorAll('.close-modal').forEach(b => b.addEventListener('click', () => modal.classList.add('hidden')));
 
-        // Filtros e Tabelas Listeners
-        if(document.getElementById('search-table-estoque')) document.getElementById('search-table-estoque').addEventListener('input', e => { window.currentSearchText = e.target.value; window.currentPageEstoque = 1; window.atualizarInterfaceEstoque(); });
-        if(document.getElementById('filter-cat-estoque')) document.getElementById('filter-cat-estoque').addEventListener('change', e => { window.currentFilterCat = e.target.value; window.currentPageEstoque = 1; window.atualizarInterfaceEstoque(); });
-        if(document.getElementById('search-table-rastreio')) document.getElementById('search-table-rastreio').addEventListener('input', e => { window.currentSearchRastreio = e.target.value; window.currentPageRastreio = 1; window.atualizarInterfaceRastreio(); });
-        if(document.getElementById('search-table-voip')) document.getElementById('search-table-voip').addEventListener('input', e => { window.currentSearchVoip = e.target.value; window.currentPageVoip = 1; window.atualizarInterfaceVoip(); });
+        if(document.getElementById('search-table-estoque')) document.getElementById('search-table-estoque').addEventListener('input', e => { window.currentSearchText = e.target.value; window.currentPageEstoque = 1; atualizarInterfaceEstoque(); });
+        if(document.getElementById('filter-cat-estoque')) document.getElementById('filter-cat-estoque').addEventListener('change', e => { window.currentFilterCat = e.target.value; window.currentPageEstoque = 1; atualizarInterfaceEstoque(); });
+        if(document.getElementById('search-table-rastreio')) document.getElementById('search-table-rastreio').addEventListener('input', e => { window.currentSearchRastreio = e.target.value; window.currentPageRastreio = 1; atualizarInterfaceRastreio(); });
+        if(document.getElementById('search-table-voip')) document.getElementById('search-table-voip').addEventListener('input', e => { window.currentSearchVoip = e.target.value; window.currentPageVoip = 1; atualizarInterfaceVoip(); });
         
-        if(document.getElementById('btn-prev-estoque')) document.getElementById('btn-prev-estoque').addEventListener('click', () => { if(window.currentPageEstoque > 1) { window.currentPageEstoque--; window.atualizarInterfaceEstoque(); } });
-        if(document.getElementById('btn-next-estoque')) document.getElementById('btn-next-estoque').addEventListener('click', () => { window.currentPageEstoque++; window.atualizarInterfaceEstoque(); });
-        if(document.getElementById('btn-prev-rastreio')) document.getElementById('btn-prev-rastreio').addEventListener('click', () => { if(window.currentPageRastreio > 1) { window.currentPageRastreio--; window.atualizarInterfaceRastreio(); } });
-        if(document.getElementById('btn-next-rastreio')) document.getElementById('btn-next-rastreio').addEventListener('click', () => { window.currentPageRastreio++; window.atualizarInterfaceRastreio(); });
-        if(document.getElementById('btn-prev-voip')) document.getElementById('btn-prev-voip').addEventListener('click', () => { if(window.currentPageVoip > 1) { window.currentPageVoip--; window.atualizarInterfaceVoip(); } });
-        if(document.getElementById('btn-next-voip')) document.getElementById('btn-next-voip').addEventListener('click', () => { window.currentPageVoip++; window.atualizarInterfaceVoip(); });
+        if(document.getElementById('btn-prev-estoque')) document.getElementById('btn-prev-estoque').addEventListener('click', () => { if(window.currentPageEstoque > 1) { window.currentPageEstoque--; atualizarInterfaceEstoque(); } });
+        if(document.getElementById('btn-next-estoque')) document.getElementById('btn-next-estoque').addEventListener('click', () => { window.currentPageEstoque++; atualizarInterfaceEstoque(); });
+        if(document.getElementById('btn-prev-rastreio')) document.getElementById('btn-prev-rastreio').addEventListener('click', () => { if(window.currentPageRastreio > 1) { window.currentPageRastreio--; atualizarInterfaceRastreio(); } });
+        if(document.getElementById('btn-next-rastreio')) document.getElementById('btn-next-rastreio').addEventListener('click', () => { window.currentPageRastreio++; atualizarInterfaceRastreio(); });
+        if(document.getElementById('btn-prev-voip')) document.getElementById('btn-prev-voip').addEventListener('click', () => { if(window.currentPageVoip > 1) { window.currentPageVoip--; atualizarInterfaceVoip(); } });
+        if(document.getElementById('btn-next-voip')) document.getElementById('btn-next-voip').addEventListener('click', () => { window.currentPageVoip++; atualizarInterfaceVoip(); });
+
+        if(document.getElementById('btn-export-csv')) document.getElementById('btn-export-csv').addEventListener('click', () => { let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Local,Serie,Patrimonio,Quantidade\n"; window.estoqueLocal.forEach(r => csv += `"r.Categoria||''","{r.Componente||''}","r.Modelo||''","{r.Especificação||''}","r.Local||''","{r.Série||''}","r.Patrimonio||''","{r.Quantidade||0}"\n`); const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); });
 
     </script>
 </body>
 </html>
+
