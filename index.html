@@ -104,7 +104,6 @@
                     <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-map-location-dot text-5xl text-emerald-600"></i></div>
                     <div class="z-10"><div class="flex items-center gap-2 mb-1"><i class="fas fa-map-location-dot text-emerald-500 text-xs"></i><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Total Rastreado</p></div><p id="kpi-total-rastreio" class="text-2xl font-extrabold text-slate-800">0</p></div>
                 </div>
-                <!-- NOVO KPI VOIP -->
                 <div class="modern-card p-4 flex items-start justify-between relative overflow-hidden group border-l-4 border-l-indigo-500">
                     <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-phone-volume text-5xl text-indigo-600"></i></div>
                     <div class="z-10"><div class="flex items-center gap-2 mb-1"><i class="fas fa-phone-volume text-indigo-500 text-xs"></i><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Telefonia VoIP</p></div><p id="kpi-total-voip" class="text-2xl font-extrabold text-slate-800">0</p></div>
@@ -136,9 +135,16 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="modern-card p-6 flex flex-col justify-center items-center relative">
-                    <h3 class="text-sm font-bold text-slate-800 absolute top-6 left-6 flex items-center"><i class="fas fa-sitemap text-indigo-500 mr-2"></i> Divisão Estrutural</h3>
-                    <div class="h-48 w-full flex justify-center mt-10"><canvas id="chartPizzaCategorias"></canvas></div>
+                
+                <!-- NOVO GRÁFICO VOIP (STATUS) -->
+                <div class="modern-card p-6 flex flex-col justify-center items-center relative overflow-hidden group">
+                    <h3 class="text-sm font-bold text-slate-800 absolute top-6 left-6 flex items-center"><i class="fas fa-phone-volume text-indigo-500 mr-2"></i> Status Telefonia VoIP</h3>
+                    <div class="h-48 w-full flex justify-center mt-12 relative cursor-pointer" title="Clique para filtrar a tabela VoIP">
+                        <canvas id="chartStatusVoip"></canvas>
+                        <div class="absolute bottom-1 text-center pointer-events-none opacity-0 group-hover:opacity-100 transition">
+                            <p class="text-[10px] text-indigo-500 font-bold bg-indigo-50 px-2 py-0.5 rounded-full"><i class="fas fa-hand-pointer mr-1"></i>Clique na cor para filtrar</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="modern-card p-6 flex flex-col relative overflow-hidden">
@@ -331,7 +337,6 @@
             </div>
 
             <div class="flex-1 p-8 overflow-y-auto bg-white relative">
-                <!-- TAB ENTRADA -->
                 <div id="tab-entrada" class="tab-tool-content h-full flex flex-col">
                     <h2 class="text-2xl font-bold text-blue-900 mb-2"><i class="fas fa-boxes mr-2 text-blue-600"></i>Entrada de Ativos (Estoque)</h2>
                     <p class="text-sm text-slate-500 mb-6 border-b pb-4">Adicione estoque manualmente ou importe em lote por planilha.</p>
@@ -362,7 +367,6 @@
                     <datalist id="lista-categorias"></datalist><datalist id="lista-componentes"></datalist>
                 </div>
 
-                <!-- TAB SAÍDA -->
                 <div id="tab-saida" class="tab-tool-content hidden h-full flex flex-col">
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Baixa de Material</h2>
                     <p class="text-sm text-slate-500 mb-8 border-b pb-4">Despacho de componentes para atendimento de incidentes.</p>
@@ -382,7 +386,6 @@
                     </div>
                 </div>
 
-                <!-- TAB LOCALIDADE / RASTREIO -->
                 <div id="tab-localidade" class="tab-tool-content hidden h-full flex flex-col">
                     <h2 class="text-2xl font-bold text-indigo-900 mb-2"><i class="fas fa-map-marker-alt mr-2 text-indigo-600"></i>Gestão de Localidades e Rastreio</h2>
                     <p class="text-sm text-slate-500 mb-6 border-b pb-4">Mapeie fisicamente os equipamentos registando número de série e património.</p>
@@ -480,7 +483,6 @@
                             <div><h2 class="text-2xl font-bold text-slate-800">Painel do Administrador</h2></div>
                             <button id="btn-admin-lock" class="text-slate-400 hover:text-slate-800 transition"><i class="fas fa-lock text-xl"></i></button>
                         </div>
-
                         <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
                             <!-- EXCLUSÃO EM LOTE -->
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between col-span-1 lg:col-span-2">
@@ -505,7 +507,6 @@
                                         <button id="btn-delete-est-batch" class="w-full bg-red-600 text-white font-bold py-1.5 px-2 rounded hover:bg-red-700 transition text-[11px] shadow disabled:opacity-50" disabled><i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)</button>
                                     </div>
                                     
-                                    <!-- NOVO BLOCO APAGAR VOIP -->
                                     <div class="bg-white p-3 border border-purple-200 rounded shadow-sm">
                                         <label class="block text-[11px] font-bold text-purple-800 mb-1">Apagar Telefonia VoIP</label>
                                         <div class="relative mb-2"><i class="fas fa-search absolute left-2 top-2 text-purple-400 text-xs"></i><input type="text" id="admin-search-voip" class="w-full text-[11px] p-1.5 pl-7 border border-purple-300 rounded focus:ring-purple-500 focus:outline-none" placeholder="Digite ramal, setor, IP..."></div>
@@ -517,7 +518,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- FIM EXCLUSÃO LOTE -->
 
                             <div class="border border-blue-200 rounded-xl p-5 bg-blue-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-user-plus text-blue-600 mr-2"></i> Novo Usuário</h3>
@@ -549,52 +549,7 @@
         </div>
     </div>
 
-    <!-- MODALS E RELATORIOS PDF -->
-    <div id="printable-report" class="hidden font-sans">
-        <div class="bg-[#161B33] text-white p-6 flex justify-between items-center print-bg mb-6">
-            <div>
-                <h1 class="text-2xl font-bold uppercase tracking-wide">MINISTÉRIO DA JUSTIÇA E SEGURANÇA PÚBLICA</h1>
-                <p class="text-sm mt-1 text-slate-300">Polícia Rodoviária Federal - Diretoria de Tecnologia da Informação e Comunicação (DTIC)</p>
-                <p class="text-lg font-bold mt-3 text-white" id="print-title-doc">Relatório Gerencial Analítico - Gestão de Estoque</p>
-            </div>
-            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" class="h-20">
-        </div>
-        <div class="px-6">
-            <h2 class="text-xl font-bold text-slate-800">Parecer e Metodologia de Cálculo</h2>
-            <p class="text-sm text-slate-700 mt-1 mb-6 leading-relaxed" id="print-parecer"></p>
-            <h2 class="text-xl font-bold text-slate-800" id="print-resumo-title">Resumo de Totais por Equipamento</h2>
-            <p class="text-sm text-slate-700 mt-1 mb-6 leading-relaxed" id="print-resumo"></p>
-            <div class="grid grid-cols-4 gap-4 mb-8" id="print-kpis"></div>
-            <h2 class="text-xl font-bold text-slate-800 mb-3" id="print-visual-title">Análise Visual</h2>
-            <div class="grid grid-cols-3 gap-4 mb-8" id="print-charts-container">
-                <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center">Panorama Geral de Componentes</p><img id="print-chart-1" src="" class="w-full border p-2 bg-white"></div>
-                <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center">Top 5 Mais Retirados</p><img id="print-chart-2" src="" class="w-full border p-2 bg-white"></div>
-                <div><p class="text-[10px] font-bold text-slate-500 mb-1 uppercase text-center">Distribuição por Categoria</p><img id="print-chart-3" src="" class="w-full border p-2 bg-white"></div>
-            </div>
-            <h2 class="text-xl font-bold text-slate-800 mb-3">Detalhamento Analítico</h2>
-            <table class="w-full text-left text-sm border-collapse">
-                <thead id="print-thead"></thead>
-                <tbody id="print-tbody" class="border-b"></tbody>
-            </table>
-        </div>
-    </div>
-
-    <div id="printable-simple-table" class="hidden">
-        <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
-            <div style="text-align: left;">
-                <h2 style="margin: 0; font-size: 16px; text-transform: uppercase; font-family: Arial, sans-serif;">Ministério da Justiça e Segurança Pública</h2>
-                <h3 style="margin: 3px 0; font-size: 14px; font-family: Arial, sans-serif;">Polícia Rodoviária Federal - SETIC</h3>
-                <p style="margin: 0; font-size: 12px; font-weight: bold; font-family: Arial, sans-serif;" id="print-simple-title">Extrato de Ativos</p>
-                <p style="margin: 2px 0 0 0; font-size: 10px; color: #555; font-family: Arial, sans-serif;" id="print-simple-date"></p>
-            </div>
-            <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" style="height: 65px;">
-        </div>
-        <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif;">
-            <thead id="print-simple-thead"></thead>
-            <tbody id="print-simple-tbody"></tbody>
-        </table>
-    </div>
-
+    <!-- SCRIPT DE CONFIGURAÇÃO E EXECUÇÃO GERAL (BLINDADO) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -623,11 +578,13 @@
         let currentFilterCat = '', currentSearchText = '', currentSearchRastreio = '', currentSearchVoip = '';
         let mapItensSaida = {}, mapEditLocais = {}, mapEditEstoque = {}, mapEditVoip = {};
         
-        let chartComponentesAmpliado = null, chartTopSaidas = null, chartPizzaCategorias = null, chartRastreio = null; 
+        let chartComponentesAmpliado = null, chartTopSaidas = null, chartStatusVoip = null, chartRastreio = null; 
         let estoqueCarregado = false, locaisCarregados = false, logsCarregados = false, voipCarregado = false;
 
+        // ================= FUNÇÕES UTILITÁRIAS GERAIS =================
         function showToast(msg, type = 'success') {
-            const container = document.getElementById('toast-container'); if(!container) return;
+            const container = document.getElementById('toast-container');
+            if(!container) return;
             const toast = document.createElement('div');
             const colorClass = type === 'success' ? 'bg-emerald-500' : (type === 'error' ? 'bg-red-500' : 'bg-blue-500');
             const iconClass = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-times-circle' : 'fa-info-circle');
@@ -652,15 +609,18 @@
                     let cleanPKey = pKey.toUpperCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                     if (cleanKey === cleanPKey || cleanKey.indexOf(cleanPKey) !== -1) return sanitizeVal(row[rawKey]);
                 }
-            } return '';
+            }
+            return '';
         }
 
+        // ================= PREFERÊNCIAS E LOGIN =================
         function carregarPreferencias() {
             const title = localStorage.getItem('pref_title') || 'Painel de Gestão de Estoque - SETIC';
             const color = localStorage.getItem('pref_color') || '#161B33';
             const icon = localStorage.getItem('pref_icon') || 'fa-chart-line';
             const bgImage = localStorage.getItem('pref_bg') || "https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg";
-            if(document.getElementById('navbar-title')) document.getElementById('navbar-title').textContent = title; document.title = title;
+            if(document.getElementById('navbar-title')) document.getElementById('navbar-title').textContent = title; 
+            document.title = title;
             if(document.getElementById('navbar-main')) document.getElementById('navbar-main').style.backgroundColor = color;
             document.querySelectorAll('.btn-primary').forEach(el => el.style.backgroundColor = color);
             if(document.getElementById('navbar-icon')) document.getElementById('navbar-icon').className = `fas ${icon} text-xl ml-2`; 
@@ -675,24 +635,55 @@
         if(document.getElementById('pref-color-text')) document.getElementById('pref-color-text').addEventListener('input', (e) => { if(/^#[0-9A-F]{6}$/i.test(e.target.value)) document.getElementById('pref-color').value = e.target.value; });
 
         function showLoginMessage(msg, isError = true) {
-            const container = document.getElementById('login-msg-container'); const textObj = document.getElementById('login-msg-text');
-            if(container && textObj) { textObj.innerText = msg; container.classList.remove('hidden'); container.className = isError ? "mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm block bg-red-50 border-red-500 text-red-700" : "mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm block bg-emerald-50 border-emerald-500 text-emerald-700"; }
+            const container = document.getElementById('login-msg-container');
+            const textObj = document.getElementById('login-msg-text');
+            if(container && textObj) { 
+                textObj.innerText = msg; 
+                container.classList.remove('hidden'); 
+                container.className = isError ? "mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm block bg-red-50 border-red-500 text-red-700" : "mt-4 p-3 border-l-4 text-sm font-medium rounded shadow-sm block bg-emerald-50 border-emerald-500 text-emerald-700"; 
+            }
         }
 
         function fazerLogin() {
-            const email = document.getElementById('login-email').value.trim(); const pass = document.getElementById('login-password').value; 
+            const email = document.getElementById('login-email').value.trim(); 
+            const pass = document.getElementById('login-password').value; 
             if(!email || !pass) return showLoginMessage("Preencha e-mail e senha.", true);
+            
             document.getElementById('btn-login').innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Autenticando...';
-            signInWithEmailAndPassword(auth, email, pass).catch((error) => { showLoginMessage("Credenciais ou API inválidas. Erro: " + error.code, true); document.getElementById('btn-login').innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Autenticar'; });
+            
+            signInWithEmailAndPassword(auth, email, pass).catch((error) => { 
+                let msg = "Credenciais inválidas.";
+                if(error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
+                    msg = "Senha incorreta ou usuário não encontrado.";
+                } else if(error.code === 'auth/invalid-email') {
+                    msg = "O formato do e-mail é inválido.";
+                } else if(error.code === 'auth/invalid-api-key') {
+                    msg = "A chave da API do Firebase está incorreta.";
+                } else {
+                    msg = "Erro Firebase: " + error.code;
+                }
+                showLoginMessage(msg, true); 
+                document.getElementById('btn-login').innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Autenticar'; 
+            });
         }
+
         if(document.getElementById('btn-login')) document.getElementById('btn-login').addEventListener('click', fazerLogin);
         if(document.getElementById('login-password')) document.getElementById('login-password').addEventListener('keypress', (e) => { if (e.key === 'Enter') fazerLogin(); });
-        if(document.getElementById('btn-forgot-password')) document.getElementById('btn-forgot-password').addEventListener('click', () => { const email = document.getElementById('login-email').value.trim(); if (!email) return showLoginMessage("Digite e-mail acima para recuperar.", true); sendPasswordResetEmail(auth, email).then(() => showLoginMessage(`E-mail de recuperação enviado para: ${email}`, false)).catch((error) => showLoginMessage("Erro: " + error.code, true)); });
+        
+        if(document.getElementById('btn-forgot-password')) {
+            document.getElementById('btn-forgot-password').addEventListener('click', () => {
+                const email = document.getElementById('login-email').value.trim();
+                if (!email) return showLoginMessage("Digite seu e-mail acima para recuperar a senha.", true);
+                sendPasswordResetEmail(auth, email).then(() => showLoginMessage(`E-mail de recuperação enviado para: ${email}`, false)).catch((error) => showLoginMessage("Erro ao enviar e-mail: " + error.code, true));
+            });
+        }
+
         if(document.getElementById('btn-logout')) document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
         
         onAuthStateChanged(auth, (user) => {
-            if (user) { userEmail = user.email; document.getElementById('login-screen').classList.add('hidden'); document.getElementById('main-system').classList.remove('hidden'); iniciarSistema(); } 
-            else { document.getElementById('login-screen').classList.remove('hidden'); document.getElementById('main-system').classList.add('hidden'); }
+            if (user) { 
+                userEmail = user.email; document.getElementById('login-screen').classList.add('hidden'); document.getElementById('main-system').classList.remove('hidden'); iniciarSistema(); 
+            } else { document.getElementById('login-screen').classList.remove('hidden'); document.getElementById('main-system').classList.add('hidden'); }
         });
 
         // ================= SISTEMA CORE E CARREGAMENTO =================
@@ -719,6 +710,7 @@
         }
         async function registrarLog(tipo, itemNome, qtd, chamado = "") { try { await addDoc(collection(db, "logs"), { tipo, itemNome, qtd: Number(qtd), chamado, usuario: userEmail, dataHora: serverTimestamp() }); } catch(e) {} }
 
+        // Centralizador Robusto de Interface
         function tentarAtualizarDashboard() {
             if(estoqueCarregado && locaisCarregados && logsCarregados && voipCarregado) {
                 atualizarInterfaceEstoque();
@@ -734,62 +726,29 @@
             }
         }
 
-        // ================= IA CHATBOT SYSTEM =================
-        const aiInput = document.getElementById('ai-input'); const aiSendBtn = document.getElementById('btn-ai-send'); const aiBody = document.getElementById('ai-chat-body');
-        function appendAI_Msg(text, sender) { const div = document.createElement('div'); div.className = sender === 'ai' ? 'chat-bubble-ai shadow-sm border border-gray-100' : 'chat-bubble-user shadow-sm'; div.innerHTML = text; aiBody.appendChild(div); aiBody.scrollTop = aiBody.scrollHeight; }
-
-        function processAILogic(msg) {
-            const mOriginal = msg.trim(); const m = mOriginal.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); 
-            if(m.includes('ola') || m.includes('oi ') || m === 'oi' || m.includes('bom dia') || m.includes('boa tarde') || m.includes('boa noite') || m.includes('tudo bem')) return "Olá! Sou o Assistente Virtual SETIC. É um prazer ajudar. Como posso facilitar a gestão do nosso almoxarifado hoje?";
-            if(m.includes('como') && m.includes('pdf')) return "Para gerar um relatório em PDF, clique em 'Exportações / Relatórios' no menu de Ferramentas, ou use o botão 'Gerar Relatório' acima das tabelas.";
-            if(m.includes('como') && (m.includes('cadastrar') || m.includes('entrada'))) return "Vá na aba 'Entrada Estoque' para preencher o formulário manual ou importar uma planilha Excel.";
-            if(m.includes('como') && m.includes('baixa')) return "Acesse 'Baixa / Saída'. Use a busca inteligente digitando as primeiras letras do item, informe a quantidade e confirme.";
-            if(m.includes('maior') || m.includes('mais temos') || m.includes('mais sobra')) { if(estoqueLocal.length === 0) return "Ainda não há dados no estoque."; let top = estoqueLocal.reduce((prev, current) => ((prev.Quantidade||0) > (current.Quantidade||0)) ? prev : current); return `O item com maior volume no estoque é <b>${top.Componente}</b>, com ${top.Quantidade} unidades (${top.Local}).`; }
-            if(m.includes('alerta') || m.includes('zerado') || m.includes('critico') || m.includes('faltando')) { let alertas = estoqueLocal.filter(i => (i.Quantidade||0) <= (i.EstoqueMinimo||5)); if(alertas.length === 0) return "Excelente! Não identifiquei itens críticos no momento."; let resp = `Identifiquei <b>${alertas.length} item(ns)</b> em estado de alerta:<br><br>`; alertas.slice(0, 4).forEach(i => resp += `• ${i.Componente} (Qtd: ${i.Quantidade})<br>`); if(alertas.length > 4) resp += `<i>... e mais ${alertas.length - 4} itens.</i>`; return resp; }
-            if(m.includes('quantos') || m.includes('quantas') || m.includes('temos') || m.includes('quantidade')) {
-                let isTotalGeral = m.replace(/(quantos|quantas|itens|equipamentos|ativos|temos|no total|em|no|estoque|rastreio|mapa|voip|ramais|telefones|\?|\s)/gi, '').length === 0;
-                if (isTotalGeral && (m.includes('rastreio') || m.includes('mapa'))) { let t = 0; localidadesLocais.forEach(i => t += i.Quantidade||0); return `Temos um total de <b>${t} equipamentos</b> rastreados nos locais físicos.`; } 
-                else if (isTotalGeral && (m.includes('voip') || m.includes('ramais') || m.includes('telefones'))) { return `Temos um total de <b>${voipLocal.length} ramais VoIP</b> cadastrados no sistema.`; }
-                else if (isTotalGeral) { let t = 0; estoqueLocal.forEach(i => t += i.Quantidade||0); return `Contabilizo <b>${t} unidades</b> consolidadas fisicamente no nosso estoque geral.`; }
-                let itemBuscado = m.replace(/\b(quantos|quantas|temos|de|do|da|no|na|em|o|a|os|as|estoque|rastreio|mapa|almoxarifado|quantidade|qual|sao)\b/gi, '').replace(/\?/g, '').trim();
-                if (itemBuscado.endsWith('s') && itemBuscado.length > 3) itemBuscado = itemBuscado.slice(0, -1);
-                if (!itemBuscado || itemBuscado.length < 2) return "Poderia especificar o que deseja consultar? (Ex: Quantos Switchs temos? Ou: Onde fica o ramal 1234?)";
-
-                let totalEstoque = 0, totalRastreio = 0;
-                estoqueLocal.forEach(i => { let comp = (i.Componente || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); let cat = (i.Categoria || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); if(comp.includes(itemBuscado) || cat.includes(itemBuscado)) totalEstoque += (i.Quantidade || 0); });
-                localidadesLocais.forEach(i => { let eq = (i.Equipamento || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); let marca = (i.Marca || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); if(eq.includes(itemBuscado) || marca.includes(itemBuscado)) totalRastreio += (i.Quantidade || 0); });
-                
-                if (totalEstoque === 0 && totalRastreio === 0) return `Não encontrei nenhum registro de "<b>${mOriginal.replace(/(quantos|quantas|temos|\?)/gi, '').trim()}</b>" nas bases físicas.`;
-                let resp = `Resultados para "<b>${mOriginal.replace(/(quantos|quantas|temos|no estoque|no rastreio|\?)/gi, '').trim()}</b>":<br>`;
-                resp += `• No Estoque: <b>${totalEstoque}</b> und.<br>• No Rastreio (Físico): <b>${totalRastreio}</b> und.`; return resp;
-            }
-            if(m.includes('onde fica o ramal') || m.includes('de quem e o ramal') || m.includes('qual o ip do ramal') || (m.includes('ramal') && m.match(/\d{4}/))) {
-                let numeroRamal = m.match(/\d{4}/);
-                if(numeroRamal) {
-                    let achou = voipLocal.find(v => v.Ramal === numeroRamal[0]);
-                    if(achou) return `O ramal <b>${achou.Ramal}</b> está no setor <b>${achou.Setor}</b>. O IP dele é: ${achou.Ip} (${achou.Equipamento || 'Sem info extra'}).`;
-                    else return `Não encontrei o ramal ${numeroRamal[0]} cadastrado na base VoIP.`;
-                }
-            }
-            return "Entendi, mas para consultas tente ser mais direto: <i>'Quantas memórias temos?'</i>, <i>'Onde fica o ramal 1234?'</i> ou <i>'Como gerar um PDF?'</i>.";
-        }
-        function handleAIChat() { const txt = aiInput.value.trim(); if(!txt) return; appendAI_Msg(txt, 'user'); aiInput.value = ''; setTimeout(() => { const response = processAILogic(txt); appendAI_Msg(response, 'ai'); }, 600); }
-        if(aiSendBtn) aiSendBtn.addEventListener('click', handleAIChat);
-        if(aiInput) aiInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') handleAIChat(); });
-
         // ================= ATUALIZAÇÃO DAS TABELAS =================
         function atualizarInterfaceEstoque() {
             const tbody = document.getElementById('inventory-tbody'); if(!tbody) return;
             let tTotal = 0, tZerado = 0, tSaidas = 0;
             estoqueLocal.forEach(item => { const qtd = item.Quantidade || 0; tTotal += qtd; if(qtd <= (item.EstoqueMinimo || 5)) tZerado++; });
             logsLocal.forEach(log => { if(log.tipo === 'SAÍDA') tSaidas += (log.qtd || 0); });
-            
+
             if(document.getElementById('kpi-total-estoque')) document.getElementById('kpi-total-estoque').innerText = tTotal; 
             if(document.getElementById('kpi-total-saidas')) document.getElementById('kpi-total-saidas').innerText = tSaidas; 
             if(document.getElementById('kpi-zerado')) document.getElementById('kpi-zerado').innerText = tZerado;
 
-            let filtrados = estoqueLocal.filter(item => { let matchBusca = true; if (currentSearchText) { const searchTerms = currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !currentFilterCat || (item.Categoria || 'Sem Categoria') === currentFilterCat; return matchBusca && matchCat; });
-            const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1; if(currentPageEstoque > totalPaginas) currentPageEstoque = totalPaginas;
+            let filtrados = estoqueLocal.filter(item => {
+                let matchBusca = true;
+                if (currentSearchText) {
+                    const searchTerms = currentSearchText.toLowerCase().split(' ');
+                    const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase();
+                    matchBusca = searchTerms.every(term => itemText.includes(term));
+                }
+                let matchCat = !currentFilterCat || (item.Categoria || 'Sem Categoria') === currentFilterCat;
+                return matchBusca && matchCat;
+            });
+            const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1;
+            if(currentPageEstoque > totalPaginas) currentPageEstoque = totalPaginas;
             const inicio = (currentPageEstoque - 1) * itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
 
             tbody.innerHTML = '';
@@ -805,15 +764,28 @@
 
         function atualizarInterfaceRastreio() {
             const tbody = document.getElementById('rastreio-tbody'); if(!tbody) return;
-            let tTotalRastreio = 0; localidadesLocais.forEach(item => tTotalRastreio += (item.Quantidade || 0));
+            
+            let tTotalRastreio = 0;
+            localidadesLocais.forEach(item => tTotalRastreio += (item.Quantidade || 0));
             if(document.getElementById('kpi-total-rastreio')) document.getElementById('kpi-total-rastreio').innerText = tTotalRastreio;
 
-            let filtrados = localidadesLocais.filter(item => { if (!currentSearchRastreio) return true; const searchTerms = currentSearchRastreio.toLowerCase().split(' '); const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); });
-            const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1; if(currentPageRastreio > totalPaginas) currentPageRastreio = totalPaginas;
+            let filtrados = localidadesLocais.filter(item => {
+                if (!currentSearchRastreio) return true;
+                const searchTerms = currentSearchRastreio.toLowerCase().split(' ');
+                const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase();
+                return searchTerms.every(term => itemText.includes(term));
+            });
+            const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1;
+            if(currentPageRastreio > totalPaginas) currentPageRastreio = totalPaginas;
             const inicio = (currentPageRastreio - 1) * itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
 
             tbody.innerHTML = '';
-            dadosPagina.sort((a,b) => { let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(loc => {
+            
+            dadosPagina.sort((a,b) => {
+                let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || '');
+                if (cmp !== 0) return cmp;
+                return (a.Local || '').localeCompare(b.Local || '');
+            }).forEach(loc => {
                 tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||''}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.LocalSipac||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||''}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${loc.Quantidade||0}</td></tr>`;
             });
             if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
@@ -825,7 +797,17 @@
             const tbody = document.getElementById('voip-tbody'); if(!tbody) return;
             if(document.getElementById('kpi-total-voip')) document.getElementById('kpi-total-voip').innerText = voipLocal.length;
 
-            let filtrados = voipLocal.filter(item => { if (!currentSearchVoip) return true; const searchTerms = currentSearchVoip.toLowerCase().split(' '); const itemText = [item.Ramal, item.Setor, item.Ip, item.Equipamento].map(v => (v || '').toString()).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); });
+            let filtrados = voipLocal.filter(item => { 
+                if (!currentSearchVoip) return true; 
+                
+                // Filtros Especiais da Interatividade do Gráfico
+                if (currentSearchVoip === '[Livres]') return (item.Ip || '').toUpperCase() === 'DESATIVADO';
+                if (currentSearchVoip === '[Em Uso]') return (item.Ip || '').toUpperCase() !== 'DESATIVADO' && (item.Ip || '').trim() !== '';
+
+                const searchTerms = currentSearchVoip.toLowerCase().split(' '); 
+                const itemText = [item.Ramal, item.Setor, item.Ip, item.Equipamento].map(v => (v || '').toString()).join(' ').toLowerCase(); 
+                return searchTerms.every(term => itemText.includes(term)); 
+            });
             const totalPaginas = Math.ceil(filtrados.length / itemsPerPage) || 1; if(currentPageVoip > totalPaginas) currentPageVoip = totalPaginas;
             const inicio = (currentPageVoip - 1) * itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
 
@@ -846,34 +828,75 @@
         function renderChartsUIUX() {
             if(chartComponentesAmpliado) { chartComponentesAmpliado.destroy(); }
             if(chartTopSaidas) { chartTopSaidas.destroy(); }
-            if(chartPizzaCategorias) { chartPizzaCategorias.destroy(); }
+            if(chartStatusVoip) { chartStatusVoip.destroy(); }
             if(chartRastreio) { chartRastreio.destroy(); }
             
             const primColor = localStorage.getItem('pref_color') || '#161B33';
+
             const topItensEstoque = [...estoqueLocal].sort((a, b) => (b.Quantidade||0) - (a.Quantidade||0)).slice(0, 8);
             const ctxComp = document.getElementById('chartComponentesAmpliado');
             if(ctxComp) {
-                chartComponentesAmpliado = new Chart(ctxComp, { type: 'line', data: { labels: topItensEstoque.length > 0 ? topItensEstoque.map(i => (i.Componente || '').substring(0, 18)) : ['Nenhum item'], datasets: [{ data: topItensEstoque.length > 0 ? topItensEstoque.map(i => i.Quantidade || 0) : [0], borderColor: '#3B82F6', backgroundColor: 'rgba(59, 130, 246, 0.2)', borderWidth: 3, fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#ffffff', pointBorderColor: '#3B82F6' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false, drawBorder: false }, ticks: { font: { weight: 'bold', size: 10 } } } } } });
+                chartComponentesAmpliado = new Chart(ctxComp, {
+                    type: 'line', 
+                    data: { 
+                        labels: topItensEstoque.length > 0 ? topItensEstoque.map(i => (i.Componente || '').substring(0, 18)) : ['Nenhum item'], 
+                        datasets: [{ data: topItensEstoque.length > 0 ? topItensEstoque.map(i => i.Quantidade || 0) : [0], borderColor: '#3B82F6', backgroundColor: 'rgba(59, 130, 246, 0.2)', borderWidth: 3, fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#ffffff', pointBorderColor: '#3B82F6' }] 
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false, drawBorder: false }, ticks: { font: { weight: 'bold', size: 10 } } } } }
+                });
             }
 
-            const saidasMap = {}; logsLocal.forEach(log => { if (log.tipo === 'SAÍDA' && log.itemNome) { saidasMap[log.itemNome] = (saidasMap[log.itemNome] || 0) + (log.qtd || 0); } });
+            const saidasMap = {};
+            logsLocal.forEach(log => { if (log.tipo === 'SAÍDA' && log.itemNome) { saidasMap[log.itemNome] = (saidasMap[log.itemNome] || 0) + (log.qtd || 0); } });
             const topSaidasKeys = Object.keys(saidasMap).sort((a,b) => saidasMap[b] - saidasMap[a]).slice(0, 5);
             const saidasLabels = topSaidasKeys.length > 0 ? topSaidasKeys.map(k => k.split(' - ')[0].substring(0, 12)) : ['Sem Baixas'];
             const saidasValues = topSaidasKeys.length > 0 ? topSaidasKeys.map(k => saidasMap[k]) : [0];
             const ctxSaidas = document.getElementById('chartTopSaidas');
             if(ctxSaidas) {
                 let backgroundColors = saidasValues.map((val, idx) => idx === 0 ? '#3B82F6' : '#E2E8F0');
-                chartTopSaidas = new Chart(ctxSaidas, { type: 'bar', data: { labels: saidasLabels, datasets: [{ data: saidasValues, backgroundColor: backgroundColors, borderRadius: 8, barThickness: 24 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { color: (ctx) => ctx.dataIndex === 0 ? 'white' : '#64748B', font: { weight: 'bold', size: 11 }, anchor: 'end', align: 'start', offset: 8 } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 }, color: '#94A3B8' } } } } });
+                chartTopSaidas = new Chart(ctxSaidas, {
+                    type: 'bar', data: { labels: saidasLabels, datasets: [{ data: saidasValues, backgroundColor: backgroundColors, borderRadius: 8, barThickness: 24 }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { color: (ctx) => ctx.dataIndex === 0 ? 'white' : '#64748B', font: { weight: 'bold', size: 11 }, anchor: 'end', align: 'start', offset: 8 } }, scales: { y: { display: false, grid: { display: false } }, x: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 }, color: '#94A3B8' } } } }
+                });
             }
 
-            const mapCat = {}; estoqueLocal.forEach(item => { const cat = item.Categoria || 'Geral'; mapCat[cat] = (mapCat[cat] || 0) + (item.Quantidade || 0); });
-            const catLabels = Object.keys(mapCat); const catData = catLabels.map(k => mapCat[k]); const coresVibrantes = ['#10B981', '#F59E0B', '#3B82F6', '#6366F1', '#EC4899', '#8B5CF6', '#EF4444', '#06B6D4'];
-            const ctxPizza = document.getElementById('chartPizzaCategorias');
-            if(ctxPizza) {
-                chartPizzaCategorias = new Chart(ctxPizza, { type: 'doughnut', data: { labels: catLabels.length > 0 ? catLabels : ['Sem Dados'], datasets: [{ data: catData.length > 0 ? catData : [1], backgroundColor: coresVibrantes, borderWidth: 0, cutout: '75%' }] }, options: { responsive: true, maintainAspectRatio: false, rotation: -90, circumference: 180, plugins: { legend: { display: false }, datalabels: { display: false } } } });
+            // NOVO GRÁFICO: STATUS TELEFONIA VOIP (Semiarco Interativo)
+            let livres = 0, emUso = 0;
+            voipLocal.forEach(v => {
+                if((v.Ip || '').toUpperCase() === 'DESATIVADO') livres++;
+                else if((v.Ip || '').trim() !== '') emUso++;
+            });
+            
+            let vLabels = (livres === 0 && emUso === 0) ? ['Sem Dados'] : [`Em Uso (${emUso})`, `Livres (${livres})`];
+            let vData = (livres === 0 && emUso === 0) ? [1] : [emUso, livres];
+            let vColors = (livres === 0 && emUso === 0) ? ['#E2E8F0'] : ['#3B82F6', '#10B981'];
+
+            const ctxVoip = document.getElementById('chartStatusVoip');
+            if(ctxVoip) {
+                chartStatusVoip = new Chart(ctxVoip, {
+                    type: 'doughnut', 
+                    data: { labels: vLabels, datasets: [{ data: vData, backgroundColor: vColors, borderWidth: 0, cutout: '75%', hoverOffset: 4 }] },
+                    options: { 
+                        responsive: true, maintainAspectRatio: false, rotation: -90, circumference: 180, 
+                        plugins: { legend: { display: true, position: 'bottom', labels: { usePointStyle: true, boxWidth: 8, font: { weight: 'bold', size: 11 } } }, datalabels: { display: false } },
+                        onClick: (e, elements) => {
+                            if (elements.length > 0 && (livres > 0 || emUso > 0)) {
+                                const index = elements[0].index;
+                                const targetFilter = index === 0 ? '[Em Uso]' : '[Livres]';
+                                document.querySelector('[data-target="view-voip-content"]').click();
+                                const searchInput = document.getElementById('search-table-voip');
+                                searchInput.value = targetFilter;
+                                searchInput.dispatchEvent(new Event('input'));
+                                document.getElementById('tabelas-ancora').scrollIntoView({ behavior: 'smooth' });
+                            }
+                        },
+                        onHover: (e, elements) => { e.native.target.style.cursor = (elements.length && (livres > 0 || emUso > 0)) ? 'pointer' : 'default'; }
+                    }
+                });
             }
 
-            let rastreioMap = {}; localidadesLocais.forEach(loc => { let eq = loc.Equipamento || 'Geral'; rastreioMap[eq] = (rastreioMap[eq] || 0) + (loc.Quantidade || 0); });
+            let rastreioMap = {};
+            localidadesLocais.forEach(loc => { let eq = loc.Equipamento || 'Geral'; rastreioMap[eq] = (rastreioMap[eq] || 0) + (loc.Quantidade || 0); });
             const topRastreioKeys = Object.keys(rastreioMap).sort((a,b) => rastreioMap[b] - rastreioMap[a]); 
             const rLabels = topRastreioKeys.length > 0 ? topRastreioKeys.map(k => k.substring(0, 25)) : ['Sem Rastreio'];
             const rData = topRastreioKeys.length > 0 ? topRastreioKeys.map(k => rastreioMap[k]) : [0];
@@ -882,13 +905,22 @@
             if(ctxRastreio) {
                 if (rLabels.length > 5) ctxRastreio.parentElement.style.height = `${rLabels.length * 30}px`;
                 chartRastreio = new Chart(ctxRastreio, { 
-                    type: 'bar', data: { labels: rLabels, datasets: [{ data: rData, backgroundColor: '#F97316', borderRadius: 4, barThickness: 12, hoverBackgroundColor: '#C2410C' }] }, 
+                    type: 'bar', 
+                    data: { labels: rLabels, datasets: [{ data: rData, backgroundColor: '#F97316', borderRadius: 4, barThickness: 12, hoverBackgroundColor: '#C2410C' }] }, 
                     options: { 
                         indexAxis: 'y', responsive: true, maintainAspectRatio: false, 
                         plugins: { legend: { display: false }, datalabels: { color: '#ffffff', font: { weight: 'bold', size: 10 }, anchor: 'end', align: 'left' } }, 
                         scales: { x: { display: false, grid: { display: false } }, y: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 }, color: '#475569' } } },
-                        onClick: (e, elements) => { if (elements.length > 0) { const index = elements[0].index; const labelClicado = rLabels[index]; document.querySelector('[data-target="view-rastreio-content"]').click(); const searchInput = document.getElementById('search-table-rastreio'); searchInput.value = labelClicado; searchInput.dispatchEvent(new Event('input')); document.getElementById('tabelas-ancora').scrollIntoView({ behavior: 'smooth' }); } },
-                        onHover: (e, elements) => { e.native.target.style.cursor = elements.length ? 'pointer' : 'default'; }
+                        onClick: (e, elements) => {
+                            if (elements.length > 0 && rLabels[0] !== 'Sem Rastreio') {
+                                const index = elements[0].index; const labelClicado = rLabels[index];
+                                document.querySelector('[data-target="view-rastreio-content"]').click();
+                                const searchInput = document.getElementById('search-table-rastreio');
+                                searchInput.value = labelClicado; searchInput.dispatchEvent(new Event('input'));
+                                document.getElementById('tabelas-ancora').scrollIntoView({ behavior: 'smooth' });
+                            }
+                        },
+                        onHover: (e, elements) => { e.native.target.style.cursor = (elements.length && rLabels[0] !== 'Sem Rastreio') ? 'pointer' : 'default'; }
                     } 
                 });
             }
@@ -898,10 +930,17 @@
             const container = document.getElementById('insights-container'); if(!container) return; container.innerHTML = ''; 
             let zerados = [], baixos = [], maiorVolume = null, totalItens = 0;
             if (!estoqueLocal || estoqueLocal.length === 0) { container.innerHTML = `<div class="col-span-3 bg-gray-50 border-l-4 border-gray-400 p-4 rounded-xl shadow-sm text-gray-500 font-medium flex items-center"><i class="fas fa-info-circle mr-2 text-xl"></i> Sem dados no estoque.</div>`; return; }
-            estoqueLocal.forEach(item => { const qtd = item.Quantidade || 0; totalItens += qtd; const minEstoque = item.EstoqueMinimo || 5; if (qtd === 0) zerados.push(item); else if (qtd <= minEstoque) baixos.push(item); if (!maiorVolume || qtd > maiorVolume.Quantidade) maiorVolume = item; });
+            estoqueLocal.forEach(item => {
+                const qtd = item.Quantidade || 0; totalItens += qtd; const minEstoque = item.EstoqueMinimo || 5;
+                if (qtd === 0) zerados.push(item); else if (qtd <= minEstoque) baixos.push(item);
+                if (!maiorVolume || qtd > maiorVolume.Quantidade) maiorVolume = item;
+            });
             let alertHtml = '';
-            if (zerados.length > 0 || baixos.length > 0) { let desc = ''; if (zerados.length > 0) desc += `<span class="text-red-600 font-bold">${zerados.length} itens esgotados.</span> `; if (baixos.length > 0) desc += `<span class="text-orange-600 font-bold">${baixos.length} em alerta.</span>`; alertHtml = `<div class="bg-red-50 border-l-4 border-red-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-exclamation-triangle text-red-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-red-800 uppercase tracking-wide">Reposição Prioritária</h4><p class="text-xs text-red-700 mt-2">${desc}</p></div></div>`; } 
-            else { alertHtml = `<div class="bg-emerald-50 border-l-4 border-emerald-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-check-circle text-emerald-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wide">Estoque Saudável</h4><p class="text-xs text-emerald-700 mt-2">Nenhum equipamento em nível crítico.</p></div></div>`; }
+            if (zerados.length > 0 || baixos.length > 0) {
+                let desc = ''; if (zerados.length > 0) desc += `<span class="text-red-600 font-bold">${zerados.length} itens esgotados.</span> `; if (baixos.length > 0) desc += `<span class="text-orange-600 font-bold">${baixos.length} em alerta.</span>`;
+                alertHtml = `<div class="bg-red-50 border-l-4 border-red-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-exclamation-triangle text-red-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-red-800 uppercase tracking-wide">Reposição Prioritária</h4><p class="text-xs text-red-700 mt-2">${desc}</p></div></div>`;
+            } else { alertHtml = `<div class="bg-emerald-50 border-l-4 border-emerald-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-check-circle text-emerald-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wide">Estoque Saudável</h4><p class="text-xs text-emerald-700 mt-2">Nenhum equipamento em nível crítico.</p></div></div>`; }
+            
             let acumuloHtml = `<div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-boxes text-blue-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-blue-800 uppercase tracking-wide">Concentração</h4><p class="text-xs text-blue-700 mt-2"><b>${maiorVolume ? maiorVolume.Componente : 'Item'}</b> possui o maior volume.</p></div></div>`;
             let techHtml = `<div class="bg-purple-50 border-l-4 border-purple-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-sitemap text-purple-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-purple-800 uppercase tracking-wide">Diversidade</h4><p class="text-xs text-purple-700 mt-2">Gestão de ${[...new Set(estoqueLocal.map(i => i.Categoria || 'Geral'))].length} categorias.</p></div></div>`;
             container.innerHTML = alertHtml + acumuloHtml + techHtml;
@@ -910,53 +949,134 @@
         function atualizarDatalists() { 
             const lc = document.getElementById('lista-componentes'); if(lc) lc.innerHTML = [...new Set(estoqueLocal.map(i => i.Componente||''))].map(c => `<option value="${c}">`).join(''); 
             const filterCat = document.getElementById('filter-cat-estoque');
-            if(filterCat) { const categoriasUnicas = [...new Set(estoqueLocal.map(i => i.Categoria || 'Sem Categoria'))].sort(); filterCat.innerHTML = '<option value="">Todas as Categorias</option>'; categoriasUnicas.forEach(cat => filterCat.innerHTML += `<option value="${cat}">${cat}</option>`); }
+            if(filterCat) {
+                const categoriasUnicas = [...new Set(estoqueLocal.map(i => i.Categoria || 'Sem Categoria'))].sort();
+                filterCat.innerHTML = '<option value="">Todas as Categorias</option>';
+                categoriasUnicas.forEach(cat => filterCat.innerHTML += `<option value="${cat}">${cat}</option>`);
+            }
         }
 
-        // ================= GESTÃO MANUAL E UPLOADS =================
+        // ================= EXCLUSÃO EM LOTE NO ADMIN (BLINDADO) =================
+        if(document.getElementById('btn-admin-login')) document.getElementById('btn-admin-login').addEventListener('click', () => { const input = document.getElementById('admin-pass-input').value; if(btoa(input) === "c2V0aWNhZG1pbg==") { document.getElementById('admin-login-section').classList.add('hidden'); document.getElementById('admin-content-section').classList.remove('hidden'); document.getElementById('admin-error').classList.add('hidden'); document.getElementById('admin-pass-input').value = ""; } else { document.getElementById('admin-error').classList.remove('hidden'); } });
+        if(document.getElementById('btn-admin-lock')) document.getElementById('btn-admin-lock').addEventListener('click', () => { document.getElementById('admin-content-section').classList.add('hidden'); document.getElementById('admin-login-section').classList.remove('hidden'); });
+        
+        let currentFilteredLocsForDelete = [];
+        if (document.getElementById('admin-search-loc')) {
+            document.getElementById('admin-search-loc').addEventListener('input', (e) => {
+                const text = e.target.value.toLowerCase().trim(); const container = document.getElementById('admin-loc-list-container'); const itemsDiv = document.getElementById('admin-loc-items'); const btn = document.getElementById('btn-delete-loc-batch'); const selectAllCb = document.getElementById('admin-loc-select-all');
+                itemsDiv.innerHTML = ''; currentFilteredLocsForDelete = []; selectAllCb.checked = false; btn.disabled = true; btn.innerHTML = `<i class="fas fa-eraser mr-1"></i> Apagar Selecionados (0)`;
+                if (text.length >= 3) {
+                    const searchTerms = text.split(' ');
+                    localidadesLocais.forEach(item => {
+                        let display = `[RASTREIO] ${item.Equipamento} | Loc: ${item.Local} | Patr: ${item.Patrimonio||''} | Série: ${item.Serie||''}`;
+                        if (searchTerms.every(term => display.toLowerCase().includes(term))) {
+                            currentFilteredLocsForDelete.push(item.id);
+                            const div = document.createElement('div'); div.className = "flex items-start gap-2 border-b border-gray-200 pb-1"; div.innerHTML = `<input type="checkbox" class="cb-del-loc mt-0.5 rounded border-gray-400 cursor-pointer" value="${item.id}"> <label class="text-slate-600 leading-tight">${display}</label>`; itemsDiv.appendChild(div);
+                        }
+                    });
+                    if (currentFilteredLocsForDelete.length > 0) { container.classList.remove('hidden'); container.classList.add('flex'); } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+                    document.querySelectorAll('.cb-del-loc').forEach(cb => { cb.addEventListener('change', updateDelLocBtn); });
+                } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+            });
+        }
+        function updateDelLocBtn() { const checked = document.querySelectorAll('.cb-del-loc:checked').length; const btn = document.getElementById('btn-delete-loc-batch'); document.getElementById('admin-loc-select-all').checked = (checked === document.querySelectorAll('.cb-del-loc').length && checked > 0); if (checked > 0) { btn.disabled = false; btn.innerHTML = `<i class="fas fa-eraser mr-1"></i> Apagar Selecionados (${checked})`; } else { btn.disabled = true; btn.innerHTML = `<i class="fas fa-eraser mr-1"></i> Apagar Selecionados (0)`; } }
+        if (document.getElementById('admin-loc-select-all')) document.getElementById('admin-loc-select-all').addEventListener('change', (e) => { document.querySelectorAll('.cb-del-loc').forEach(cb => { cb.checked = e.target.checked; cb.dispatchEvent(new Event('change')); }); });
+        if (document.getElementById('btn-delete-loc-batch')) {
+            document.getElementById('btn-delete-loc-batch').addEventListener('click', async () => {
+                const idsToDelete = Array.from(document.querySelectorAll('.cb-del-loc:checked')).map(cb => cb.value);
+                if (idsToDelete.length === 0) return;
+                if (confirm(`Atenção! Vai apagar ${idsToDelete.length} item(ns) do Rastreio.\nAção irreversível. Confirmar?`)) {
+                    const btn = document.getElementById('btn-delete-loc-batch'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...'; btn.disabled = true;
+                    try { for(let id of idsToDelete) await deleteDoc(doc(db, "localidades", id)); showToast(`${idsToDelete.length} item(ns) apagado(s).`); document.getElementById('admin-search-loc').value = ''; document.getElementById('admin-search-loc').dispatchEvent(new Event('input')); } catch (error) { showToast("Erro: " + error.message, "error"); btn.innerHTML = originalText; btn.disabled = false; }
+                }
+            });
+        }
+
+        let currentFilteredEstForDelete = [];
+        if (document.getElementById('admin-search-est')) {
+            document.getElementById('admin-search-est').addEventListener('input', (e) => {
+                const text = e.target.value.toLowerCase().trim(); const container = document.getElementById('admin-est-list-container'); const itemsDiv = document.getElementById('admin-est-items'); const btn = document.getElementById('btn-delete-est-batch'); const selectAllCb = document.getElementById('admin-est-select-all');
+                itemsDiv.innerHTML = ''; currentFilteredEstForDelete = []; selectAllCb.checked = false; btn.disabled = true; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)`;
+                if (text.length >= 3) {
+                    const searchTerms = text.split(' ');
+                    estoqueLocal.forEach(item => {
+                        let display = `[ESTOQUE] ${item.Componente} | Loc: ${item.Local} | Patr: ${item.Patrimonio||''} | Série: ${item.Série||''}`;
+                        if (searchTerms.every(term => display.toLowerCase().includes(term))) {
+                            currentFilteredEstForDelete.push(item.id);
+                            const div = document.createElement('div'); div.className = "flex items-start gap-2 border-b border-gray-200 pb-1"; div.innerHTML = `<input type="checkbox" class="cb-del-est mt-0.5 rounded border-gray-400 cursor-pointer" value="${item.id}"> <label class="text-slate-600 leading-tight">${display}</label>`; itemsDiv.appendChild(div);
+                        }
+                    });
+                    if (currentFilteredEstForDelete.length > 0) { container.classList.remove('hidden'); container.classList.add('flex'); } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+                    document.querySelectorAll('.cb-del-est').forEach(cb => { cb.addEventListener('change', updateDelEstBtn); });
+                } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+            });
+        }
+        function updateDelEstBtn() { const checked = document.querySelectorAll('.cb-del-est:checked').length; const btn = document.getElementById('btn-delete-est-batch'); document.getElementById('admin-est-select-all').checked = (checked === document.querySelectorAll('.cb-del-est').length && checked > 0); if (checked > 0) { btn.disabled = false; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (${checked})`; } else { btn.disabled = true; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)`; } }
+        if (document.getElementById('admin-est-select-all')) document.getElementById('admin-est-select-all').addEventListener('change', (e) => { document.querySelectorAll('.cb-del-est').forEach(cb => { cb.checked = e.target.checked; cb.dispatchEvent(new Event('change')); }); });
+        if (document.getElementById('btn-delete-est-batch')) {
+            document.getElementById('btn-delete-est-batch').addEventListener('click', async () => {
+                const idsToDelete = Array.from(document.querySelectorAll('.cb-del-est:checked')).map(cb => cb.value);
+                if (idsToDelete.length === 0) return;
+                if (confirm(`Atenção! Vai apagar ${idsToDelete.length} item(ns) do Estoque.\nAção irreversível. Confirmar?`)) {
+                    const btn = document.getElementById('btn-delete-est-batch'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...'; btn.disabled = true;
+                    try { for(let id of idsToDelete) await deleteDoc(doc(db, "estoque", id)); showToast(`${idsToDelete.length} item(ns) apagado(s) do Estoque.`); document.getElementById('admin-search-est').value = ''; document.getElementById('admin-search-est').dispatchEvent(new Event('input')); } catch (error) { showToast("Erro: " + error.message, "error"); btn.innerHTML = originalText; btn.disabled = false; }
+                }
+            });
+        }
+
+        let currentFilteredVoipForDelete = [];
+        if (document.getElementById('admin-search-voip')) {
+            document.getElementById('admin-search-voip').addEventListener('input', (e) => {
+                const text = e.target.value.toLowerCase().trim(); const container = document.getElementById('admin-voip-list-container'); const itemsDiv = document.getElementById('admin-voip-items'); const btn = document.getElementById('btn-delete-voip-batch'); const selectAllCb = document.getElementById('admin-voip-select-all');
+                itemsDiv.innerHTML = ''; currentFilteredVoipForDelete = []; selectAllCb.checked = false; btn.disabled = true; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)`;
+                if (text.length >= 2) {
+                    const searchTerms = text.split(' ');
+                    voipLocal.forEach(item => {
+                        let display = `[VOIP] Ramal: ${item.Ramal} | Setor: ${item.Setor} | IP: ${item.Ip}`;
+                        if (searchTerms.every(term => display.toLowerCase().includes(term))) {
+                            currentFilteredVoipForDelete.push(item.id);
+                            const div = document.createElement('div'); div.className = "flex items-start gap-2 border-b border-gray-200 pb-1"; div.innerHTML = `<input type="checkbox" class="cb-del-voip mt-0.5 rounded border-gray-400 cursor-pointer" value="${item.id}"> <label class="text-slate-600 leading-tight">${display}</label>`; itemsDiv.appendChild(div);
+                        }
+                    });
+                    if (currentFilteredVoipForDelete.length > 0) { container.classList.remove('hidden'); container.classList.add('flex'); } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+                    document.querySelectorAll('.cb-del-voip').forEach(cb => { cb.addEventListener('change', updateDelVoipBtn); });
+                } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+            });
+        }
+        function updateDelVoipBtn() { const checked = document.querySelectorAll('.cb-del-voip:checked').length; const btn = document.getElementById('btn-delete-voip-batch'); document.getElementById('admin-voip-select-all').checked = (checked === document.querySelectorAll('.cb-del-voip').length && checked > 0); if (checked > 0) { btn.disabled = false; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (${checked})`; } else { btn.disabled = true; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)`; } }
+        if (document.getElementById('admin-voip-select-all')) document.getElementById('admin-voip-select-all').addEventListener('change', (e) => { document.querySelectorAll('.cb-del-voip').forEach(cb => { cb.checked = e.target.checked; cb.dispatchEvent(new Event('change')); }); });
+        if (document.getElementById('btn-delete-voip-batch')) {
+            document.getElementById('btn-delete-voip-batch').addEventListener('click', async () => {
+                const idsToDelete = Array.from(document.querySelectorAll('.cb-del-voip:checked')).map(cb => cb.value);
+                if (idsToDelete.length === 0) return;
+                if (confirm(`Atenção! Vai apagar ${idsToDelete.length} Ramais VoIP.\nAção irreversível. Confirmar?`)) {
+                    const btn = document.getElementById('btn-delete-voip-batch'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...'; btn.disabled = true;
+                    try { for(let id of idsToDelete) await deleteDoc(doc(db, "voip", id)); showToast(`${idsToDelete.length} ramais apagados.`); document.getElementById('admin-search-voip').value = ''; document.getElementById('admin-search-voip').dispatchEvent(new Event('input')); } catch (error) { showToast("Erro: " + error.message, "error"); btn.innerHTML = originalText; btn.disabled = false; }
+                }
+            });
+        }
+
+        if(document.getElementById('btn-create-user')) document.getElementById('btn-create-user').addEventListener('click', async () => {
+            const email = document.getElementById('new-user-email').value.trim(), pass = document.getElementById('new-user-pass').value.trim();
+            if(!email || pass.length < 6) return showToast("Mínimo 6 chars.", "error");
+            document.getElementById('btn-create-user').innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Criando...';
+            try { await createUserWithEmailAndPassword(auth, email, pass); showToast("Usuário criado!"); document.getElementById('new-user-email').value = ""; document.getElementById('new-user-pass').value = ""; } catch (e) { showToast("Erro: " + e.message, "error"); } document.getElementById('btn-create-user').innerHTML = '<i class="fas fa-save mr-1"></i> Cadastrar';
+        });
+
+        // ================= GESTÃO DE DADOS FORMS =================
         function atualizarSelectEdicaoLocais() { const dl = document.getElementById('lista-edit-locais'); if(!dl) return; dl.innerHTML = ''; mapEditLocais = {}; [...localidadesLocais].sort((a,b) => (a.Equipamento||'').localeCompare(b.Equipamento||'')).forEach(loc => { const text = `${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio || ''} | Série: ${loc.Serie || ''}`; mapEditLocais[text] = loc; }); }
         function atualizarSelectEdicaoEstoque() { const dl = document.getElementById('lista-edit-estoque'); if(!dl) return; dl.innerHTML = ''; mapEditEstoque = {}; [...estoqueLocal].sort((a,b) => (a.Componente||'').localeCompare(b.Componente||'')).forEach(item => { const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || ''} | Série: ${item.Série || ''}`; mapEditEstoque[text] = item; }); }
         function atualizarDatalistSaida() { const dl = document.getElementById('lista-saida-items'); if(!dl) return; dl.innerHTML = ''; mapItensSaida = {}; [...estoqueLocal].sort((a,b) => (a.Categoria||'').localeCompare(b.Categoria||'')).forEach(i => { const text = `[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||''}) - Qtd: ${i.Quantidade||0}`; mapItensSaida[text] = i; }); }
         function atualizarSelectEdicaoVoip() { const dl = document.getElementById('lista-edit-voip'); if(!dl) return; dl.innerHTML = ''; mapEditVoip = {}; [...voipLocal].sort((a,b) => (a.Ramal||'').localeCompare(b.Ramal||'')).forEach(v => { const text = `Ramal: ${v.Ramal} | Setor: ${v.Setor} | IP: ${v.Ip}`; mapEditVoip[text] = v; }); }
 
-        if(document.getElementById('voip-action-type')) document.getElementById('voip-action-type').addEventListener('change', (e) => { const isE = e.target.value === 'edit'; const c = document.getElementById('voip-edit-container'), i = document.getElementById('voip-edit-input'), b = document.getElementById('btn-save-voip'); if(isE) { c.classList.remove('hidden'); b.innerText = 'Gravar Alterações'; b.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; } else { c.classList.add('hidden'); i.value = ''; b.innerText = 'Registrar Ramal'; b.className = 'w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; ['voip-ramal','voip-setor', 'voip-ip', 'voip-equip','voip-edit-id'].forEach(id => document.getElementById(id).value = ''); } });
-        if(document.getElementById('voip-edit-input')) document.getElementById('voip-edit-input').addEventListener('input', (e) => { const t = e.target.value; const dl = document.getElementById('lista-edit-voip'); dl.innerHTML = ''; if(t.length >= 3) { const s = t.toLowerCase().split(' '); let c = 0; for(let k in mapEditVoip) { if(s.every(term => k.toLowerCase().includes(term))) { let o = document.createElement('option'); o.value = k; dl.appendChild(o); c++; if(c > 40) break; } } } const item = mapEditVoip[t]; if(item) { document.getElementById('voip-edit-id').value = item.id; document.getElementById('voip-ramal').value = item.Ramal || ''; document.getElementById('voip-setor').value = item.Setor || ''; document.getElementById('voip-ip').value = item.Ip || ''; document.getElementById('voip-equip').value = item.Equipamento || ''; } else { ['voip-edit-id','voip-ramal','voip-setor','voip-ip','voip-equip'].forEach(id => document.getElementById(id).value = ''); } });
-
-        if(document.getElementById('btn-save-voip')) {
-            document.getElementById('btn-save-voip').addEventListener('click', async () => {
-                const action = document.getElementById('voip-action-type').value, eId = document.getElementById('voip-edit-id').value;
-                const ramal = document.getElementById('voip-ramal').value.trim(), setor = document.getElementById('voip-setor').value.trim(), ip = document.getElementById('voip-ip').value.trim(), equip = document.getElementById('voip-equip').value.trim();
-                if(!ramal || !setor || !ip) return showToast("Preencha Ramal, Setor e IP.", "error");
-                const b = document.getElementById('btn-save-voip'); const o = b.innerText; b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-                try {
-                    if(action === 'edit' && eId) { await updateDoc(doc(db, "voip", eId), { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: equip }); await registrarLog("MOVIMENTAÇÃO (VOIP)", `Ramal ${ramal}`, 1, `Setor: ${setor}`); showToast("Alteração gravada!"); } 
-                    else { await addDoc(collection(db, "voip"), { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: equip }); await registrarLog("ENTRADA (VOIP)", `Ramal ${ramal}`, 1, `Setor: ${setor}`); showToast("Ramal registado!"); }
-                    ['voip-ramal','voip-setor','voip-ip','voip-equip','voip-edit-id','voip-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('voip-action-type').value = 'new'; document.getElementById('voip-action-type').dispatchEvent(new Event('change'));
-                } catch (e) { showToast("Erro: " + e.message, "error"); } b.innerText = o;
-            });
-        }
-
-        if(document.getElementById('btn-voip-upload')) document.getElementById('btn-voip-upload').addEventListener('click', () => {
-            const fi = document.getElementById('voip-file-upload'), b = document.getElementById('btn-voip-upload'); if (!fi.files.length) return showToast("Selecione planilha.", "error"); b.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Lendo...'; 
-            const r = new FileReader(); r.onload = async (e) => {
-                try {
-                    const js = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let c = 0;
-                    for (let row of js) {
-                        const ramal = getVal(row, ['RAMAL', 'Ramal', 'NÚMERO']); const setor = getVal(row, ['SETOR', 'Setor', 'LOCAL']); const ip = getVal(row, ['IP', 'Ip', 'ENDEREÇO IP']); const eq = getVal(row, ['EQUIPAMENTO', 'Equipamento', 'OBSERVAÇÃO', 'MODELO']);
-                        if(!ramal) continue;
-                        await addDoc(collection(db, "voip"), { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: eq }); c++;
-                    }
-                    await registrarLog("MAP_LOCAL (VOIP)", `Upload Excel`, c, ""); showToast(`Sucesso! ${c} ramais importados.`); fi.value = "";
-                } catch (er) { showToast("Erro leitura.", "error"); } b.innerHTML = 'Iniciar Importação';
-            }; r.readAsArrayBuffer(fi.files[0]);
-        });
-
-
         if(document.getElementById('loc-action-type')) document.getElementById('loc-action-type').addEventListener('change', (e) => { const isE = e.target.value === 'edit'; const c = document.getElementById('loc-edit-container'), i = document.getElementById('loc-edit-input'), b = document.getElementById('btn-save-loc'); if(isE) { c.classList.remove('hidden'); b.innerText = 'Gravar Alterações'; b.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; } else { c.classList.add('hidden'); i.value = ''; b.innerText = 'Mapear Equipamento'; b.className = 'w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; ['loc-equip','loc-local', 'loc-sipac', 'loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; } });
         if(document.getElementById('estoque-action-type')) document.getElementById('estoque-action-type').addEventListener('change', (e) => { const isE = e.target.value === 'edit'; const c = document.getElementById('estoque-edit-container'), i = document.getElementById('estoque-edit-input'), b = document.getElementById('btn-save-item'); if(isE) { c.classList.remove('hidden'); b.innerText = 'Gravar Alterações'; b.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; } else { c.classList.add('hidden'); i.value = ''; b.innerText = 'Registar Entrada no Estoque'; b.className = 'w-full bg-blue-600 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; ['form-cat','form-comp','form-mod','form-esp','form-local','form-patrimonio-estoque', 'form-serie-estoque', 'estoque-edit-id'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5; } });
+        if(document.getElementById('voip-action-type')) document.getElementById('voip-action-type').addEventListener('change', (e) => { const isE = e.target.value === 'edit'; const c = document.getElementById('voip-edit-container'), i = document.getElementById('voip-edit-input'), b = document.getElementById('btn-save-voip'); if(isE) { c.classList.remove('hidden'); b.innerText = 'Gravar Alterações'; b.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; } else { c.classList.add('hidden'); i.value = ''; b.innerText = 'Registrar Ramal'; b.className = 'w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; ['voip-ramal','voip-setor', 'voip-ip', 'voip-equip','voip-edit-id'].forEach(id => document.getElementById(id).value = ''); } });
+
         if(document.getElementById('loc-edit-input')) document.getElementById('loc-edit-input').addEventListener('input', (e) => { const t = e.target.value; const dl = document.getElementById('lista-edit-locais'); dl.innerHTML = ''; if(t.length >= 3) { const s = t.toLowerCase().split(' '); let c = 0; for(let k in mapEditLocais) { if(s.every(term => k.toLowerCase().includes(term))) { let o = document.createElement('option'); o.value = k; dl.appendChild(o); c++; if(c > 40) break; } } } const item = mapEditLocais[t]; if(item) { document.getElementById('loc-edit-id').value = item.id; document.getElementById('loc-equip').value = item.Equipamento || ''; document.getElementById('loc-local').value = item.Local || ''; document.getElementById('loc-sipac').value = item.LocalSipac || ''; document.getElementById('loc-marca').value = item.Marca || ''; document.getElementById('loc-qtd').value = item.Quantidade || 1; document.getElementById('loc-serie').value = item.Serie || ''; document.getElementById('loc-patrimonio').value = item.Patrimonio || ''; } else { ['loc-edit-id','loc-equip','loc-local','loc-sipac','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; } });
         if(document.getElementById('estoque-edit-input')) document.getElementById('estoque-edit-input').addEventListener('input', (e) => { const t = e.target.value; const dl = document.getElementById('lista-edit-estoque'); dl.innerHTML = ''; if(t.length >= 3) { const s = t.toLowerCase().split(' '); let c = 0; for(let k in mapEditEstoque) { if(s.every(term => k.toLowerCase().includes(term))) { let o = document.createElement('option'); o.value = k; dl.appendChild(o); c++; if(c > 40) break; } } } const item = mapEditEstoque[t]; if(item) { document.getElementById('estoque-edit-id').value = item.id; document.getElementById('form-cat').value = item.Categoria || ''; document.getElementById('form-comp').value = item.Componente || ''; document.getElementById('form-mod').value = item.Modelo || ''; document.getElementById('form-esp').value = item.Especificação || ''; document.getElementById('form-local').value = item.Local || ''; document.getElementById('form-serie-estoque').value = item.Série || ''; document.getElementById('form-patrimonio-estoque').value = item.Patrimonio || ''; document.getElementById('form-qtd').value = item.Quantidade || 1; document.getElementById('form-minimo').value = item.EstoqueMinimo || 5; } else { ['estoque-edit-id','form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5; } });
         if(document.getElementById('saida-item-input')) document.getElementById('saida-item-input').addEventListener('input', (e) => { const t = e.target.value; const dl = document.getElementById('lista-saida-items'); dl.innerHTML = ''; if(t.length >= 3) { const s = t.toLowerCase().split(' '); let c = 0; for(let k in mapItensSaida) { if(s.every(term => k.toLowerCase().includes(term))) { let o = document.createElement('option'); o.value = k; dl.appendChild(o); c++; if(c > 40) break; } } } });
+        if(document.getElementById('voip-edit-input')) document.getElementById('voip-edit-input').addEventListener('input', (e) => { const t = e.target.value; const dl = document.getElementById('lista-edit-voip'); dl.innerHTML = ''; if(t.length >= 3) { const s = t.toLowerCase().split(' '); let c = 0; for(let k in mapEditVoip) { if(s.every(term => k.toLowerCase().includes(term))) { let o = document.createElement('option'); o.value = k; dl.appendChild(o); c++; if(c > 40) break; } } } const item = mapEditVoip[t]; if(item) { document.getElementById('voip-edit-id').value = item.id; document.getElementById('voip-ramal').value = item.Ramal || ''; document.getElementById('voip-setor').value = item.Setor || ''; document.getElementById('voip-ip').value = item.Ip || ''; document.getElementById('voip-equip').value = item.Equipamento || ''; } else { ['voip-edit-id','voip-ramal','voip-setor','voip-ip','voip-equip'].forEach(id => document.getElementById(id).value = ''); } });
 
         if(document.getElementById('btn-save-loc')) {
             document.getElementById('btn-save-loc').addEventListener('click', async () => {
@@ -1010,6 +1130,34 @@
 
         if(document.getElementById('btn-register-saida')) document.getElementById('btn-register-saida').addEventListener('click', async () => { const inputTexto = document.getElementById('saida-item-input').value; const qtdSaida = parseInt(document.getElementById('saida-qtd').value); const chamado = document.getElementById('saida-chamado').value.trim(); const itemDB = mapItensSaida[inputTexto]; if(!itemDB) return showToast("Equipamento não encontrado ou seleção inválida.", "error"); if(isNaN(qtdSaida) || qtdSaida <= 0) return showToast("Quantidade inválida.", "error"); const btn = document.getElementById('btn-register-saida'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...'; if(qtdSaida > (itemDB.Quantidade||0)) { showToast("Estoque insuficiente para esta saída!", "error"); btn.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa'; return; } try { await updateDoc(doc(db, "estoque", itemDB.id), { Quantidade: (itemDB.Quantidade||0) - qtdSaida }); await registrarLog("SAÍDA", `${itemDB.Componente} (${itemDB.Especificação})`, qtdSaida, chamado); showToast("Baixa processada!"); document.getElementById('saida-item-input').value = ""; document.getElementById('saida-qtd').value = 1; document.getElementById('saida-chamado').value = ""; } catch(e) { showToast("Erro baixa.", "error"); } btn.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa'; });
 
+        if(document.getElementById('btn-save-voip')) {
+            document.getElementById('btn-save-voip').addEventListener('click', async () => {
+                const action = document.getElementById('voip-action-type').value, eId = document.getElementById('voip-edit-id').value;
+                const ramal = document.getElementById('voip-ramal').value.trim(), setor = document.getElementById('voip-setor').value.trim(), ip = document.getElementById('voip-ip').value.trim(), equip = document.getElementById('voip-equip').value.trim();
+                if(!ramal || !setor || !ip) return showToast("Preencha Ramal, Setor e IP.", "error");
+                const b = document.getElementById('btn-save-voip'); const o = b.innerText; b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+                try {
+                    if(action === 'edit' && eId) { await updateDoc(doc(db, "voip", eId), { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: equip }); await registrarLog("MOVIMENTAÇÃO (VOIP)", `Ramal ${ramal}`, 1, `Setor: ${setor}`); showToast("Alteração gravada!"); } 
+                    else { await addDoc(collection(db, "voip"), { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: equip }); await registrarLog("ENTRADA (VOIP)", `Ramal ${ramal}`, 1, `Setor: ${setor}`); showToast("Ramal registado!"); }
+                    ['voip-ramal','voip-setor','voip-ip','voip-equip','voip-edit-id','voip-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('voip-action-type').value = 'new'; document.getElementById('voip-action-type').dispatchEvent(new Event('change'));
+                } catch (e) { showToast("Erro: " + e.message, "error"); } b.innerText = o;
+            });
+        }
+
+        if(document.getElementById('btn-voip-upload')) document.getElementById('btn-voip-upload').addEventListener('click', () => {
+            const fi = document.getElementById('voip-file-upload'), b = document.getElementById('btn-voip-upload'); if (!fi.files.length) return showToast("Selecione planilha.", "error"); b.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Lendo...'; 
+            const r = new FileReader(); r.onload = async (e) => {
+                try {
+                    const js = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let c = 0;
+                    for (let row of js) {
+                        const ramal = getVal(row, ['RAMAL', 'Ramal', 'NÚMERO']); const setor = getVal(row, ['SETOR', 'Setor', 'LOCAL']); const ip = getVal(row, ['IP', 'Ip', 'ENDEREÇO IP']); const eq = getVal(row, ['EQUIPAMENTO', 'Equipamento', 'OBSERVAÇÃO', 'MODELO']);
+                        if(!ramal) continue; await addDoc(collection(db, "voip"), { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: eq }); c++;
+                    }
+                    await registrarLog("MAP_LOCAL (VOIP)", `Upload Excel`, c, ""); showToast(`Sucesso! ${c} ramais importados.`); fi.value = "";
+                } catch (er) { showToast("Erro leitura.", "error"); } b.innerHTML = 'Iniciar Importação';
+            }; r.readAsArrayBuffer(fi.files[0]);
+        });
+
         // ================= PDFs E RELATÓRIOS =================
         function gerarRelatorioAnalitico(tipoRelatorio) {
             document.getElementById('printable-simple-table').classList.remove('active-print'); document.getElementById('printable-report').classList.add('active-print'); const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5); const titleDoc = document.getElementById('print-title-doc'), parecer = document.getElementById('print-parecer'), resumo = document.getElementById('print-resumo'), kpisContainer = document.getElementById('print-kpis'), thead = document.getElementById('print-thead'), tbody = document.getElementById('print-tbody'), chartsContainer = document.getElementById('print-charts-container'), visualTitle = document.getElementById('print-visual-title');
@@ -1017,15 +1165,11 @@
                 titleDoc.textContent = `Relatório Consolidado - ${localStorage.getItem('pref_title') || 'SETIC'}`; let tTotal = 0, tZerados = 0, tBaixos = 0; let categorias = new Set(); tbody.innerHTML = ''; let totaisEquip = {}; document.getElementById('print-resumo-title').innerText = "Resumo de Totais por Equipamento";
                 [...estoqueLocal].sort((a, b) => { let cmp = (a.Componente || '').localeCompare(b.Componente || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(i => { tTotal += (i.Quantidade || 0); categorias.add(i.Categoria || 'Geral'); let minEstoque = i.EstoqueMinimo || 5; if(i.Quantidade === 0) tZerados++; else if(i.Quantidade <= minEstoque) tBaixos++; let eqName = i.Componente || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (i.Quantidade || 0); tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||''}</td><td class="border px-2 py-1">${i.Componente||''}</td><td class="border px-2 py-1">${i.Modelo||''} / ${i.Especificação||''}</td><td class="border px-2 py-1">${i.Local||''}</td><td class="border px-2 py-1 font-mono">${i.Série||''}</td><td class="border px-2 py-1 font-mono">${i.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`; });
                 let taxaCritica = estoqueLocal.length > 0 ? (((tZerados + tBaixos) / estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1);
-                parecer.innerHTML = `Extração consolidou <b>${estoqueLocal.length}</b> registos de estoque físico. Emitido por ${userEmail} em ${dataAtual}.`; let listTotais = Object.keys(totaisEquip).sort().map(k => `<li><b>${k}:</b> ${totaisEquip[k]} und.</li>`).join(''); resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. <br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`;
-                kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`;
-                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`; visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid'; if(chartComponentesAmpliado) document.getElementById('print-chart-1').src = document.getElementById('chartComponentesAmpliado').toDataURL('image/png'); if(chartTopSaidas) document.getElementById('print-chart-2').src = document.getElementById('chartTopSaidas').toDataURL('image/png'); if(chartPizzaCategorias) document.getElementById('print-chart-3').src = document.getElementById('chartPizzaCategorias').toDataURL('image/png');
+                parecer.innerHTML = `Extração consolidou <b>${estoqueLocal.length}</b> registos de estoque físico. Emitido por ${userEmail} em ${dataAtual}.`; let listTotais = Object.keys(totaisEquip).sort().map(k => `<li><b>${k}:</b> ${totaisEquip[k]} und.</li>`).join(''); resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. <br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`; visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid'; if(chartComponentesAmpliado) document.getElementById('print-chart-1').src = document.getElementById('chartComponentesAmpliado').toDataURL('image/png'); if(chartTopSaidas) document.getElementById('print-chart-2').src = document.getElementById('chartTopSaidas').toDataURL('image/png'); if(chartStatusVoip) { document.getElementById('print-chart-3').src = document.getElementById('chartStatusVoip').toDataURL('image/png'); document.getElementById('print-chart-3').previousElementSibling.innerText = "Status Telefonia VoIP"; }
             } else if (tipoRelatorio === 'rastreio') {
                 titleDoc.textContent = `Relatório de Rastreio - ${localStorage.getItem('pref_title') || 'SETIC'}`; let tLocaisUnicos = new Set(), tVolumeRastreado = 0, tEquipsUnicos = new Set(); tbody.innerHTML = ''; let totaisEquip = {}; document.getElementById('print-resumo-title').innerText = "Resumo de Totais por Equipamento";
                 [...localidadesLocais].sort((a, b) => { let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(loc => { tLocaisUnicos.add(loc.Local || 'N/A'); tVolumeRastreado += (loc.Quantidade||0); tEquipsUnicos.add(loc.Equipamento || 'N/A'); let eqName = loc.Equipamento || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (loc.Quantidade || 0); tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento||''}</td><td class="border px-2 py-1">${loc.Local||''}</td><td class="border px-2 py-1">${loc.LocalSipac||''}</td><td class="border px-2 py-1">${loc.Marca||''}</td><td class="border px-2 py-1 font-mono">${loc.Serie||''}</td><td class="border px-2 py-1 font-mono">${loc.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`; });
-                parecer.innerHTML = `A extração consolidou <b>${localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${userEmail} em ${dataAtual}.`; let listTotais = Object.keys(totaisEquip).sort().map(k => `<li><b>${k}:</b> ${totaisEquip[k]} und.</li>`).join(''); resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades.<br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`;
-                kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros</p><p class="text-2xl font-black text-slate-800">${localidadesLocais.length}</p></div>`;
-                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`; visualTitle.style.display = 'none'; chartsContainer.style.display = 'none';
+                parecer.innerHTML = `A extração consolidou <b>${localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${userEmail} em ${dataAtual}.`; let listTotais = Object.keys(totaisEquip).sort().map(k => `<li><b>${k}:</b> ${totaisEquip[k]} und.</li>`).join(''); resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades.<br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros</p><p class="text-2xl font-black text-slate-800">${localidadesLocais.length}</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`; visualTitle.style.display = 'none'; chartsContainer.style.display = 'none';
             } else if (tipoRelatorio === 'voip') {
                 titleDoc.textContent = `Relatório de Telefonia VoIP - ${localStorage.getItem('pref_title') || 'SETIC'}`; tbody.innerHTML = ''; document.getElementById('print-resumo-title').innerText = "Visão Geral de Disponibilidade";
                 let tTotal = voipLocal.length; let tLivres = 0; let tOcupados = 0;
@@ -1046,25 +1190,14 @@
             document.getElementById('printable-report').classList.remove('active-print'); document.getElementById('printable-simple-table').classList.add('active-print');
             const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5); const titleObj = document.getElementById('print-simple-title'), dateObj = document.getElementById('print-simple-date'), theadObj = document.getElementById('print-simple-thead'), tbodyObj = document.getElementById('print-simple-tbody'); tbodyObj.innerHTML = '';
             if(tipo === 'estoque') {
-                titleObj.innerText = "Extrato: Inventário Consolidado"; theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente / Espec.</th><th>Local</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
-                let filtrados = estoqueLocal.filter(item => { let matchBusca = true; if (currentSearchText) { const searchTerms = currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !currentFilterCat || item.Categoria === currentFilterCat; return matchBusca && matchCat; });
-                let totaisEquip = {};
-                filtrados.sort((a, b) => { let cmp = (a.Componente || '').localeCompare(b.Componente || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(i => { let eqName = i.Componente || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (i.Quantidade || 0); tbodyObj.innerHTML += `<tr><td>${i.Categoria||''}</td><td><b>${i.Componente||''}</b><br><span style="font-size:10px; color:#555;">${i.Modelo||''} / ${i.Especificação||''}</span></td><td>${i.Local||''}</td><td style="font-family:monospace;">${i.Série||''}</td><td style="font-family:monospace;">${i.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`; });
+                titleObj.innerText = "Extrato: Inventário Consolidado"; theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente / Espec.</th><th>Local</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`; let filtrados = estoqueLocal.filter(item => { let matchBusca = true; if (currentSearchText) { const searchTerms = currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !currentFilterCat || item.Categoria === currentFilterCat; return matchBusca && matchCat; }); let totaisEquip = {}; filtrados.sort((a, b) => { let cmp = (a.Componente || '').localeCompare(b.Componente || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(i => { let eqName = i.Componente || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (i.Quantidade || 0); tbodyObj.innerHTML += `<tr><td>${i.Categoria||''}</td><td><b>${i.Componente||''}</b><br><span style="font-size:10px; color:#555;">${i.Modelo||''} / ${i.Especificação||''}</span></td><td>${i.Local||''}</td><td style="font-family:monospace;">${i.Série||''}</td><td style="font-family:monospace;">${i.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`; });
                 let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${k}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${userEmail} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
             } else if(tipo === 'rastreio') {
-                titleObj.innerText = "Extrato: Rastreamento Físico"; theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Local SIPAC</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
-                let filtradosRastreio = localidadesLocais.filter(item => { if (!currentSearchRastreio) return true; const searchTerms = currentSearchRastreio.toLowerCase().split(' '); const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); });
-                let totaisEquip = {};
-                filtradosRastreio.sort((a, b) => { let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(loc => { let eqName = loc.Equipamento || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (loc.Quantidade || 0); tbodyObj.innerHTML += `<tr><td><b>${loc.Equipamento||''}</b></td><td>${loc.Local||''}</td><td>${loc.LocalSipac||''}</td><td>${loc.Marca||''}</td><td style="font-family:monospace;">${loc.Serie||''}</td><td style="font-family:monospace;">${loc.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${loc.Quantidade||0}</td></tr>`; });
+                titleObj.innerText = "Extrato: Rastreamento Físico"; theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Local SIPAC</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`; let filtradosRastreio = localidadesLocais.filter(item => { if (!currentSearchRastreio) return true; const searchTerms = currentSearchRastreio.toLowerCase().split(' '); const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); }); let totaisEquip = {}; filtradosRastreio.sort((a, b) => { let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(loc => { let eqName = loc.Equipamento || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (loc.Quantidade || 0); tbodyObj.innerHTML += `<tr><td><b>${loc.Equipamento||''}</b></td><td>${loc.Local||''}</td><td>${loc.LocalSipac||''}</td><td>${loc.Marca||''}</td><td style="font-family:monospace;">${loc.Serie||''}</td><td style="font-family:monospace;">${loc.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${loc.Quantidade||0}</td></tr>`; });
                 let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${k}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${userEmail} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
             } else if(tipo === 'voip') {
-                titleObj.innerText = "Extrato: Telefonia VoIP"; theadObj.innerHTML = `<tr><th>Ramal</th><th>Setor</th><th>Endereço IP</th><th>Equipamento / Obs</th></tr>`;
-                let filtrados = voipLocal.filter(item => { if (!currentSearchVoip) return true; const searchTerms = currentSearchVoip.toLowerCase().split(' '); const itemText = [item.Ramal, item.Setor, item.Ip, item.Equipamento].map(v => (v || '').toString()).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); });
-                let tLivres = 0;
-                filtrados.sort((a, b) => (a.Ramal||'').localeCompare(b.Ramal||'')).forEach(v => { 
-                    let ipStr = v.Ip || ''; if(ipStr.toUpperCase() === 'DESATIVADO') { tLivres++; ipStr = 'LIVRE (DESATIVADO)'; }
-                    tbodyObj.innerHTML += `<tr><td style="text-align:center; font-weight:bold;">${v.Ramal||''}</td><td>${v.Setor||''}</td><td style="font-family:monospace;">${ipStr}</td><td>${v.Equipamento||'-'}</td></tr>`; 
-                });
+                titleObj.innerText = "Extrato: Telefonia VoIP"; theadObj.innerHTML = `<tr><th>Ramal</th><th>Setor</th><th>Endereço IP</th><th>Equipamento / Obs</th></tr>`; let filtrados = voipLocal.filter(item => { if (!currentSearchVoip) return true; const searchTerms = currentSearchVoip.toLowerCase().split(' '); const itemText = [item.Ramal, item.Setor, item.Ip, item.Equipamento].map(v => (v || '').toString()).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); }); let tLivres = 0;
+                filtrados.sort((a, b) => (a.Ramal||'').localeCompare(b.Ramal||'')).forEach(v => { let ipStr = v.Ip || ''; if(ipStr.toUpperCase() === 'DESATIVADO') { tLivres++; ipStr = 'LIVRE (DESATIVADO)'; } tbodyObj.innerHTML += `<tr><td style="text-align:center; font-weight:bold;">${v.Ramal||''}</td><td>${v.Setor||''}</td><td style="font-family:monospace;">${ipStr}</td><td>${v.Equipamento||'-'}</td></tr>`; });
                 dateObj.innerHTML = `Emitido por: ${userEmail} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Total de Ramais:</b> ${filtrados.length} &nbsp;|&nbsp; <b>Livres:</b> ${tLivres}</span>`;
             }
             window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
