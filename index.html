@@ -284,13 +284,17 @@
     <!-- ÁREAS DE IMPRESSÃO / RELATÓRIOS -->
     <div id="printable-report" class="hidden">
         <div style="padding:24px; font-family:Inter,Arial,sans-serif;">
-            <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #161B33;padding-bottom:12px;margin-bottom:16px;">
-                <div>
-                    <h1 id="print-title-doc" style="font-size:22px;font-weight:800;margin:0;color:#161B33;"></h1>
-                    <p id="print-parecer" style="font-size:11px;margin:6px 0 0;color:#475569;"></p>
+            <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #161B33;padding-bottom:12px;margin-bottom:16px;gap:18px;">
+                <div style="display:flex;align-items:center;gap:14px;min-width:0;">
+                    <img id="print-logo-official" src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="Brasão da PRF" crossorigin="anonymous" style="width:58px;height:58px;object-fit:contain;flex:0 0 58px;">
+                    <div style="min-width:0;">
+                        <h1 id="print-title-doc" style="font-size:22px;font-weight:800;margin:0;color:#161B33;"></h1>
+                        <p id="print-parecer" style="font-size:11px;margin:6px 0 0;color:#475569;"></p>
+                    </div>
                 </div>
-                <div style="font-size:10px;color:#64748B;text-align:right;">
-                    <div>SETIC / PRF</div>
+                <div style="font-size:10px;color:#64748B;text-align:right;white-space:nowrap;">
+                    <div style="font-weight:800;color:#161B33;">POLÍCIA RODOVIÁRIA FEDERAL</div>
+                    <div>SETIC</div>
                     <div id="print-generated-at"></div>
                 </div>
             </div>
@@ -327,9 +331,18 @@
 
     <div id="printable-simple-table" class="hidden">
         <div style="padding:24px;font-family:Inter,Arial,sans-serif;">
-            <div style="border-bottom:3px solid #161B33;padding-bottom:10px;margin-bottom:12px;">
-                <h1 id="print-simple-title" style="font-size:20px;font-weight:800;margin:0;color:#161B33;"></h1>
-                <div id="print-simple-date" style="font-size:10px;color:#64748B;margin-top:5px;"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #161B33;padding-bottom:10px;margin-bottom:12px;gap:16px;">
+                <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+                    <img id="print-simple-logo" src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="Brasão da PRF" crossorigin="anonymous" style="width:50px;height:50px;object-fit:contain;flex:0 0 50px;">
+                    <div style="min-width:0;">
+                        <h1 id="print-simple-title" style="font-size:20px;font-weight:800;margin:0;color:#161B33;"></h1>
+                        <div id="print-simple-date" style="font-size:10px;color:#64748B;margin-top:5px;"></div>
+                    </div>
+                </div>
+                <div style="font-size:9px;color:#64748B;text-align:right;white-space:nowrap;">
+                    <div style="font-weight:800;color:#161B33;">PRF / SETIC</div>
+                    <div>Gestão de Equipamentos TIC</div>
+                </div>
             </div>
             <table style="width:100%;border-collapse:collapse;font-size:9px;">
                 <thead id="print-simple-thead"></thead>
@@ -1185,27 +1198,44 @@
         }
 
         // ================= FUNÇÕES DOS RELATÓRIOS EM PDF (GLOBAIS) =================
+        async function aguardarImagensImpressao(elemento) {
+            if (!elemento) return;
+            const imagens = Array.from(elemento.querySelectorAll('img'));
+            if (!imagens.length) return;
+            await Promise.all(imagens.map(img => {
+                if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+                return new Promise(resolve => {
+                    const finalizar = () => resolve();
+                    img.addEventListener('load', finalizar, { once: true });
+                    img.addEventListener('error', finalizar, { once: true });
+                    setTimeout(finalizar, 2500);
+                });
+            }));
+        }
+
         function executarImpressao(elemento, limpeza) {
             if (!elemento) { showToast('Área de impressão não encontrada.', 'error'); return; }
             elemento.classList.remove('hidden');
             elemento.classList.add('active-print');
-            // Aguarda o browser aplicar o layout de impressão antes de abrir a caixa de diálogo.
-            requestAnimationFrame(() => requestAnimationFrame(() => {
+            const imprimir = async () => {
                 try {
+                    await aguardarImagensImpressao(elemento);
+                    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
                     window.focus();
                     window.print();
                 } catch (err) {
                     console.error('Erro ao imprimir:', err);
                     showToast('Não foi possível abrir a impressão: ' + err.message, 'error');
                 }
-            }));
+            };
+            imprimir();
             const limpar = () => {
                 elemento.classList.remove('active-print');
                 elemento.classList.add('hidden');
                 if (typeof limpeza === 'function') limpeza();
             };
             window.addEventListener('afterprint', limpar, { once: true });
-            setTimeout(limpar, 3000);
+            setTimeout(limpar, 5000);
         }
 
         window.gerarRelatorioAnalitico = function(tipoRelatorio) {
