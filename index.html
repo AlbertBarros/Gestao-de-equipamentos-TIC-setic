@@ -52,6 +52,7 @@
 <body class="transition-colors duration-200">
     <div id="toast-container" class="fixed top-5 right-5 z-[9999] flex flex-col gap-3 pointer-events-none"></div>
 
+    <!-- TELA DE LOGIN -->
     <div id="login-screen" class="fixed inset-0 flex justify-center items-center z-50 bg-cover bg-center bg-no-repeat" style="background-image: url('https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg'); transition: background-image 0.5s ease;">
         <div class="absolute inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm"></div>
         <div class="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500 relative z-10">
@@ -73,6 +74,7 @@
         </div>
     </div>
 
+    <!-- SISTEMA PRINCIPAL -->
     <div id="main-system" class="hidden relative">
         <nav id="navbar-main" class="bg-[#161B33] text-white shadow-md border-b-4 border-yellow-500 no-print transition-colors sticky top-0 z-40">
             <div class="px-4 sm:px-6 lg:px-8">
@@ -94,6 +96,7 @@
 
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
             
+            <!-- KPIS GLOBAIS -->
             <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                 <div class="modern-card p-4 flex items-start justify-between relative overflow-hidden group border-l-4 border-l-blue-500">
                     <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-boxes text-5xl text-blue-600"></i></div>
@@ -117,6 +120,7 @@
                 </div>
             </div>
 
+            <!-- GRÁFICOS PARTE 1 -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div class="modern-card p-6 md:col-span-2 flex flex-col">
                     <div class="flex justify-between items-center mb-4">
@@ -133,6 +137,7 @@
                 </div>
             </div>
 
+            <!-- GRÁFICOS PARTE 2 -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div class="modern-card p-6 flex flex-col justify-center items-center relative">
                     <h3 class="text-sm font-bold text-slate-800 absolute top-6 left-6 flex items-center"><i class="fas fa-sitemap text-indigo-500 mr-2"></i> Divisão Estrutural</h3>
@@ -156,11 +161,15 @@
                 </div>
             </div>
 
+            <!-- MOTOR DE INSIGHTS E ALERTAS -->
             <div class="mb-8">
-                <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center"><i class="fas fa-lightbulb text-yellow-500 mr-2 text-lg"></i> Análise Inteligente de Estoque</h3>
+                <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center">
+                    <i class="fas fa-lightbulb text-yellow-500 mr-2 text-lg"></i> Análise Inteligente de Estoque
+                </h3>
                 <div id="insights-container" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
             </div>
 
+            <!-- TABELAS E NAVEGAÇÃO -->
             <div class="modern-card overflow-hidden mb-8" id="tabelas-ancora">
                 <div class="border-b border-gray-100 bg-gray-50/50 pt-2 px-2 overflow-x-auto">
                     <ul class="flex flex-nowrap text-sm font-medium text-center text-gray-500 gap-1 whitespace-nowrap min-w-max">
@@ -335,7 +344,6 @@
                             <button id="btn-estoque-upload" class="w-full bg-slate-800 text-white font-bold py-3 px-4 rounded hover:bg-slate-700 transition shadow mt-4">Processar Planilha de Estoque</button>
                         </div>
                     </div>
-                    <datalist id="lista-categorias"></datalist><datalist id="lista-componentes"></datalist>
                 </div>
 
                 <div id="tab-saida" class="tab-tool-content hidden h-full flex flex-col">
@@ -531,6 +539,7 @@
         </table>
     </div>
 
+    <!-- SCRIPT GERAL -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -558,7 +567,6 @@
         window.itemsPerPage = 10;
         window.currentFilterCat = ''; window.currentSearchText = ''; window.currentSearchRastreio = ''; window.currentSearchVoip = '';
         
-        // Memória das Imagens (BLINDAGEM DO PDF)
         window.imgChart1 = null; window.imgChart2 = null; window.imgChart3 = null; window.imgChartVoip = null; window.imgChartRastreio = null;
 
         let mapItensSaida = {}, mapEditLocais = {}, mapEditEstoque = {}, mapEditVoip = {};
@@ -778,7 +786,6 @@
             if(document.getElementById('btn-next-voip')) document.getElementById('btn-next-voip').disabled = window.currentPageVoip === totalPaginas;
         }
 
-        // ================= GRÁFICOS =================
         function renderChartsUIUX() {
             if(chartComponentesAmpliado) { chartComponentesAmpliado.destroy(); }
             if(chartTopSaidas) { chartTopSaidas.destroy(); }
@@ -865,7 +872,7 @@
                 let taxaCritica = window.estoqueLocal.length > 0 ? (((tZerados + tBaixos) / window.estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1); parecer.innerHTML = `Extração consolidou <b>${window.estoqueLocal.length}</b> registos de estoque físico. Emitido por ${window.userEmail} em ${dataAtual}.`; let listTotais = Object.keys(totaisEquip).sort().map(k => `<li><b>${k}:</b> ${totaisEquip[k]} und.</li>`).join(''); resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. <br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${window.estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`; 
                 
                 visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid'; chartsContainer.className = "grid grid-cols-3 gap-4 mb-8";
-                document.getElementById('print-col-1').style.display = 'block'; document.getElementById('print-col-2').style.display = 'block'; document.getElementById('print-col-3').style.display = 'block'; document.getElementById('print-col-3').className = "";
+                document.getElementById('print-col-1').style.display = 'block'; document.getElementById('print-col-2').style.display = 'block'; document.getElementById('print-col-3').style.display = 'block'; document.getElementById('print-col-3').className = "w-full";
                 
                 if(window.imgChart1) document.getElementById('print-chart-1').src = window.imgChart1; 
                 if(window.imgChart2) document.getElementById('print-chart-2').src = window.imgChart2; 
@@ -949,7 +956,6 @@
 
         if(document.getElementById('btn-export-csv')) document.getElementById('btn-export-csv').addEventListener('click', () => { let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Local,Serie,Patrimonio,Quantidade\n"; window.estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Local||''}","${r.Série||''}","${r.Patrimonio||''}","${r.Quantidade||0}"\n`); const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); });
 
-        }); // FIM DO DOMContentLoaded
     </script>
 </body>
 </html>
