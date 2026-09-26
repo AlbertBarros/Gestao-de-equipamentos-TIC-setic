@@ -83,7 +83,6 @@
                         <span id="navbar-title" class="font-bold text-lg tracking-wide whitespace-nowrap">Painel de Gestão de Estoque - SETIC</span>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <span class="bg-green-500 text-white text-xs px-2.5 py-1.5 rounded-md flex items-center font-bold shadow-sm hidden md:flex"><i class="fas fa-check-circle mr-1.5"></i> Sincronizado</span>
                         <button id="btn-theme" class="p-2 rounded-full hover:bg-white hover:bg-opacity-10 transition" title="Modo Noturno"><i class="fas fa-moon text-lg"></i></button>
                         <button id="btn-tools" class="bg-white bg-opacity-10 hover:bg-opacity-20 border border-white border-opacity-10 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-sm flex items-center backdrop-blur-sm"><i class="fas fa-toolbox mr-2"></i> <span class="hidden md:inline">Painel de Ferramentas</span></button>
                         <button id="btn-logout" class="bg-[#E53935] hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-sm flex items-center"><i class="fas fa-sign-out-alt mr-2"></i> <span class="hidden md:inline">Sair</span></button>
@@ -134,9 +133,15 @@
                     <div class="h-48 w-full flex justify-center mt-10"><canvas id="chartPizzaCategorias"></canvas></div>
                 </div>
 
-                <div class="modern-card p-6 flex flex-col relative">
-                    <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center"><i class="fas fa-map-location-dot text-orange-500 mr-2"></i> Mapeamento Físico (Top 5)</h3>
-                    <div class="flex-1 min-h-[200px] relative w-full flex justify-center items-center"><canvas id="chartRastreio"></canvas></div>
+                <!-- GRÁFICO DE RASTREIO ATUALIZADO (TODOS OS ITENS, INTERATIVO) -->
+                <div class="modern-card p-6 flex flex-col relative overflow-hidden">
+                    <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center"><i class="fas fa-map-location-dot text-orange-500 mr-2"></i> Rastreamento de Ativos</h3>
+                    <div class="flex-1 w-full overflow-y-auto pr-2" style="max-height: 220px;">
+                        <div class="relative w-full" style="min-height: 200px;">
+                            <canvas id="chartRastreio"></canvas>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-2 text-center italic">Clique numa barra para ver os detalhes na tabela abaixo.</p>
                 </div>
 
                 <div class="modern-card p-6 flex flex-col justify-between" style="background: linear-gradient(135deg, #161B33 0%, #2a3563 100%);">
@@ -148,12 +153,15 @@
                 </div>
             </div>
 
+            <!-- MOTOR DE INSIGHTS E ALERTAS (BLINDADO E RESTAURADO) -->
             <div class="mb-8">
-                <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center"><i class="fas fa-lightbulb text-yellow-500 mr-2 text-lg"></i> Análise Inteligente de Estoque</h3>
+                <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center">
+                    <i class="fas fa-lightbulb text-yellow-500 mr-2 text-lg"></i> Análise Inteligente de Estoque
+                </h3>
                 <div id="insights-container" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
             </div>
 
-            <div class="modern-card overflow-hidden mb-8">
+            <div class="modern-card overflow-hidden mb-8" id="tabelas-ancora">
                 <div class="border-b border-gray-100 bg-gray-50/50 pt-2 px-2">
                     <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 gap-1">
                         <li><button id="view-estoque-btn" class="inline-block px-5 py-3 text-blue-600 border-b-2 border-blue-600 active rounded-t-lg transition-colors bg-white font-bold"><i class="fas fa-boxes mr-2"></i>Estoque Consolidado</button></li>
@@ -169,7 +177,10 @@
                         </div>
                         <div class="flex items-center gap-3">
                             <select id="filter-cat-estoque" class="border border-gray-200 rounded-lg text-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 font-medium text-slate-600 cursor-pointer"><option value="">Todas as Categorias</option></select>
-                            <div class="relative"><i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i><input type="text" id="search-table-estoque" placeholder="Pesquisar registro..." class="pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 transition-shadow focus:bg-white"></div>
+                            <div class="relative">
+                                <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                                <input type="text" id="search-table-estoque" placeholder="Pesquisar registro..." class="pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 transition-shadow focus:bg-white">
+                            </div>
                         </div>
                     </div>
                     <div class="overflow-x-auto min-h-[300px] bg-white">
@@ -203,7 +214,10 @@
                             <h3 class="text-sm font-bold text-indigo-900 tracking-wide"><i class="fas fa-location-dot mr-2 text-indigo-500"></i>Mapa de Distribuição de Ativos</h3>
                             <button id="btn-print-rastreio-main" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-1.5 px-3 rounded-md border border-indigo-200 transition flex items-center"><i class="fas fa-print mr-1.5"></i> Gerar Relatório</button>
                         </div>
-                        <div class="relative"><i class="fas fa-search absolute left-3 top-2.5 text-indigo-300 text-sm"></i><input type="text" id="search-table-rastreio" placeholder="Pesquisar Local, Patrimônio, Série..." class="pl-9 pr-3 py-2 border border-indigo-100 rounded-lg text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm transition-shadow"></div>
+                        <div class="relative">
+                            <i class="fas fa-search absolute left-3 top-2.5 text-indigo-300 text-sm"></i>
+                            <input type="text" id="search-table-rastreio" placeholder="Pesquisar Equipamento, Local..." class="pl-9 pr-3 py-2 border border-indigo-100 rounded-lg text-sm w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm transition-shadow">
+                        </div>
                     </div>
                     <div class="overflow-x-auto min-h-[300px] bg-white">
                         <table class="min-w-full divide-y divide-gray-100">
@@ -317,7 +331,6 @@
             </div>
 
             <div class="flex-1 p-8 overflow-y-auto bg-white relative">
-                <!-- TAB ENTRADA -->
                 <div id="tab-entrada" class="tab-content h-full flex flex-col">
                     <h2 class="text-2xl font-bold text-blue-900 mb-2"><i class="fas fa-boxes mr-2 text-blue-600"></i>Entrada de Ativos (Estoque)</h2>
                     <p class="text-sm text-slate-500 mb-6 border-b pb-4">Adicione estoque manualmente ou importe em lote por planilha.</p>
@@ -345,9 +358,9 @@
                             <button id="btn-estoque-upload" class="w-full bg-slate-800 text-white font-bold py-3 px-4 rounded hover:bg-slate-700 transition shadow mt-4">Processar Planilha de Estoque</button>
                         </div>
                     </div>
+                    <datalist id="lista-categorias"></datalist><datalist id="lista-componentes"></datalist>
                 </div>
 
-                <!-- TAB SAÍDA -->
                 <div id="tab-saida" class="tab-content hidden h-full flex flex-col">
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Baixa de Material</h2>
                     <p class="text-sm text-slate-500 mb-8 border-b pb-4">Despacho de componentes para atendimento de incidentes.</p>
@@ -367,7 +380,6 @@
                     </div>
                 </div>
 
-                <!-- TAB LOCALIDADE / RASTREIO -->
                 <div id="tab-localidade" class="tab-content hidden h-full flex flex-col">
                     <h2 class="text-2xl font-bold text-indigo-900 mb-2"><i class="fas fa-map-marker-alt mr-2 text-indigo-600"></i>Gestão de Localidades e Rastreio</h2>
                     <p class="text-sm text-slate-500 mb-6 border-b pb-4">Mapeie fisicamente os equipamentos registando número de série e património.</p>
@@ -396,7 +408,6 @@
                     </div>
                 </div>
 
-                <!-- TAB RELATORIOS -->
                 <div id="tab-relatorio" class="tab-content hidden h-full flex flex-col justify-center items-center">
                     <i class="fas fa-file-contract text-6xl text-slate-300 mb-6"></i>
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Exportações e Relatórios Oficiais</h2>
@@ -408,7 +419,6 @@
                     <button id="btn-export-csv" class="text-slate-500 hover:text-slate-800 font-bold transition flex items-center underline"><i class="fas fa-file-csv mr-2"></i> Ou exportar apenas os dados brutos em CSV</button>
                 </div>
 
-                <!-- TAB PREFERÊNCIAS -->
                 <div id="tab-pref" class="tab-content hidden">
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Preferências do Sistema</h2>
                     <p class="text-sm text-slate-500 mb-8 border-b pb-4">Personalize a aparência do painel oficial.</p>
@@ -421,7 +431,6 @@
                     <button id="btn-save-pref" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:opacity-90 transition shadow mt-4"><i class="fas fa-save mr-2"></i> Salvar Preferências</button>
                 </div>
 
-                <!-- TAB ADMINISTRADOR -->
                 <div id="tab-admin" class="tab-content hidden h-full">
                     <div id="admin-login-section" class="flex flex-col items-center justify-center h-full">
                         <i class="fas fa-user-shield text-7xl text-slate-300 mb-4"></i>
@@ -436,7 +445,6 @@
                             <div><h2 class="text-2xl font-bold text-slate-800">Painel do Administrador</h2></div>
                             <button id="btn-admin-lock" class="text-slate-400 hover:text-slate-800 transition"><i class="fas fa-lock text-xl"></i></button>
                         </div>
-
                         <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
                             <!-- EXCLUSÃO EM LOTE -->
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between col-span-1 lg:col-span-2">
@@ -462,8 +470,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- FIM EXCLUSÃO LOTE -->
-
                             <div class="border border-blue-200 rounded-xl p-5 bg-blue-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-user-plus text-blue-600 mr-2"></i> Novo Usuário</h3>
                                 <input type="email" id="new-user-email" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="E-mail corporativo">
@@ -494,7 +500,6 @@
         </div>
     </div>
 
-    <!-- SCRIPT DE CONFIGURAÇÃO E EXECUÇÃO GERAL (BLINDADO) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -737,7 +742,7 @@
             if(document.getElementById('btn-next-rastreio')) document.getElementById('btn-next-rastreio').disabled = currentPageRastreio === totalPaginas;
         }
 
-        // ================= GRÁFICOS E INSIGHTS =================
+        // ================= GRÁFICOS E INSIGHTS (COM INTERATIVIDADE) =================
         function renderChartsUIUX() {
             if(chartComponentesAmpliado) { chartComponentesAmpliado.destroy(); }
             if(chartTopSaidas) { chartTopSaidas.destroy(); }
@@ -768,13 +773,53 @@
                 chartPizzaCategorias = new Chart(ctxPizza, { type: 'doughnut', data: { labels: catLabels.length > 0 ? catLabels : ['Sem Dados'], datasets: [{ data: catData.length > 0 ? catData : [1], backgroundColor: coresVibrantes, borderWidth: 0, cutout: '75%' }] }, options: { responsive: true, maintainAspectRatio: false, rotation: -90, circumference: 180, plugins: { legend: { display: false }, datalabels: { display: false } } } });
             }
 
+            // Gráfico Rastreio Interativo (Todos os itens)
             let rastreioMap = {}; localidadesLocais.forEach(loc => { let eq = loc.Equipamento || 'Geral'; rastreioMap[eq] = (rastreioMap[eq] || 0) + (loc.Quantidade || 0); });
-            const topRastreioKeys = Object.keys(rastreioMap).sort((a,b) => rastreioMap[b] - rastreioMap[a]).slice(0, 5);
-            const rLabels = topRastreioKeys.length > 0 ? topRastreioKeys.map(k => k.substring(0, 15)) : ['Sem Rastreio'];
+            const topRastreioKeys = Object.keys(rastreioMap).sort((a,b) => rastreioMap[b] - rastreioMap[a]); // Removeu slice para exibir tudo
+            const rLabels = topRastreioKeys.length > 0 ? topRastreioKeys.map(k => k.substring(0, 25)) : ['Sem Rastreio'];
             const rData = topRastreioKeys.length > 0 ? topRastreioKeys.map(k => rastreioMap[k]) : [0];
             const ctxRastreio = document.getElementById('chartRastreio');
+            
+            // Ajusta a altura do canvas dinamicamente se houver muitos itens
+            if (rLabels.length > 5) {
+                ctxRastreio.parentElement.style.height = `${rLabels.length * 30}px`;
+            }
+
             if(ctxRastreio) {
-                chartRastreio = new Chart(ctxRastreio, { type: 'bar', data: { labels: rLabels, datasets: [{ data: rData, backgroundColor: '#F97316', borderRadius: 4, barThickness: 12 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { color: '#ffffff', font: { weight: 'bold', size: 10 }, anchor: 'end', align: 'left' } }, scales: { x: { display: false, grid: { display: false } }, y: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 }, color: '#475569' } } } } });
+                chartRastreio = new Chart(ctxRastreio, { 
+                    type: 'bar', 
+                    data: { labels: rLabels, datasets: [{ data: rData, backgroundColor: '#F97316', borderRadius: 4, barThickness: 12, hoverBackgroundColor: '#C2410C' }] }, 
+                    options: { 
+                        indexAxis: 'y', 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        plugins: { legend: { display: false }, datalabels: { color: '#ffffff', font: { weight: 'bold', size: 10 }, anchor: 'end', align: 'left' } }, 
+                        scales: { x: { display: false, grid: { display: false } }, y: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 10 }, color: '#475569' } } },
+                        // Interatividade do Clique
+                        onClick: (e, elements) => {
+                            if (elements.length > 0) {
+                                const index = elements[0].index;
+                                const labelClicado = rLabels[index];
+                                
+                                // Muda para a aba de rastreio
+                                document.getElementById('view-rastreio-btn').click();
+                                
+                                // Preenche a barra de pesquisa
+                                const searchInput = document.getElementById('search-table-rastreio');
+                                searchInput.value = labelClicado;
+                                
+                                // Dispara o evento de input para filtrar a tabela na hora
+                                searchInput.dispatchEvent(new Event('input'));
+                                
+                                // Faz o scroll descer suavemente até as tabelas
+                                document.getElementById('tabelas-ancora').scrollIntoView({ behavior: 'smooth' });
+                            }
+                        },
+                        onHover: (e, elements) => {
+                            e.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+                        }
+                    } 
+                });
             }
         }
 
@@ -922,7 +967,7 @@
                 const inTxt = document.getElementById('saida-item-input').value; const qt = parseInt(document.getElementById('saida-qtd').value); const ch = document.getElementById('saida-chamado').value.trim();
                 const item = mapItensSaida[inTxt]; if(!item) return showToast("Equipamento inválido.", "error"); if(isNaN(qt) || qt <= 0) return showToast("Quantidade inválida.", "error");
                 const b = document.getElementById('btn-register-saida'); b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-                if(qt > (item.Quantidade||0)) { showToast("Estoque insuficiente!", "error"); b.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa'; return; }
+                if(qt > (item.Quantidade||0)) { showToast("Estoque insuficiente para esta saída!", "error"); b.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa'; return; }
                 try { await updateDoc(doc(db, "estoque", item.id), { Quantidade: (item.Quantidade||0) - qt }); await registrarLog("SAÍDA", `${item.Componente}`, qt, ch); showToast("Baixa processada!"); document.getElementById('saida-item-input').value = ""; document.getElementById('saida-qtd').value = 1; document.getElementById('saida-chamado').value = ""; } catch(e) { showToast("Erro baixa.", "error"); } b.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa';
             });
         }
@@ -989,26 +1034,26 @@
         function gerarPDFSimples(tipo) {
             document.getElementById('printable-report').classList.remove('active-print'); document.getElementById('printable-simple-table').classList.add('active-print');
             const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5);
-            const dateObj = document.getElementById('print-simple-date'); dateObj.innerHTML = `Emitido por: ${userEmail} em ${dataAtual} às ${horaAtual}`; 
-            const theadObj = document.getElementById('print-simple-thead'), tbodyObj = document.getElementById('print-simple-tbody'); tbodyObj.innerHTML = '';
+            const titleObj = document.getElementById('print-simple-title'), dateObj = document.getElementById('print-simple-date'), theadObj = document.getElementById('print-simple-thead'), tbodyObj = document.getElementById('print-simple-tbody');
+            tbodyObj.innerHTML = '';
             if(tipo === 'estoque') {
-                document.getElementById('print-simple-title').innerText = "Extrato: Inventário Consolidado"; theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente / Espec.</th><th>Local</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
+                titleObj.innerText = "Extrato: Inventário Consolidado"; theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente / Espec.</th><th>Local</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
                 let filtrados = estoqueLocal.filter(item => { let matchBusca = true; if (currentSearchText) { const searchTerms = currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !currentFilterCat || item.Categoria === currentFilterCat; return matchBusca && matchCat; });
                 let totaisEquip = {};
                 filtrados.sort((a, b) => { let cmp = (a.Componente || '').localeCompare(b.Componente || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(i => { 
                     let eqName = i.Componente || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (i.Quantidade || 0);
                     tbodyObj.innerHTML += `<tr><td>${i.Categoria||''}</td><td><b>${i.Componente||''}</b><br><span style="font-size:10px; color:#555;">${i.Modelo||''} / ${i.Especificação||''}</span></td><td>${i.Local||''}</td><td style="font-family:monospace;">${i.Série||''}</td><td style="font-family:monospace;">${i.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`; 
                 });
-                let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${k}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML += `<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
+                let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${k}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${userEmail} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
             } else {
-                document.getElementById('print-simple-title').innerText = "Extrato: Rastreamento Físico"; theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Local SIPAC</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
+                titleObj.innerText = "Extrato: Rastreamento Físico"; theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Local SIPAC</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
                 let filtradosRastreio = localidadesLocais.filter(item => { if (!currentSearchRastreio) return true; const searchTerms = currentSearchRastreio.toLowerCase().split(' '); const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); });
                 let totaisEquip = {};
                 filtradosRastreio.sort((a, b) => { let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(loc => { 
                     let eqName = loc.Equipamento || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (loc.Quantidade || 0);
                     tbodyObj.innerHTML += `<tr><td><b>${loc.Equipamento||''}</b></td><td>${loc.Local||''}</td><td>${loc.LocalSipac||''}</td><td>${loc.Marca||''}</td><td style="font-family:monospace;">${loc.Serie||''}</td><td style="font-family:monospace;">${loc.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${loc.Quantidade||0}</td></tr>`; 
                 });
-                let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${k}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML += `<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
+                let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${k}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${userEmail} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
             }
             window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
         }
@@ -1017,6 +1062,7 @@
         if(document.getElementById('btn-print-rastreio-main')) document.getElementById('btn-print-rastreio-main').addEventListener('click', () => gerarPDFSimples('rastreio'));
         if(document.getElementById('btn-relatorio-analitico-estoque')) document.getElementById('btn-relatorio-analitico-estoque').addEventListener('click', () => gerarRelatorioAnalitico('estoque'));
         if(document.getElementById('btn-relatorio-analitico-rastreio')) document.getElementById('btn-relatorio-analitico-rastreio').addEventListener('click', () => gerarRelatorioAnalitico('rastreio'));
+
         if(document.getElementById('btn-export-logs-pdf')) document.getElementById('btn-export-logs-pdf').addEventListener('click', () => {
             document.getElementById('printable-report').classList.remove('active-print'); document.getElementById('printable-simple-table').classList.add('active-print'); document.getElementById('print-simple-title').innerText = "Auditoria de Movimentações"; document.getElementById('print-simple-date').innerText = `Gerado por: ${userEmail} em ${new Date().toLocaleDateString('pt-BR')}`; document.getElementById('print-simple-thead').innerHTML = `<tr><th>Data/Hora</th><th>Ação</th><th>Item</th><th style="text-align:center;">Qtd</th><th>Usuário / Ref.</th></tr>`; const tb = document.getElementById('print-simple-tbody'); tb.innerHTML = '';
             logsLocal.forEach(log => { let dateStr = log.dataHora ? log.dataHora.toDate().toLocaleDateString('pt-BR') + ' ' + log.dataHora.toDate().toLocaleTimeString('pt-BR').substring(0,5) : "N/A"; tb.innerHTML += `<tr><td>${dateStr}</td><td><b>${log.tipo}</b></td><td>${log.itemNome}</td><td style="text-align:center;">${log.qtd}</td><td>${(log.chamado||'') + (log.usuario ? ` (${log.usuario})` : '')}</td></tr>`; }); window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
@@ -1028,15 +1074,19 @@
             btn.addEventListener('click', (e) => { 
                 tabsBtns.forEach(b => { b.classList.remove('bg-blue-100', 'text-blue-800', 'bg-purple-100', 'text-purple-800', 'bg-indigo-100', 'text-indigo-800', 'border-indigo-500'); b.classList.add('text-slate-600', 'border-transparent'); }); 
                 e.currentTarget.classList.remove('text-slate-600', 'border-transparent'); const target = e.currentTarget.getAttribute('data-target');
-                if(target === 'tab-admin') e.currentTarget.classList.add('bg-purple-100', 'text-purple-800'); else if(target === 'tab-localidade') e.currentTarget.classList.add('bg-indigo-100', 'text-indigo-800', 'border-indigo-500'); else e.currentTarget.classList.add('bg-blue-100', 'text-blue-800');
+                if(target === 'tab-admin') e.currentTarget.classList.add('bg-purple-100', 'text-purple-800');
+                else if(target === 'tab-localidade') e.currentTarget.classList.add('bg-indigo-100', 'text-indigo-800', 'border-indigo-500');
+                else e.currentTarget.classList.add('bg-blue-100', 'text-blue-800');
                 tabContents.forEach(tc => tc.classList.add('hidden')); if(document.getElementById(target)) document.getElementById(target).classList.remove('hidden'); 
             }); 
         });
 
         if(document.getElementById('btn-theme')) document.getElementById('btn-theme').addEventListener('click', () => document.body.classList.toggle('dark'));
         const modal = document.getElementById('tools-modal'); if(document.getElementById('btn-tools')) document.getElementById('btn-tools').addEventListener('click', () => modal.classList.remove('hidden')); document.querySelectorAll('.close-modal').forEach(b => b.addEventListener('click', () => modal.classList.add('hidden')));
+
         if(document.getElementById('view-estoque-btn')) document.getElementById('view-estoque-btn').addEventListener('click', (e) => { e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600'); e.currentTarget.classList.replace('bg-gray-100', 'bg-white'); const otherBtn = document.getElementById('view-rastreio-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500'); otherBtn.classList.replace('bg-white', 'bg-gray-100'); document.getElementById('view-estoque-content').classList.remove('hidden'); document.getElementById('view-rastreio-content').classList.add('hidden'); });
         if(document.getElementById('view-rastreio-btn')) document.getElementById('view-rastreio-btn').addEventListener('click', (e) => { e.currentTarget.classList.replace('border-transparent', 'border-blue-600'); e.currentTarget.classList.replace('text-gray-500', 'text-blue-600'); e.currentTarget.classList.replace('bg-gray-100', 'bg-white'); const otherBtn = document.getElementById('view-estoque-btn'); otherBtn.classList.replace('border-blue-600', 'border-transparent'); otherBtn.classList.replace('text-blue-600', 'text-gray-500'); otherBtn.classList.replace('bg-white', 'bg-gray-100'); document.getElementById('view-rastreio-content').classList.remove('hidden'); document.getElementById('view-estoque-content').classList.add('hidden'); });
+
         if(document.getElementById('search-table-estoque')) document.getElementById('search-table-estoque').addEventListener('input', e => { currentSearchText = e.target.value; currentPageEstoque = 1; atualizarInterfaceEstoque(); });
         if(document.getElementById('filter-cat-estoque')) document.getElementById('filter-cat-estoque').addEventListener('change', e => { currentFilterCat = e.target.value; currentPageEstoque = 1; atualizarInterfaceEstoque(); });
         if(document.getElementById('search-table-rastreio')) document.getElementById('search-table-rastreio').addEventListener('input', e => { currentSearchRastreio = e.target.value; currentPageRastreio = 1; atualizarInterfaceRastreio(); });
@@ -1044,9 +1094,17 @@
         if(document.getElementById('btn-next-estoque')) document.getElementById('btn-next-estoque').addEventListener('click', () => { currentPageEstoque++; atualizarInterfaceEstoque(); });
         if(document.getElementById('btn-prev-rastreio')) document.getElementById('btn-prev-rastreio').addEventListener('click', () => { if(currentPageRastreio > 1) { currentPageRastreio--; atualizarInterfaceRastreio(); } });
         if(document.getElementById('btn-next-rastreio')) document.getElementById('btn-next-rastreio').addEventListener('click', () => { currentPageRastreio++; atualizarInterfaceRastreio(); });
-        if(document.getElementById('btn-export-csv')) document.getElementById('btn-export-csv').addEventListener('click', () => { let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Local,Serie,Patrimonio,Quantidade\n"; estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Local||''}","${r.Série||''}","${r.Patrimonio||''}","${r.Quantidade||0}"\n`); const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); });
 
-        setTimeout(() => { const kpis = document.querySelectorAll('.modern-card'); kpis.forEach((kpi, i) => { kpi.style.opacity = '0'; kpi.style.transform = 'translateY(10px)'; kpi.style.transition = 'all 0.4s ease-out'; setTimeout(() => { kpi.style.opacity = '1'; kpi.style.transform = 'translateY(0)'; }, i * 100); }); }, 300);
+        if(document.getElementById('btn-export-csv')) document.getElementById('btn-export-csv').addEventListener('click', () => { 
+            let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Local,Serie,Patrimonio,Quantidade\n"; 
+            estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Local||''}","${r.Série||''}","${r.Patrimonio||''}","${r.Quantidade||0}"\n`); 
+            const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); 
+        });
+
+        setTimeout(() => {
+            const kpis = document.querySelectorAll('.modern-card');
+            kpis.forEach((kpi, i) => { kpi.style.opacity = '0'; kpi.style.transform = 'translateY(10px)'; kpi.style.transition = 'all 0.4s ease-out'; setTimeout(() => { kpi.style.opacity = '1'; kpi.style.transform = 'translateY(0)'; }, i * 100); });
+        }, 300);
     </script>
 </body>
 </html>
