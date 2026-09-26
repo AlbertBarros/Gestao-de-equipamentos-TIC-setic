@@ -133,7 +133,6 @@
                     <div class="h-48 w-full flex justify-center mt-10"><canvas id="chartPizzaCategorias"></canvas></div>
                 </div>
 
-                <!-- NOVO GRÁFICO DE RASTREIO FÍSICO -->
                 <div class="modern-card p-6 flex flex-col relative">
                     <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center"><i class="fas fa-map-location-dot text-orange-500 mr-2"></i> Mapeamento Físico (Top 5)</h3>
                     <div class="flex-1 min-h-[200px] relative w-full flex justify-center items-center"><canvas id="chartRastreio"></canvas></div>
@@ -148,9 +147,11 @@
                 </div>
             </div>
 
-            <!-- MOTOR DE INSIGHTS E ALERTAS -->
+            <!-- MOTOR DE INSIGHTS E ALERTAS DE VOLTA! -->
             <div class="mb-8">
-                <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center"><i class="fas fa-lightbulb text-yellow-500 mr-2 text-lg"></i> Análise Inteligente de Estoque</h3>
+                <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center">
+                    <i class="fas fa-lightbulb text-yellow-500 mr-2 text-lg"></i> Análise Inteligente de Estoque
+                </h3>
                 <div id="insights-container" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
             </div>
 
@@ -538,7 +539,25 @@
         let currentFilterCat = '', currentSearchText = '', currentSearchRastreio = '';
         let mapItensSaida = {}, mapEditLocais = {}, mapEditEstoque = {};
         
+        let mapAdminDelLoc = {};
+        let mapAdminDelEst = {};
+        
         let chartComponentesAmpliado = null, chartTopSaidas = null, chartPizzaCategorias = null, chartRastreio = null; 
+        
+        let estoqueCarregado = false, locaisCarregados = false, logsCarregados = false;
+
+        function tentarAtualizarDashboard() {
+            if(estoqueCarregado && locaisCarregados && logsCarregados) {
+                atualizarInterfaceEstoque();
+                atualizarInterfaceRastreio();
+                atualizarDatalists();
+                atualizarDatalistSaida();
+                atualizarSelectEdicaoLocais();
+                atualizarSelectEdicaoEstoque();
+                gerarInsights();
+                renderChartsUIUX();
+            }
+        }
 
         // ================= IA CHATBOT SYSTEM =================
         const aiInput = document.getElementById('ai-input');
@@ -553,7 +572,6 @@
             aiBody.scrollTop = aiBody.scrollHeight;
         }
 
-        // MOTOR NLP (Evoluído para ignorar "s" final e acentos)
         function processAILogic(msg) {
             const mOriginal = msg.trim();
             const m = mOriginal.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); 
@@ -591,7 +609,6 @@
                     return `Contabilizo <b>${t} unidades</b> consolidadas fisicamente no nosso estoque geral.`;
                 }
 
-                // Cérebro Filtro: Remove plural (s final) e palavras inúteis
                 let itemBuscado = m.replace(/\b(quantos|quantas|temos|de|do|da|no|na|em|o|a|os|as|estoque|rastreio|mapa|almoxarifado|quantidade|qual|sao)\b/gi, '').replace(/\?/g, '').trim();
                 if (itemBuscado.endsWith('s') && itemBuscado.length > 3) itemBuscado = itemBuscado.slice(0, -1);
 
@@ -701,12 +718,10 @@
             } else { document.getElementById('login-screen').classList.remove('hidden'); document.getElementById('main-system').classList.add('hidden'); }
         });
 
-        // ================= SISTEMA CORE =================
-        let isSystemReady = false;
-        
+        // ================= SISTEMA CORE E CARREGAMENTO =================
         function iniciarSistema() {
-            onSnapshot(collection(db, "estoque"), (snapshot) => { estoqueLocal = []; snapshot.forEach((doc) => { estoqueLocal.push({ id: doc.id, ...doc.data() }); }); atualizarDashboard(); });
-            onSnapshot(collection(db, "localidades"), (snapshot) => { localidadesLocais = []; snapshot.forEach((doc) => { localidadesLocais.push({ id: doc.id, ...doc.data() }); }); atualizarDashboard(); });
+            onSnapshot(collection(db, "estoque"), (snapshot) => { estoqueLocal = []; snapshot.forEach((doc) => { estoqueLocal.push({ id: doc.id, ...doc.data() }); }); estoqueCarregado = true; tentarAtualizarDashboard(); });
+            onSnapshot(collection(db, "localidades"), (snapshot) => { localidadesLocais = []; snapshot.forEach((doc) => { localidadesLocais.push({ id: doc.id, ...doc.data() }); }); locaisCarregados = true; tentarAtualizarDashboard(); });
             onSnapshot(query(collection(db, "logs"), orderBy("dataHora", "desc"), limit(100)), (snapshot) => {
                 const tbody = document.getElementById('logs-tbody'); 
                 if(tbody) {
@@ -719,22 +734,10 @@
                         tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b"><td class="px-4 py-3">${dateStr}</td><td class="px-4 py-3 font-bold ${corAcao}"><i class="fas ${iconAcao} mr-1"></i> ${log.tipo}</td><td class="px-4 py-3">${log.itemNome}</td><td class="px-4 py-3">${log.qtd}</td><td class="px-4 py-3 text-xs text-gray-500">${log.usuario||''}</td></tr>`;
                     });
                 }
-                atualizarDashboard();
+                logsCarregados = true; tentarAtualizarDashboard();
             });
         }
         async function registrarLog(tipo, itemNome, qtd, chamado = "") { try { await addDoc(collection(db, "logs"), { tipo, itemNome, qtd: Number(qtd), chamado, usuario: userEmail, dataHora: serverTimestamp() }); } catch(e) {} }
-
-        // Centralizador Robusto de Interface
-        function atualizarDashboard() {
-            if(!estoqueLocal || !localidadesLocais || !logsLocal) return; // Aguarda os dados
-            atualizarInterfaceEstoque();
-            atualizarInterfaceRastreio();
-            atualizarDatalists();
-            atualizarDatalistSaida();
-            atualizarSelectEdicaoLocais();
-            gerarInsights();
-            renderChartsUIUX();
-        }
 
         // ================= ATUALIZAÇÃO DAS TABELAS =================
         function atualizarInterfaceEstoque() {
@@ -787,8 +790,6 @@
             const inicio = (currentPageRastreio - 1) * itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + itemsPerPage);
 
             tbody.innerHTML = '';
-            
-            // Ordem alfabética estrita para visualização
             dadosPagina.sort((a,b) => {
                 let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || '');
                 if (cmp !== 0) return cmp;
@@ -848,7 +849,6 @@
                 });
             }
 
-            // NOVO GRÁFICO: MAPA FÍSICO RASTREIO (Barras Horizontais)
             let rastreioMap = {};
             localidadesLocais.forEach(loc => { let eq = loc.Equipamento || 'Geral'; rastreioMap[eq] = (rastreioMap[eq] || 0) + (loc.Quantidade || 0); });
             const topRastreioKeys = Object.keys(rastreioMap).sort((a,b) => rastreioMap[b] - rastreioMap[a]).slice(0, 5);
@@ -867,7 +867,7 @@
         // ================= INSIGHTS E UI =================
         function gerarInsights() {
             const container = document.getElementById('insights-container'); if(!container) return; container.innerHTML = ''; 
-            let zerados = [], baixos = [], maiorVolume = null, totalItens = 0, hdCount = 0, ssdCount = 0;
+            let zerados = [], baixos = [], maiorVolume = null, totalItens = 0;
             if (!estoqueLocal || estoqueLocal.length === 0) { container.innerHTML = `<div class="col-span-3 bg-gray-50 border-l-4 border-gray-400 p-4 rounded-xl shadow-sm text-gray-500 font-medium flex items-center"><i class="fas fa-info-circle mr-2 text-xl"></i> Sem dados no estoque.</div>`; return; }
             estoqueLocal.forEach(item => {
                 const qtd = item.Quantidade || 0; totalItens += qtd; const minEstoque = item.EstoqueMinimo || 5;
@@ -879,7 +879,6 @@
                 let desc = ''; if (zerados.length > 0) desc += `<span class="text-red-600 font-bold">${zerados.length} itens esgotados.</span> `; if (baixos.length > 0) desc += `<span class="text-orange-600 font-bold">${baixos.length} em alerta.</span>`;
                 alertHtml = `<div class="bg-red-50 border-l-4 border-red-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-exclamation-triangle text-red-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-red-800 uppercase tracking-wide">Reposição Prioritária</h4><p class="text-xs text-red-700 mt-2">${desc}</p></div></div>`;
             } else { alertHtml = `<div class="bg-emerald-50 border-l-4 border-emerald-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-check-circle text-emerald-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wide">Estoque Saudável</h4><p class="text-xs text-emerald-700 mt-2">Nenhum equipamento em nível crítico.</p></div></div>`; }
-            
             let acumuloHtml = `<div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-boxes text-blue-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-blue-800 uppercase tracking-wide">Concentração</h4><p class="text-xs text-blue-700 mt-2"><b>${maiorVolume ? maiorVolume.Componente : 'Item'}</b> possui o maior volume.</p></div></div>`;
             let techHtml = `<div class="bg-purple-50 border-l-4 border-purple-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-sitemap text-purple-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-purple-800 uppercase tracking-wide">Diversidade</h4><p class="text-xs text-purple-700 mt-2">Gestão de ${[...new Set(estoqueLocal.map(i => i.Categoria || 'Geral'))].length} categorias.</p></div></div>`;
             container.innerHTML = alertHtml + acumuloHtml + techHtml;
@@ -908,10 +907,8 @@
                 const itemsDiv = document.getElementById('admin-loc-items');
                 const btn = document.getElementById('btn-delete-loc-batch');
                 const selectAllCb = document.getElementById('admin-loc-select-all');
-                
                 itemsDiv.innerHTML = ''; currentFilteredLocsForDelete = []; selectAllCb.checked = false;
                 btn.disabled = true; btn.innerHTML = `<i class="fas fa-eraser mr-1"></i> Apagar Selecionados (0)`;
-                
                 if (text.length >= 3) {
                     const searchTerms = text.split(' ');
                     localidadesLocais.forEach(item => {
@@ -924,9 +921,7 @@
                             itemsDiv.appendChild(div);
                         }
                     });
-                    
-                    if (currentFilteredLocsForDelete.length > 0) { container.classList.remove('hidden'); container.classList.add('flex'); } 
-                    else { container.classList.remove('flex'); container.classList.add('hidden'); }
+                    if (currentFilteredLocsForDelete.length > 0) { container.classList.remove('hidden'); container.classList.add('flex'); } else { container.classList.remove('flex'); container.classList.add('hidden'); }
                     document.querySelectorAll('.cb-del-loc').forEach(cb => { cb.addEventListener('change', updateDelLocBtn); });
                 } else { container.classList.remove('flex'); container.classList.add('hidden'); }
             });
@@ -936,8 +931,7 @@
             const checked = document.querySelectorAll('.cb-del-loc:checked').length;
             const btn = document.getElementById('btn-delete-loc-batch');
             document.getElementById('admin-loc-select-all').checked = (checked === document.querySelectorAll('.cb-del-loc').length && checked > 0);
-            if (checked > 0) { btn.disabled = false; btn.innerHTML = `<i class="fas fa-eraser mr-1"></i> Apagar Selecionados (${checked})`; } 
-            else { btn.disabled = true; btn.innerHTML = `<i class="fas fa-eraser mr-1"></i> Apagar Selecionados (0)`; }
+            if (checked > 0) { btn.disabled = false; btn.innerHTML = `<i class="fas fa-eraser mr-1"></i> Apagar Selecionados (${checked})`; } else { btn.disabled = true; btn.innerHTML = `<i class="fas fa-eraser mr-1"></i> Apagar Selecionados (0)`; }
         }
 
         if (document.getElementById('admin-loc-select-all')) document.getElementById('admin-loc-select-all').addEventListener('change', (e) => { document.querySelectorAll('.cb-del-loc').forEach(cb => { cb.checked = e.target.checked; }); updateDelLocBtn(); });
@@ -982,9 +976,7 @@
                             itemsDiv.appendChild(div);
                         }
                     });
-                    
-                    if (currentFilteredEstForDelete.length > 0) { container.classList.remove('hidden'); container.classList.add('flex'); } 
-                    else { container.classList.remove('flex'); container.classList.add('hidden'); }
+                    if (currentFilteredEstForDelete.length > 0) { container.classList.remove('hidden'); container.classList.add('flex'); } else { container.classList.remove('flex'); container.classList.add('hidden'); }
                     document.querySelectorAll('.cb-del-est').forEach(cb => { cb.addEventListener('change', updateDelEstBtn); });
                 } else { container.classList.remove('flex'); container.classList.add('hidden'); }
             });
@@ -994,8 +986,7 @@
             const checked = document.querySelectorAll('.cb-del-est:checked').length;
             const btn = document.getElementById('btn-delete-est-batch');
             document.getElementById('admin-est-select-all').checked = (checked === document.querySelectorAll('.cb-del-est').length && checked > 0);
-            if (checked > 0) { btn.disabled = false; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (${checked})`; } 
-            else { btn.disabled = true; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)`; }
+            if (checked > 0) { btn.disabled = false; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (${checked})`; } else { btn.disabled = true; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)`; }
         }
 
         if (document.getElementById('admin-est-select-all')) document.getElementById('admin-est-select-all').addEventListener('change', (e) => { document.querySelectorAll('.cb-del-est').forEach(cb => { cb.checked = e.target.checked; }); updateDelEstBtn(); });
@@ -1016,14 +1007,7 @@
             });
         }
 
-        if(document.getElementById('btn-create-user')) document.getElementById('btn-create-user').addEventListener('click', async () => {
-            const email = document.getElementById('new-user-email').value.trim(), pass = document.getElementById('new-user-pass').value.trim();
-            if(!email || pass.length < 6) return showToast("Erro: Mínimo 6 chars.", "error");
-            const btn = document.getElementById('btn-create-user'); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Criando...';
-            try { await createUserWithEmailAndPassword(auth, email, pass); showToast("Usuário criado!"); document.getElementById('new-user-email').value = ""; document.getElementById('new-user-pass').value = ""; } catch (error) { showToast("Erro: " + error.message, "error"); } btn.innerHTML = '<i class="fas fa-save mr-1"></i> Cadastrar';
-        });
-
-        // ================= FUNÇÕES DOS RELATÓRIOS EM PDF (RESUMOS TOTAIS ADICIONADOS) =================
+        // ================= FUNÇÕES DOS RELATÓRIOS EM PDF =================
         function gerarRelatorioAnalitico(tipoRelatorio) {
             document.getElementById('printable-simple-table').classList.remove('active-print'); document.getElementById('printable-report').classList.add('active-print');
             const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5);
@@ -1032,24 +1016,18 @@
             if(tipoRelatorio === 'estoque') {
                 titleDoc.textContent = `Relatório Consolidado - ${localStorage.getItem('pref_title') || 'SETIC'}`;
                 let tTotal = 0, tZerados = 0, tBaixos = 0; let categorias = new Set(); tbody.innerHTML = '';
-                
                 let totaisEquip = {};
                 
                 [...estoqueLocal].sort((a, b) => { let cmp = (a.Componente || '').localeCompare(b.Componente || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(i => {
                     tTotal += (i.Quantidade || 0); categorias.add(i.Categoria || 'Geral'); let minEstoque = i.EstoqueMinimo || 5;
                     if(i.Quantidade === 0) tZerados++; else if(i.Quantidade <= minEstoque) tBaixos++;
-                    
-                    let eqName = i.Componente || 'Geral';
-                    totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (i.Quantidade || 0);
-                    
+                    let eqName = i.Componente || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (i.Quantidade || 0);
                     tbody.innerHTML += `<tr><td class="border px-2 py-1">${i.Categoria||''}</td><td class="border px-2 py-1">${i.Componente||''}</td><td class="border px-2 py-1">${i.Modelo||''} / ${i.Especificação||''}</td><td class="border px-2 py-1">${i.Local||''}</td><td class="border px-2 py-1 font-mono">${i.Série||''}</td><td class="border px-2 py-1 font-mono">${i.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${i.Quantidade||0}</td></tr>`;
                 });
                 let taxaCritica = estoqueLocal.length > 0 ? (((tZerados + tBaixos) / estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1);
                 parecer.innerHTML = `Extração consolidou <b>${estoqueLocal.length}</b> registos de estoque físico. Emitido por ${userEmail} em ${dataAtual}.`;
-                
                 let listTotais = Object.keys(totaisEquip).sort().map(k => `<li><b>${k}:</b> ${totaisEquip[k]} und.</li>`).join('');
                 resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. <br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`;
-                
                 kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`;
                 thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
                 visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid';
@@ -1060,22 +1038,16 @@
             } else if (tipoRelatorio === 'rastreio') {
                 titleDoc.textContent = `Relatório de Rastreio - ${localStorage.getItem('pref_title') || 'SETIC'}`;
                 let tLocaisUnicos = new Set(), tVolumeRastreado = 0, tEquipsUnicos = new Set(); tbody.innerHTML = '';
-                
                 let totaisEquip = {};
 
                 [...localidadesLocais].sort((a, b) => { let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(loc => {
                     tLocaisUnicos.add(loc.Local || 'N/A'); tVolumeRastreado += (loc.Quantidade||0); tEquipsUnicos.add(loc.Equipamento || 'N/A');
-                    
-                    let eqName = loc.Equipamento || 'Geral';
-                    totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (loc.Quantidade || 0);
-
+                    let eqName = loc.Equipamento || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (loc.Quantidade || 0);
                     tbody.innerHTML += `<tr><td class="border px-2 py-1">${loc.Equipamento||''}</td><td class="border px-2 py-1">${loc.Local||''}</td><td class="border px-2 py-1">${loc.LocalSipac||''}</td><td class="border px-2 py-1">${loc.Marca||''}</td><td class="border px-2 py-1 font-mono">${loc.Serie||''}</td><td class="border px-2 py-1 font-mono">${loc.Patrimonio||''}</td><td class="border px-2 py-1 text-center font-bold">${loc.Quantidade||0}</td></tr>`;
                 });
                 parecer.innerHTML = `A extração consolidou <b>${localidadesLocais.length}</b> linhas de rastreabilidade física. Emitido por ${userEmail} em ${dataAtual}.`;
-                
                 let listTotais = Object.keys(totaisEquip).sort().map(k => `<li><b>${k}:</b> ${totaisEquip[k]} und.</li>`).join('');
-                resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades, com ${tEquipsUnicos.size} modelos distintos.<br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`;
-                
+                resumo.innerHTML = `O mapeamento localizou <b>${tVolumeRastreado}</b> ativos em <b>${tLocaisUnicos.size}</b> localidades.<br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`;
                 kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Rastreado</p><p class="text-2xl font-black text-slate-800">${tVolumeRastreado}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Locais Mapeados</p><p class="text-2xl font-black text-indigo-600">${tLocaisUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Equipamentos</p><p class="text-2xl font-black text-slate-800">${tEquipsUnicos.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Registros</p><p class="text-2xl font-black text-slate-800">${localidadesLocais.length}</p></div>`;
                 thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local Físico</th><th class="border px-2 py-1 text-left">Local SIPAC</th><th class="border px-2 py-1 text-left">Marca/Modelo</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`;
                 visualTitle.style.display = 'none'; chartsContainer.style.display = 'none';
@@ -1092,36 +1064,24 @@
             if(tipo === 'estoque') {
                 titleObj.innerText = "Extrato: Inventário Consolidado"; 
                 theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente / Espec.</th><th>Local</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
-                
                 let filtrados = estoqueLocal.filter(item => { let matchBusca = true; if (currentSearchText) { const searchTerms = currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !currentFilterCat || item.Categoria === currentFilterCat; return matchBusca && matchCat; });
-                
                 let totaisEquip = {};
-
                 filtrados.sort((a, b) => { let cmp = (a.Componente || '').localeCompare(b.Componente || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(i => { 
-                    let eqName = i.Componente || 'Geral';
-                    totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (i.Quantidade || 0);
-
+                    let eqName = i.Componente || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (i.Quantidade || 0);
                     tbodyObj.innerHTML += `<tr><td>${i.Categoria||''}</td><td><b>${i.Componente||''}</b><br><span style="font-size:10px; color:#555;">${i.Modelo||''} / ${i.Especificação||''}</span></td><td>${i.Local||''}</td><td style="font-family:monospace;">${i.Série||''}</td><td style="font-family:monospace;">${i.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${i.Quantidade||0}</td></tr>`; 
                 });
-
                 let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${k}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; ');
                 dateObj.innerHTML = `Emitido por: ${userEmail} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
 
             } else {
                 titleObj.innerText = "Extrato: Rastreamento Físico"; 
                 theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Local SIPAC</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`;
-                
                 let filtradosRastreio = localidadesLocais.filter(item => { if (!currentSearchRastreio) return true; const searchTerms = currentSearchRastreio.toLowerCase().split(' '); const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => (v || '').toString()).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); });
-                
                 let totaisEquip = {};
-
                 filtradosRastreio.sort((a, b) => { let cmp = (a.Equipamento || '').localeCompare(b.Equipamento || ''); if (cmp !== 0) return cmp; return (a.Local || '').localeCompare(b.Local || ''); }).forEach(loc => { 
-                    let eqName = loc.Equipamento || 'Geral';
-                    totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (loc.Quantidade || 0);
-
+                    let eqName = loc.Equipamento || 'Geral'; totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (loc.Quantidade || 0);
                     tbodyObj.innerHTML += `<tr><td><b>${loc.Equipamento||''}</b></td><td>${loc.Local||''}</td><td>${loc.LocalSipac||''}</td><td>${loc.Marca||''}</td><td style="font-family:monospace;">${loc.Serie||''}</td><td style="font-family:monospace;">${loc.Patrimonio||''}</td><td style="text-align:center; font-weight:bold;">${loc.Quantidade||0}</td></tr>`; 
                 });
-
                 let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${k}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; ');
                 dateObj.innerHTML = `Emitido por: ${userEmail} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
             }
@@ -1142,7 +1102,7 @@
             window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
         });
 
-        // ================= BOTÕES NAVEGAÇÃO =================
+        // ================= EVENT LISTENERS GERAIS =================
         const tabsBtns = document.querySelectorAll('.tab-btn'), tabContents = document.querySelectorAll('.tab-content');
         tabsBtns.forEach(btn => { 
             btn.addEventListener('click', (e) => { 
@@ -1178,6 +1138,11 @@
             estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Local||''}","${r.Série||''}","${r.Patrimonio||''}","${r.Quantidade||0}"\n`); 
             const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click(); 
         });
+
+        setTimeout(() => {
+            const kpis = document.querySelectorAll('.modern-card');
+            kpis.forEach((kpi, i) => { kpi.style.opacity = '0'; kpi.style.transform = 'translateY(10px)'; kpi.style.transition = 'all 0.4s ease-out'; setTimeout(() => { kpi.style.opacity = '1'; kpi.style.transform = 'translateY(0)'; }, i * 100); });
+        }, 300);
     </script>
 </body>
 </html>
