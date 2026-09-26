@@ -52,7 +52,6 @@
 <body class="transition-colors duration-200">
     <div id="toast-container" class="fixed top-5 right-5 z-[9999] flex flex-col gap-3 pointer-events-none"></div>
 
-    <!-- TELA DE LOGIN -->
     <div id="login-screen" class="fixed inset-0 flex justify-center items-center z-50 bg-cover bg-center bg-no-repeat" style="background-image: url('https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/fundo%20login.jpeg'); transition: background-image 0.5s ease;">
         <div class="absolute inset-0 bg-slate-900 bg-opacity-60 backdrop-blur-sm"></div>
         <div class="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-md border-t-4 border-yellow-500 relative z-10">
@@ -74,7 +73,6 @@
         </div>
     </div>
 
-    <!-- SISTEMA PRINCIPAL -->
     <div id="main-system" class="hidden relative">
         <nav id="navbar-main" class="bg-[#161B33] text-white shadow-md border-b-4 border-yellow-500 no-print transition-colors sticky top-0 z-40">
             <div class="px-4 sm:px-6 lg:px-8">
@@ -96,7 +94,6 @@
 
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
             
-            <!-- KPIS GLOBAIS -->
             <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                 <div class="modern-card p-4 flex items-start justify-between relative overflow-hidden group border-l-4 border-l-blue-500">
                     <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-boxes text-5xl text-blue-600"></i></div>
@@ -120,7 +117,6 @@
                 </div>
             </div>
 
-            <!-- GRÁFICOS PARTE 1 -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div class="modern-card p-6 md:col-span-2 flex flex-col">
                     <div class="flex justify-between items-center mb-4">
@@ -137,7 +133,6 @@
                 </div>
             </div>
 
-            <!-- GRÁFICOS PARTE 2 -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div class="modern-card p-6 flex flex-col justify-center items-center relative">
                     <h3 class="text-sm font-bold text-slate-800 absolute top-6 left-6 flex items-center"><i class="fas fa-sitemap text-indigo-500 mr-2"></i> Divisão Estrutural</h3>
@@ -161,11 +156,8 @@
                 </div>
             </div>
 
-            <!-- MOTOR DE INSIGHTS E ALERTAS -->
             <div class="mb-8">
-                <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center">
-                    <i class="fas fa-lightbulb text-yellow-500 mr-2 text-lg"></i> Análise Inteligente de Estoque
-                </h3>
+                <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4 flex items-center"><i class="fas fa-lightbulb text-yellow-500 mr-2 text-lg"></i> Análise Inteligente de Estoque</h3>
                 <div id="insights-container" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
             </div>
 
@@ -344,6 +336,7 @@
                             <button id="btn-estoque-upload" class="w-full bg-slate-800 text-white font-bold py-3 px-4 rounded hover:bg-slate-700 transition shadow mt-4">Processar Planilha de Estoque</button>
                         </div>
                     </div>
+                    <datalist id="lista-categorias"></datalist><datalist id="lista-componentes"></datalist>
                 </div>
 
                 <div id="tab-saida" class="tab-tool-content hidden h-full flex flex-col">
@@ -493,7 +486,7 @@
         </div>
     </div>
 
-    <!-- MODALS E RELATORIOS PDF (HIDDEN STRUCTURES) -->
+    <!-- MODALS E RELATORIOS PDF -->
     <div id="printable-report" class="hidden font-sans">
         <div class="bg-[#161B33] text-white p-6 flex justify-between items-center print-bg mb-6">
             <div>
@@ -539,7 +532,6 @@
         </table>
     </div>
 
-    <!-- SCRIPT GERAL -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -872,7 +864,7 @@
                 let taxaCritica = window.estoqueLocal.length > 0 ? (((tZerados + tBaixos) / window.estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1); parecer.innerHTML = `Extração consolidou <b>${window.estoqueLocal.length}</b> registos de estoque físico. Emitido por ${window.userEmail} em ${dataAtual}.`; let listTotais = Object.keys(totaisEquip).sort().map(k => `<li><b>${k}:</b> ${totaisEquip[k]} und.</li>`).join(''); resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. <br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${window.estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`; 
                 
                 visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid'; chartsContainer.className = "grid grid-cols-3 gap-4 mb-8";
-                document.getElementById('print-col-1').style.display = 'block'; document.getElementById('print-col-2').style.display = 'block'; document.getElementById('print-col-3').style.display = 'block'; document.getElementById('print-col-3').className = "w-full";
+                document.getElementById('print-col-1').style.display = 'block'; document.getElementById('print-col-2').style.display = 'block'; document.getElementById('print-col-3').style.display = 'block'; document.getElementById('print-col-3').className = "";
                 
                 if(window.imgChart1) document.getElementById('print-chart-1').src = window.imgChart1; 
                 if(window.imgChart2) document.getElementById('print-chart-2').src = window.imgChart2; 
@@ -917,6 +909,88 @@
             }
             window.print(); setTimeout(() => { document.getElementById('printable-simple-table').classList.remove('active-print'); }, 1000);
         }
+
+        // ================= EXCLUSÃO EM LOTE NO ADMIN =================
+        if(document.getElementById('admin-search-loc')) {
+            document.getElementById('admin-search-loc').addEventListener('input', (e) => {
+                const text = e.target.value.toLowerCase().trim(); const container = document.getElementById('admin-loc-list-container'); const itemsDiv = document.getElementById('admin-loc-items'); const btn = document.getElementById('btn-delete-loc-batch'); const selectAllCb = document.getElementById('admin-loc-select-all');
+                itemsDiv.innerHTML = ''; selectAllCb.checked = false; btn.disabled = true; btn.innerHTML = `<i class="fas fa-eraser mr-1"></i> Apagar Selecionados (0)`;
+                if (text.length >= 3) {
+                    const searchTerms = text.split(' '); let count = 0;
+                    window.localidadesLocais.forEach(item => { let display = `[RASTREIO] ${item.Equipamento} | Loc: ${item.Local} | Patr: ${item.Patrimonio||''} | Série: ${item.Serie||''}`; if (searchTerms.every(term => display.toLowerCase().includes(term))) { const div = document.createElement('div'); div.className = "flex items-start gap-2 border-b border-gray-200 pb-1"; div.innerHTML = `<input type="checkbox" class="cb-del-loc mt-0.5 rounded border-gray-400 cursor-pointer" value="${item.id}"> <label class="text-slate-600 leading-tight">${display}</label>`; itemsDiv.appendChild(div); count++; } });
+                    if (count > 0) { container.classList.remove('hidden'); container.classList.add('flex'); } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+                    document.querySelectorAll('.cb-del-loc').forEach(cb => { cb.addEventListener('change', () => { const checked = document.querySelectorAll('.cb-del-loc:checked').length; selectAllCb.checked = (checked === count && checked > 0); btn.disabled = (checked === 0); btn.innerHTML = `<i class="fas fa-eraser mr-1"></i> Apagar Selecionados (${checked})`; }); });
+                } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+            });
+        }
+        if (document.getElementById('admin-loc-select-all')) document.getElementById('admin-loc-select-all').addEventListener('change', (e) => { document.querySelectorAll('.cb-del-loc').forEach(cb => { cb.checked = e.target.checked; cb.dispatchEvent(new Event('change')); }); });
+        if (document.getElementById('btn-delete-loc-batch')) {
+            document.getElementById('btn-delete-loc-batch').addEventListener('click', async () => {
+                const ids = Array.from(document.querySelectorAll('.cb-del-loc:checked')).map(cb => cb.value); if (ids.length === 0) return;
+                if (confirm(`Atenção! Vai apagar ${ids.length} item(ns) do Rastreio.\nConfirmar?`)) {
+                    const btn = document.getElementById('btn-delete-loc-batch'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...'; btn.disabled = true;
+                    try { for(let id of ids) await deleteDoc(doc(db, "localidades", id)); showToast(`${ids.length} item(ns) apagado(s).`); document.getElementById('admin-search-loc').value = ''; document.getElementById('admin-search-loc').dispatchEvent(new Event('input')); } 
+                    catch (error) { showToast("Erro: " + error.message, "error"); btn.innerHTML = originalText; btn.disabled = false; }
+                }
+            });
+        }
+
+        if (document.getElementById('admin-search-est')) {
+            document.getElementById('admin-search-est').addEventListener('input', (e) => {
+                const text = e.target.value.toLowerCase().trim(); const container = document.getElementById('admin-est-list-container'); const itemsDiv = document.getElementById('admin-est-items'); const btn = document.getElementById('btn-delete-est-batch'); const selectAllCb = document.getElementById('admin-est-select-all');
+                itemsDiv.innerHTML = ''; selectAllCb.checked = false; btn.disabled = true; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)`;
+                if (text.length >= 3) {
+                    const searchTerms = text.split(' '); let count = 0;
+                    window.estoqueLocal.forEach(item => { let display = `[ESTOQUE] ${item.Componente} | Loc: ${item.Local} | Patr: ${item.Patrimonio||''} | Série: ${item.Série||''}`; if (searchTerms.every(term => display.toLowerCase().includes(term))) { const div = document.createElement('div'); div.className = "flex items-start gap-2 border-b border-gray-200 pb-1"; div.innerHTML = `<input type="checkbox" class="cb-del-est mt-0.5 rounded border-gray-400 cursor-pointer" value="${item.id}"> <label class="text-slate-600 leading-tight">${display}</label>`; itemsDiv.appendChild(div); count++; } });
+                    if (count > 0) { container.classList.remove('hidden'); container.classList.add('flex'); } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+                    document.querySelectorAll('.cb-del-est').forEach(cb => { cb.addEventListener('change', () => { const checked = document.querySelectorAll('.cb-del-est:checked').length; selectAllCb.checked = (checked === count && checked > 0); btn.disabled = (checked === 0); btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (${checked})`; }); });
+                } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+            });
+        }
+        if (document.getElementById('admin-est-select-all')) document.getElementById('admin-est-select-all').addEventListener('change', (e) => { document.querySelectorAll('.cb-del-est').forEach(cb => { cb.checked = e.target.checked; cb.dispatchEvent(new Event('change')); }); });
+        if (document.getElementById('btn-delete-est-batch')) {
+            document.getElementById('btn-delete-est-batch').addEventListener('click', async () => {
+                const ids = Array.from(document.querySelectorAll('.cb-del-est:checked')).map(cb => cb.value); if (ids.length === 0) return;
+                if (confirm(`Atenção! Vai apagar ${ids.length} item(ns) do Estoque.\nConfirmar?`)) {
+                    const btn = document.getElementById('btn-delete-est-batch'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...'; btn.disabled = true;
+                    try { for(let id of ids) await deleteDoc(doc(db, "estoque", id)); showToast(`${ids.length} item(ns) apagado(s).`); document.getElementById('admin-search-est').value = ''; document.getElementById('admin-search-est').dispatchEvent(new Event('input')); } 
+                    catch (error) { showToast("Erro: " + error.message, "error"); btn.innerHTML = originalText; btn.disabled = false; }
+                }
+            });
+        }
+
+        if (document.getElementById('admin-search-voip')) {
+            document.getElementById('admin-search-voip').addEventListener('input', (e) => {
+                const text = e.target.value.toLowerCase().trim(); const container = document.getElementById('admin-voip-list-container'); const itemsDiv = document.getElementById('admin-voip-items'); const btn = document.getElementById('btn-delete-voip-batch'); const selectAllCb = document.getElementById('admin-voip-select-all');
+                itemsDiv.innerHTML = ''; selectAllCb.checked = false; btn.disabled = true; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)`;
+                if (text.length >= 2) {
+                    const searchTerms = text.split(' '); let count = 0;
+                    window.voipLocal.forEach(item => { let display = `[VOIP] Ramal: ${item.Ramal} | Setor: ${item.Setor} | IP: ${item.Ip}`; if (searchTerms.every(term => display.toLowerCase().includes(term))) { const div = document.createElement('div'); div.className = "flex items-start gap-2 border-b border-gray-200 pb-1"; div.innerHTML = `<input type="checkbox" class="cb-del-voip mt-0.5 rounded border-gray-400 cursor-pointer" value="${item.id}"> <label class="text-slate-600 leading-tight">${display}</label>`; itemsDiv.appendChild(div); count++; } });
+                    if (count > 0) { container.classList.remove('hidden'); container.classList.add('flex'); } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+                    document.querySelectorAll('.cb-del-voip').forEach(cb => { cb.addEventListener('change', () => { const checked = document.querySelectorAll('.cb-del-voip:checked').length; selectAllCb.checked = (checked === count && checked > 0); btn.disabled = (checked === 0); btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (${checked})`; }); });
+                } else { container.classList.remove('flex'); container.classList.add('hidden'); }
+            });
+        }
+        if (document.getElementById('admin-voip-select-all')) document.getElementById('admin-voip-select-all').addEventListener('change', (e) => { document.querySelectorAll('.cb-del-voip').forEach(cb => { cb.checked = e.target.checked; cb.dispatchEvent(new Event('change')); }); });
+        if (document.getElementById('btn-delete-voip-batch')) {
+            document.getElementById('btn-delete-voip-batch').addEventListener('click', async () => {
+                const ids = Array.from(document.querySelectorAll('.cb-del-voip:checked')).map(cb => cb.value); if (ids.length === 0) return;
+                if (confirm(`Atenção! Vai apagar ${ids.length} Ramais VoIP.\nConfirmar?`)) {
+                    const btn = document.getElementById('btn-delete-voip-batch'); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...'; btn.disabled = true;
+                    try { for(let id of ids) await deleteDoc(doc(db, "voip", id)); showToast(`${ids.length} ramais apagados.`); document.getElementById('admin-search-voip').value = ''; document.getElementById('admin-search-voip').dispatchEvent(new Event('input')); } 
+                    catch (error) { showToast("Erro: " + error.message, "error"); btn.innerHTML = originalText; btn.disabled = false; }
+                }
+            });
+        }
+
+        if(document.getElementById('btn-admin-login')) document.getElementById('btn-admin-login').addEventListener('click', () => { const input = document.getElementById('admin-pass-input').value; if(btoa(input) === "c2V0aWNhZG1pbg==") { document.getElementById('admin-login-section').classList.add('hidden'); document.getElementById('admin-content-section').classList.remove('hidden'); document.getElementById('admin-error').classList.add('hidden'); document.getElementById('admin-pass-input').value = ""; } else { document.getElementById('admin-error').classList.remove('hidden'); } });
+        if(document.getElementById('btn-admin-lock')) document.getElementById('btn-admin-lock').addEventListener('click', () => { document.getElementById('admin-content-section').classList.add('hidden'); document.getElementById('admin-login-section').classList.remove('hidden'); });
+
+        if(document.getElementById('btn-create-user')) document.getElementById('btn-create-user').addEventListener('click', async () => {
+            const email = document.getElementById('new-user-email').value.trim(), pass = document.getElementById('new-user-pass').value.trim();
+            if(!email || pass.length < 6) return showToast("Mínimo 6 chars.", "error"); document.getElementById('btn-create-user').innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Criando...';
+            try { await createUserWithEmailAndPassword(auth, email, pass); showToast("Usuário criado!"); document.getElementById('new-user-email').value = ""; document.getElementById('new-user-pass').value = ""; } catch (e) { showToast("Erro: " + e.message, "error"); } document.getElementById('btn-create-user').innerHTML = '<i class="fas fa-save mr-1"></i> Cadastrar';
+        });
 
         // ================= BOTÕES E TABS NAVEGAÇÃO =================
         const tabsBtns = document.querySelectorAll('.tab-btn-tool'), tabContents = document.querySelectorAll('.tab-tool-content');
