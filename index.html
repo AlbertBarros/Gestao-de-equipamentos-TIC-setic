@@ -460,7 +460,7 @@
                                 <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-700 uppercase">Modelo / Marca</label><input type="text" id="form-mod" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div><div><label class="block text-xs font-bold text-slate-700 uppercase">Especificação</label><input type="text" id="form-esp" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div></div>
                                 <div><label class="block text-xs font-bold text-slate-700 uppercase text-blue-600">Local Físico *</label><input type="text" id="form-local" class="mt-1 block w-full rounded border-blue-300 border p-2 text-sm bg-white"></div>
                                 <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-700 uppercase">Nº de Série</label><input type="text" id="form-serie-estoque" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div><div><label class="block text-xs font-bold text-slate-700 uppercase">Nº Património</label><input type="text" id="form-patrimonio-estoque" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div></div>
-                                <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-700 uppercase text-orange-600">Estoque Mínimo</label><input type="number" id="form-minimo" class="mt-1 block w-full rounded border-orange-300 border p-2 text-sm" min="0" value="5"></div><div><label class="block text-xs font-bold text-slate-700 uppercase text-emerald-600">Qtd (Total) *</label><input type="number" id="form-qtd" class="mt-1 block w-full rounded border-emerald-300 border p-2 text-sm" min="1" value="1"></div></div>
+                                <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-700 uppercase text-orange-600">Estoque Mínimo</label><input type="number" id="form-minimo" class="mt-1 block w-full rounded border-orange-300 border p-2 text-sm" min="0" step="1" placeholder="Informe o mínimo" required></div><div><label class="block text-xs font-bold text-slate-700 uppercase text-emerald-600">Qtd (Total) *</label><input type="number" id="form-qtd" class="mt-1 block w-full rounded border-emerald-300 border p-2 text-sm" min="1" value="1"></div></div>
                             </div>
                             <button id="btn-save-item" class="w-full bg-blue-600 text-white font-bold py-2.5 px-4 rounded hover:bg-blue-700 transition shadow mt-4">Registar Entrada no Estoque</button>
                         </div>
@@ -830,18 +830,18 @@
             setTimeout(() => { toast.classList.add('translate-x-full'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
-        function estoqueMinimoValido(value) {
-            if(value === null || value === undefined || String(value).trim() === '') return 5;
-            const n = Number(value);
-            return Number.isInteger(n) && n >= 0 ? n : 5;
+        function minimoInformado(value) {
+            if(value===null||value===undefined||String(value).trim()==='') return null;
+            const n=Number(String(value).trim().replace(',','.'));
+            return Number.isInteger(n)&&n>=0?n:null;
         }
+        function estoqueMinimoValido(value) { return minimoInformado(value) ?? 0; }
         function minimoDaPlanilha(row) {
-            const nomes = ['estoque minimo', 'minimo', 'min'];
-            for(const [k,v] of Object.entries(row)) {
-                const chave = String(k).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/[_\s]+/g,' ');
-                if(nomes.includes(chave)) return estoqueMinimoValido(v);
+            for(const [key,value] of Object.entries(row)) {
+                const name=String(key).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+                if(['estoqueminimo','minimo','min','qtdminima','quantidademinima'].includes(name))return minimoInformado(value);
             }
-            return 5;
+            return null;
         }
 
         function sanitizeVal(val) {
@@ -864,9 +864,10 @@
             
             if(document.getElementById('navbar-title')) document.getElementById('navbar-title').textContent = titlePainel; 
             document.title = titlePainel;
+            document.getElementById('pref-title').value=titlePainel;
             
-            // GARANTINDO QUE A TELA DE LOGIN MANTÉM "Almoxarifado TIC" independentemente da preferencia.
-            if(document.getElementById('login-title')) document.getElementById('login-title').textContent = "Almoxarifado TIC";
+            // Título único para painel, login e aba do navegador.
+            if(document.getElementById('login-title')) document.getElementById('login-title').textContent = titlePainel;
             
             if(document.getElementById('navbar-main')) document.getElementById('navbar-main').style.backgroundColor = color;
             document.querySelectorAll('.btn-primary').forEach(el => el.style.backgroundColor = color);
@@ -1573,14 +1574,14 @@ window.atualizarInterfaceEstoque = function() {
         window.salvarEstoque = async function() {
             if(document.getElementById('estoque-action-type').value==='new'){try{await requireAdmin();}catch(e){return showToast(e.message,'error');}}
             const actionType = document.getElementById('estoque-action-type') ? document.getElementById('estoque-action-type').value : 'new'; const editId = document.getElementById('estoque-edit-id') ? document.getElementById('estoque-edit-id').value : '';
-            const cat = document.getElementById('form-cat').value.trim(); const comp = document.getElementById('form-comp').value.trim(); const mod = sanitizeVal(document.getElementById('form-mod').value); const esp = sanitizeVal(document.getElementById('form-esp').value); const local = document.getElementById('form-local').value.trim(); const serie = sanitizeVal(document.getElementById('form-serie-estoque').value); const patrim = sanitizeVal(document.getElementById('form-patrimonio-estoque').value); const qtd = parseInt(document.getElementById('form-qtd').value); const minEstoque = estoqueMinimoValido(document.getElementById('form-minimo').value); 
+            const cat = document.getElementById('form-cat').value.trim(); const comp = document.getElementById('form-comp').value.trim(); const mod = sanitizeVal(document.getElementById('form-mod').value); const esp = sanitizeVal(document.getElementById('form-esp').value); const local = document.getElementById('form-local').value.trim(); const serie = sanitizeVal(document.getElementById('form-serie-estoque').value); const patrim = sanitizeVal(document.getElementById('form-patrimonio-estoque').value); const qtd = parseInt(document.getElementById('form-qtd').value); const minEstoque = minimoInformado(document.getElementById('form-minimo').value); if(minEstoque===null)return showToast('Informe um estoque mínimo inteiro, maior ou igual a zero.','error'); 
             if(actionType === 'edit' && !editId) return showToast('Selecione um registro existente para atualizar.', 'error');
             if(!cat || !comp || !local || !Number.isInteger(qtd) || qtd < 0 || (actionType !== 'edit' && qtd === 0)) return showToast("Preencha Categoria, Componente, Local e Qtd.", "error");
             const btn = document.getElementById('btn-save-item'); const originalText = btn.innerText; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
             try {
                 if(actionType === 'edit' && editId) { await updateDoc(doc(db, "estoque", editId), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque }); await registrarLog("MOVIMENTAÇÃO (ESTOQUE)", `${comp} - ${mod}`, qtd, `Local: ${local}`); showToast("Alteração gravada com sucesso!"); } 
                 else { const ex = window.estoqueLocal.find(i => { let mP = (patrim && (i.Patrimonio === patrim || i.Série === patrim)); let mS = (serie && (i.Série === serie || i.Patrimonio === serie)); if(mP || mS) return true; return String(i.Componente||'') === comp && String(i.Modelo||'') === mod && String(i.Especificação||'') === esp && String(i.Local||'') === local; }); if(ex) await updateDoc(doc(db, "estoque", ex.id), { Quantidade: (Number(ex.Quantidade)||0) + qtd, EstoqueMinimo: minEstoque }); else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque }); await registrarLog("ENTRADA", `${comp} (${esp})`, qtd, local); showToast("Entrada registada!"); }
-                ['form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque', 'estoque-edit-id', 'estoque-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5; if(document.getElementById('estoque-action-type')) { document.getElementById('estoque-action-type').value = 'new'; document.getElementById('estoque-action-type').dispatchEvent(new Event('change')); }
+                ['form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque', 'estoque-edit-id', 'estoque-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = ''; if(document.getElementById('estoque-action-type')) { document.getElementById('estoque-action-type').value = 'new'; document.getElementById('estoque-action-type').dispatchEvent(new Event('change')); }
             } catch (e) { showToast("Erro: " + e.message, "error");} btn.innerText = originalText;
         };
 
@@ -1620,13 +1621,15 @@ window.atualizarInterfaceEstoque = function() {
             reader.onload = async (e) => {
                 try {
                     const json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let cont = 0;
+                    const invalid=json.findIndex(row=>getVal(row,['COMPONENTE','EQUIPAMENTO','NOME','ITEM'])&&minimoDaPlanilha(row)===null);
+                    if(invalid>=0)throw new Error('Estoque mínimo ausente ou inválido no registro '+(invalid+1)+'. Informe a coluna Estoque Mínimo antes de importar. Nenhum registro foi importado.');
                     for (let row of json) {
                         const cat = getVal(row, ['CATEGORIA', 'TIPO', 'GRUPO']) || 'Geral'; const comp = getVal(row, ['COMPONENTE', 'EQUIPAMENTO', 'NOME', 'ITEM']); const mod = getVal(row, ['MODELO', 'MARCA/MODELO', 'MARCA MODELO', 'MARCA']); const esp = getVal(row, ['ESPECIFICAÇÃO', 'ESPECIFICACAO', 'Especificação', 'Especificacao']); const local = getVal(row, ['LOCAL FISICO', 'LOCAL', 'Local', 'LOCAL FÍSICO']); const serie = getVal(row, ['Nº DE SÉRIE', 'N DE SERIE', 'Nº DE SERIE', 'Nº Série', 'N Serie', 'SÉRIE', 'Série', 'SERIE', 'NUMERO DE SERIE']); const patrim = getVal(row, ['Nº PATRIMÔNIO', 'Nº PATRIMONIO', 'N Patrimônio', 'N Patrimonio', 'PATRIMÔNIO', 'PATRIMONIO', 'Patrimônio', 'Patrimonio']); const minEst = minimoDaPlanilha(row); const qtd = parseInt(getVal(row, ['QUANTIDADE', 'Quantidade', 'QTD', 'Qtd'])) || 1;
                         if(!comp) continue; const existente = window.estoqueLocal.find(i => { let matchPatr = (patrim && (i.Patrimonio === patrim || i.Série === patrim)); let matchSerie = (serie && (i.Série === serie || i.Patrimonio === serie)); if(matchPatr || matchSerie) return true; return String(i.Componente||'') === comp && String(i.Modelo||'') === mod && String(i.Especificação||'') === esp && String(i.Local||'') === local; });
                         if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (Number(existente.Quantidade)||0) + qtd, EstoqueMinimo: minEst }); else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, EstoqueMinimo: minEst, Quantidade: qtd }); cont++;
                     }
                     await registrarLog("ENTRADA", `Upload Lote`, cont, ""); showToast(`Sucesso! ${cont} importados.`); fileInput.value = "";
-                } catch (error) { showToast("Erro leitura.", "error"); } btn.innerHTML = 'Processar Planilha de Estoque';
+                } catch (error) { showToast(error.message || "Erro leitura.", "error"); } btn.innerHTML = 'Processar Planilha de Estoque';
             }; reader.readAsArrayBuffer(fileInput.files[0]);
         };
 
@@ -1699,8 +1702,8 @@ window.atualizarInterfaceEstoque = function() {
                     if(item) { document.getElementById('loc-edit-id').value = item.id; document.getElementById('loc-equip').value = item.Equipamento || ''; document.getElementById('loc-local').value = item.Local || ''; document.getElementById('loc-sipac').value = item.LocalSipac || ''; document.getElementById('loc-marca').value = item.Marca || ''; document.getElementById('loc-qtd').value = item.Quantidade || 1; document.getElementById('loc-serie').value = item.Serie || ''; document.getElementById('loc-patrimonio').value = item.Patrimonio || ''; } 
                     else { ['loc-edit-id','loc-equip','loc-local','loc-sipac','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; }
                 } else if(tipo === 'estoque') {
-                    if(item) { document.getElementById('estoque-edit-id').value = item.id; document.getElementById('form-cat').value = item.Categoria || ''; document.getElementById('form-comp').value = item.Componente || ''; document.getElementById('form-mod').value = item.Modelo || ''; document.getElementById('form-esp').value = item.Especificação || ''; document.getElementById('form-local').value = item.Local || ''; document.getElementById('form-serie-estoque').value = item.Série || ''; document.getElementById('form-patrimonio-estoque').value = item.Patrimonio || ''; document.getElementById('form-qtd').value = item.Quantidade ?? 0; document.getElementById('form-minimo').value = estoqueMinimoValido(item.EstoqueMinimo); } 
-                    else { ['estoque-edit-id','form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5; }
+                    if(item) { document.getElementById('estoque-edit-id').value = item.id; document.getElementById('form-cat').value = item.Categoria || ''; document.getElementById('form-comp').value = item.Componente || ''; document.getElementById('form-mod').value = item.Modelo || ''; document.getElementById('form-esp').value = item.Especificação || ''; document.getElementById('form-local').value = item.Local || ''; document.getElementById('form-serie-estoque').value = item.Série || ''; document.getElementById('form-patrimonio-estoque').value = item.Patrimonio || ''; document.getElementById('form-qtd').value = item.Quantidade ?? 0; document.getElementById('form-minimo').value = minimoInformado(item.EstoqueMinimo) ?? ''; } 
+                    else { ['estoque-edit-id','form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = ''; }
                 } else if(tipo === 'voip') {
                     if(item) { document.getElementById('voip-edit-id').value = item.id; document.getElementById('voip-ramal').value = item.Ramal || ''; document.getElementById('voip-setor').value = item.Setor || ''; document.getElementById('voip-ip').value = item.Ip || ''; document.getElementById('voip-equip').value = item.Equipamento || ''; } 
                     else { ['voip-edit-id','voip-ramal','voip-setor','voip-ip','voip-equip'].forEach(id => document.getElementById(id).value = ''); }
