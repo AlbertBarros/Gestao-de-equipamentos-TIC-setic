@@ -80,6 +80,16 @@
 .ai-prf-crest{display:inline-block;width:25px;height:31px;object-fit:contain;vertical-align:middle;margin-left:5px;}
 @media(max-width:480px){[data-cadastro-base]{padding:10px 6px;gap:5px;font-size:12px;}[data-cadastro-base] i{font-size:16px;}.ai-prf-crest{width:20px;height:26px;}}
 </style>
+<style>
+.dark .text-black,.dark .text-slate-900,.dark .text-slate-700,.dark .text-slate-600,.dark .text-gray-900,.dark .text-gray-700,.dark .text-gray-600{color:#f1f5f9;}
+.dark dialog{background:#1e293b;color:#f8fafc;}
+.dark textarea{background:#334155;color:#f8fafc;border-color:#64748b;}
+.dark .bg-slate-50,.dark .bg-gray-50{background:#263449;}
+.dark .text-blue-900,.dark .text-indigo-900{color:#c7d2fe;}
+.dark .admin-section{background:#1e293b;color:#f8fafc;border-color:#475569;}
+.dark .admin-actions button:not([aria-expanded="true"]),.dark [data-cadastro-base]:not([aria-pressed="true"]){background:#29364a;color:#f8fafc;border-color:#64748b;}
+.dark #dashboard-detail-body .border-b{border-color:#475569;}
+</style>
 </head>
 <body class="transition-colors duration-200">
     <!-- WIDGETS GLOBAIS -->
@@ -418,7 +428,7 @@
         </div>
     </div>
 
-    <dialog id="dashboard-detail" style="width:min(720px,94vw);max-height:80vh;border:0;border-radius:16px;padding:24px"><div class="flex justify-between gap-4 mb-4"><h3 id="dashboard-detail-title" class="font-bold text-slate-800"></h3><button type="button" onclick="document.getElementById('dashboard-detail').close()" aria-label="Fechar detalhes">✕</button></div><div id="dashboard-detail-body" style="overflow:auto;max-height:60vh"></div></dialog>
+    <dialog id="dashboard-detail" style="width:min(720px,94vw);max-height:80vh;border:0;border-radius:16px;padding:24px"><div class="flex justify-between gap-4 mb-4"><h3 id="dashboard-detail-title" class="font-bold text-slate-800"></h3><button type="button" id="print-dashboard-detail" class="bg-blue-600 text-white rounded px-3 py-2">Imprimir</button><button type="button" onclick="document.getElementById('dashboard-detail').close()" aria-label="Fechar detalhes">✕</button></div><div id="dashboard-detail-body" style="overflow:auto;max-height:60vh"></div></dialog>
     <!-- MODAL PAINEL DE FERRAMENTAS -->
     <div id="tools-modal" class="hidden fixed inset-0 bg-slate-900 bg-opacity-80 flex justify-center items-center z-50 p-4">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-[1200px] flex overflow-hidden h-[750px] flex-col md:flex-row relative">
@@ -638,6 +648,26 @@
             appId: "1:323362748309:web:019905d5f8f5b71014a89c"
         };
 
+
+        if(window.Chart)window.Chart.register({id:'seticThemeContrast',beforeUpdate(chart){
+            const dark=document.body.classList.contains('dark'),color=dark?'#f8fafc':'#334155';
+            chart.options.color=color;
+            for(const scale of Object.values(chart.options.scales||{})){if(scale.ticks)scale.ticks.color=color;if(scale.title)scale.title.color=color;if(scale.grid)scale.grid.color=dark?'rgba(203,213,225,.14)':'rgba(51,65,85,.10)';}
+            if(chart.options.plugins?.legend?.labels)chart.options.plugins.legend.labels.color=color;
+        }});
+        document.getElementById('print-dashboard-detail').onclick=()=>{
+            const popup=window.open('','_blank','width=900,height=700');
+            if(!popup)return showToast('Permita abrir a janela de impressão no navegador.','error');
+            const d=popup.document;d.title=document.getElementById('dashboard-detail-title').textContent;
+            const style=d.createElement('style');style.textContent='body{font:14px Arial;color:#111;padding:24px}h1{font-size:20px}article{break-inside:avoid;border-bottom:1px solid #ccc;padding:12px 0}p{line-height:1.5}';d.head.append(style);
+            const h=d.createElement('h1');h.textContent=d.title;d.body.append(h);
+            const date=d.createElement('p');date.textContent='SETIC · '+new Date().toLocaleString('pt-BR');d.body.append(date);
+            const source=document.getElementById('dashboard-detail-body');
+            for(const row of source.children){const article=d.createElement('article');article.textContent=row.innerText;article.style.whiteSpace='pre-line';d.body.append(article);}
+            if(!source.children.length){const p=d.createElement('p');p.textContent=source.textContent;d.body.append(p);}
+            popup.focus();popup.setTimeout(()=>popup.print(),150);
+        };
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -664,7 +694,7 @@
             if (e.target.closest('#btn-tools')) { document.getElementById('tools-modal').classList.remove('hidden'); return; }
 
             // Modo Noturno
-            if (e.target.closest('#btn-theme')) { document.body.classList.toggle('dark'); return; }
+            if (e.target.closest('#btn-theme')) { document.body.classList.toggle('dark'); Object.values(window.Chart?.instances||{}).forEach(chart=>chart.update('none')); return; }
 
             // Controles exclusivos do assistente: minimizar preserva; fechar limpa.
             if(e.target.closest('#btn-ai-dismiss-greeting')) { SETIC_AI.dismissGreeting(); return; }
@@ -1199,6 +1229,7 @@ window.atualizarInterfaceEstoque = function() {
             if(document.getElementById('kpi-zerado')) document.getElementById('kpi-zerado').innerText = tZerado;
 
             let filtrados = window.estoqueLocal.filter(item => { let matchBusca = true; if (window.currentSearchText) { const searchTerms = window.currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !window.currentFilterCat || String(item.Categoria || 'Sem Categoria') === window.currentFilterCat; return matchBusca && matchCat; });
+            filtrados.sort((a,b)=>String(a.Componente||'').localeCompare(String(b.Componente||''),'pt-BR',{sensitivity:'base',numeric:true}) || String(a.Local||'').localeCompare(String(b.Local||''),'pt-BR',{sensitivity:'base',numeric:true}));
             const totalPaginas = Math.ceil(filtrados.length / window.itemsPerPage) || 1; if(window.currentPageEstoque > totalPaginas) window.currentPageEstoque = totalPaginas;
             const inicio = (window.currentPageEstoque - 1) * window.itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + window.itemsPerPage);
 
@@ -1219,11 +1250,12 @@ window.atualizarInterfaceEstoque = function() {
             if(document.getElementById('kpi-total-rastreio')) document.getElementById('kpi-total-rastreio').innerText = tTotalRastreio;
 
             let filtrados = window.localidadesLocais.filter(item => { if (!window.currentSearchRastreio) return true; const searchTerms = window.currentSearchRastreio.toLowerCase().split(' '); const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); });
+            filtrados.sort((a,b)=>String(a.Equipamento||'').localeCompare(String(b.Equipamento||''),'pt-BR',{sensitivity:'base',numeric:true}) || String(a.Local||'').localeCompare(String(b.Local||''),'pt-BR',{sensitivity:'base',numeric:true}));
             const totalPaginas = Math.ceil(filtrados.length / window.itemsPerPage) || 1; if(window.currentPageRastreio > totalPaginas) window.currentPageRastreio = totalPaginas;
             const inicio = (window.currentPageRastreio - 1) * window.itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + window.itemsPerPage);
 
             tbody.innerHTML = '';
-            dadosPagina.sort((a,b) => { let cmp = String(a.Equipamento || '').localeCompare(String(b.Equipamento || '')); if (cmp !== 0) return cmp; return String(a.Local || '').localeCompare(String(b.Local || '')); }).forEach(loc => {
+            dadosPagina.forEach(loc => {
                 tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||''}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.LocalSipac||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||''}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${Number(loc.Quantidade)||0}</td></tr>`;
             });
             if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + window.itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
@@ -1241,11 +1273,12 @@ window.atualizarInterfaceEstoque = function() {
                 if (window.currentSearchVoip === '[Em Uso]') return String(item.Ip || '').toUpperCase() !== 'DESATIVADO' && String(item.Ip || '').trim() !== '';
                 const searchTerms = window.currentSearchVoip.toLowerCase().split(' '); const itemText = [item.Ramal, item.Setor, item.Ip, item.Equipamento].map(v => String(v || '')).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); 
             });
+            filtrados.sort((a,b)=>String(a.Setor||'').localeCompare(String(b.Setor||''),'pt-BR',{sensitivity:'base',numeric:true}) || String(a.Ramal||'').localeCompare(String(b.Ramal||''),'pt-BR',{sensitivity:'base',numeric:true}));
             const totalPaginas = Math.ceil(filtrados.length / window.itemsPerPage) || 1; if(window.currentPageVoip > totalPaginas) window.currentPageVoip = totalPaginas;
             const inicio = (window.currentPageVoip - 1) * window.itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + window.itemsPerPage);
 
             tbody.innerHTML = '';
-            dadosPagina.sort((a,b) => String(a.Ramal || '').localeCompare(String(b.Ramal || ''))).forEach(v => {
+            dadosPagina.forEach(v => {
                 let strIp = String(v.Ip || ''); let badgeIp = '';
                 if(strIp.toUpperCase() === 'DESATIVADO') badgeIp = `<span class="px-2 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700"><i class="fas fa-check-circle mr-1"></i>LIVRE</span>`;
                 else badgeIp = `<span class="px-2 py-1 inline-flex text-xs font-bold rounded bg-blue-50 text-blue-700 font-mono border border-blue-200">${strIp}</span>`;
@@ -1320,7 +1353,7 @@ window.atualizarInterfaceEstoque = function() {
             if(chartComponentesAmpliado)chartComponentesAmpliado.destroy();
             const size=document.getElementById('stock-chart-size');if(size)size.style.height=Math.max(280,rows.reduce((sum,r)=>sum+Math.max(40,wrapStockLabel(r.name).length*17+14),0)+45)+'px';
             const caption=document.getElementById('stock-chart-caption');if(caption)caption.textContent=`${cats.find(c=>c.key===selectedStockCategory)?.name||'Todas as categorias'} · ${rows.length} componentes · ${rows.reduce((sum,r)=>sum+r.quantity,0)} unidades`;
-            const quantities={id:'stockQuantities',afterDatasetsDraw(chart){const {ctx}=chart;ctx.save();ctx.font='bold 12px Arial';ctx.fillStyle='#334155';ctx.textBaseline='middle';chart.getDatasetMeta(0).data.forEach((bar,i)=>{ctx.fillText(String(chart.data.datasets[0].data[i]),bar.x+7,bar.y);});ctx.restore();}};
+            const quantities={id:'stockQuantities',afterDatasetsDraw(chart){const {ctx}=chart;ctx.save();ctx.font='bold 12px Arial';ctx.fillStyle=document.body.classList.contains('dark')?'#f8fafc':'#334155';ctx.textBaseline='middle';chart.getDatasetMeta(0).data.forEach((bar,i)=>{ctx.fillText(String(chart.data.datasets[0].data[i]),bar.x+7,bar.y);});ctx.restore();}};
             chartComponentesAmpliado=new window.Chart(canvas,{type:'bar',plugins:[quantities],data:{labels:rows.length?rows.map(r=>wrapStockLabel(r.name)):['Nenhum componente nesta categoria'],datasets:[{label:'Quantidade',data:rows.length?rows.map(r=>r.quantity):[0],backgroundColor:rows.map(r=>cats.find(c=>c.key===r.cat)?.color||'#2563eb'),borderRadius:5,barThickness:18}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:{right:48}},animation:{duration:200,onComplete:function(){window.imgChart1=this.toBase64Image();}},plugins:{legend:{display:false},datalabels:{display:false},tooltip:{callbacks:{title:items=>rows[items[0]?.dataIndex]?.name||'Sem dados',label:c=>`Quantidade: ${c.raw}`}}},scales:{x:{beginAtZero:true,grace:'15%',ticks:{precision:0},title:{display:true,text:'Quantidade (unidades)'}},y:{grid:{display:false},ticks:{autoSkip:false,color:'#334155',font:{size:11}}}}}});
         }
 
@@ -1331,7 +1364,7 @@ window.atualizarInterfaceEstoque = function() {
         function openDashboardDetail(title,rows){
             const dialog=document.getElementById('dashboard-detail');document.getElementById('dashboard-detail-title').textContent=title;
             const body=document.getElementById('dashboard-detail-body');body.replaceChildren();
-            if(!rows.length){body.textContent='Nenhum item nesta situação.';}else rows.forEach(row=>{const article=document.createElement('div');article.className='p-3 border-b border-slate-200';const name=document.createElement('strong');name.textContent=row.name;const detail=document.createElement('p');detail.className='text-sm text-slate-600 mt-1';detail.textContent=row.detail;article.append(name,detail);body.append(article);});
+            if(!rows.length){body.textContent='Nenhum item nesta situação.';}else [...rows].sort((a,b)=>a.name.localeCompare(b.name,'pt-BR',{sensitivity:'base',numeric:true})).forEach(row=>{const article=document.createElement('div');article.className='p-3 border-b border-slate-200';const name=document.createElement('strong');name.textContent=row.name;const detail=document.createElement('p');detail.className='text-sm text-slate-600 mt-1';detail.textContent=row.detail;article.append(name,detail);body.append(article);});
             if(!dialog.open)dialog.showModal();
         }
         function showAlertDetails(){openDashboardDetail('Itens em alerta — quantidade igual ou abaixo do mínimo',dashboardAlerts().map(i=>({name:i.Componente||'Sem componente',detail:`Quantidade: ${Number(i.Quantidade)||0} · Mínimo: ${estoqueMinimoValido(i.EstoqueMinimo)} · Categoria: ${i.Categoria||'-'} · Local: ${i.Local||'-'}`})));}
@@ -1340,7 +1373,7 @@ window.atualizarInterfaceEstoque = function() {
         function compactDashboardChart(canvasId,rows,color,onClick){
             const canvas=document.getElementById(canvasId);if(!canvas)return null;
             canvas.parentElement.style.height=Math.max(160,rows.reduce((n,r)=>n+Math.max(40,wrapStockLabel(r.name).length*16+12),0)+35)+'px';
-            return new window.Chart(canvas,{type:'bar',plugins:[{id:'dashboardNumbers',afterDatasetsDraw(c){const ctx=c.ctx;ctx.save();ctx.font='bold 11px Arial';ctx.fillStyle='#334155';ctx.textBaseline='middle';c.getDatasetMeta(0).data.forEach((bar,i)=>ctx.fillText(String(c.data.datasets[0].data[i]),bar.x+5,bar.y));ctx.restore();}}],data:{labels:rows.length?rows.map(r=>wrapStockLabel(r.name)):['Nenhum registro'],datasets:[{data:rows.length?rows.map(r=>r.quantity):[0],backgroundColor:color,borderRadius:4,barThickness:16}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:{right:40}},animation:{onComplete:function(){if(canvasId==='chartTopSaidas')window.imgChart2=this.toBase64Image();}},plugins:{legend:{display:false},datalabels:{display:false},tooltip:{callbacks:{title:items=>rows[items[0]?.dataIndex]?.name||'Sem dados'}}},scales:{x:{beginAtZero:true,grace:'15%',ticks:{precision:0}},y:{ticks:{autoSkip:false,font:{size:10}},grid:{display:false}}},onClick:(event,elements)=>{if(elements.length&&rows.length)onClick?.(rows[elements[0].index]);}}});
+            return new window.Chart(canvas,{type:'bar',plugins:[{id:'dashboardNumbers',afterDatasetsDraw(c){const ctx=c.ctx;ctx.save();ctx.font='bold 11px Arial';ctx.fillStyle=document.body.classList.contains('dark')?'#f8fafc':'#334155';ctx.textBaseline='middle';c.getDatasetMeta(0).data.forEach((bar,i)=>ctx.fillText(String(c.data.datasets[0].data[i]),bar.x+5,bar.y));ctx.restore();}}],data:{labels:rows.length?rows.map(r=>wrapStockLabel(r.name)):['Nenhum registro'],datasets:[{data:rows.length?rows.map(r=>r.quantity):[0],backgroundColor:color,borderRadius:4,barThickness:16}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:{right:40}},animation:{onComplete:function(){if(canvasId==='chartTopSaidas')window.imgChart2=this.toBase64Image();}},plugins:{legend:{display:false},datalabels:{display:false},tooltip:{callbacks:{title:items=>rows[items[0]?.dataIndex]?.name||'Sem dados'}}},scales:{x:{beginAtZero:true,grace:'15%',ticks:{precision:0}},y:{ticks:{autoSkip:false,font:{size:10}},grid:{display:false}}},onClick:(event,elements)=>{if(elements.length&&rows.length)onClick?.(rows[elements[0].index]);}}});
         }
         function renderDashboardSides(){
             if(chartTopSaidas)chartTopSaidas.destroy();if(chartAlertasEstoque)chartAlertasEstoque.destroy();
