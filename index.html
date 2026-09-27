@@ -54,6 +54,17 @@
         #ai-chatbot-container .chat-bubble-ai { background:#fff; color:#334155; border-radius:16px 16px 16px 4px; padding:10px 12px; font-size:13px; max-width:94%; margin-bottom:8px; margin-right:auto; line-height:1.45; }
         #ai-chatbot-container .chat-bubble-user { background:#2563eb; color:#fff; border-radius:16px 16px 4px 16px; padding:10px 14px; font-size:13px; max-width:85%; margin-bottom:8px; margin-left:auto; line-height:1.5; }
 </style>
+<style>
+#tools-modal > div:first-child {width:min(1080px,94vw);height:min(680px,88dvh);max-height:88dvh;}
+#tools-modal > div:first-child > div:first-of-type {width:210px;flex-shrink:0;padding:20px;}
+.admin-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-bottom:20px;}
+.admin-actions button{margin:0;padding:12px;border:1px solid #dbe3f0;border-radius:10px;background:#f5f8ff;color:#244394;text-align:left;font-weight:600;}
+.admin-actions button[aria-expanded="true"]{background:#245cf5;color:white;border-color:#245cf5;}
+.admin-section{padding:18px;border:1px solid #dbe3f0;border-radius:12px;margin-bottom:16px;min-width:0;}
+.admin-section[hidden]{display:none!important;}
+#admin-content-section > div:first-child{padding-right:30px;}
+@media(max-width:767px){#tools-modal > div:first-child{width:96vw;height:92dvh;max-height:92dvh;overflow:auto;}#tools-modal > div:first-child > div:first-of-type{width:100%;height:auto;flex-shrink:0;padding:12px;}#tools-modal .admin-actions{grid-template-columns:repeat(2,minmax(0,1fr));}}
+</style>
 </head>
 <body class="transition-colors duration-200">
     <!-- WIDGETS GLOBAIS -->
@@ -1668,7 +1679,7 @@ window.atualizarInterfaceEstoque = function() {
             adminAuthorized=true;
         }
         function resetAdminAccess(){
-            adminAuthorized=false;reverseUnsubscribe?.();reverseUnsubscribe=null;withdrawalRows=[];
+            closeAdminSections();adminAuthorized=false;reverseUnsubscribe?.();reverseUnsubscribe=null;withdrawalRows=[];
             document.getElementById('admin-content-section').classList.add('hidden');
             document.getElementById('admin-login-section').classList.remove('hidden');
             document.getElementById('admin-reversal-list').replaceChildren();
@@ -1768,6 +1779,53 @@ window.atualizarInterfaceEstoque = function() {
         for(const mode of ['single','batch'])document.getElementById('delete-mode-'+mode).onclick=()=>{
             for(const other of ['single','batch']){document.getElementById('delete-'+other+'-panel').classList.toggle('hidden',other!==mode);document.getElementById('delete-mode-'+other).setAttribute('aria-pressed',String(other===mode));}
         };
+        // Organização visual das ferramentas administrativas.
+        const adminContent=document.getElementById('admin-content-section');
+        const entryHost=document.getElementById('admin-entry-host');
+        const entryButton=document.getElementById('btn-admin-entry');
+        const adminHeader=document.getElementById('btn-admin-lock').parentElement;
+        const reversalPanel=document.getElementById('admin-reversal-search').closest('section');
+        const cards=document.getElementById('delete-single-panel').parentElement.parentElement;
+        const deletePanel=document.getElementById('delete-single-panel').parentElement;
+        const userPanel=document.getElementById('btn-create-user').parentElement;
+        const accessPanel=userPanel.nextElementSibling;
+        const auditHeader=document.getElementById('btn-export-logs-pdf').parentElement;
+        const auditTable=document.getElementById('logs-tbody').closest('table').parentElement;
+        const auditPanel=document.createElement('section');auditPanel.append(auditHeader,auditTable);
+        const logPanel=document.createElement('section');
+        logPanel.innerHTML='<h3 class="font-bold text-lg mb-2">Excluir logs</h3><p class="text-sm mb-3">Apagar logs pode remover os dados de reversão e alterar o indicador de itens retirados. Os cadastros de estoque, rastreio e ramais não serão excluídos.</p><input id="admin-log-search" class="border rounded p-2 w-full mb-3" placeholder="Pesquisar entre os 100 logs mais recentes"><div id="admin-log-list" style="max-height:260px;overflow:auto"></div><button type="button" id="admin-log-delete" class="bg-red-600 text-white rounded p-2 mt-3">Excluir logs selecionados</button>';
+        const nav=document.createElement('div');nav.className='admin-actions';nav.setAttribute('aria-label','Funções administrativas');
+        const adminSections={entry:entryHost,reversal:reversalPanel,deletion:deletePanel,users:userPanel,access:accessPanel,audit:auditPanel,logs:logPanel};
+        entryButton.textContent='Entrada';entryButton.dataset.adminSection='entry';nav.append(entryButton);
+        for(const [key,title] of [['reversal','Reverter baixas e exclusões'],['deletion','Excluir registros'],['users','Novo usuário'],['access','Gerir acessos'],['audit','Auditoria'],['logs','Excluir logs']]){
+            const button=document.createElement('button');button.type='button';button.textContent=title;button.dataset.adminSection=key;nav.append(button);
+        }
+        const intro=document.createElement('p');intro.className='text-slate-500 text-sm mb-4';intro.textContent='Escolha uma opção para abrir os campos necessários.';
+        for(const section of Object.values(adminSections)){section.classList.add('admin-section');section.hidden=true;}
+        adminContent.replaceChildren(adminHeader,intro,nav,...Object.values(adminSections));
+        adminContent.classList.remove('h-full');
+        function closeAdminSections(){for(const section of Object.values(adminSections))section.hidden=true;nav.querySelectorAll('button').forEach(b=>b.setAttribute('aria-expanded','false'));}
+        function showAdminSection(key){const open=adminSections[key].hidden;closeAdminSections();if(open){adminSections[key].hidden=false;nav.querySelector(`[data-admin-section="${key}"]`).setAttribute('aria-expanded','true');if(key==='logs')renderAdminLogs();}}
+        nav.addEventListener('click',async event=>{const button=event.target.closest('[data-admin-section]');if(!button)return;try{await requireAdmin();showAdminSection(button.dataset.adminSection);}catch(e){showToast(e.message,'error');}});
+        closeAdminSections();
+        function renderAdminLogs(){
+            const area=document.getElementById('admin-log-list');area.replaceChildren();const term=normalized(document.getElementById('admin-log-search').value);
+            const rows=(window.logsLocal||[]).filter(log=>normalized([log.tipo,log.itemNome,log.usuario,log.chamado].join(' ')).includes(term));
+            for(const log of rows){const label=document.createElement('label');label.className='block border-b py-2';const checkbox=document.createElement('input');checkbox.type='checkbox';checkbox.value=log.id;checkbox.className='admin-log-checkbox mr-2';const text=document.createElement('span');text.textContent=`${log.dataHora?.toDate?.().toLocaleString('pt-BR')||''} · ${log.tipo} · ${log.itemNome||''} · ${log.usuario||''}`;label.append(checkbox,text);area.append(label);}
+            if(!rows.length)area.textContent='Nenhum log encontrado.';
+        }
+        document.getElementById('admin-log-search').addEventListener('input',renderAdminLogs);
+        async function deleteAdminLogs(ids){
+            await requireAdmin();if(!ids.length||ids.length>100)throw new Error('Selecione entre 1 e 100 logs.');
+            await runTransaction(db,async tx=>{const refs=ids.map(id=>doc(db,'logs',id));for(const ref of refs){const snap=await tx.get(ref);if(!snap.exists())throw new Error('Um log já foi removido. Atualize a lista.');}for(const ref of refs)tx.delete(ref);});
+        }
+        document.getElementById('admin-log-delete').onclick=async()=>{
+            const ids=Array.from(document.querySelectorAll('.admin-log-checkbox:checked')).map(c=>c.value);if(!ids.length)return showToast('Selecione os logs que deseja excluir.','error');
+            if(!confirm(`Excluir definitivamente ${ids.length} logs? Esta ação não pode ser desfeita. Reversões vinculadas poderão deixar de estar disponíveis e os indicadores de retiradas poderão mudar.`))return;
+            const button=document.getElementById('admin-log-delete');button.disabled=true;
+            try{await deleteAdminLogs(ids);window.logsLocal=window.logsLocal.filter(log=>!ids.includes(log.id));renderAdminLogs();showToast('Logs selecionados excluídos.');}catch(e){showToast(e.message,'error');}finally{button.disabled=false;}
+        };
+
         let cadastroMode='edit', cadastroBase='estoque';
         const cadastroPanels={estoque:'tab-entrada',loc:'tab-localidade',voip:'tab-voip-tool'};
         const originalMudarModoEdicao=window.mudarModoEdicao;
