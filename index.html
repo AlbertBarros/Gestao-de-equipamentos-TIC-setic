@@ -112,7 +112,7 @@
                 </div>
                 <div class="modern-card p-4 flex items-start justify-between relative overflow-hidden group border-l-4 border-l-indigo-500">
                     <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-phone-volume text-5xl text-indigo-600"></i></div>
-                    <div class="z-10"><div class="flex items-center gap-2 mb-1"><i class="fas fa-phone-volume text-indigo-500 text-xs"></i><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Telefonia VoIP</p></div><p id="kpi-total-voip" class="text-2xl font-extrabold text-slate-800">0</p></div>
+                    <div class="z-10"><div class="flex items-center gap-2 mb-1"><i class="fas fa-phone-volume text-indigo-500 text-xs"></i><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Ramais</p></div><p id="kpi-total-voip" class="text-2xl font-extrabold text-slate-800">0</p></div>
                 </div>
                 <div class="modern-card p-4 flex items-start justify-between relative overflow-hidden group border-l-4 border-l-yellow-500">
                     <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-truck-fast text-5xl text-yellow-600"></i></div>
@@ -135,17 +135,17 @@
                     <div style="max-height:720px;overflow:auto"><div id="stock-chart-size" style="position:relative;height:320px;min-width:520px"><canvas id="chartComponentesAmpliado" aria-label="Componentes e quantidades em estoque"></canvas></div></div>
                 </div>
                 <div id="dashboard-side-stack" style="display:grid;grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:16px;min-height:480px">
-                    <div class="modern-card p-4 flex flex-col" style="min-height:0"><h3 class="text-sm font-bold text-slate-800 mb-2">Itens Retirados</h3><p id="withdrawals-caption" class="text-xs text-slate-500 mb-2"></p><div style="overflow:auto;flex:1;min-height:0"><div style="position:relative"><canvas id="chartTopSaidas"></canvas></div></div></div>
+                <div class="modern-card p-6 flex flex-col justify-center items-center relative">
+                    <h3 class="text-sm font-bold text-slate-800 absolute top-6 left-6 flex items-center"><i class="fas fa-sitemap text-indigo-500 mr-2"></i> Divisão por categoria</h3>
+                    <div class="h-48 w-full flex justify-center mt-10"><canvas id="chartPizzaCategorias" aria-label="Clique em uma categoria para filtrar o gráfico do estoque"></canvas></div><p class="text-xs text-slate-500 mt-2">Clique em uma cor para filtrar o estoque.</p><div id="stock-category-buttons" class="flex flex-wrap gap-2 mt-3 w-full" aria-label="Categorias do estoque"></div>
+                </div>
                     <div class="modern-card p-4 flex flex-col" style="min-height:0"><h3 class="text-sm font-bold text-slate-800 mb-2">Componentes em alerta</h3><p class="text-xs text-slate-500 mb-2">Quantidade igual ou abaixo do mínimo. Clique para ver os detalhes.</p><div style="overflow:auto;flex:1;min-height:0"><div style="position:relative"><canvas id="chartAlertasEstoque"></canvas></div></div></div>
                 </div>
             </div>
 
             <!-- GRÁFICOS PARTE 2 -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="modern-card p-6 flex flex-col justify-center items-center relative">
-                    <h3 class="text-sm font-bold text-slate-800 absolute top-6 left-6 flex items-center"><i class="fas fa-sitemap text-indigo-500 mr-2"></i> Divisão por categoria</h3>
-                    <div class="h-48 w-full flex justify-center mt-10"><canvas id="chartPizzaCategorias" aria-label="Clique em uma categoria para filtrar o gráfico do estoque"></canvas></div><p class="text-xs text-slate-500 mt-2">Clique em uma cor para filtrar o estoque.</p><div id="stock-category-buttons" class="flex flex-wrap gap-2 mt-3 w-full" aria-label="Categorias do estoque"></div>
-                </div>
+                    <div class="modern-card p-4 flex flex-col" style="min-height:320px;max-height:440px"><h3 class="text-sm font-bold text-slate-800 mb-2">Itens Retirados</h3><p id="withdrawals-caption" class="text-xs text-slate-500 mb-2"></p><div style="overflow:auto;flex:1;min-height:0"><div style="position:relative"><canvas id="chartTopSaidas"></canvas></div></div></div>
 
                 <div class="modern-card p-6 flex flex-col justify-center items-center relative overflow-hidden group">
                     <h3 class="text-sm font-bold text-slate-800 absolute top-6 left-6 flex items-center"><i class="fas fa-phone-volume text-indigo-500 mr-2"></i> Gráfico Ramais</h3>
@@ -1157,7 +1157,7 @@ window.atualizarInterfaceEstoque = function() {
             const tbody = document.getElementById('inventory-tbody'); if(!tbody) return;
             let tTotal = 0, tZerado = 0, tSaidas = 0;
             window.estoqueLocal.forEach(item => { const qtd = Number(item.Quantidade) || 0; tTotal += qtd; if(qtd <= (estoqueMinimoValido(item.EstoqueMinimo))) tZerado++; });
-            window.logsLocal.forEach(log => { if(String(log.tipo) === 'SAÍDA') tSaidas += (Number(log.qtd) || 0); });
+            tSaidas = dashboardWithdrawals().reduce((total, item) => total + item.quantity, 0);
             if(document.getElementById('kpi-total-estoque')) document.getElementById('kpi-total-estoque').innerText = tTotal; 
             if(document.getElementById('kpi-total-saidas')) document.getElementById('kpi-total-saidas').innerText = tSaidas; 
             if(document.getElementById('kpi-zerado')) document.getElementById('kpi-zerado').innerText = tZerado;
