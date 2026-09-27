@@ -462,7 +462,7 @@
                                 <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-700 uppercase">Marca / Modelo</label><input type="text" id="loc-marca" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div><div><label class="block text-xs font-bold text-slate-700 uppercase">Quantidade *</label><input type="number" id="loc-qtd" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm" min="1" value="1"></div></div>
                                 <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-700 uppercase">Nº de Série</label><input type="text" id="loc-serie" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div><div><label class="block text-xs font-bold text-slate-700 uppercase">Nº Património</label><input type="text" id="loc-patrimonio" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div></div>
                             </div>
-                            <button id="btn-save-loc" class="w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded hover:bg-indigo-700 transition shadow mt-4">Mapear Equipamento</button><button type="button" id="btn-delete-selected-loc" class="hidden bg-red-600 text-white rounded p-2 mt-2">Excluir registro selecionado</button>
+                            <button id="btn-save-loc" class="w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded hover:bg-indigo-700 transition shadow mt-4">Mapear Equipamento</button>
                         </div>
                         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                             <h3 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-excel mr-2 text-emerald-600"></i>Importação em Lote</h3>
@@ -484,7 +484,7 @@
                                 <div><label class="block text-xs font-bold text-slate-700 uppercase">Endereço IP (Ou 'Desativado') *</label><input type="text" id="voip-ip" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div>
                                 <div><label class="block text-xs font-bold text-slate-700 uppercase">Equipamento / Obs</label><input type="text" id="voip-equip" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div>
                             </div>
-                            <button id="btn-save-voip" class="w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded hover:bg-indigo-700 transition shadow mt-4">Registrar Ramal</button><button type="button" id="btn-delete-selected-voip" class="hidden bg-red-600 text-white rounded p-2 mt-2">Excluir registro selecionado</button>
+                            <button id="btn-save-voip" class="w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded hover:bg-indigo-700 transition shadow mt-4">Registrar Ramal</button>
                         </div>
                         <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
                             <h3 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-excel mr-2 text-emerald-600"></i>Importação em Lote</h3>
@@ -527,15 +527,17 @@
 
                     <div id="admin-content-section" class="hidden h-full flex flex-col">
                         <button type="button" id="btn-admin-entry" class="bg-blue-600 text-white rounded p-3 mb-3">Entrada — Estoque, Rastreio e Ramais</button><div id="admin-entry-host"></div>
-                        <section class="border rounded p-4 mb-4"><h3 class="font-bold mb-2">Reverter baixa de estoque</h3><input id="admin-reversal-search" class="border p-2 rounded w-full mb-3" placeholder="Pesquisar item, chamado ou responsável"><div id="admin-reversal-list" style="max-height:360px;overflow:auto"></div></section>
+                        <section class="border rounded p-4 mb-4"><h3 class="font-bold mb-2">Reverter baixas e exclusões</h3><input id="admin-reversal-search" class="border p-2 rounded w-full mb-3" placeholder="Digite as primeiras letras do item excluído ou baixado" autocomplete="off"><div id="admin-reversal-list" style="max-height:360px;overflow:auto"></div></section>
                         <div class="flex justify-between items-center mb-4 border-b pb-4">
                             <div><h2 class="text-2xl font-bold text-slate-800">Painel do Administrador</h2></div>
                             <button id="btn-admin-lock" class="text-slate-400 hover:text-slate-800 transition"><i class="fas fa-lock text-xl"></i></button>
                         </div>
                         <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
                             <div class="border border-red-200 rounded-xl p-5 bg-red-50 shadow-sm flex flex-col justify-between col-span-1 lg:col-span-2">
-                                <div><h3 class="font-bold text-red-800 mb-1"><i class="fas fa-exclamation-triangle text-red-600 mr-2"></i> Zona de Perigo (Exclusão em Lote)</h3></div>
-                                <div class="space-y-4 mt-auto">
+                                <div><h3 class="font-bold text-red-800 mb-1"><i class="fas fa-exclamation-triangle text-red-600 mr-2"></i> Exclusão de registros</h3></div>
+                                <div class="flex gap-2 my-3"><button type="button" id="delete-mode-single" class="border rounded p-2" aria-pressed="true">Por item</button><button type="button" id="delete-mode-batch" class="border rounded p-2" aria-pressed="false">Em lote</button></div>
+<section id="delete-single-panel"><label for="admin-single-base">Base</label><select id="admin-single-base" class="border rounded p-2 w-full"><option value="estoque">Estoque</option><option value="localidades">Rastreio</option><option value="voip">Ramais</option></select><input id="admin-single-search" class="border rounded p-2 w-full mt-2" placeholder="Pesquisar nome, série, patrimônio ou ramal"><div id="admin-single-results" style="max-height:320px;overflow:auto"></div></section>
+<div id="delete-batch-panel" class="hidden space-y-4 mt-auto">
                                     <div class="bg-white p-3 border border-orange-200 rounded shadow-sm">
                                         <label class="block text-[11px] font-bold text-orange-800 mb-1">Apagar do Rastreio (Mapa Físico)</label>
                                         <div class="relative mb-2"><i class="fas fa-search absolute left-2 top-2 text-orange-400 text-xs"></i><input type="text" id="admin-search-loc" class="w-full text-[11px] p-1.5 pl-7 border border-orange-300 rounded focus:ring-orange-500 focus:outline-none" placeholder="Pesquise local..."></div>
@@ -549,7 +551,7 @@
                                         <button id="btn-delete-est-batch" class="w-full bg-red-600 text-white font-bold py-1.5 px-2 rounded hover:bg-red-700 transition text-[11px] shadow disabled:opacity-50" disabled><i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)</button>
                                     </div>
                                     <div class="bg-white p-3 border border-purple-200 rounded shadow-sm">
-                                        <label class="block text-[11px] font-bold text-purple-800 mb-1">Apagar Telefonia VoIP</label>
+                                        <label class="block text-[11px] font-bold text-purple-800 mb-1">Apagar Ramais</label>
                                         <div class="relative mb-2"><i class="fas fa-search absolute left-2 top-2 text-purple-400 text-xs"></i><input type="text" id="admin-search-voip" class="w-full text-[11px] p-1.5 pl-7 border border-purple-300 rounded focus:ring-purple-500 focus:outline-none" placeholder="Pesquise ramal..."></div>
                                         <div id="admin-voip-list-container" class="hidden flex-col gap-1 max-h-32 overflow-y-auto bg-gray-50 border border-gray-200 rounded p-2 mb-2 text-[10px]"><div class="flex items-center gap-2 mb-1 pb-1 border-b border-gray-300"><input type="checkbox" id="admin-voip-select-all" class="rounded border-gray-400 cursor-pointer"><label for="admin-voip-select-all" class="font-bold text-slate-700 cursor-pointer">Selecionar Todos</label></div><div id="admin-voip-items" class="flex flex-col gap-1"></div></div>
                                         <button id="btn-delete-voip-batch" class="w-full bg-purple-600 text-white font-bold py-1.5 px-2 rounded hover:bg-purple-700 transition text-[11px] shadow disabled:opacity-50" disabled><i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)</button>
@@ -560,7 +562,7 @@
                                 <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-user-plus text-blue-600 mr-2"></i> Novo Usuário</h3>
                                 <input type="email" id="new-user-email" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="E-mail corporativo">
                                 <input type="password" id="new-user-pass" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="Senha (mín. 6 chars)">
-                                <button id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 px-2 rounded hover:bg-blue-700 transition text-sm shadow mt-auto"><i class="fas fa-save mr-1"></i> Cadastrar</button>
+                                <p class="text-sm text-slate-600 mb-3">Novas contas recebem acesso de usuário comum.</p><button id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 px-2 rounded hover:bg-blue-700 transition text-sm shadow mt-auto"><i class="fas fa-save mr-1"></i> Cadastrar</button>
                             </div>
                             <div class="border border-orange-200 rounded-xl p-5 bg-orange-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-orange-800 mb-2"><i class="fas fa-user-minus text-orange-600 mr-2"></i> Gerir Acessos</h3>
@@ -588,8 +590,8 @@
 
     <!-- SCRIPT DE CONFIGURAÇÃO E EXECUÇÃO GERAL -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, initializeAuth, inMemoryPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, addDoc, serverTimestamp, query, orderBy, limit, deleteDoc, runTransaction, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         // Chart.js pode carregar antes/depois do plugin dependendo da rede/CDN.
@@ -723,9 +725,7 @@
             if(e.target.closest('#btn-admin-login')){await openAdmin();return;}
             if(e.target.closest('#btn-admin-lock')){resetAdminAccess();return;}
             if(e.target.closest('#btn-admin-entry')){try{await requireAdmin();showCadastro('new',cadastroBase);document.getElementById('tab-cadastros').classList.remove('hidden');}catch(err){showToast(err.message,'error');}return;}
-            if(e.target.closest('#btn-delete-selected-loc')){await deleteSelectedCadastro('loc');return;}
-            if(e.target.closest('#btn-delete-selected-voip')){await deleteSelectedCadastro('voip');return;}
-            if (e.target.closest('#btn-create-user')) { const email = document.getElementById('new-user-email').value.trim(), pass = document.getElementById('new-user-pass').value.trim(); if(!email || pass.length < 6) return showToast("Mínimo 6 chars.", "error"); document.getElementById('btn-create-user').innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Criando...'; try { await createUserWithEmailAndPassword(auth, email, pass); showToast("Usuário criado!"); document.getElementById('new-user-email').value = ""; document.getElementById('new-user-pass').value = ""; } catch (err) { showToast("Erro: " + err.message, "error"); } document.getElementById('btn-create-user').innerHTML = '<i class="fas fa-save mr-1"></i> Cadastrar'; return; }
+            if (e.target.closest('#btn-create-user')) { await createManagedUser(); return; }
             
             // Delete Batch (Exclusão em Lote Admin)
             if (e.target.closest('#btn-delete-loc-batch')) { window.apagarLote('loc'); return; }
@@ -1600,13 +1600,11 @@ window.atualizarInterfaceEstoque = function() {
 
         // ================= GESTÃO DE DELETS ADMIN =================
         window.apagarLote = async function(tipo) {
-            const className = `.cb-del-${tipo}`; const inputId = `admin-search-${tipo}`; const collectionName = tipo === 'loc' ? 'localidades' : tipo === 'est' ? 'estoque' : 'voip';
-            const idsToDelete = Array.from(document.querySelectorAll(`${className}:checked`)).map(cb => cb.value); if (idsToDelete.length === 0) return;
-            if (confirm(`Atenção! Vai apagar ${idsToDelete.length} itens da base ${collectionName.toUpperCase()}.\nAção irreversível. Confirmar?`)) {
-                const btn = document.getElementById(`btn-delete-${tipo}-batch`); const originalText = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Apagando...'; btn.disabled = true;
-                try { for(let id of idsToDelete) await deleteDoc(doc(db, collectionName, id)); showToast(`${idsToDelete.length} item(ns) apagado(s).`); document.getElementById(inputId).value = ''; document.getElementById(inputId).dispatchEvent(new Event('input')); } 
-                catch (error) { showToast("Erro: " + error.message, "error"); btn.innerHTML = originalText; btn.disabled = false; }
-            }
+            const ids=Array.from(document.querySelectorAll(`.cb-del-${tipo}:checked`)).map(cb=>cb.value);
+            if(!ids.length)return;
+            if(!confirm(`Excluir os ${ids.length} registros selecionados? Será guardada uma cópia para reversão.`))return;
+            const button=document.getElementById(`btn-delete-${tipo}-batch`);button.disabled=true;
+            try{await deleteRecords(({est:'estoque',loc:'localidades',voip:'voip'})[tipo],ids);const input=document.getElementById(`admin-search-${tipo}`);input.value='';input.dispatchEvent(new Event('input'));showToast('Registros excluídos e disponíveis para reversão.');}catch(e){showToast(e.message,'error');}finally{window.atualizarBotaoDelete(tipo);}
         };
 
         window.atualizarBotaoDelete = function(tipo) {
@@ -1658,39 +1656,118 @@ window.atualizarInterfaceEstoque = function() {
         };
 
 
+        const REVERSAL_START = Date.parse('2026-09-27T00:00:00-03:00');
+        const normalized = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+        const logMillis = log => log.dataHora?.toMillis?.() ?? Date.parse(log.dataHora);
+        const eligibleReversal = log => !log.revertida && logMillis(log)>=REVERSAL_START && (log.tipo==='SAÍDA' || log.tipo==='EXCLUSÃO');
         let adminAuthorized=false,reverseUnsubscribe=null,withdrawalRows=[];
         async function requireAdmin(){
             if(!auth.currentUser)throw new Error('Entre no sistema.');
             const result=await auth.currentUser.getIdTokenResult(true);
-            if(result.claims.admin!==true){adminAuthorized=false;throw new Error('Sua conta precisa da permissão admin no Firebase. A senha local não concede essa permissão.');}
+            if(result.claims.admin!==true){adminAuthorized=false;throw new Error('Acesso permitido somente a administradores.');}
             adminAuthorized=true;
         }
-        function resetAdminAccess(){adminAuthorized=false;reverseUnsubscribe?.();reverseUnsubscribe=null;withdrawalRows=[];document.getElementById('admin-content-section').classList.add('hidden');document.getElementById('admin-login-section').classList.remove('hidden');document.getElementById('admin-reversal-list').replaceChildren();}
+        function resetAdminAccess(){
+            adminAuthorized=false;reverseUnsubscribe?.();reverseUnsubscribe=null;withdrawalRows=[];
+            document.getElementById('admin-content-section').classList.add('hidden');
+            document.getElementById('admin-login-section').classList.remove('hidden');
+            document.getElementById('admin-reversal-list').replaceChildren();
+            document.getElementById('admin-reversal-search').value='';
+            document.getElementById('new-user-pass').value='';
+        }
+        function reversalLabel(log){return `${log.itemNome||'Item'} | ${log.tipo} | ${log.base||'estoque'} | ${log.dataHora?.toDate?.().toLocaleString('pt-BR')||''} | ${log.id}`;}
         function renderReversals(){
             const area=document.getElementById('admin-reversal-list');area.replaceChildren();
-            const term=document.getElementById('admin-reversal-search').value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-            const rows=withdrawalRows.filter(l=>!l.revertida&&[l.itemNome,l.itemId,l.chamado,l.usuario,l.qtd].join(' ').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().includes(term));
-            if(!rows.length){area.textContent='Nenhuma baixa pendente de reversão encontrada.';return;}
-            rows.forEach(l=>{const row=document.createElement('div');row.className='border rounded p-3 mb-2';const title=document.createElement('strong');title.textContent=l.itemNome||'Item';const detail=document.createElement('p');detail.textContent=`Quantidade: ${l.qtd} · Chamado: ${l.chamado||'-'} · Usuário: ${l.usuario||'-'} · Data: ${l.dataHora?.toDate?.().toLocaleString('pt-BR')||'Não informada'}`;row.append(title,detail);
-                let select=null;if(!l.itemId){const note=document.createElement('p');note.textContent='Baixa antiga sem identificação do item. Confira a origem e selecione explicitamente o cadastro que deve receber a devolução.';row.append(note);select=document.createElement('select');select.className='border p-2 w-full';select.append(new Option('Selecione o item correto do estoque',''));window.estoqueLocal.forEach(i=>select.append(new Option(`${i.Componente} | ${i.Modelo||''} | Local: ${i.Local||''} | Patr.: ${i.Patrimonio||''} | ID: ${i.id}`,i.id)));row.append(select);}
-                const button=document.createElement('button');button.type='button';button.className='bg-emerald-600 text-white rounded px-3 py-2 mt-2';button.textContent='Reverter baixa';button.onclick=async()=>{const id=l.itemId||select?.value;if(!id)return showToast('Selecione o cadastro de destino.','error');if(!confirm(`Devolver ${l.qtd} unidade(s) de ${l.itemNome} ao cadastro ${id}? Esta baixa só poderá ser revertida uma vez.`))return;button.disabled=true;try{await reverseWithdrawal(l.id,id);showToast('Baixa revertida. Estoque atualizado.');}catch(e){showToast(e.message,'error');}finally{button.disabled=false;}};row.append(button);area.append(row);});
+            const input=document.getElementById('admin-reversal-search'), term=normalized(input.value.trim());
+            const rows=withdrawalRows.filter(eligibleReversal);
+            const selected=rows.find(log=>reversalLabel(log)===input.value);
+            if(!selected){
+                if(!term){area.textContent='Digite as primeiras letras para consultar baixas e exclusões desde 27/09/2026.';return;}
+                const matches=rows.filter(log=>normalized(reversalLabel(log)+' '+(log.chamado||'')+' '+(log.usuario||'')).includes(term));
+                if(!matches.length)area.textContent='Nenhuma baixa ou exclusão disponível para esta pesquisa.';
+                matches.slice(0,50).forEach(log=>{const button=document.createElement('button');button.type='button';button.className='block w-full text-left border rounded p-2 mb-2';button.textContent=reversalLabel(log);button.onclick=()=>{input.value=reversalLabel(log);renderReversals();};area.append(button);});
+                return;
+            }
+            const title=document.createElement('strong');title.textContent=reversalLabel(selected);
+            const detail=document.createElement('p');detail.textContent=`Quantidade: ${selected.qtd??'-'} · Responsável: ${selected.usuario||'-'}`;
+            const label=document.createElement('label');label.textContent='Motivo da reversão (obrigatório)';label.htmlFor='reversal-reason';
+            const reason=document.createElement('textarea');reason.id='reversal-reason';reason.required=true;reason.maxLength=1000;reason.className='border rounded p-2 w-full';
+            const button=document.createElement('button');button.type='button';button.textContent='Confirmar reversão';button.className='bg-emerald-600 text-white rounded p-2 mt-2';
+            button.onclick=async()=>{if(!reason.value.trim())return showToast('Informe o motivo da reversão.','error');if(!confirm('Confirmar a reversão deste registro?'))return;button.disabled=true;try{await reverseOperation(selected.id,reason.value);input.value='';renderReversals();showToast('Reversão concluída.');}catch(e){showToast(e.message,'error');}finally{button.disabled=false;}};
+            area.append(title,detail,label,reason,button);
         }
         async function openAdmin(){
             try{await requireAdmin();document.getElementById('admin-login-section').classList.add('hidden');document.getElementById('admin-content-section').classList.remove('hidden');
-                if(!reverseUnsubscribe)reverseUnsubscribe=onSnapshot(query(collection(db,'logs'),where('tipo','==','SAÍDA')),snap=>{withdrawalRows=[];snap.forEach(d=>withdrawalRows.push({...d.data(),id:d.id}));withdrawalRows.sort((a,b)=>(b.dataHora?.toMillis?.()||0)-(a.dataHora?.toMillis?.()||0));renderReversals();},()=>{document.getElementById('admin-reversal-list').textContent='Não foi possível ler as baixas. Confira as permissões do Firebase.';});
+                if(!reverseUnsubscribe)reverseUnsubscribe=onSnapshot(query(collection(db,'logs'),where('dataHora','>=',new Date(REVERSAL_START))),snap=>{withdrawalRows=[];snap.forEach(d=>withdrawalRows.push({...d.data(),id:d.id}));withdrawalRows.sort((a,b)=>logMillis(b)-logMillis(a));renderReversals();},()=>{document.getElementById('admin-reversal-list').textContent='Erro ao consultar o histórico. Confira as regras do Firebase.';});
             }catch(e){showToast(e.message,'error');}
         }
-        async function reverseWithdrawal(logId,selectedItemId){
-            await requireAdmin();const logRef=doc(db,'logs',logId),auditRef=doc(collection(db,'logs'));
-            await runTransaction(db,async tx=>{const logSnap=await tx.get(logRef);if(!logSnap.exists())throw new Error('Baixa não encontrada.');const log=logSnap.data();if(log.tipo!=='SAÍDA'||log.revertida)throw new Error('Esta baixa não está disponível para reversão.');if(log.itemId&&log.itemId!==selectedItemId)throw new Error('O item selecionado não corresponde à baixa.');const qty=Number(log.qtd);if(!Number.isInteger(qty)||qty<=0)throw new Error('Quantidade da baixa inválida.');const itemRef=doc(db,'estoque',selectedItemId),itemSnap=await tx.get(itemRef);if(!itemSnap.exists())throw new Error('O item original não existe mais. Nenhum cadastro foi recriado.');const current=Number(itemSnap.data().Quantidade);if(!Number.isFinite(current)||current<0)throw new Error('Saldo atual inválido.');tx.update(itemRef,{Quantidade:current+qty});tx.update(logRef,{revertida:true,itemId:selectedItemId,revertidaEm:serverTimestamp(),revertidaPor:auth.currentUser.uid});tx.set(auditRef,{tipo:'REVERSÃO DE SAÍDA',itemNome:log.itemNome||'',itemId:selectedItemId,qtd:qty,baixaId:logId,usuario:window.userEmail,dataHora:serverTimestamp()});});
+        async function deleteRecords(base,ids){
+            await requireAdmin();
+            if(!['estoque','localidades','voip'].includes(base)||!ids.length||ids.length>100)throw new Error('Selecione entre 1 e 100 registros por operação.');
+            const unique=[...new Set(ids)];
+            await runTransaction(db,async tx=>{
+                const entries=[];
+                for(const id of unique){const ref=doc(db,base,id),snap=await tx.get(ref);if(!snap.exists())throw new Error('Um registro já foi excluído. Atualize a pesquisa.');entries.push({id,ref,data:snap.data(),log:doc(collection(db,'logs'))});}
+                for(const entry of entries){tx.set(entry.log,{tipo:'EXCLUSÃO',base,registroId:entry.id,itemNome:entry.data.Componente||entry.data.Equipamento||String(entry.data.Ramal||'Registro'),qtd:entry.data.Quantidade??1,dadosOriginais:entry.data,revertida:false,usuario:window.userEmail,dataHora:serverTimestamp()});tx.delete(entry.ref);}
+            });
         }
-        async function deleteSelectedCadastro(tipo){
-            const id=document.getElementById(`${tipo}-edit-id`).value;if(!id)return showToast('Selecione um registro antes de excluir.','error');
-            const name=tipo==='loc'?'localidades':'voip';if(!confirm('Excluir definitivamente este registro de '+(tipo==='loc'?'rastreio':'ramal')+'?'))return;
-            const button=document.getElementById(`btn-delete-selected-${tipo}`);button.disabled=true;
-            try{const ref=doc(db,name,id),auditRef=doc(collection(db,'logs'));await runTransaction(db,async tx=>{const snap=await tx.get(ref);if(!snap.exists())throw new Error('Registro não encontrado.');tx.delete(ref);tx.set(auditRef,{tipo:'EXCLUSÃO '+name.toUpperCase(),itemNome:tipo==='loc'?snap.data().Equipamento||'':String(snap.data().Ramal||''),registroId:id,usuario:window.userEmail,dataHora:serverTimestamp()});});window.filtrarEdicao(tipo,'');document.getElementById(`${tipo}-edit-input`).value='';showToast('Registro excluído.');}catch(e){showToast(e.message,'error');}finally{button.disabled=false;}
+        async function reverseOperation(logId,motivo){
+            await requireAdmin();motivo=String(motivo||'').trim();if(!motivo||motivo.length>1000)throw new Error('Informe um motivo de até 1000 caracteres.');
+            const logRef=doc(db,'logs',logId),auditRef=doc(collection(db,'logs'));
+            await runTransaction(db,async tx=>{
+                const snap=await tx.get(logRef);if(!snap.exists())throw new Error('Registro não encontrado.');
+                const log=snap.data();if(!eligibleReversal(log))throw new Error('Registro antigo ou já revertido.');
+                if(log.tipo==='EXCLUSÃO'){
+                    if(!['estoque','localidades','voip'].includes(log.base)||!log.registroId||!log.dadosOriginais)throw new Error('Exclusão sem cópia recuperável.');
+                    const ref=doc(db,log.base,log.registroId),current=await tx.get(ref);
+                    if(current.exists())throw new Error('Já existe um cadastro com esta identificação. Nenhum dado foi sobrescrito.');
+                    tx.set(ref,log.dadosOriginais);
+                }else{
+                    if(!log.itemId)throw new Error('Esta baixa antiga não possui identificação segura do item.');
+                    const ref=doc(db,'estoque',log.itemId),current=await tx.get(ref);
+                    if(!current.exists())throw new Error('O cadastro foi excluído. Restaure primeiro a exclusão desse cadastro.');
+                    const qty=Number(log.qtd),balance=Number(current.data().Quantidade);
+                    if(!Number.isInteger(qty)||qty<=0||!Number.isFinite(balance)||balance<0)throw new Error('Quantidade inválida.');
+                    tx.update(ref,{Quantidade:balance+qty});
+                }
+                tx.update(logRef,{revertida:true,revertidaEm:serverTimestamp(),revertidaPor:auth.currentUser.uid,motivoReversao:motivo});
+                tx.set(auditRef,{tipo:'REVERSÃO',origemId:logId,itemNome:log.itemNome||'',qtd:log.qtd??0,motivo,usuario:window.userEmail,dataHora:serverTimestamp()});
+            });
         }
-
+        function renderSingleDelete(){
+            const base=document.getElementById('admin-single-base').value,term=normalized(document.getElementById('admin-single-search').value.trim()),area=document.getElementById('admin-single-results');area.replaceChildren();
+            if(!term)return;
+            const rows=base==='estoque'?window.estoqueLocal:base==='localidades'?window.localidadesLocais:window.voipLocal;
+            rows.filter(item=>normalized(Object.values(item).join(' ')).includes(term)).slice(0,50).forEach(item=>{
+                const button=document.createElement('button');button.type='button';button.className='block border rounded p-2 mb-2 w-full text-left';button.textContent=`Excluir: ${item.Componente||item.Equipamento||item.Ramal} | ${item.Local||item.Setor||''} | Série: ${item.Série||item.Serie||'-'} | Patrimônio: ${item.Patrimonio||'-'} | ID: ${item.id}`;
+                button.onclick=async()=>{if(!confirm('Excluir somente este registro? '+button.textContent))return;button.disabled=true;try{await deleteRecords(base,[item.id]);document.getElementById('admin-single-search').value='';area.replaceChildren();showToast('Registro excluído e disponível para reversão.');}catch(e){showToast(e.message,'error');}finally{button.disabled=false;}};area.append(button);
+            });
+            if(!area.children.length)area.textContent='Nenhum registro encontrado.';
+        }
+        async function createManagedUser(){
+            const button=document.getElementById('btn-create-user');if(button.disabled)return;button.disabled=true;
+            let secondaryApp=null,secondaryAuth=null;
+            try{
+                await requireAdmin();
+                const email=document.getElementById('new-user-email').value.trim(),password=document.getElementById('new-user-pass').value;
+                if(!email||password.length<6)throw new Error('Informe e-mail e senha com pelo menos 6 caracteres.');
+                secondaryApp=initializeApp(firebaseConfig,'setic-user-'+Date.now());
+                secondaryAuth=initializeAuth(secondaryApp,{persistence:inMemoryPersistence});
+                await createUserWithEmailAndPassword(secondaryAuth,email,password);
+                document.getElementById('new-user-email').value='';document.getElementById('new-user-pass').value='';
+                showToast('Usuário comum criado. Sua sessão de administrador foi mantida.');
+            }catch(e){showToast('Não foi possível cadastrar: '+e.message,'error');}
+            finally{
+                if(secondaryAuth){try{await signOut(secondaryAuth);}catch{}}
+                if(secondaryApp){try{await deleteApp(secondaryApp);}catch{}}
+                button.disabled=false;
+            }
+        }
+        document.getElementById('admin-single-search').addEventListener('input',renderSingleDelete);
+        document.getElementById('admin-single-base').addEventListener('change',renderSingleDelete);
+        for(const mode of ['single','batch'])document.getElementById('delete-mode-'+mode).onclick=()=>{
+            for(const other of ['single','batch']){document.getElementById('delete-'+other+'-panel').classList.toggle('hidden',other!==mode);document.getElementById('delete-mode-'+other).setAttribute('aria-pressed',String(other===mode));}
+        };
         let cadastroMode='edit', cadastroBase='estoque';
         const cadastroPanels={estoque:'tab-entrada',loc:'tab-localidade',voip:'tab-voip-tool'};
         const originalMudarModoEdicao=window.mudarModoEdicao;
@@ -1715,7 +1792,6 @@ window.atualizarInterfaceEstoque = function() {
                 const grid=panel.querySelector('.grid');grid.classList.toggle('lg:grid-cols-2',mode==='new');
                 grid.children[1].classList.toggle('hidden',mode==='edit');
                 window.mudarModoEdicao(key,mode);
-                document.getElementById(`btn-delete-selected-${key}`)?.classList.toggle('hidden',mode!=='edit');
                 panel.querySelector('h2').textContent=(mode==='edit'?'Atualizar — ':'Entrada — ')+({estoque:'Estoque',loc:'Rastreio',voip:'Ramais'}[key]);
             });
             document.getElementById('form-qtd').min=mode==='edit'?'0':'1';
