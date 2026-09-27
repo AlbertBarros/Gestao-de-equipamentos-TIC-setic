@@ -400,10 +400,9 @@
             <div class="w-full md:w-64 bg-slate-50 border-r border-gray-200 p-6 flex flex-col h-full">
                 <div class="flex items-center mb-8 border-b pb-4"><i class="fas fa-toolbox text-[#161B33] text-2xl mr-3 btn-primary-text"></i><h3 class="text-lg font-bold text-slate-800">Ferramentas</h3></div>
                 <ul class="space-y-2 flex-1">
-                    <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg bg-blue-100 text-blue-800 font-bold transition flex items-center text-sm" data-target="tab-entrada"><i class="fas fa-plus-circle w-6"></i> Entrada Estoque</button></li>
+                    <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg bg-blue-100 text-blue-800 font-bold transition flex items-center text-sm" data-target="tab-cadastros" data-cadastro-mode="new"><i class="fas fa-plus-circle w-6"></i> Entrada</button></li>
+                    <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-cadastros" data-cadastro-mode="edit"><i class="fas fa-pen w-6"></i> Atualizar</button></li>
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-saida"><i class="fas fa-minus-circle w-6"></i> Baixa / Saída</button></li>
-                    <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-indigo-100 hover:text-indigo-800 font-semibold transition flex items-center text-sm border-l-4 border-transparent hover:border-indigo-500" data-target="tab-localidade"><i class="fas fa-map-marker-alt w-6 text-indigo-500"></i> Locais / Rastreio</button></li>
-                    <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-indigo-100 hover:text-indigo-800 font-semibold transition flex items-center text-sm border-l-4 border-transparent hover:border-indigo-500" data-target="tab-voip-tool"><i class="fas fa-phone-volume w-6 text-indigo-500"></i> Gestão de Ramais</button></li>
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm mt-4" data-target="tab-relatorio"><i class="fas fa-file-contract w-6"></i> Exportações / Relatórios</button></li>
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-pref"><i class="fas fa-sliders-h w-6"></i> Preferências</button></li>
                 </ul>
@@ -413,11 +412,12 @@
             </div>
 
             <div class="flex-1 p-8 overflow-y-auto bg-white relative">
+                <div id="tab-cadastros" class="tab-tool-content flex flex-col"><h2 id="cadastro-title" class="text-2xl font-bold text-blue-900 mb-3">Entrada</h2><div class="flex gap-2 mb-4" role="group" aria-label="Selecionar base"><button type="button" data-cadastro-base="estoque" class="px-4 py-2 rounded border">Estoque</button><button type="button" data-cadastro-base="loc" class="px-4 py-2 rounded border">Rastreio</button><button type="button" data-cadastro-base="voip" class="px-4 py-2 rounded border">Ramais</button></div><p id="cadastro-help" class="text-sm text-slate-500 mb-4"></p><div id="cadastro-panels"></div></div>
                 <div id="tab-entrada" class="tab-tool-content h-full flex flex-col">
                     <h2 class="text-2xl font-bold text-blue-900 mb-2"><i class="fas fa-boxes mr-2 text-blue-600"></i>Entrada de Ativos (Estoque)</h2>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
                         <div class="bg-blue-50/50 p-6 rounded-xl border border-blue-100 shadow-sm flex flex-col">
-                            <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-blue-800"><i class="fas fa-keyboard mr-2"></i>Gestão Manual</h3><select id="estoque-action-type" class="border-blue-300 rounded text-xs py-1 px-2 focus:ring-blue-500 bg-white font-bold text-blue-700 shadow-sm cursor-pointer outline-none"><option value="new">Novo Registo</option><option value="edit">Editar Registo</option></select></div>
+                            <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-blue-800"><i class="fas fa-keyboard mr-2"></i>Gestão Manual</h3><select id="estoque-action-type" aria-hidden="true" tabindex="-1" class="hidden border-blue-300 rounded text-xs py-1 px-2 focus:ring-blue-500 bg-white font-bold text-blue-700 shadow-sm cursor-pointer outline-none"><option value="new">Novo Registo</option><option value="edit">Editar Registo</option></select></div>
                             <div id="estoque-edit-container" class="relative hidden mb-4"><i class="fas fa-search absolute left-3 top-3 text-orange-500"></i><input list="lista-edit-estoque" id="estoque-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500" placeholder="Pesquise Equipamento, Marca, Série ou Patr..."><datalist id="lista-edit-estoque"></datalist></div>
                             <input type="hidden" id="estoque-edit-id">
                             <div class="space-y-4 flex-1">
@@ -454,7 +454,7 @@
                     <h2 class="text-2xl font-bold text-indigo-900 mb-2"><i class="fas fa-map-marker-alt mr-2 text-indigo-600"></i>Gestão de Localidades e Rastreio</h2>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
                         <div class="bg-indigo-50/50 p-6 rounded-xl border border-indigo-100 shadow-sm flex flex-col">
-                            <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-indigo-800"><i class="fas fa-keyboard mr-2"></i>Gestão Manual</h3><select id="loc-action-type" class="border-indigo-300 rounded text-xs py-1 px-2 focus:ring-indigo-500 bg-white font-bold text-indigo-700 shadow-sm cursor-pointer outline-none"><option value="new">Novo Registo</option><option value="edit">Editar / Mover</option></select></div>
+                            <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-indigo-800"><i class="fas fa-keyboard mr-2"></i>Gestão Manual</h3><select id="loc-action-type" aria-hidden="true" tabindex="-1" class="hidden border-indigo-300 rounded text-xs py-1 px-2 focus:ring-indigo-500 bg-white font-bold text-indigo-700 shadow-sm cursor-pointer outline-none"><option value="new">Novo Registo</option><option value="edit">Editar / Mover</option></select></div>
                             <div id="loc-edit-container" class="relative hidden mb-4"><i class="fas fa-search absolute left-3 top-3 text-orange-500"></i><input list="lista-edit-locais" id="loc-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500" placeholder="Pesquise Equipamento..."><datalist id="lista-edit-locais"></datalist></div>
                             <input type="hidden" id="loc-edit-id">
                             <div class="space-y-4 flex-1">
@@ -477,7 +477,7 @@
                     <h2 class="text-2xl font-bold text-indigo-900 mb-2"><i class="fas fa-phone-volume mr-2 text-indigo-600"></i>Gestão de Ramais</h2>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
                         <div class="bg-indigo-50/50 p-6 rounded-xl border border-indigo-100 shadow-sm flex flex-col">
-                            <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-indigo-800"><i class="fas fa-keyboard mr-2"></i>Gestão Manual</h3><select id="voip-action-type" class="border-indigo-300 rounded text-xs py-1 px-2 focus:ring-indigo-500 bg-white font-bold text-indigo-700 shadow-sm cursor-pointer outline-none"><option value="new">Novo Registo</option><option value="edit">Editar Ramal</option></select></div>
+                            <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-indigo-800"><i class="fas fa-keyboard mr-2"></i>Gestão Manual</h3><select id="voip-action-type" aria-hidden="true" tabindex="-1" class="hidden border-indigo-300 rounded text-xs py-1 px-2 focus:ring-indigo-500 bg-white font-bold text-indigo-700 shadow-sm cursor-pointer outline-none"><option value="new">Novo Registo</option><option value="edit">Editar Ramal</option></select></div>
                             <div id="voip-edit-container" class="relative hidden mb-4"><i class="fas fa-search absolute left-3 top-3 text-orange-500"></i><input list="lista-edit-voip" id="voip-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500" placeholder="Pesquise Ramal..."><datalist id="lista-edit-voip"></datalist></div>
                             <input type="hidden" id="voip-edit-id">
                             <div class="space-y-4 flex-1">
@@ -656,6 +656,10 @@
             }
 
             // Abas do Menu de Ferramentas
+            const baseButton=e.target.closest('[data-cadastro-base]');
+            if(baseButton){showCadastro(cadastroMode,baseButton.dataset.cadastroBase);return;}
+            const modeButton=e.target.closest('[data-cadastro-mode]');
+            if(modeButton)showCadastro(modeButton.dataset.cadastroMode,cadastroBase);
             const tabTool = e.target.closest('.tab-btn-tool');
             if (tabTool) {
                 document.querySelectorAll('.tab-btn-tool').forEach(b => { b.classList.remove('bg-blue-100', 'text-blue-800', 'bg-purple-100', 'text-purple-800', 'bg-indigo-100', 'text-indigo-800', 'border-indigo-500'); b.classList.add('text-slate-600', 'border-transparent'); });
@@ -1497,14 +1501,15 @@ window.atualizarInterfaceEstoque = function() {
 
         // ================= GESTÃO MANUAL E UPLOADS =================
         function atualizarDatalistSaida() { const dl = document.getElementById('lista-saida-items'); if(!dl) return; dl.innerHTML = ''; mapItensSaida = {}; [...window.estoqueLocal].sort((a,b) => String(a.Categoria||'').localeCompare(String(b.Categoria||''))).forEach(i => { const text = `[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||''}) - Qtd: ${i.Quantidade||0}`; mapItensSaida[text] = i; }); }
-        function atualizarSelectEdicaoLocais() { const dl = document.getElementById('lista-edit-locais'); if(!dl) return; dl.innerHTML = ''; mapEditLocais = {}; [...window.localidadesLocais].sort((a,b) => String(a.Equipamento||'').localeCompare(String(b.Equipamento||''))).forEach(loc => { const text = `${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio || ''} | Série: ${loc.Serie || ''}`; mapEditLocais[text] = loc; }); }
-        function atualizarSelectEdicaoEstoque() { const dl = document.getElementById('lista-edit-estoque'); if(!dl) return; dl.innerHTML = ''; mapEditEstoque = {}; [...window.estoqueLocal].sort((a,b) => String(a.Componente||'').localeCompare(String(b.Componente||''))).forEach(item => { const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || ''} | Série: ${item.Série || ''}`; mapEditEstoque[text] = item; }); }
-        function atualizarSelectEdicaoVoip() { const dl = document.getElementById('lista-edit-voip'); if(!dl) return; dl.innerHTML = ''; mapEditVoip = {}; [...window.voipLocal].sort((a,b) => String(a.Ramal||'').localeCompare(String(b.Ramal||''))).forEach(v => { const text = `Ramal: ${v.Ramal} | Setor: ${v.Setor} | IP: ${v.Ip}`; mapEditVoip[text] = v; }); }
+        function atualizarSelectEdicaoLocais() { const dl = document.getElementById('lista-edit-locais'); if(!dl) return; dl.innerHTML = ''; mapEditLocais = {}; [...window.localidadesLocais].sort((a,b) => String(a.Equipamento||'').localeCompare(String(b.Equipamento||''))).forEach(loc => { const text = `${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio || ''} | Série: ${loc.Serie || ''}`; mapEditLocais[text + ' [ID: ' + loc.id + ']'] = loc; }); }
+        function atualizarSelectEdicaoEstoque() { const dl = document.getElementById('lista-edit-estoque'); if(!dl) return; dl.innerHTML = ''; mapEditEstoque = {}; [...window.estoqueLocal].sort((a,b) => String(a.Componente||'').localeCompare(String(b.Componente||''))).forEach(item => { const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || ''} | Série: ${item.Série || ''}`; mapEditEstoque[text + ' [ID: ' + item.id + ']'] = item; }); }
+        function atualizarSelectEdicaoVoip() { const dl = document.getElementById('lista-edit-voip'); if(!dl) return; dl.innerHTML = ''; mapEditVoip = {}; [...window.voipLocal].sort((a,b) => String(a.Ramal||'').localeCompare(String(b.Ramal||''))).forEach(v => { const text = `Ramal: ${v.Ramal} | Setor: ${v.Setor} | IP: ${v.Ip}`; mapEditVoip[text + ' [ID: ' + v.id + ']'] = v; }); }
 
         window.salvarEstoque = async function() {
             const actionType = document.getElementById('estoque-action-type') ? document.getElementById('estoque-action-type').value : 'new'; const editId = document.getElementById('estoque-edit-id') ? document.getElementById('estoque-edit-id').value : '';
             const cat = document.getElementById('form-cat').value.trim(); const comp = document.getElementById('form-comp').value.trim(); const mod = sanitizeVal(document.getElementById('form-mod').value); const esp = sanitizeVal(document.getElementById('form-esp').value); const local = document.getElementById('form-local').value.trim(); const serie = sanitizeVal(document.getElementById('form-serie-estoque').value); const patrim = sanitizeVal(document.getElementById('form-patrimonio-estoque').value); const qtd = parseInt(document.getElementById('form-qtd').value); const minEstoque = estoqueMinimoValido(document.getElementById('form-minimo').value); 
-            if(!cat || !comp || !local || isNaN(qtd) || qtd <= 0) return showToast("Preencha Categoria, Componente, Local e Qtd.", "error");
+            if(actionType === 'edit' && !editId) return showToast('Selecione um registro existente para atualizar.', 'error');
+            if(!cat || !comp || !local || !Number.isInteger(qtd) || qtd < 0 || (actionType !== 'edit' && qtd === 0)) return showToast("Preencha Categoria, Componente, Local e Qtd.", "error");
             const btn = document.getElementById('btn-save-item'); const originalText = btn.innerText; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
             try {
                 if(actionType === 'edit' && editId) { await updateDoc(doc(db, "estoque", editId), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque }); await registrarLog("MOVIMENTAÇÃO (ESTOQUE)", `${comp} - ${mod}`, qtd, `Local: ${local}`); showToast("Alteração gravada com sucesso!"); } 
@@ -1516,6 +1521,7 @@ window.atualizarInterfaceEstoque = function() {
         window.salvarRastreio = async function() {
             const action = document.getElementById('loc-action-type').value, eId = document.getElementById('loc-edit-id').value;
             const eq = document.getElementById('loc-equip').value.trim(), loc = document.getElementById('loc-local').value.trim(), sip = sanitizeVal(document.getElementById('loc-sipac').value), mar = sanitizeVal(document.getElementById('loc-marca').value), ser = sanitizeVal(document.getElementById('loc-serie').value), pat = sanitizeVal(document.getElementById('loc-patrimonio').value), qt = parseInt(document.getElementById('loc-qtd').value);
+            if(action === 'edit' && !eId) return showToast('Selecione um registro existente para atualizar.', 'error');
             if(!eq || !loc || isNaN(qt) || qt <= 0) return showToast("Preencha Equipamento, Local Físico e Quantidade.", "error");
             const b = document.getElementById('btn-save-loc'); const o = b.innerText; b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
             try { if(action === 'edit' && eId) { await updateDoc(doc(db, "localidades", eId), { Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: qt }); await registrarLog("MOVIMENTAÇÃO", `${eq} (Novo: ${loc})`, qt, `SIPAC: ${sip || '-'} | Série: ${ser || '-'}`); showToast("Alteração gravada e movimentada com sucesso!"); } else { await addDoc(collection(db, "localidades"), { Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: qt }); await registrarLog("MAP_LOCAL", `${eq} (${loc})`, qt, `SIPAC: ${sip || '-'} | Série: ${ser || '-'}`); showToast("Equipamento mapeado com sucesso!"); } ['loc-equip','loc-local', 'loc-sipac','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id', 'loc-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; document.getElementById('loc-action-type').value = 'new'; document.getElementById('loc-action-type').dispatchEvent(new Event('change')); } catch (e) { showToast("Erro: " + e.message, "error"); } b.innerText = o;
@@ -1524,6 +1530,7 @@ window.atualizarInterfaceEstoque = function() {
         window.salvarVoip = async function() {
             const action = document.getElementById('voip-action-type').value, eId = document.getElementById('voip-edit-id').value;
             const ramal = document.getElementById('voip-ramal').value.trim(), setor = document.getElementById('voip-setor').value.trim(), ip = document.getElementById('voip-ip').value.trim(), equip = document.getElementById('voip-equip').value.trim();
+            if(action === 'edit' && !eId) return showToast('Selecione um registro existente para atualizar.', 'error');
             if(!ramal || !setor || !ip) return showToast("Preencha Ramal, Setor e IP.", "error");
             const b = document.getElementById('btn-save-voip'); const o = b.innerText; b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
             try {
@@ -1612,8 +1619,8 @@ window.atualizarInterfaceEstoque = function() {
         };
 
         window.filtrarEdicao = function(tipo, text) {
-            const dl = document.getElementById(`lista-edit-${tipo === 'loc' ? 'locais' : tipo === 'saida' ? 'saida-items' : tipo}`); dl.innerHTML = '';
-            let mapBase = tipo === 'loc' ? mapEditLocais : tipo === 'est' ? mapEditEstoque : tipo === 'voip' ? mapEditVoip : mapItensSaida;
+            const dl = document.getElementById(tipo === 'saida' ? 'lista-saida-items' : `lista-edit-${tipo === 'loc' ? 'locais' : tipo}`); dl.innerHTML = '';
+            let mapBase = tipo === 'loc' ? mapEditLocais : tipo === 'estoque' ? mapEditEstoque : tipo === 'voip' ? mapEditVoip : mapItensSaida;
             if(text.length >= 3) { const s = text.toLowerCase().split(' '); let c = 0; for(let k in mapBase) { if(s.every(term => String(k).toLowerCase().includes(term))) { let o = document.createElement('option'); o.value = k; dl.appendChild(o); c++; if(c > 40) break; } } }
             if(tipo !== 'saida') {
                 const item = mapBase[text];
@@ -1621,7 +1628,7 @@ window.atualizarInterfaceEstoque = function() {
                     if(item) { document.getElementById('loc-edit-id').value = item.id; document.getElementById('loc-equip').value = item.Equipamento || ''; document.getElementById('loc-local').value = item.Local || ''; document.getElementById('loc-sipac').value = item.LocalSipac || ''; document.getElementById('loc-marca').value = item.Marca || ''; document.getElementById('loc-qtd').value = item.Quantidade || 1; document.getElementById('loc-serie').value = item.Serie || ''; document.getElementById('loc-patrimonio').value = item.Patrimonio || ''; } 
                     else { ['loc-edit-id','loc-equip','loc-local','loc-sipac','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; }
                 } else if(tipo === 'estoque') {
-                    if(item) { document.getElementById('estoque-edit-id').value = item.id; document.getElementById('form-cat').value = item.Categoria || ''; document.getElementById('form-comp').value = item.Componente || ''; document.getElementById('form-mod').value = item.Modelo || ''; document.getElementById('form-esp').value = item.Especificação || ''; document.getElementById('form-local').value = item.Local || ''; document.getElementById('form-serie-estoque').value = item.Série || ''; document.getElementById('form-patrimonio-estoque').value = item.Patrimonio || ''; document.getElementById('form-qtd').value = item.Quantidade || 1; document.getElementById('form-minimo').value = estoqueMinimoValido(item.EstoqueMinimo); } 
+                    if(item) { document.getElementById('estoque-edit-id').value = item.id; document.getElementById('form-cat').value = item.Categoria || ''; document.getElementById('form-comp').value = item.Componente || ''; document.getElementById('form-mod').value = item.Modelo || ''; document.getElementById('form-esp').value = item.Especificação || ''; document.getElementById('form-local').value = item.Local || ''; document.getElementById('form-serie-estoque').value = item.Série || ''; document.getElementById('form-patrimonio-estoque').value = item.Patrimonio || ''; document.getElementById('form-qtd').value = item.Quantidade ?? 0; document.getElementById('form-minimo').value = estoqueMinimoValido(item.EstoqueMinimo); } 
                     else { ['estoque-edit-id','form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = 5; }
                 } else if(tipo === 'voip') {
                     if(item) { document.getElementById('voip-edit-id').value = item.id; document.getElementById('voip-ramal').value = item.Ramal || ''; document.getElementById('voip-setor').value = item.Setor || ''; document.getElementById('voip-ip').value = item.Ip || ''; document.getElementById('voip-equip').value = item.Equipamento || ''; } 
@@ -1635,6 +1642,34 @@ window.atualizarInterfaceEstoque = function() {
             if(isE) { c.classList.remove('hidden'); b.innerText = 'Gravar Alterações'; b.className = 'w-full bg-orange-500 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; } 
             else { c.classList.add('hidden'); i.value = ''; b.innerText = tipo === 'estoque' ? 'Registar Entrada no Estoque' : tipo === 'loc' ? 'Mapear Equipamento' : 'Registrar Ramal'; b.className = 'w-full bg-indigo-600 text-white font-bold py-2.5 px-4 rounded shadow mt-4'; if(tipo==='estoque'){b.className='w-full bg-blue-600 text-white font-bold py-2.5 px-4 rounded shadow mt-4';} window.filtrarEdicao(tipo, ''); }
         };
+
+
+        let cadastroMode='new', cadastroBase='estoque';
+        const cadastroPanels={estoque:'tab-entrada',loc:'tab-localidade',voip:'tab-voip-tool'};
+        const originalMudarModoEdicao=window.mudarModoEdicao;
+        window.mudarModoEdicao=function(tipo,action){
+            const effective=cadastroMode==='edit'?'edit':action;
+            document.getElementById(`${tipo}-action-type`).value=effective;
+            originalMudarModoEdicao(tipo,effective);
+        };
+        function showCadastro(mode,base){
+            const changed=mode!==cadastroMode;
+            if(changed)Object.keys(cadastroPanels).forEach(k=>window.filtrarEdicao(k,''));
+            cadastroMode=mode;cadastroBase=base;
+            document.getElementById('cadastro-title').textContent=mode==='edit'?'Atualizar cadastro':'Entrada de equipamentos';
+            document.getElementById('cadastro-help').textContent=mode==='edit'?'Pesquise e selecione um registro existente. Edite os campos e clique em Gravar Alterações.':'Escolha a base para cadastrar manualmente ou importar uma planilha.';
+            Object.entries(cadastroPanels).forEach(([key,id])=>{
+                const panel=document.getElementById(id);panel.classList.toggle('hidden',key!==base);
+                const grid=panel.querySelector('.grid');grid.classList.toggle('lg:grid-cols-2',mode==='new');
+                grid.children[1].classList.toggle('hidden',mode==='edit');
+                window.mudarModoEdicao(key,mode);
+                panel.querySelector('h2').textContent=(mode==='edit'?'Atualizar — ':'Entrada — ')+({estoque:'Estoque',loc:'Rastreio',voip:'Ramais'}[key]);
+            });
+            document.getElementById('form-qtd').min=mode==='edit'?'0':'1';
+            document.querySelectorAll('[data-cadastro-base]').forEach(b=>{const active=b.dataset.cadastroBase===base;b.setAttribute('aria-pressed',String(active));b.classList.toggle('bg-blue-100',active);b.classList.toggle('text-blue-800',active);});
+        }
+        Object.values(cadastroPanels).forEach(id=>{const panel=document.getElementById(id);panel.classList.remove('tab-tool-content','h-full');document.getElementById('cadastro-panels').appendChild(panel);});
+        showCadastro('new','estoque');
 
     </script>
 </body>
