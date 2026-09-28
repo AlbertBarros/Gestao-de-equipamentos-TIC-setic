@@ -71,7 +71,7 @@
 .admin-actions button:hover,[data-cadastro-base]:hover{transform:translateY(-2px);box-shadow:0 5px 12px #17255418;}
 .admin-actions button[aria-expanded="true"],[data-cadastro-base][aria-pressed="true"]{background:var(--action-color);border-color:var(--action-color);color:white;}
 .admin-actions button:focus-visible,[data-cadastro-base]:focus-visible{outline:3px solid var(--action-color);outline-offset:3px;}
-[data-admin-section="reversal"]{--action-color:#047857!important;--action-tint:#ecfdf5!important;}
+[data-admin-section="transfer"],[data-admin-section="reversal"]{--action-color:#047857!important;--action-tint:#ecfdf5!important;}
 [data-admin-section="deletion"],[data-admin-section="logs"]{--action-color:#b91c1c!important;--action-tint:#fef2f2!important;}
 [data-admin-section="users"],[data-cadastro-base="loc"]{--action-color:#4f46e5!important;--action-tint:#eef2ff!important;}
 [data-admin-section="access"],[data-cadastro-base="voip"]{--action-color:#7e22ce!important;--action-tint:#faf5ff!important;}
@@ -1871,9 +1871,12 @@ window.atualizarInterfaceEstoque = function() {
         const logPanel=document.createElement('section');
         logPanel.innerHTML='<h3 class="font-bold text-lg mb-2">Excluir logs</h3><p class="text-sm mb-3">Apagar logs pode remover os dados de reversão e alterar o indicador de itens retirados. Os cadastros de estoque, rastreio e ramais não serão excluídos.</p><input id="admin-log-search" class="border rounded p-2 w-full mb-3" placeholder="Pesquisar entre os 100 logs mais recentes"><div id="admin-log-list" style="max-height:260px;overflow:auto"></div><button type="button" id="admin-log-delete" class="bg-red-600 text-white rounded p-2 mt-3">Excluir logs selecionados</button>';
         const nav=document.createElement('div');nav.className='admin-actions';nav.setAttribute('aria-label','Funções administrativas');
-        const adminSections={entry:entryHost,reversal:reversalPanel,deletion:deletePanel,users:userPanel,access:accessPanel,audit:auditPanel,logs:logPanel};
+        const transferPanel=document.getElementById('transfer-form');
+        transferPanel.classList.remove('hidden');
+        document.getElementById('transfer-open').remove();
+        const adminSections={entry:entryHost,transfer:transferPanel,reversal:reversalPanel,deletion:deletePanel,users:userPanel,access:accessPanel,audit:auditPanel,logs:logPanel};
         entryButton.textContent='Entrada';entryButton.dataset.adminSection='entry';nav.append(entryButton);
-        for(const [key,title] of [['reversal','Reversão de itens'],['deletion','Excluir registros'],['users','Novo usuário'],['access','Gerir acessos'],['audit','Auditoria'],['logs','Excluir logs']]){
+        for(const [key,title] of [['transfer','Transferir equipamento'],['reversal','Reversão de itens'],['deletion','Excluir registros'],['users','Novo usuário'],['access','Gerir acessos'],['audit','Auditoria'],['logs','Excluir logs']]){
             const button=document.createElement('button');button.type='button';button.textContent=title;button.dataset.adminSection=key;nav.append(button);
         }
         const intro=document.createElement('p');intro.className='text-slate-500 text-sm mb-4';intro.textContent='Escolha uma opção para abrir os campos necessários.';
@@ -1881,12 +1884,12 @@ window.atualizarInterfaceEstoque = function() {
         adminContent.replaceChildren(adminHeader,intro,nav,...Object.values(adminSections));
         adminContent.classList.remove('h-full');
 
-        const actionIcons={entry:'fa-boxes',reversal:'fa-undo-alt',deletion:'fa-trash-alt',users:'fa-user-plus',access:'fa-user-shield',audit:'fa-history',logs:'fa-eraser'};
+        const actionIcons={entry:'fa-boxes',transfer:'fa-exchange-alt',reversal:'fa-undo-alt',deletion:'fa-trash-alt',users:'fa-user-plus',access:'fa-user-shield',audit:'fa-history',logs:'fa-eraser'};
         document.querySelectorAll('[data-admin-section]').forEach(button=>{const icon=document.createElement('i');icon.className='fas '+actionIcons[button.dataset.adminSection];icon.setAttribute('aria-hidden','true');button.prepend(icon);});
         document.querySelectorAll('[data-cadastro-base]').forEach(button=>{const icon=document.createElement('i');icon.className='fas '+({estoque:'fa-boxes',loc:'fa-map-marker-alt',voip:'fa-phone-alt'})[button.dataset.cadastroBase];icon.setAttribute('aria-hidden','true');button.prepend(icon);});
 
         function closeAdminSections(){for(const section of Object.values(adminSections))section.hidden=true;nav.querySelectorAll('button').forEach(b=>b.setAttribute('aria-expanded','false'));}
-        function showAdminSection(key){const open=adminSections[key].hidden;closeAdminSections();if(open){adminSections[key].hidden=false;nav.querySelector(`[data-admin-section="${key}"]`).setAttribute('aria-expanded','true');if(key==='logs')renderAdminLogs();}}
+        function showAdminSection(key){const open=adminSections[key].hidden;closeAdminSections();if(open){adminSections[key].hidden=false;nav.querySelector(`[data-admin-section="${key}"]`).setAttribute('aria-expanded','true');if(key==='logs')renderAdminLogs();if(key==='transfer'){transferDirectionChanged();transferEl('direction').focus();}}}
         nav.addEventListener('click',async event=>{const button=event.target.closest('[data-admin-section]');if(!button)return;try{await requireAdmin();showAdminSection(button.dataset.adminSection);}catch(e){showToast(e.message,'error');}});
         closeAdminSections();
         function renderAdminLogs(){
@@ -1954,10 +1957,7 @@ window.atualizarInterfaceEstoque = function() {
             transferEl('sipac-label').classList.toggle('hidden',toStock);
             transferEl('search').value='';refreshTransferItems();
         }
-        transferEl('open').addEventListener('click',async()=>{
-            try{await requireAdmin();transferEl('form').classList.remove('hidden');transferDirectionChanged();transferEl('direction').focus();}catch(error){showToast(error.message,'error');}
-        });
-        transferEl('close').addEventListener('click',()=>{if(!transferBusy)transferEl('form').classList.add('hidden');});
+        transferEl('close').addEventListener('click',()=>{if(!transferBusy)closeAdminSections();});
         transferEl('direction').addEventListener('change',transferDirectionChanged);
         transferEl('search').addEventListener('input',refreshTransferItems);
         transferEl('item').addEventListener('change',()=>{
@@ -1991,8 +1991,6 @@ window.atualizarInterfaceEstoque = function() {
             const hub=document.getElementById('tab-cadastros');
             (mode==='new'?document.getElementById('admin-entry-host'):cadastroHome).appendChild(hub);
             hub.classList.toggle('tab-tool-content',mode!=='new');
-            transferEl('open').classList.toggle('hidden',mode!=='edit');
-            transferEl('form').classList.add('hidden');
             const changed=mode!==cadastroMode;
             if(changed)Object.keys(cadastroPanels).forEach(k=>window.filtrarEdicao(k,''));
             cadastroMode=mode;cadastroBase=base;
