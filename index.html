@@ -438,7 +438,7 @@
                 <ul class="space-y-2 flex-1">
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-cadastros" data-cadastro-mode="edit"><i class="fas fa-pen w-6"></i> Atualizar</button></li>
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-saida"><i class="fas fa-minus-circle w-6"></i> Baixa / Saída</button></li>
-                    <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm mt-4" data-target="tab-relatorio"><i class="fas fa-file-contract w-6"></i> Exportações / Relatórios</button></li>
+                    <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold flex items-center text-sm" data-target="tab-maintenance"><i class="fas fa-tools w-6"></i> Condição / Manutenção</button></li><li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm mt-4" data-target="tab-relatorio"><i class="fas fa-file-contract w-6"></i> Exportações / Relatórios</button></li>
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-pref"><i class="fas fa-sliders-h w-6"></i> Preferências</button></li>
                 </ul>
                 <div class="border-t pt-4 mt-auto">
@@ -447,7 +447,7 @@
             </div>
 
             <div class="flex-1 p-8 overflow-y-auto bg-white relative">
-                <div id="tab-cadastros" class="tab-tool-content flex flex-col"><h2 id="cadastro-title" class="text-2xl font-bold text-blue-900 mb-3">Entrada</h2><div class="flex gap-2 mb-4" role="group" aria-label="Selecionar base"><button type="button" data-cadastro-base="estoque" class="px-4 py-2 rounded border">Estoque</button><button type="button" data-cadastro-base="loc" class="px-4 py-2 rounded border">Rastreio</button><button type="button" data-cadastro-base="voip" class="px-4 py-2 rounded border">Ramais</button></div><p id="cadastro-help" class="text-sm text-slate-500 mb-4"></p><button type="button" id="transfer-open" class="px-4 py-2 rounded-lg bg-emerald-600 text-white font-bold mb-4"><i class="fas fa-exchange-alt mr-2"></i>Transferir equipamento</button>
+                <section id="tab-maintenance" class="tab-tool-content hidden"><h2 class="text-2xl font-bold text-blue-900 mb-3">Condição / Manutenção</h2><p class="mb-4">Pesquise e confira o equipamento antes de registrar sua condição. O registro mantém a quantidade e o local atuais.</p><form id="maintenance-form"><label>Base<select id="maintenance-base" class="w-full border rounded p-2 mb-3"><option value="estoque">Estoque</option><option value="localidades">Rastreio</option></select></label><label>Pesquisar equipamento<input id="maintenance-search" autocomplete="off" class="w-full border rounded p-2 mb-3" placeholder="Nome, patrimônio, série ou local"></label><div id="maintenance-results" aria-live="polite" style="max-height:260px;overflow:auto"></div><div id="maintenance-details" class="border rounded p-4 my-3" role="status" hidden></div><p class="text-sm mb-3">A condição será aplicada a todas as unidades do registro selecionado. Para condições diferentes, separe os equipamentos em registros distintos.</p><label>Condição<select id="maintenance-condition" required class="w-full border rounded p-2 mb-3"><option>Em manutenção</option><option>Não funcionando</option><option>Funcionando</option></select></label><label>Observação / motivo *<textarea id="maintenance-notes" maxlength="1000" required class="w-full border rounded p-2 mb-3" placeholder="Descreva o defeito, a manutenção ou o retorno ao funcionamento."></textarea></label><button id="maintenance-save" disabled class="bg-amber-600 text-white rounded px-4 py-2 font-bold">Salvar condição</button></form></section><div id="tab-cadastros" class="tab-tool-content flex flex-col"><h2 id="cadastro-title" class="text-2xl font-bold text-blue-900 mb-3">Entrada</h2><div class="flex gap-2 mb-4" role="group" aria-label="Selecionar base"><button type="button" data-cadastro-base="estoque" class="px-4 py-2 rounded border">Estoque</button><button type="button" data-cadastro-base="loc" class="px-4 py-2 rounded border">Rastreio</button><button type="button" data-cadastro-base="voip" class="px-4 py-2 rounded border">Ramais</button></div><p id="cadastro-help" class="text-sm text-slate-500 mb-4"></p><button type="button" id="transfer-open" class="px-4 py-2 rounded-lg bg-emerald-600 text-white font-bold mb-4"><i class="fas fa-exchange-alt mr-2"></i>Transferir equipamento</button>
 <form id="transfer-form" class="hidden rounded-xl border border-emerald-200 p-5 mb-5 bg-slate-50">
  <h3 class="text-xl font-bold mb-2">Transferir equipamento</h3>
  <p class="text-sm text-slate-500 mb-4">Selecione o equipamento e informe a quantidade e o local de destino. A transferência exige acesso de administrador.</p>
@@ -1263,6 +1263,7 @@ window.atualizarInterfaceEstoque = function() {
             dadosPagina.forEach(item => {
                 const qtd = Number(item.Quantidade) || 0; const minEstoque = estoqueMinimoValido(item.EstoqueMinimo);
                 let badge = qtd === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' : qtd <= minEstoque ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>' : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
+                if(['Funcionando','Em manutenção','Não funcionando'].includes(item.Condicao)) badge += '<br><span class="text-xs font-bold">'+item.Condicao+'</span>';
                 tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${item.Categoria||''}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${item.Componente||''}<br><span class="text-xs font-normal text-slate-500">${item.Modelo||''} / ${item.Especificação||''}</span></td><td class="px-6 py-4 text-sm text-blue-600">${item.Local||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${item.Série||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${item.Patrimonio||''}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
             });
             if(document.getElementById('estoque-page-info')) document.getElementById('estoque-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + window.itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
@@ -1282,7 +1283,7 @@ window.atualizarInterfaceEstoque = function() {
 
             tbody.innerHTML = '';
             dadosPagina.forEach(loc => {
-                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||''}</td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.LocalSipac||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||''}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${Number(loc.Quantidade)||0}</td></tr>`;
+                tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${loc.Equipamento||''}<br><span class="text-xs font-normal">${['Funcionando','Em manutenção','Não funcionando'].includes(loc.Condicao)?loc.Condicao:''}</span></td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${loc.Local||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.LocalSipac||''}</td><td class="px-6 py-4 text-sm text-slate-500">${loc.Marca||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Serie||''}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${loc.Patrimonio||''}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${Number(loc.Quantidade)||0}</td></tr>`;
             });
             if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + window.itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
             if(document.getElementById('btn-prev-rastreio')) document.getElementById('btn-prev-rastreio').disabled = window.currentPageRastreio === 1;
@@ -1599,12 +1600,12 @@ window.atualizarInterfaceEstoque = function() {
         window.salvarEstoque = async function() {
             if(document.getElementById('estoque-action-type').value==='new'){try{await requireAdmin();}catch(e){return showToast(e.message,'error');}}
             const actionType = document.getElementById('estoque-action-type') ? document.getElementById('estoque-action-type').value : 'new'; const editId = document.getElementById('estoque-edit-id') ? document.getElementById('estoque-edit-id').value : '';
-            const cat = document.getElementById('form-cat').value.trim(); const comp = document.getElementById('form-comp').value.trim(); const mod = sanitizeVal(document.getElementById('form-mod').value); const esp = sanitizeVal(document.getElementById('form-esp').value); const local = document.getElementById('form-local').value.trim(); const serie = sanitizeVal(document.getElementById('form-serie-estoque').value); const patrim = sanitizeVal(document.getElementById('form-patrimonio-estoque').value); const qtd = parseInt(document.getElementById('form-qtd').value); const minEstoque = minimoInformado(document.getElementById('form-minimo').value); if(minEstoque===null)return showToast('Informe um estoque mínimo inteiro, maior ou igual a zero.','error'); 
+            const cat = document.getElementById('form-cat').value.trim(); const comp = document.getElementById('form-comp').value.trim(); const mod = sanitizeVal(document.getElementById('form-mod').value); const esp = sanitizeVal(document.getElementById('form-esp').value); const local = document.getElementById('form-local').value.trim(); const serie = sanitizeVal(document.getElementById('form-serie-estoque').value); const patrim = sanitizeVal(document.getElementById('form-patrimonio-estoque').value); const qtd = Number(document.getElementById('form-qtd').value); const minEstoque = minimoInformado(document.getElementById('form-minimo').value); if(minEstoque===null)return showToast('Informe um estoque mínimo inteiro, maior ou igual a zero.','error'); 
             if(actionType === 'edit' && !editId) return showToast('Selecione um registro existente para atualizar.', 'error');
             if(!cat || !comp || !local || !Number.isInteger(qtd) || qtd < 0 || (actionType !== 'edit' && qtd === 0)) return showToast("Preencha Categoria, Componente, Local e Qtd.", "error");
             const btn = document.getElementById('btn-save-item'); const originalText = btn.innerText; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
             try {
-                if(actionType === 'edit' && editId) { await updateDoc(doc(db, "estoque", editId), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque }); await registrarLog("MOVIMENTAÇÃO (ESTOQUE)", `${comp} - ${mod}`, qtd, `Local: ${local}`); showToast("Alteração gravada com sucesso!"); } 
+                if(actionType === 'edit' && editId) { await saveInventoryEdit("estoque",editId,{ Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque },"estoque"); showToast("Alteração gravada com sucesso!"); } 
                 else { const ex = window.estoqueLocal.find(i => { let mP = (patrim && (i.Patrimonio === patrim || i.Série === patrim)); let mS = (serie && (i.Série === serie || i.Patrimonio === serie)); if(mP || mS) return true; return String(i.Componente||'') === comp && String(i.Modelo||'') === mod && String(i.Especificação||'') === esp && String(i.Local||'') === local; }); if(ex) await updateDoc(doc(db, "estoque", ex.id), { Quantidade: (Number(ex.Quantidade)||0) + qtd, EstoqueMinimo: minEstoque }); else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque }); await registrarLog("ENTRADA", `${comp} (${esp})`, qtd, local); showToast("Entrada registada!"); }
                 ['form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque', 'estoque-edit-id', 'estoque-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = ''; if(document.getElementById('estoque-action-type')) { document.getElementById('estoque-action-type').value = 'new'; document.getElementById('estoque-action-type').dispatchEvent(new Event('change')); }
             } catch (e) { showToast("Erro: " + e.message, "error");} btn.innerText = originalText;
@@ -1613,11 +1614,11 @@ window.atualizarInterfaceEstoque = function() {
         window.salvarRastreio = async function() {
             if(document.getElementById('loc-action-type').value==='new'){try{await requireAdmin();}catch(e){return showToast(e.message,'error');}}
             const action = document.getElementById('loc-action-type').value, eId = document.getElementById('loc-edit-id').value;
-            const eq = document.getElementById('loc-equip').value.trim(), loc = document.getElementById('loc-local').value.trim(), sip = sanitizeVal(document.getElementById('loc-sipac').value), mar = sanitizeVal(document.getElementById('loc-marca').value), ser = sanitizeVal(document.getElementById('loc-serie').value), pat = sanitizeVal(document.getElementById('loc-patrimonio').value), qt = parseInt(document.getElementById('loc-qtd').value);
+            const eq = document.getElementById('loc-equip').value.trim(), loc = document.getElementById('loc-local').value.trim(), sip = sanitizeVal(document.getElementById('loc-sipac').value), mar = sanitizeVal(document.getElementById('loc-marca').value), ser = sanitizeVal(document.getElementById('loc-serie').value), pat = sanitizeVal(document.getElementById('loc-patrimonio').value), qt = Number(document.getElementById('loc-qtd').value);
             if(action === 'edit' && !eId) return showToast('Selecione um registro existente para atualizar.', 'error');
-            if(!eq || !loc || isNaN(qt) || qt <= 0) return showToast("Preencha Equipamento, Local Físico e Quantidade.", "error");
+            if(!eq || !loc || !Number.isSafeInteger(qt) || qt < 0) return showToast("Preencha Equipamento, Local Físico e Quantidade.", "error");
             const b = document.getElementById('btn-save-loc'); const o = b.innerText; b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-            try { if(action === 'edit' && eId) { await updateDoc(doc(db, "localidades", eId), { Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: qt }); await registrarLog("MOVIMENTAÇÃO", `${eq} (Novo: ${loc})`, qt, `SIPAC: ${sip || '-'} | Série: ${ser || '-'}`); showToast("Alteração gravada e movimentada com sucesso!"); } else { await addDoc(collection(db, "localidades"), { Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: qt }); await registrarLog("MAP_LOCAL", `${eq} (${loc})`, qt, `SIPAC: ${sip || '-'} | Série: ${ser || '-'}`); showToast("Equipamento mapeado com sucesso!"); } ['loc-equip','loc-local', 'loc-sipac','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id', 'loc-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; document.getElementById('loc-action-type').value = 'new'; document.getElementById('loc-action-type').dispatchEvent(new Event('change')); } catch (e) { showToast("Erro: " + e.message, "error"); } b.innerText = o;
+            try { if(action === 'edit' && eId) { await saveInventoryEdit("localidades",eId,{ Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: qt },"loc"); showToast("Alteração gravada e movimentada com sucesso!"); } else { await addDoc(collection(db, "localidades"), { Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: qt }); await registrarLog("MAP_LOCAL", `${eq} (${loc})`, qt, `SIPAC: ${sip || '-'} | Série: ${ser || '-'}`); showToast("Equipamento mapeado com sucesso!"); } ['loc-equip','loc-local', 'loc-sipac','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id', 'loc-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; document.getElementById('loc-action-type').value = 'new'; document.getElementById('loc-action-type').dispatchEvent(new Event('change')); } catch (e) { showToast("Erro: " + e.message, "error"); } b.innerText = o;
         };
 
         window.salvarVoip = async function() {
@@ -1724,7 +1725,7 @@ window.atualizarInterfaceEstoque = function() {
             if(tipo !== 'saida') {
                 const item = mapBase[text];
                 if(tipo === 'loc') {
-                    if(item) { document.getElementById('loc-edit-id').value = item.id; document.getElementById('loc-equip').value = item.Equipamento || ''; document.getElementById('loc-local').value = item.Local || ''; document.getElementById('loc-sipac').value = item.LocalSipac || ''; document.getElementById('loc-marca').value = item.Marca || ''; document.getElementById('loc-qtd').value = item.Quantidade || 1; document.getElementById('loc-serie').value = item.Serie || ''; document.getElementById('loc-patrimonio').value = item.Patrimonio || ''; } 
+                    if(item) { document.getElementById('loc-edit-id').value = item.id; document.getElementById('loc-equip').value = item.Equipamento || ''; document.getElementById('loc-local').value = item.Local || ''; document.getElementById('loc-sipac').value = item.LocalSipac || ''; document.getElementById('loc-marca').value = item.Marca || ''; document.getElementById('loc-qtd').value = item.Quantidade ?? 0; document.getElementById('loc-serie').value = item.Serie || ''; document.getElementById('loc-patrimonio').value = item.Patrimonio || ''; } 
                     else { ['loc-edit-id','loc-equip','loc-local','loc-sipac','loc-marca','loc-serie','loc-patrimonio'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; }
                 } else if(tipo === 'estoque') {
                     if(item) { document.getElementById('estoque-edit-id').value = item.id; document.getElementById('form-cat').value = item.Categoria || ''; document.getElementById('form-comp').value = item.Componente || ''; document.getElementById('form-mod').value = item.Modelo || ''; document.getElementById('form-esp').value = item.Especificação || ''; document.getElementById('form-local').value = item.Local || ''; document.getElementById('form-serie-estoque').value = item.Série || ''; document.getElementById('form-patrimonio-estoque').value = item.Patrimonio || ''; document.getElementById('form-qtd').value = item.Quantidade ?? 0; document.getElementById('form-minimo').value = minimoInformado(item.EstoqueMinimo) ?? ''; } 
@@ -2026,6 +2027,79 @@ window.atualizarInterfaceEstoque = function() {
             document.querySelectorAll('[data-cadastro-base]').forEach(b=>{const active=b.dataset.cadastroBase===base;b.setAttribute('aria-pressed',String(active));b.classList.toggle('bg-blue-100',active);b.classList.toggle('text-blue-800',active);});
         }
         Object.values(cadastroPanels).forEach(id=>{const panel=document.getElementById(id);panel.classList.remove('tab-tool-content','h-full');document.getElementById('cadastro-panels').appendChild(panel);});
+        const quantityBaseline={estoque:null,loc:null};
+        function quantityReasonUI(kind){
+            const prefix=kind==='estoque'?'form':'loc',old=quantityBaseline[kind];
+            const changed=document.getElementById(kind+'-action-type').value==='edit'&&old!==null&&Number(document.getElementById(prefix+'-qtd').value)!==old;
+            document.getElementById(kind+'-reason-box').hidden=!changed;
+            document.getElementById(kind+'-reason').required=changed;
+            if(!changed)document.getElementById(kind+'-reason').value='';
+        }
+        async function saveInventoryEdit(base,id,patch,kind){
+            const reason=document.getElementById(kind+'-reason').value.trim(),expected=quantityBaseline[kind];
+            if(!Number.isSafeInteger(patch.Quantidade)||patch.Quantidade<0)throw Error('Informe uma quantidade inteira válida.');
+            const ref=doc(db,base,id),audit=doc(collection(db,'logs'));
+            await runTransaction(db,async tx=>{
+                const snap=await tx.get(ref);if(!snap.exists())throw Error('O equipamento não existe mais. Selecione novamente.');
+                const before=snap.data(),old=Number(before.Quantidade);
+                if(expected===null||old!==expected)throw Error('O saldo foi alterado desde a seleção. Pesquise e selecione novamente o equipamento.');
+                const changed=old!==patch.Quantidade;
+                if(changed&&(!reason||reason.length>1000))throw Error('Informe a justificativa da alteração de quantidade (até 1000 caracteres).');
+                tx.update(ref,patch);
+                tx.set(audit,{tipo:base==='estoque'?'MOVIMENTAÇÃO (ESTOQUE)':'MOVIMENTAÇÃO',itemId:id,itemNome:patch.Componente||patch.Equipamento||'',qtd:patch.Quantidade,chamado:changed?`AJUSTE DE QUANTIDADE | Base: ${base} | Saldo anterior: ${old} | Saldo corrigido: ${patch.Quantidade} | Diferença: ${patch.Quantidade-old} | Justificativa: ${reason}`:`ATUALIZAÇÃO DE CADASTRO | Base: ${base} | Quantidade mantida: ${old}`,usuario:auth.currentUser.email||'',dataHora:serverTimestamp()});
+            });
+        }
+        ['estoque','loc'].forEach(kind=>{
+            const qty=document.getElementById((kind==='estoque'?'form':'loc')+'-qtd'),box=document.createElement('div');
+            box.id=kind+'-reason-box';box.hidden=true;box.className='mt-3';
+            const label=document.createElement('label');label.textContent='Justificativa da alteração de quantidade *';label.htmlFor=kind+'-reason';
+            const input=document.createElement('textarea');input.id=kind+'-reason';input.maxLength=1000;input.className='w-full border rounded p-2';input.placeholder='Explique por que a quantidade precisa ser corrigida.';
+            box.append(label,input);qty.closest('.grid').after(box);qty.addEventListener('input',()=>quantityReasonUI(kind));
+        });
+        const originalFilterForQuantity=window.filtrarEdicao;
+        window.filtrarEdicao=function(kind,text){
+            originalFilterForQuantity(kind,text);
+            if(!['estoque','loc'].includes(kind))return;
+            const id=document.getElementById(kind+'-edit-id').value,row=(kind==='estoque'?window.estoqueLocal:window.localidadesLocais).find(row=>row.id===id);
+            quantityBaseline[kind]=row?Number(row.Quantidade):null;
+            document.getElementById(kind+'-reason').value='';quantityReasonUI(kind);
+        };
+        const maintenanceEl=id=>document.getElementById('maintenance-'+id);
+        let maintenanceSelected=null,maintenanceBusy=false;
+        const maintenanceRows=()=>maintenanceEl('base').value==='estoque'?window.estoqueLocal:window.localidadesLocais;
+        function conditionLabel(row){return ['Funcionando','Em manutenção','Não funcionando'].includes(row.Condicao)?row.Condicao:'Não informada';}
+        function maintenanceLabel(row){const stock=maintenanceEl('base').value==='estoque';return `${(stock?row.Componente:row.Equipamento)||'Sem nome'} | Marca/modelo: ${(stock?row.Modelo:row.Marca)||'—'} | Local: ${row.Local||'—'} | Série: ${(stock?row.Série:row.Serie)||'—'} | Patrimônio: ${row.Patrimonio||'—'} | Quantidade: ${row.Quantidade??'—'} | Condição: ${conditionLabel(row)} | Registro: ${row.id}`;}
+        function searchMaintenance(){
+            maintenanceSelected=null;maintenanceEl('details').hidden=true;maintenanceEl('save').disabled=true;
+            const area=maintenanceEl('results');area.replaceChildren();
+            const terms=transferNormalize(maintenanceEl('search').value).trim().split(/\s+/).filter(Boolean);if(!terms.length)return;
+            const rows=maintenanceRows().filter(row=>terms.every(term=>transferNormalize([row.Componente,row.Equipamento,row.Modelo,row.Marca,row.Série,row.Serie,row.Patrimonio,row.Local].join(' ')).includes(term)));
+            const info=document.createElement('p');info.textContent=rows.length?`${rows.length} resultado(s). Selecione o equipamento.${rows.length>20?' Refine a pesquisa para localizar os demais resultados.':''}`:'Nenhum equipamento encontrado nesta base.';area.append(info);
+            rows.slice(0,20).forEach(row=>{const button=document.createElement('button');button.type='button';button.className='w-full text-left border rounded p-3 my-1';button.textContent=maintenanceLabel(row);button.onclick=()=>{
+                if(maintenanceBusy)return;maintenanceSelected={id:row.id,base:maintenanceEl('base').value,condition:conditionLabel(row)};
+                maintenanceEl('details').textContent=maintenanceLabel(row);maintenanceEl('details').hidden=false;maintenanceEl('save').disabled=false;
+                maintenanceEl('condition').value=row.Condicao||'Em manutenção';maintenanceEl('notes').value='';area.replaceChildren();
+            };area.append(button);});
+        }
+        maintenanceEl('search').addEventListener('input',searchMaintenance);
+        maintenanceEl('base').addEventListener('change',()=>{maintenanceEl('search').value='';searchMaintenance();});
+        maintenanceEl('form').addEventListener('submit',async event=>{
+            event.preventDefault();if(!maintenanceSelected||maintenanceBusy)return;
+            const selection={...maintenanceSelected},condition=maintenanceEl('condition').value,notes=maintenanceEl('notes').value.trim();
+            if(!['Funcionando','Em manutenção','Não funcionando'].includes(condition)||!notes)return;
+            maintenanceBusy=true;const controls=[...maintenanceEl('form').querySelectorAll('input,textarea,select,button')];controls.forEach(el=>el.disabled=true);
+            try{
+                const ref=doc(db,selection.base,selection.id),audit=doc(collection(db,'logs'));
+                await runTransaction(db,async tx=>{
+                    const snap=await tx.get(ref);if(!snap.exists())throw Error('Equipamento não encontrado. Pesquise novamente.');const row=snap.data();
+                    if(conditionLabel(row)!==selection.condition)throw Error('A condição foi alterada por outro usuário. Pesquise novamente.');
+                    tx.update(ref,{Condicao:condition,ObservacaoCondicao:notes,CondicaoAtualizadaEm:serverTimestamp(),CondicaoAtualizadaPor:auth.currentUser.email||''});
+                    tx.set(audit,{tipo:selection.base==='estoque'?'MOVIMENTAÇÃO (ESTOQUE)':'MOVIMENTAÇÃO',itemId:selection.id,itemNome:(selection.base==='estoque'?row.Componente:row.Equipamento)||'',qtd:Number(row.Quantidade)||0,chamado:`CONDIÇÃO DO EQUIPAMENTO | Base: ${selection.base} | Anterior: ${conditionLabel(row)} | Nova: ${condition} | Observação: ${notes}`,usuario:auth.currentUser.email||'',dataHora:serverTimestamp()});
+                });
+                maintenanceEl('form').reset();searchMaintenance();showToast('Condição registrada com sucesso.');
+            }catch(error){showToast(error.message,'error');}finally{maintenanceBusy=false;controls.forEach(el=>el.disabled=false);maintenanceEl('save').disabled=!maintenanceSelected;}
+        });
+
         showCadastro('edit','estoque');
 
     </script>
