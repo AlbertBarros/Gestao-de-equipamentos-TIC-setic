@@ -1200,7 +1200,8 @@ const SETIC_AI = (() => {
             const match=[...greeting.matchAll(/bom dia|boa tarde|boa noite|ola|oi/g)].pop()?.[0];
             append(({'bom dia':'Bom dia!','boa tarde':'Boa tarde!','boa noite':'Boa noite!'}[match]||'Olá!')+' Em que posso ajudar?','ai');return;
         }
-        const loading=document.createElement('div'); loading.className='chat-bubble-ai shadow-sm'; loading.textContent='Vou consultar os dados para você…';
+        const loading=document.createElement('div'); loading.className='chat-bubble-ai shadow-sm'; loading.textContent='Consultando a base de dados da SETIC…';
+        if(element('ai-status')){element('ai-status').textContent='Consultando a base de dados da SETIC…';element('ai-status').style.color='#ffffff';}
         element('ai-chat-body')?.appendChild(loading);
         const controller=new AbortController(); pending=controller; setBusy(true);
         const timeout=setTimeout(()=>controller.abort(),45000);
@@ -1220,11 +1221,13 @@ const SETIC_AI = (() => {
             if(data.contexto)conversationContext=data.contexto;
             append(esc(data.resposta).replace(/\n/g,'<br>'),'ai');
             if(element('ai-status')){
-                const reasons={sem_chave:'chave ausente',modelo_invalido:'nome do modelo inválido',requisicao_ou_chave_invalida:'requisição ou chave inválida (400)',chave_recusada:'chave recusada (401)',acesso_gemini_negado:'acesso ao Gemini negado (403)',modelo_indisponivel:'modelo indisponível (404)',cota_ou_limite:'cota ou limite de uso (429)',tempo_esgotado:'tempo de resposta esgotado',resposta_nao_validada:'falha de conexão ou resposta não validada'};
-                element('ai-status').textContent=data.gemini_status==='ativo'?'Gemini conectado':data.gemini_status==='nao_necessario'?'Assistente online':'Modo básico — '+(reasons[data.gemini_status]||'falha do Gemini');
-                if(data.gemini_status&&data.gemini_status!=='ativo'&&data.gemini_status!=='nao_necessario')append(esc('Diagnóstico: '+(reasons[data.gemini_status]||data.gemini_status)+'. A consulta acima usou o mecanismo básico.'),'ai');
+                const active=data.gemini_status==='ativo';
+                element('ai-status').textContent=active?'● Gemini conectado':'Consulta pela base de dados da SETIC';
+                element('ai-status').style.color=active?'#86efac':'#ffffff';
+                element('ai-status').title=active?'O Gemini respondeu à última consulta.':'Consulta realizada diretamente na base de dados.';
             }
         }catch(error){
+            if(session===generation&&element('ai-status')){element('ai-status').textContent='Consulta não concluída';element('ai-status').style.color='#ffffff';}
             if(session===generation)append(esc(error.name==='AbortError'?'A consulta demorou mais que o esperado. Tente novamente.':error.message||'Não foi possível conectar ao assistente.'),'ai');
         }finally{
             clearTimeout(timeout); loading.remove();
