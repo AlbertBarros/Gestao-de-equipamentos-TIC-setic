@@ -453,8 +453,8 @@
  <p class="text-sm text-slate-500 mb-4">Selecione o equipamento e informe a quantidade e o local de destino. A transferência exige acesso de administrador.</p>
  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
  <label>Sentido<select id="transfer-direction" class="w-full border rounded p-2"><option value="estoque">Estoque → Rastreio</option><option value="localidades">Rastreio → Estoque</option></select></label>
- <label>Pesquisar equipamento<input id="transfer-search" class="w-full border rounded p-2" placeholder="Nome, marca, série ou patrimônio"></label>
- <label class="md:col-span-2">Equipamento de origem<select id="transfer-item" required class="w-full border rounded p-2"></select></label>
+ <label>Pesquisar equipamento<input id="transfer-search" autocomplete="off" aria-controls="transfer-suggestions" class="w-full border rounded p-2" placeholder="Nome, marca, série ou patrimônio"></label>
+ <div id="transfer-suggestions" class="md:col-span-2" aria-label="Sugestões de equipamentos" hidden></div><div id="transfer-selected" class="md:col-span-2 rounded-lg border border-emerald-300 p-3" role="status" hidden></div><label class="md:col-span-2">Equipamento de origem<select id="transfer-item" required class="w-full border rounded p-2"></select></label>
  <label>Quantidade<input id="transfer-quantity" type="number" min="1" step="1" value="1" required class="w-full border rounded p-2"></label>
  <label>Local de destino<input id="transfer-location" required class="w-full border rounded p-2"></label>
  <label id="transfer-sipac-label">Local SIPAC (opcional)<input id="transfer-sipac" class="w-full border rounded p-2"></label>
@@ -1942,14 +1942,38 @@ window.atualizarInterfaceEstoque = function() {
         let transferBusy=false;
         const transferRows=()=>transferEl('direction').value==='estoque'?window.estoqueLocal||[]:window.localidadesLocais||[];
         const transferNormalize=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+        function transferIdentity(row){
+            const stock=transferEl('direction').value==='estoque';
+            return `${(stock?row.Componente:row.Equipamento)||'Sem nome'} | Marca/modelo: ${(stock?row.Modelo:row.Marca)||'Não informado'} | Local: ${row.Local||'Não informado'} | Série: ${(stock?row.Série:row.Serie)||'Não informada'} | Patrimônio: ${row.Patrimonio||'Não informado'} | Quantidade: ${row.Quantidade} | Registro: ${row.id}`;
+        }
+        function showTransferSelection(){
+            const row=transferRows().find(row=>row.id===transferEl('item').value);
+            transferEl('selected').hidden=!row;
+            transferEl('selected').textContent=row?'Equipamento selecionado: '+transferIdentity(row):'';
+            if(!row)return;
+            transferEl('quantity').max=row.Quantidade;transferEl('quantity').value=1;
+            transferEl('category').value=row.Categoria||'';transferEl('minimum').value=row.EstoqueMinimo??'';
+            transferEl('suggestions').hidden=true;
+            transferEl('info').textContent=`Confira os dados do equipamento selecionado. Disponível na origem: ${row.Quantidade}.`;
+        }
         function refreshTransferItems(){
-            const query=transferNormalize(transferEl('search').value),select=transferEl('item');
+            const query=transferNormalize(transferEl('search').value).trim(),select=transferEl('item'),suggestions=transferEl('suggestions');
             select.replaceChildren(new Option('Selecione um equipamento',''));
-            for(const row of transferRows().filter(row=>Number(row.Quantidade)>0&&transferNormalize([row.Componente,row.Equipamento,row.Modelo,row.Marca,row.Série,row.Serie,row.Patrimonio,row.Local].join(' ')).includes(query)).sort((a,b)=>String(a.Componente||a.Equipamento||'').localeCompare(String(b.Componente||b.Equipamento||''),'pt-BR'))){
-                select.add(new Option(`${row.Componente||row.Equipamento} | ${row.Modelo||row.Marca||''} | ${row.Local||''} | Série: ${row.Série||row.Serie||'—'} | Patr.: ${row.Patrimonio||'—'} | Qtd.: ${row.Quantidade}`,row.id));
+            suggestions.replaceChildren();suggestions.hidden=!query;
+            transferEl('selected').hidden=true;transferEl('selected').textContent='';
+            transferEl('category').value='';transferEl('minimum').value='';
+            const terms=query.split(/\s+/).filter(Boolean);
+            const rows=transferRows().filter(row=>Number(row.Quantidade)>0&&terms.every(term=>transferNormalize([row.Componente,row.Equipamento,row.Modelo,row.Marca,row.Série,row.Serie,row.Patrimonio,row.Local].join(' ')).includes(term))).sort((a,b)=>transferIdentity(a).localeCompare(transferIdentity(b),'pt-BR'));
+            rows.forEach(row=>select.add(new Option(transferIdentity(row),row.id)));
+            if(query){
+                const status=document.createElement('p');status.setAttribute('role','status');status.className='text-sm mb-2';status.textContent=rows.length?`${rows.length} equipamento(s) encontrado(s). Clique no item para selecionar.${rows.length>20?' Mostrando os primeiros 20; refine a pesquisa ou use a lista abaixo.':''}`:'Nenhum equipamento disponível para esta pesquisa. Confira a origem, o nome ou o número digitado.';suggestions.append(status);
+                const list=document.createElement('div');list.style.cssText='max-height:260px;overflow:auto;display:grid;gap:8px';
+                rows.slice(0,20).forEach(row=>{
+                    const button=document.createElement('button');button.type='button';button.className='text-left border rounded-lg p-3 w-full';button.textContent=transferIdentity(row);
+                    button.addEventListener('click',()=>{if(transferBusy)return;select.value=row.id;showTransferSelection();transferEl('quantity').focus();});list.append(button);
+                });suggestions.append(list);
             }
-            transferEl('info').textContent=select.options.length===1?'Nenhum equipamento disponível para esta pesquisa.':'';
-            transferEl('quantity').removeAttribute('max');
+            transferEl('info').textContent='';transferEl('quantity').removeAttribute('max');
         }
         function transferDirectionChanged(){
             const toStock=transferEl('direction').value==='localidades';
@@ -1960,12 +1984,7 @@ window.atualizarInterfaceEstoque = function() {
         transferEl('close').addEventListener('click',()=>{if(!transferBusy)closeAdminSections();});
         transferEl('direction').addEventListener('change',transferDirectionChanged);
         transferEl('search').addEventListener('input',refreshTransferItems);
-        transferEl('item').addEventListener('change',()=>{
-            const row=transferRows().find(row=>row.id===transferEl('item').value);if(!row)return;
-            transferEl('quantity').max=row.Quantidade;transferEl('quantity').value=1;
-            transferEl('category').value=row.Categoria||'';transferEl('minimum').value=row.EstoqueMinimo??'';
-            transferEl('info').textContent=`Disponível na origem: ${row.Quantidade}. O destino receberá um registro próprio para esta transferência.`;
-        });
+        transferEl('item').addEventListener('change',showTransferSelection);
         transferEl('form').addEventListener('submit',async event=>{
             event.preventDefault();if(transferBusy)return;
             const input={base:transferEl('direction').value,id:transferEl('item').value,quantity:transferEl('quantity').value,location:transferEl('location').value,reason:transferEl('reason').value,sipac:transferEl('sipac').value,category:transferEl('category').value,minimum:transferEl('minimum').value};
