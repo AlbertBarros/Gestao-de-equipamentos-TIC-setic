@@ -496,7 +496,7 @@
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Baixa de Material</h2>
                     <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex-1">
                         <div class="space-y-5 mb-8">
-                            <div><label class="block text-sm font-semibold text-slate-700">Pesquisar Equipamento</label><div class="relative"><i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i><input list="lista-saida-items" id="saida-item-input" class="mt-1 block w-full rounded-md border-gray-300 border py-3 pl-10 shadow-sm focus:ring-red-500 focus:border-red-500 text-sm font-medium"><datalist id="lista-saida-items"></datalist></div></div>
+                            <div><label class="block text-sm font-semibold text-slate-700">Pesquisar Equipamento</label><div class="relative"><i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i><input list="lista-saida-items" id="saida-item-input" class="mt-1 block w-full rounded-md border-gray-300 border py-3 pl-10 shadow-sm focus:ring-red-500 focus:border-red-500 text-sm font-medium"><datalist id="lista-saida-items"></datalist></div></div><section id="saida-conferencia" hidden class="rounded-xl border border-blue-200 p-4 mt-4"><h3 class="font-bold text-lg mb-2">Confira o equipamento selecionado</h3><p class="text-sm text-slate-500 mb-3">Dados do cadastro para conferência. Para corrigir informações, utilize Atualizar.</p><div id="saida-ficha" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div><p id="saida-saldo-previsto" role="status" class="font-bold mt-4"></p></section>
                             <hr class="border-gray-200">
                             <div class="grid grid-cols-2 gap-5"><div><label class="block text-sm font-semibold text-slate-700">Qtd Retirada</label><input type="number" id="saida-qtd" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500" min="1" value="1"></div><div><label class="block text-sm font-semibold text-slate-700">Sistema / Chamado</label><input type="text" id="saida-chamado" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500"></div></div>
                         </div>
@@ -1592,7 +1592,7 @@ window.atualizarInterfaceEstoque = function() {
         }
 
         // ================= GESTÃO MANUAL E UPLOADS =================
-        function atualizarDatalistSaida() { const dl = document.getElementById('lista-saida-items'); if(!dl) return; dl.innerHTML = ''; mapItensSaida = {}; [...window.estoqueLocal].sort((a,b) => String(a.Categoria||'').localeCompare(String(b.Categoria||''))).forEach(i => { const text = `[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||''}) - Qtd: ${i.Quantidade||0}`; mapItensSaida[text + ' [ID: ' + i.id + ']'] = i; }); }
+        function atualizarDatalistSaida() { const dl = document.getElementById('lista-saida-items'); if(!dl) return; dl.innerHTML = ''; mapItensSaida = {}; [...window.estoqueLocal].sort((a,b) => String(a.Categoria||'').localeCompare(String(b.Categoria||''))).forEach(i => { const text = `[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||''}) - Qtd: ${i.Quantidade||0}`; mapItensSaida[text + ' [ID: ' + i.id + ']'] = i; }); renderWithdrawalDetails(); }
         function atualizarSelectEdicaoLocais() { const dl = document.getElementById('lista-edit-locais'); if(!dl) return; dl.innerHTML = ''; mapEditLocais = {}; [...window.localidadesLocais].sort((a,b) => String(a.Equipamento||'').localeCompare(String(b.Equipamento||''))).forEach(loc => { const text = `${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio || ''} | Série: ${loc.Serie || ''}`; mapEditLocais[text + ' [ID: ' + loc.id + ']'] = loc; }); }
         function atualizarSelectEdicaoEstoque() { const dl = document.getElementById('lista-edit-estoque'); if(!dl) return; dl.innerHTML = ''; mapEditEstoque = {}; [...window.estoqueLocal].sort((a,b) => String(a.Componente||'').localeCompare(String(b.Componente||''))).forEach(item => { const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || ''} | Série: ${item.Série || ''}`; mapEditEstoque[text + ' [ID: ' + item.id + ']'] = item; }); }
         function atualizarSelectEdicaoVoip() { const dl = document.getElementById('lista-edit-voip'); if(!dl) return; dl.innerHTML = ''; mapEditVoip = {}; [...window.voipLocal].sort((a,b) => String(a.Ramal||'').localeCompare(String(b.Ramal||''))).forEach(v => { const text = `Ramal: ${v.Ramal} | Setor: ${v.Setor} | IP: ${v.Ip}`; mapEditVoip[text + ' [ID: ' + v.id + ']'] = v; }); }
@@ -1638,7 +1638,7 @@ window.atualizarInterfaceEstoque = function() {
         window.registrarSaida = async function(){
             const item=mapItensSaida[document.getElementById('saida-item-input').value],qty=Number(document.getElementById('saida-qtd').value),chamado=document.getElementById('saida-chamado').value.trim();
             if(!item||!Number.isInteger(qty)||qty<=0)return showToast('Selecione um item e quantidade válida.','error');const button=document.getElementById('btn-register-saida');if(button.disabled)return;button.disabled=true;
-            try{const ref=doc(db,'estoque',item.id),logRef=doc(collection(db,'logs'));await runTransaction(db,async tx=>{const snap=await tx.get(ref);if(!snap.exists())throw new Error('Item não encontrado.');const data=snap.data(),saldo=Number(data.Quantidade);if(!Number.isFinite(saldo)||saldo<qty)throw new Error('Saldo insuficiente.');tx.update(ref,{Quantidade:saldo-qty});tx.set(logRef,{tipo:'SAÍDA',itemId:item.id,itemNome:`${data.Componente||''} (${data.Especificação||''})`,qtd:qty,chamado,usuario:window.userEmail,dataHora:serverTimestamp(),revertida:false});});showToast('Baixa registrada.');document.getElementById('saida-item-input').value='';document.getElementById('saida-qtd').value=1;document.getElementById('saida-chamado').value='';}catch(e){showToast(e.message,'error');}finally{button.disabled=false;}
+            try{const ref=doc(db,'estoque',item.id),logRef=doc(collection(db,'logs'));await runTransaction(db,async tx=>{const snap=await tx.get(ref);if(!snap.exists())throw new Error('Item não encontrado.');const data=snap.data(),saldo=Number(data.Quantidade);if(!Number.isFinite(saldo)||saldo<qty)throw new Error('Saldo insuficiente.');if(saldo!==Number(item.Quantidade))throw new Error('O saldo mudou desde a seleção. Pesquise novamente e confira a quantidade atual.');tx.update(ref,{Quantidade:saldo-qty});tx.set(logRef,{tipo:'SAÍDA',itemId:item.id,itemNome:`${data.Componente||''} (${data.Especificação||''})`,qtd:qty,chamado,usuario:window.userEmail,dataHora:serverTimestamp(),revertida:false});});showToast('Baixa registrada.');document.getElementById('saida-item-input').value='';document.getElementById('saida-qtd').value=1;document.getElementById('saida-chamado').value='';renderWithdrawalDetails();}catch(e){showToast(e.message,'error');}finally{button.disabled=false;}
         };
 
         window.processarUploadEstoque = async function() {
@@ -2098,6 +2098,26 @@ window.atualizarInterfaceEstoque = function() {
                 });
                 maintenanceEl('form').reset();searchMaintenance();showToast('Condição registrada com sucesso.');
             }catch(error){showToast(error.message,'error');}finally{maintenanceBusy=false;controls.forEach(el=>el.disabled=false);maintenanceEl('save').disabled=!maintenanceSelected;}
+        });
+
+
+        function renderWithdrawalDetails(){
+            const input=document.getElementById('saida-item-input'),item=mapItensSaida[input.value],panel=document.getElementById('saida-conferencia');
+            if(!panel)return;
+            panel.hidden=!item;
+            const area=document.getElementById('saida-ficha');area.replaceChildren();
+            const qty=document.getElementById('saida-qtd');
+            if(!item){qty.removeAttribute('max');document.getElementById('saida-saldo-previsto').textContent='';return;}
+            const fields=[['Categoria',item.Categoria],['Equipamento / componente',item.Componente],['Marca / modelo',item.Modelo],['Especificação',item.Especificação],['Local físico',item.Local],['Número de série',item.Série],['Patrimônio',item.Patrimonio],['Quantidade atual',item.Quantidade],['Estoque mínimo',item.EstoqueMinimo],['Condição',item.Condicao],['Observação da condição',item.ObservacaoCondicao],['Identificação do registro',item.id]];
+            fields.forEach(([title,value],index)=>{const label=document.createElement('label');label.className='block text-sm font-semibold';label.textContent=title;const field=document.createElement('input');field.id='saida-detalhe-'+index;field.readOnly=true;field.className='mt-1 block w-full border rounded p-2';field.value=value===undefined||value===null||value===''?'Não informado':String(value);label.append(field);area.append(label);});
+            const balance=Number(item.Quantidade),withdrawn=Number(qty.value),status=document.getElementById('saida-saldo-previsto');qty.max=String(balance);
+            status.textContent=!Number.isSafeInteger(withdrawn)||withdrawn<=0?'Informe uma quantidade inteira maior que zero.':withdrawn>balance?'A quantidade de retirada é maior que o saldo disponível.':`Saldo após a retirada: ${balance-withdrawn} unidade(s).`;
+        }
+        document.getElementById('saida-item-input').addEventListener('input',renderWithdrawalDetails);
+        document.getElementById('saida-item-input').addEventListener('change',renderWithdrawalDetails);
+        document.getElementById('saida-qtd').addEventListener('input',()=>{
+            const item=mapItensSaida[document.getElementById('saida-item-input').value];
+            if(item)renderWithdrawalDetails();
         });
 
         showCadastro('edit','estoque');
