@@ -647,7 +647,7 @@
     <script type="module">
         import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, initializeAuth, inMemoryPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, doc, getDoc, setDoc, updateDoc, addDoc, serverTimestamp, query, orderBy, limit, deleteDoc, runTransaction, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, getDoc, setDoc, increment, updateDoc, addDoc, serverTimestamp, query, orderBy, limit, deleteDoc, runTransaction, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         // Chart.js pode carregar antes/depois do plugin dependendo da rede/CDN.
         // O painel continua funcional mesmo se o plugin de rótulos não estiver disponível.
@@ -1650,6 +1650,21 @@ window.atualizarInterfaceEstoque = function() {
         function atualizarSelectEdicaoEstoque() { const dl = document.getElementById('lista-edit-estoque'); if(!dl) return; dl.innerHTML = ''; mapEditEstoque = {}; [...window.estoqueLocal].sort((a,b) => String(a.Componente||'').localeCompare(String(b.Componente||''))).forEach(item => { const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || ''} | Série: ${item.Série || ''}`; mapEditEstoque[text + ' [ID: ' + item.id + ']'] = item; }); }
         function atualizarSelectEdicaoVoip() { const dl = document.getElementById('lista-edit-voip'); if(!dl) return; dl.innerHTML = ''; mapEditVoip = {}; [...window.voipLocal].sort((a,b) => String(a.Ramal||'').localeCompare(String(b.Ramal||''))).forEach(v => { const text = `Ramal: ${v.Ramal} | Setor: ${v.Setor} | IP: ${v.Ip}`; mapEditVoip[text + ' [ID: ' + v.id + ']'] = v; }); }
 
+        // Equipamento com patrimônio ou série é uma unidade individual: nunca é somado
+        // a outro registro pelo nome. Só entradas SEM patrimônio e SEM série são
+        // somadas a um registro igual (mesmo componente, modelo, especificação e local).
+        const idEstoque = v => String(v ?? '').trim().toUpperCase();
+        function localizarCadastroEstoque(lista, d) {
+            const pat = idEstoque(d.patrim), ser = idEstoque(d.serie);
+            if (pat || ser) {
+                const item = lista.find(i => (pat && (idEstoque(i.Patrimonio) === pat || idEstoque(i.Série) === pat)) || (ser && (idEstoque(i.Série) === ser || idEstoque(i.Patrimonio) === ser)));
+                return item ? { tipo: 'duplicado', item } : { tipo: 'novo' };
+            }
+            const item = lista.find(i => !idEstoque(i.Patrimonio) && !idEstoque(i.Série) && String(i.Componente||'') === d.comp && String(i.Modelo||'') === d.mod && String(i.Especificação||'') === d.esp && String(i.Local||'') === d.local);
+            return item ? { tipo: 'somar', item } : { tipo: 'novo' };
+        }
+        function descreverCadastro(i) { return `"${i.Componente||'item'}" (patrimônio ${i.Patrimonio||'-'}, série ${i.Série||'-'}, quantidade ${i.Quantidade ?? '-'})`; }
+
         window.salvarEstoque = async function() {
             if(document.getElementById('estoque-action-type').value==='new'){try{await requireAdmin();}catch(e){return showToast(e.message,'error');}}
             const actionType = document.getElementById('estoque-action-type') ? document.getElementById('estoque-action-type').value : 'new'; const editId = document.getElementById('estoque-edit-id') ? document.getElementById('estoque-edit-id').value : '';
@@ -1659,7 +1674,7 @@ window.atualizarInterfaceEstoque = function() {
             const btn = document.getElementById('btn-save-item'); const originalText = btn.innerText; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
             try {
                 if(actionType === 'edit' && editId) { await saveInventoryEdit("estoque",editId,{ Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque },"estoque"); showToast("Alteração gravada com sucesso!"); } 
-                else { const ex = window.estoqueLocal.find(i => { let mP = (patrim && (i.Patrimonio === patrim || i.Série === patrim)); let mS = (serie && (i.Série === serie || i.Patrimonio === serie)); if(mP || mS) return true; return String(i.Componente||'') === comp && String(i.Modelo||'') === mod && String(i.Especificação||'') === esp && String(i.Local||'') === local; }); if(ex) await updateDoc(doc(db, "estoque", ex.id), { Quantidade: (Number(ex.Quantidade)||0) + qtd, EstoqueMinimo: minEstoque }); else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque }); await registrarLog("ENTRADA", `${comp} (${esp})`, qtd, local); showToast("Entrada registada!"); }
+                else { const r = localizarCadastroEstoque(window.estoqueLocal, { comp, mod, esp, local, serie, patrim }); if (r.tipo === 'duplicado') throw new Error('Já existe um cadastro com este patrimônio/série: ' + descreverCadastro(r.item) + '. Nada foi somado. Para alterar esse cadastro, use Atualizar.'); if (r.tipo === 'somar') await updateDoc(doc(db, "estoque", r.item.id), { Quantidade: increment(qtd), EstoqueMinimo: minEstoque }); else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque }); await registrarLog("ENTRADA", `${comp} (${esp})`, qtd, local); showToast(r.tipo === 'somar' ? "Quantidade somada ao registro existente." : "Entrada registada!"); }
                 ['form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque', 'estoque-edit-id', 'estoque-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = ''; if(document.getElementById('estoque-action-type')) { document.getElementById('estoque-action-type').value = 'new'; document.getElementById('estoque-action-type').dispatchEvent(new Event('change')); }
             } catch (e) { showToast("Erro: " + e.message, "error");} btn.innerText = originalText;
         };
@@ -1699,16 +1714,43 @@ window.atualizarInterfaceEstoque = function() {
             const fileInput = document.getElementById('estoque-file-upload'), btn = document.getElementById('btn-estoque-upload'); if (!fileInput.files.length) return showToast("Selecione Excel.", "error"); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Importando...'; const reader = new FileReader();
             reader.onload = async (e) => {
                 try {
-                    const json = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let cont = 0;
+                    const planilha = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+                    const json = XLSX.utils.sheet_to_json(planilha.Sheets[planilha.SheetNames[0]]);
                     const invalid=json.findIndex(row=>getVal(row,['COMPONENTE','EQUIPAMENTO','NOME','ITEM'])&&minimoDaPlanilha(row)===null);
                     if(invalid>=0)throw new Error('Estoque mínimo ausente ou inválido no registro '+(invalid+1)+'. Informe a coluna Estoque Mínimo antes de importar. Nenhum registro foi importado.');
-                    for (let row of json) {
-                        const cat = getVal(row, ['CATEGORIA', 'TIPO', 'GRUPO']) || 'Geral'; const comp = getVal(row, ['COMPONENTE', 'EQUIPAMENTO', 'NOME', 'ITEM']); const mod = getVal(row, ['MODELO', 'MARCA/MODELO', 'MARCA MODELO', 'MARCA']); const esp = getVal(row, ['ESPECIFICAÇÃO', 'ESPECIFICACAO', 'Especificação', 'Especificacao']); const local = getVal(row, ['LOCAL FISICO', 'LOCAL', 'Local', 'LOCAL FÍSICO']); const serie = getVal(row, ['Nº DE SÉRIE', 'N DE SERIE', 'Nº DE SERIE', 'Nº Série', 'N Serie', 'SÉRIE', 'Série', 'SERIE', 'NUMERO DE SERIE']); const patrim = getVal(row, ['Nº PATRIMÔNIO', 'Nº PATRIMONIO', 'N Patrimônio', 'N Patrimonio', 'PATRIMÔNIO', 'PATRIMONIO', 'Patrimônio', 'Patrimonio']); const minEst = minimoDaPlanilha(row); const qtd = parseInt(getVal(row, ['QUANTIDADE', 'Quantidade', 'QTD', 'Qtd'])) || 1;
-                        if(!comp) continue; const existente = window.estoqueLocal.find(i => { let matchPatr = (patrim && (i.Patrimonio === patrim || i.Série === patrim)); let matchSerie = (serie && (i.Série === serie || i.Patrimonio === serie)); if(matchPatr || matchSerie) return true; return String(i.Componente||'') === comp && String(i.Modelo||'') === mod && String(i.Especificação||'') === esp && String(i.Local||'') === local; });
-                        if(existente) await updateDoc(doc(db, "estoque", existente.id), { Quantidade: (Number(existente.Quantidade)||0) + qtd, EstoqueMinimo: minEst }); else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, EstoqueMinimo: minEst, Quantidade: qtd }); cont++;
+                    // 1) Ler e conferir TODAS as linhas antes de gravar qualquer coisa.
+                    const linhas = [], problemas = [], vistos = new Map();
+                    json.forEach((row, index) => {
+                        const comp = getVal(row, ['COMPONENTE', 'EQUIPAMENTO', 'NOME', 'ITEM']); if (!comp) return;
+                        const numero = index + 2; // linha 1 da planilha é o cabeçalho
+                        const cat = getVal(row, ['CATEGORIA', 'TIPO', 'GRUPO']) || 'Geral'; const mod = getVal(row, ['MODELO', 'MARCA/MODELO', 'MARCA MODELO', 'MARCA']); const esp = getVal(row, ['ESPECIFICAÇÃO', 'ESPECIFICACAO', 'Especificação', 'Especificacao']); const local = getVal(row, ['LOCAL FISICO', 'LOCAL', 'Local', 'LOCAL FÍSICO']); const serie = getVal(row, ['Nº DE SÉRIE', 'N DE SERIE', 'Nº DE SERIE', 'Nº Série', 'N Serie', 'SÉRIE', 'Série', 'SERIE', 'NUMERO DE SERIE']); const patrim = getVal(row, ['Nº PATRIMÔNIO', 'Nº PATRIMONIO', 'N Patrimônio', 'N Patrimonio', 'PATRIMÔNIO', 'PATRIMONIO', 'Patrimônio', 'Patrimonio']);
+                        const qtdTexto = getVal(row, ['QUANTIDADE', 'Quantidade', 'QTD', 'Qtd']);
+                        const qtd = qtdTexto === '' ? 1 : Number(String(qtdTexto).replace(',', '.'));
+                        if (!Number.isSafeInteger(qtd) || qtd < 1) { problemas.push(`linha ${numero}: quantidade inválida (${qtdTexto})`); return; }
+                        for (const valor of new Set([idEstoque(patrim), idEstoque(serie)].filter(Boolean))) {
+                            if (vistos.has(valor)) problemas.push(`linha ${numero}: patrimônio/série ${valor} repetido (também na linha ${vistos.get(valor)})`); else vistos.set(valor, numero);
+                        }
+                        linhas.push({ cat, comp, mod, esp, local, serie, patrim, minEst: minimoDaPlanilha(row), qtd });
+                    });
+                    if (problemas.length) throw new Error('Importação cancelada. Nenhum registro foi gravado.\n\nCorrija a planilha:\n• ' + problemas.slice(0, 8).join('\n• ') + (problemas.length > 8 ? `\n• e mais ${problemas.length - 8} problema(s).` : ''));
+                    // Um cadastro existente que junta várias unidades sob um único patrimônio/série
+                    // precisa ser corrigido antes; senão a planilha duplicaria essas unidades.
+                    const agrupado = linhas.map(d => localizarCadastroEstoque(window.estoqueLocal, d)).find(r => r.tipo === 'duplicado' && Number(r.item.Quantidade) > 1);
+                    if (agrupado) throw new Error('Importação cancelada. Nenhum registro foi gravado.\n\nO cadastro existente ' + descreverCadastro(agrupado.item) + ' reúne várias unidades sob um único patrimônio/série.\n\nExclua esse cadastro em Administrador → Excluir registros → Por item (a exclusão pode ser revertida) e importe a planilha novamente.');
+                    // 2) Gravar.
+                    let novos = 0, somados = 0, ignorados = 0; const criadosNestaImportacao = [];
+                    for (const d of linhas) {
+                        const r = localizarCadastroEstoque([...criadosNestaImportacao, ...window.estoqueLocal], d);
+                        if (r.tipo === 'duplicado') { ignorados++; continue; }
+                        if (r.tipo === 'somar') { await updateDoc(doc(db, "estoque", r.item.id), { Quantidade: increment(d.qtd), EstoqueMinimo: d.minEst }); somados++; continue; }
+                        const novoRef = doc(collection(db, "estoque")), novoCadastro = { Categoria: d.cat, Componente: d.comp, Modelo: d.mod, Especificação: d.esp, Local: d.local, Série: d.serie, Patrimonio: d.patrim, EstoqueMinimo: d.minEst, Quantidade: d.qtd };
+                        await setDoc(novoRef, novoCadastro); novos++;
+                        criadosNestaImportacao.push({ id: novoRef.id, ...novoCadastro }); // evita duplicar antes da tela atualizar
                     }
-                    await registrarLog("ENTRADA", `Upload Lote`, cont, ""); showToast(`Sucesso! ${cont} importados.`); fileInput.value = "";
-                } catch (error) { showToast(error.message || "Erro leitura.", "error"); } btn.innerHTML = 'Processar Planilha de Estoque';
+                    await registrarLog("ENTRADA", `Upload Lote`, novos + somados, `Novos: ${novos} | Somados: ${somados} | Já cadastrados (ignorados): ${ignorados}`);
+                    showToast(`Importação concluída: ${novos} novo(s), ${somados} somado(s), ${ignorados} já cadastrado(s).`); fileInput.value = "";
+                    if (ignorados) alert(`Importação concluída.\n\nNovos registros: ${novos}\nQuantidades somadas: ${somados}\nJá cadastrados (ignorados, nada foi somado): ${ignorados}`);
+                } catch (error) { showToast('Importação não concluída. Veja a mensagem na tela.', 'error'); alert(error.message || "Erro na leitura da planilha."); } btn.innerHTML = 'Processar Planilha de Estoque';
             }; reader.readAsArrayBuffer(fileInput.files[0]);
         };
 
