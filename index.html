@@ -617,7 +617,7 @@
                                 <h3 class="font-bold text-blue-800 mb-2"><i class="fas fa-user-plus text-blue-600 mr-2"></i> Novo Usuário</h3>
                                 <input type="email" id="new-user-email" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="E-mail corporativo">
                                 <input type="password" id="new-user-pass" class="block w-full rounded border-gray-300 border p-2 mb-2 text-xs" placeholder="Senha (mín. 6 chars)">
-                                <p class="text-sm text-slate-600 mb-3">Novas contas recebem acesso de usuário comum.</p><button id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 px-2 rounded hover:bg-blue-700 transition text-sm shadow mt-auto"><i class="fas fa-save mr-1"></i> Cadastrar</button>
+                                <p class="text-sm text-slate-600 mb-3">Novas contas recebem acesso de usuário comum e são incluídas automaticamente na lista de usuários autorizados.</p><button id="btn-create-user" class="w-full bg-blue-600 text-white font-bold py-2 px-2 rounded hover:bg-blue-700 transition text-sm shadow mt-auto"><i class="fas fa-save mr-1"></i> Cadastrar</button>
                             </div>
                             <div class="border border-orange-200 rounded-xl p-5 bg-orange-50 shadow-sm flex flex-col">
                                 <h3 class="font-bold text-orange-800 mb-2"><i class="fas fa-user-minus text-orange-600 mr-2"></i> Gerir Acessos</h3>
@@ -647,7 +647,7 @@
     <script type="module">
         import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, initializeAuth, inMemoryPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, addDoc, serverTimestamp, query, orderBy, limit, deleteDoc, runTransaction, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, getDoc, setDoc, updateDoc, addDoc, serverTimestamp, query, orderBy, limit, deleteDoc, runTransaction, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         // Chart.js pode carregar antes/depois do plugin dependendo da rede/CDN.
         // O painel continua funcional mesmo se o plugin de rótulos não estiver disponível.
@@ -824,7 +824,7 @@
         });
 
         document.addEventListener('change', (e) => {
-            if(e.target.id === 'filter-cat-estoque') { window.currentFilterCat = e.target.value; window.currentPageEstoque = 1; atualizarInterfaceEstoque(); }
+            if(e.target.id === 'filter-cat-estoque') { window.currentFilterCat = e.target.value; window.currentPageEstoque = 1; atualizarInterfaceEstoque(); sincronizarGraficoComTabela(e.target.value); }
             else if(e.target.id === 'estoque-action-type') { window.mudarModoEdicao('estoque', e.target.value); }
             else if(e.target.id === 'loc-action-type') { window.mudarModoEdicao('loc', e.target.value); }
             else if(e.target.id === 'voip-action-type') { window.mudarModoEdicao('voip', e.target.value); }
@@ -918,10 +918,37 @@
         if(document.getElementById('login-password')) document.getElementById('login-password').addEventListener('keypress', (e) => { if (e.key === 'Enter') fazerLogin(); });
         if(document.getElementById('btn-forgot-password')) document.getElementById('btn-forgot-password').addEventListener('click', () => { const email = document.getElementById('login-email').value.trim(); if (!email) return showLoginMessage("Digite e-mail acima para recuperar.", true); sendPasswordResetEmail(auth, email).then(() => showLoginMessage(`E-mail de recuperação enviado!`, false)).catch((error) => showLoginMessage("Erro: " + error.code, true)); });
         
-        onAuthStateChanged(auth, (user) => {
+        // Lista de usuários autorizados (coleção "usuarios", documento = UID).
+        // Esta verificação só melhora a mensagem na tela: quem realmente bloqueia
+        // o acesso são as regras do Firestore.
+        async function verificarAutorizacao(user) {
+            try { const token = await user.getIdTokenResult(); if (token.claims.admin === true) return 'autorizado'; } catch (e) {}
+            try {
+                const snap = await getDoc(doc(db, 'usuarios', user.uid));
+                return snap.exists() && snap.data().ativo === true ? 'autorizado' : 'nao_autorizado';
+            } catch (e) {
+                // Regras antigas (sem a coleção usuarios) ou falha de rede: segue para o sistema;
+                // o Firestore continua decidindo o que pode ser lido.
+                console.warn('Verificação de autorização indisponível:', e.code || e.message);
+                return 'indisponivel';
+            }
+        }
+        let sessaoAutenticacao = 0;
+        onAuthStateChanged(auth, async (user) => {
+            const sessao = ++sessaoAutenticacao;
             SETIC_AI.close();
             resetAdminAccess();
             if (user) {
+                const autorizacao = await verificarAutorizacao(user);
+                if (sessao !== sessaoAutenticacao) return;
+                if (autorizacao === 'nao_autorizado') {
+                    document.getElementById('login-screen').classList.remove('hidden');
+                    document.getElementById('main-system').classList.add('hidden');
+                    document.getElementById('btn-login').innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Autenticar';
+                    showLoginMessage('Sua conta ainda não está autorizada a acessar o sistema. Solicite a liberação ao administrador da SETIC.', true);
+                    signOut(auth).catch(() => {});
+                    return;
+                }
                 window.userEmail = user.email;
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('main-system').classList.remove('hidden');
@@ -1052,6 +1079,7 @@
             // A interface e os gráficos são independentes das consultas entre si.
             // Qualquer coleção que ainda não tenha respondido simplesmente fica vazia.
             try {
+                atualizarFiltroCategoriaTabela();
                 atualizarInterfaceEstoque();
                 atualizarInterfaceRastreio();
                 atualizarInterfaceVoip();
@@ -1259,7 +1287,7 @@ window.atualizarInterfaceEstoque = function() {
             if(document.getElementById('kpi-total-saidas')) document.getElementById('kpi-total-saidas').innerText = tSaidas; 
             if(document.getElementById('kpi-zerado')) document.getElementById('kpi-zerado').innerText = tZerado;
 
-            let filtrados = window.estoqueLocal.filter(item => { let matchBusca = true; if (window.currentSearchText) { const searchTerms = window.currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !window.currentFilterCat || String(item.Categoria || 'Sem Categoria') === window.currentFilterCat; return matchBusca && matchCat; });
+            let filtrados = window.estoqueLocal.filter(item => { let matchBusca = true; if (window.currentSearchText) { const searchTerms = window.currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !window.currentFilterCat || stockCategoryKey(item.Categoria) === window.currentFilterCat; return matchBusca && matchCat; });
             filtrados.sort((a,b)=>String(a.Componente||'').localeCompare(String(b.Componente||''),'pt-BR',{sensitivity:'base',numeric:true}) || String(a.Local||'').localeCompare(String(b.Local||''),'pt-BR',{sensitivity:'base',numeric:true}));
             const totalPaginas = Math.ceil(filtrados.length / window.itemsPerPage) || 1; if(window.currentPageEstoque > totalPaginas) window.currentPageEstoque = totalPaginas;
             const inicio = (window.currentPageEstoque - 1) * window.itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + window.itemsPerPage);
@@ -1271,7 +1299,7 @@ window.atualizarInterfaceEstoque = function() {
                 if(['Funcionando','Em manutenção','Não funcionando'].includes(item.Condicao)) badge += '<br><span class="text-xs font-bold">'+escHtml(item.Condicao)+'</span>';
                 tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${escHtml(item.Categoria||'')}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${escHtml(item.Componente||'')}<br><span class="text-xs font-normal text-slate-500">${escHtml(item.Modelo||'')} / ${escHtml(item.Especificação||'')}</span></td><td class="px-6 py-4 text-sm text-blue-600">${escHtml(item.Local||'')}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${escHtml(item.Série||'')}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${escHtml(item.Patrimonio||'')}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
             });
-            if(document.getElementById('estoque-page-info')) document.getElementById('estoque-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + window.itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
+            if(document.getElementById('estoque-page-info')) { const unidadesFiltradas = filtrados.reduce((soma, item) => soma + (Number(item.Quantidade) || 0), 0); const filtroAtivo = window.currentFilterCat || window.currentSearchText; document.getElementById('estoque-page-info').innerText = filtrados.length ? `Mostrando ${inicio + 1} a ${Math.min(inicio + window.itemsPerPage, filtrados.length)} de ${filtrados.length} registros${filtroAtivo ? ` · ${unidadesFiltradas} unidade(s) no filtro` : ''}` : 'Nenhum registro encontrado para este filtro.'; }
             if(document.getElementById('btn-prev-estoque')) document.getElementById('btn-prev-estoque').disabled = window.currentPageEstoque === 1;
             if(document.getElementById('btn-next-estoque')) document.getElementById('btn-next-estoque').disabled = window.currentPageEstoque === totalPaginas;
         }
@@ -1365,11 +1393,31 @@ window.atualizarInterfaceEstoque = function() {
             window.estoqueLocal.forEach(item=>{const key=stockCategoryKey(item.Categoria);if(!map.has(key))map.set(key,{key,name:String(item.Categoria||'Sem categoria').trim(),total:0});map.get(key).total+=Number(item.Quantidade)||0;});
             return [...map.values()].sort((a,b)=>a.name.localeCompare(b.name,'pt-BR')).map((c,i)=>({...c,color:stockPalette[i%stockPalette.length]}));
         }
-        function selectStockCategory(key){ selectedStockCategory=key===selectedStockCategory?null:key; renderStockDetail();renderStockCategoryButtons(); }
+        function selectStockCategory(key){ selectedStockCategory=key===selectedStockCategory?null:key; renderStockDetail();renderStockCategoryButtons(); aplicarCategoriaNaTabela(selectedStockCategory,true); }
+        // Liga o gráfico "Divisão por categoria" à tabela "Estoque Consolidado".
+        // A tabela lista cada registro separadamente (série, patrimônio, local e quantidade).
+        function aplicarCategoriaNaTabela(key,mostrarTabela){
+            window.currentFilterCat=key||'';window.currentPageEstoque=1;
+            if(key){window.currentSearchText='';const busca=document.getElementById('search-table-estoque');if(busca)busca.value='';}
+            atualizarFiltroCategoriaTabela();atualizarInterfaceEstoque();
+            if(!mostrarTabela)return;
+            const aba=document.getElementById('view-estoque-btn');if(aba)aba.click();
+            const ancora=document.getElementById('tabelas-ancora');if(ancora)setTimeout(()=>ancora.scrollIntoView({behavior:'smooth',block:'start'}),50);
+        }
+        function sincronizarGraficoComTabela(key){ selectedStockCategory=key||null; renderStockDetail();renderStockCategoryButtons(); }
+        function atualizarFiltroCategoriaTabela(){
+            const select=document.getElementById('filter-cat-estoque');if(!select)return;
+            const cats=stockCategories();
+            if(window.currentFilterCat&&!cats.some(c=>c.key===window.currentFilterCat)){window.currentFilterCat='';window.currentPageEstoque=1;}
+            const todas=new Option('Todas as Categorias','');
+            select.replaceChildren(todas,...cats.map(c=>new Option(`${c.name} (${c.total})`,c.key)));
+            select.value=window.currentFilterCat||'';
+        }
         function renderStockCategoryButtons(){
             const area=document.getElementById('stock-category-buttons');if(!area)return;area.replaceChildren();
             stockCategories().forEach(c=>{const button=document.createElement('button');button.type='button';button.className='text-xs px-2 py-1 rounded border flex items-center gap-2';button.setAttribute('aria-pressed',String(c.key===selectedStockCategory));button.style.borderColor=c.key===selectedStockCategory?c.color:'#cbd5e1';button.style.fontWeight=c.key===selectedStockCategory?'700':'400';const swatch=document.createElement('span');swatch.style.cssText=`display:inline-block;width:10px;height:10px;border-radius:3px;background:${c.color}`;button.append(swatch,document.createTextNode(`${c.name} (${c.total})`));button.addEventListener('click',()=>selectStockCategory(c.key));area.appendChild(button);});
-            const reset=document.getElementById('stock-chart-reset');if(reset)reset.onclick=()=>{selectedStockCategory=null;renderStockDetail();renderStockCategoryButtons();};
+            const reset=document.getElementById('stock-chart-reset');if(reset)reset.onclick=()=>{selectedStockCategory=null;renderStockDetail();renderStockCategoryButtons();aplicarCategoriaNaTabela(null,false);};
+            atualizarFiltroCategoriaTabela();
         }
         function stockChartRows(){
             const map=new Map();
@@ -1586,7 +1634,7 @@ window.atualizarInterfaceEstoque = function() {
             report.classList.remove('active-print'); report.classList.add('hidden');
             simple.classList.remove('hidden'); simple.classList.add('active-print'); const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5); const titleObj = document.getElementById('print-simple-title'), dateObj = document.getElementById('print-simple-date'), theadObj = document.getElementById('print-simple-thead'), tbodyObj = document.getElementById('print-simple-tbody'); tbodyObj.innerHTML = '';
             if(tipo === 'estoque') {
-                titleObj.innerText = "Extrato: Inventário Consolidado"; theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente / Espec.</th><th>Local</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`; let filtrados = window.estoqueLocal.filter(item => { let matchBusca = true; if (window.currentSearchText) { const searchTerms = window.currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !window.currentFilterCat || String(item.Categoria||'') === window.currentFilterCat; return matchBusca && matchCat; }); let totaisEquip = {}; filtrados.sort((a, b) => { let cmp = String(a.Componente || '').localeCompare(String(b.Componente || '')); if (cmp !== 0) return cmp; return String(a.Local || '').localeCompare(String(b.Local || '')); }).forEach(i => { let eqName = String(i.Componente || 'Geral'); totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (Number(i.Quantidade) || 0); tbodyObj.innerHTML += `<tr><td>${escHtml(i.Categoria||'')}</td><td><b>${escHtml(i.Componente||'')}</b><br><span style="font-size:10px; color:#555;">${escHtml(i.Modelo||'')} / ${escHtml(i.Especificação||'')}</span></td><td>${escHtml(i.Local||'')}</td><td style="font-family:monospace;">${escHtml(i.Série||'')}</td><td style="font-family:monospace;">${escHtml(i.Patrimonio||'')}</td><td style="text-align:center; font-weight:bold;">${escHtml(i.Quantidade||0)}</td></tr>`; }); let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${escHtml(k)}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${escHtml(window.userEmail)} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
+                titleObj.innerText = "Extrato: Inventário Consolidado"; theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente / Espec.</th><th>Local</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`; let filtrados = window.estoqueLocal.filter(item => { let matchBusca = true; if (window.currentSearchText) { const searchTerms = window.currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !window.currentFilterCat || stockCategoryKey(item.Categoria) === window.currentFilterCat; return matchBusca && matchCat; }); let totaisEquip = {}; filtrados.sort((a, b) => { let cmp = String(a.Componente || '').localeCompare(String(b.Componente || '')); if (cmp !== 0) return cmp; return String(a.Local || '').localeCompare(String(b.Local || '')); }).forEach(i => { let eqName = String(i.Componente || 'Geral'); totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (Number(i.Quantidade) || 0); tbodyObj.innerHTML += `<tr><td>${escHtml(i.Categoria||'')}</td><td><b>${escHtml(i.Componente||'')}</b><br><span style="font-size:10px; color:#555;">${escHtml(i.Modelo||'')} / ${escHtml(i.Especificação||'')}</span></td><td>${escHtml(i.Local||'')}</td><td style="font-family:monospace;">${escHtml(i.Série||'')}</td><td style="font-family:monospace;">${escHtml(i.Patrimonio||'')}</td><td style="text-align:center; font-weight:bold;">${escHtml(i.Quantidade||0)}</td></tr>`; }); let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${escHtml(k)}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${escHtml(window.userEmail)} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
             } else if(tipo === 'rastreio') {
                 titleObj.innerText = "Extrato: Rastreamento Físico"; theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Local SIPAC</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`; let filtradosRastreio = window.localidadesLocais.filter(item => { if (!window.currentSearchRastreio) return true; const searchTerms = window.currentSearchRastreio.toLowerCase().split(' '); const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); }); let totaisEquip = {}; filtradosRastreio.sort((a, b) => { let cmp = String(a.Equipamento || '').localeCompare(String(b.Equipamento || '')); if (cmp !== 0) return cmp; return String(a.Local || '').localeCompare(String(b.Local || '')); }).forEach(loc => { let eqName = String(loc.Equipamento || 'Geral'); totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (Number(loc.Quantidade) || 0); tbodyObj.innerHTML += `<tr><td><b>${escHtml(loc.Equipamento||'')}</b></td><td>${escHtml(loc.Local||'')}</td><td>${escHtml(loc.LocalSipac||'')}</td><td>${escHtml(loc.Marca||'')}</td><td style="font-family:monospace;">${escHtml(loc.Serie||'')}</td><td style="font-family:monospace;">${escHtml(loc.Patrimonio||'')}</td><td style="text-align:center; font-weight:bold;">${escHtml(loc.Quantidade||0)}</td></tr>`; }); let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${escHtml(k)}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${escHtml(window.userEmail)} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
             } else if(tipo === 'voip') {
@@ -1846,9 +1894,16 @@ window.atualizarInterfaceEstoque = function() {
                 if(!email||password.length<6)throw new Error('Informe e-mail e senha com pelo menos 6 caracteres.');
                 secondaryApp=initializeApp(firebaseConfig,'setic-user-'+Date.now());
                 secondaryAuth=initializeAuth(secondaryApp,{persistence:inMemoryPersistence});
-                await createUserWithEmailAndPassword(secondaryAuth,email,password);
+                const credencial=await createUserWithEmailAndPassword(secondaryAuth,email,password);
+                const novoUid=credencial.user.uid;
                 document.getElementById('new-user-email').value='';document.getElementById('new-user-pass').value='';
-                showToast('Usuário comum criado. Sua sessão de administrador foi mantida.');
+                try{
+                    await setDoc(doc(db,'usuarios',novoUid),{email:credencial.user.email||email,ativo:true,criadoEm:serverTimestamp(),criadoPor:auth.currentUser.email||''});
+                    showToast('Usuário comum criado e autorizado. Sua sessão de administrador foi mantida.');
+                }catch(erroLista){
+                    console.error('Falha ao autorizar usuário:',erroLista);
+                    showToast('Conta criada, mas não autorizada. Veja a mensagem na tela.','error');alert('A conta '+email+' foi criada, mas NÃO foi incluída na lista de usuários autorizados.\n\nInclua manualmente no Console do Firebase:\nFirestore Database → coleção usuarios → documento '+novoUid+'\nCampos: email (string) e ativo (boolean = true).');
+                }
             }catch(e){showToast('Não foi possível cadastrar: '+e.message,'error');}
             finally{
                 if(secondaryAuth){try{await signOut(secondaryAuth);}catch{}}
