@@ -647,7 +647,7 @@
     <script type="module">
         import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, initializeAuth, inMemoryPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, doc, getDoc, setDoc, increment, updateDoc, addDoc, serverTimestamp, query, orderBy, limit, deleteDoc, runTransaction, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, getDoc, setDoc, increment, writeBatch, updateDoc, addDoc, serverTimestamp, query, orderBy, limit, deleteDoc, runTransaction, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         // Chart.js pode carregar antes/depois do plugin dependendo da rede/CDN.
         // O painel continua funcional mesmo se o plugin de rótulos não estiver disponível.
@@ -1421,7 +1421,7 @@ window.atualizarInterfaceEstoque = function() {
         }
         function stockChartRows(){
             const map=new Map();
-            window.estoqueLocal.forEach(item=>{const cat=stockCategoryKey(item.Categoria);if(selectedStockCategory!==null&&cat!==selectedStockCategory)return;const name=String(item.Componente||'Sem componente').trim();const key=JSON.stringify([cat,name]);if(!map.has(key))map.set(key,{name,cat,quantity:0});map.get(key).quantity+=Number(item.Quantidade)||0;});
+            window.estoqueLocal.forEach(item=>{const cat=stockCategoryKey(item.Categoria);if(selectedStockCategory!==null&&cat!==selectedStockCategory)return;const name=nomeEquipamento(item.Componente)||'SEM COMPONENTE';const key=JSON.stringify([cat,name]);if(!map.has(key))map.set(key,{name,cat,quantity:0});map.get(key).quantity+=Number(item.Quantidade)||0;});
             return [...map.values()].sort((a,b)=>b.quantity-a.quantity||a.name.localeCompare(b.name,'pt-BR'));
         }
         function wrapStockLabel(name){
@@ -1459,7 +1459,7 @@ window.atualizarInterfaceEstoque = function() {
             if(chartTopSaidas)chartTopSaidas.destroy();if(chartAlertasEstoque)chartAlertasEstoque.destroy();
             const withdrawn=dashboardWithdrawals();
             chartTopSaidas=compactDashboardChart('chartTopSaidas',withdrawn,'#2563eb',r=>openDashboardDetail('Retiradas após a atualização',[{name:r.name,detail:`Quantidade retirada: ${r.quantity}`} ]));
-            chartAlertasEstoque=compactDashboardChart('chartAlertasEstoque',dashboardAlerts().map(i=>({name:i.Componente||'Sem componente',quantity:Number(i.Quantidade)||0})),'#ef4444',showAlertDetails);
+            chartAlertasEstoque=compactDashboardChart('chartAlertasEstoque',dashboardAlerts().map(i=>({name:nomeEquipamento(i.Componente)||'SEM COMPONENTE',quantity:Number(i.Quantidade)||0})),'#ef4444',showAlertDetails);
             const status=document.getElementById('withdrawals-caption');if(status)status.textContent=withdrawn.length?'Somente saídas desde 27/09/2026, 10:01 (Brasília). Base: últimos 100 logs carregados.':'Nenhuma retirada desde a atualização. Histórico anterior preservado.';
         }
 
@@ -1654,13 +1654,15 @@ window.atualizarInterfaceEstoque = function() {
         // a outro registro pelo nome. Só entradas SEM patrimônio e SEM série são
         // somadas a um registro igual (mesmo componente, modelo, especificação e local).
         const idEstoque = v => String(v ?? '').trim().toUpperCase();
+        // Padrão único para nomes de equipamentos do Estoque (ex.: "Switchs" → "SWITCHS").
+        function nomeEquipamento(v) { return String(v ?? '').trim().replace(/\s+/g, ' ').toLocaleUpperCase('pt-BR'); }
         function localizarCadastroEstoque(lista, d) {
             const pat = idEstoque(d.patrim), ser = idEstoque(d.serie);
             if (pat || ser) {
                 const item = lista.find(i => (pat && (idEstoque(i.Patrimonio) === pat || idEstoque(i.Série) === pat)) || (ser && (idEstoque(i.Série) === ser || idEstoque(i.Patrimonio) === ser)));
                 return item ? { tipo: 'duplicado', item } : { tipo: 'novo' };
             }
-            const item = lista.find(i => !idEstoque(i.Patrimonio) && !idEstoque(i.Série) && String(i.Componente||'') === d.comp && String(i.Modelo||'') === d.mod && String(i.Especificação||'') === d.esp && String(i.Local||'') === d.local);
+            const item = lista.find(i => !idEstoque(i.Patrimonio) && !idEstoque(i.Série) && nomeEquipamento(i.Componente) === nomeEquipamento(d.comp) && String(i.Modelo||'') === d.mod && String(i.Especificação||'') === d.esp && String(i.Local||'') === d.local);
             return item ? { tipo: 'somar', item } : { tipo: 'novo' };
         }
         function descreverCadastro(i) { return `"${i.Componente||'item'}" (patrimônio ${i.Patrimonio||'-'}, série ${i.Série||'-'}, quantidade ${i.Quantidade ?? '-'})`; }
@@ -1668,7 +1670,7 @@ window.atualizarInterfaceEstoque = function() {
         window.salvarEstoque = async function() {
             if(document.getElementById('estoque-action-type').value==='new'){try{await requireAdmin();}catch(e){return showToast(e.message,'error');}}
             const actionType = document.getElementById('estoque-action-type') ? document.getElementById('estoque-action-type').value : 'new'; const editId = document.getElementById('estoque-edit-id') ? document.getElementById('estoque-edit-id').value : '';
-            const cat = document.getElementById('form-cat').value.trim(); const comp = document.getElementById('form-comp').value.trim(); const mod = sanitizeVal(document.getElementById('form-mod').value); const esp = sanitizeVal(document.getElementById('form-esp').value); const local = document.getElementById('form-local').value.trim(); const serie = sanitizeVal(document.getElementById('form-serie-estoque').value); const patrim = sanitizeVal(document.getElementById('form-patrimonio-estoque').value); const qtd = Number(document.getElementById('form-qtd').value); const minEstoque = minimoInformado(document.getElementById('form-minimo').value); if(minEstoque===null)return showToast('Informe um estoque mínimo inteiro, maior ou igual a zero.','error'); 
+            const cat = document.getElementById('form-cat').value.trim(); const comp = nomeEquipamento(document.getElementById('form-comp').value); const mod = sanitizeVal(document.getElementById('form-mod').value); const esp = sanitizeVal(document.getElementById('form-esp').value); const local = document.getElementById('form-local').value.trim(); const serie = sanitizeVal(document.getElementById('form-serie-estoque').value); const patrim = sanitizeVal(document.getElementById('form-patrimonio-estoque').value); const qtd = Number(document.getElementById('form-qtd').value); const minEstoque = minimoInformado(document.getElementById('form-minimo').value); if(minEstoque===null)return showToast('Informe um estoque mínimo inteiro, maior ou igual a zero.','error'); 
             if(actionType === 'edit' && !editId) return showToast('Selecione um registro existente para atualizar.', 'error');
             if(!cat || !comp || !local || !Number.isInteger(qtd) || qtd < 0 || (actionType !== 'edit' && qtd === 0)) return showToast("Preencha Categoria, Componente, Local e Qtd.", "error");
             const btn = document.getElementById('btn-save-item'); const originalText = btn.innerText; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
@@ -1721,7 +1723,7 @@ window.atualizarInterfaceEstoque = function() {
                     // 1) Ler e conferir TODAS as linhas antes de gravar qualquer coisa.
                     const linhas = [], problemas = [], vistos = new Map();
                     json.forEach((row, index) => {
-                        const comp = getVal(row, ['COMPONENTE', 'EQUIPAMENTO', 'NOME', 'ITEM']); if (!comp) return;
+                        const comp = nomeEquipamento(getVal(row, ['COMPONENTE', 'EQUIPAMENTO', 'NOME', 'ITEM'])); if (!comp) return;
                         const numero = index + 2; // linha 1 da planilha é o cabeçalho
                         const cat = getVal(row, ['CATEGORIA', 'TIPO', 'GRUPO']) || 'Geral'; const mod = getVal(row, ['MODELO', 'MARCA/MODELO', 'MARCA MODELO', 'MARCA']); const esp = getVal(row, ['ESPECIFICAÇÃO', 'ESPECIFICACAO', 'Especificação', 'Especificacao']); const local = getVal(row, ['LOCAL FISICO', 'LOCAL', 'Local', 'LOCAL FÍSICO']); const serie = getVal(row, ['Nº DE SÉRIE', 'N DE SERIE', 'Nº DE SERIE', 'Nº Série', 'N Serie', 'SÉRIE', 'Série', 'SERIE', 'NUMERO DE SERIE']); const patrim = getVal(row, ['Nº PATRIMÔNIO', 'Nº PATRIMONIO', 'N Patrimônio', 'N Patrimonio', 'PATRIMÔNIO', 'PATRIMONIO', 'Patrimônio', 'Patrimonio']);
                         const qtdTexto = getVal(row, ['QUANTIDADE', 'Quantidade', 'QTD', 'Qtd']);
@@ -1801,13 +1803,13 @@ window.atualizarInterfaceEstoque = function() {
             const container = document.getElementById(`admin-${tipo}-list-container`); const itemsDiv = document.getElementById(`admin-${tipo}-items`); const btn = document.getElementById(`btn-delete-${tipo}-batch`); const selectAllCb = document.getElementById(`admin-${tipo}-select-all`);
             itemsDiv.innerHTML = ''; selectAllCb.checked = false; btn.disabled = true; btn.innerHTML = `<i class="fas fa-trash-alt mr-1"></i> Apagar Selecionados (0)`;
             if (text.length >= 2) {
-                const searchTerms = text.split(' '); let count = 0; let arrayBase = tipo === 'loc' ? window.localidadesLocais : tipo === 'est' ? window.estoqueLocal : window.voipLocal;
+                const searchTerms = normalized(text).split(/\s+/).filter(Boolean); let count = 0; let arrayBase = tipo === 'loc' ? window.localidadesLocais : tipo === 'est' ? window.estoqueLocal : window.voipLocal;
                 arrayBase.forEach(item => {
                     let display = '';
                     if(tipo === 'loc') display = `[RASTREIO] ${item.Equipamento} | Loc: ${item.Local} | Patr: ${item.Patrimonio||''} | Série: ${item.Serie||''}`;
                     else if(tipo === 'est') display = `[ESTOQUE] ${item.Componente} | Loc: ${item.Local} | Patr: ${item.Patrimonio||''} | Série: ${item.Série||''}`;
                     else if(tipo === 'voip') display = `[VOIP] Ramal: ${item.Ramal} | Setor: ${item.Setor} | IP: ${item.Ip}`;
-                    if (searchTerms.every(term => String(display).toLowerCase().includes(term))) { const div = document.createElement('div'); div.className = "flex items-start gap-2 border-b border-gray-200 pb-1"; const cb = document.createElement('input'); cb.type = 'checkbox'; cb.className = `cb-del-${tipo} mt-0.5 rounded border-gray-400 cursor-pointer`; cb.value = String(item.id); const lb = document.createElement('label'); lb.className = 'text-slate-600 leading-tight'; lb.textContent = display; div.append(cb, document.createTextNode(' '), lb); itemsDiv.appendChild(div); count++; }
+                    if (searchTerms.every(term => normalized(display).includes(term))) { const div = document.createElement('div'); div.className = "flex items-start gap-2 border-b border-gray-200 pb-1"; const cb = document.createElement('input'); cb.type = 'checkbox'; cb.className = `cb-del-${tipo} mt-0.5 rounded border-gray-400 cursor-pointer`; cb.value = String(item.id); const lb = document.createElement('label'); lb.className = 'text-slate-600 leading-tight'; lb.textContent = display; div.append(cb, document.createTextNode(' '), lb); itemsDiv.appendChild(div); count++; }
                 });
                 if (count > 0) { container.classList.remove('hidden'); container.classList.add('flex'); } else { container.classList.remove('flex'); container.classList.add('hidden'); }
             } else { container.classList.remove('flex'); container.classList.add('hidden'); }
@@ -1973,13 +1975,15 @@ window.atualizarInterfaceEstoque = function() {
         const auditPanel=document.createElement('section');auditPanel.append(auditHeader,auditTable);
         const logPanel=document.createElement('section');
         logPanel.innerHTML='<h3 class="font-bold text-lg mb-2">Excluir logs</h3><p class="text-sm mb-3">Apagar logs pode remover os dados de reversão e alterar o indicador de itens retirados. Os cadastros de estoque, rastreio e ramais não serão excluídos.</p><input id="admin-log-search" class="border rounded p-2 w-full mb-3" placeholder="Pesquisar entre os 100 logs mais recentes"><div id="admin-log-list" style="max-height:260px;overflow:auto"></div><button type="button" id="admin-log-delete" class="bg-red-600 text-white rounded p-2 mt-3">Excluir logs selecionados</button>';
+        const namesPanel=document.createElement('section');
+        namesPanel.innerHTML='<h3 class="font-bold text-lg mb-2">Padronizar nomes do estoque</h3><p class="text-sm mb-3">Converte os nomes dos componentes do Estoque para letras MAIÚSCULAS, no mesmo padrão dos demais (exemplo: "Switchs" → "SWITCHS"). Quantidade, série, patrimônio, local e categoria não são alterados. Novas entradas, importações e transferências já são gravadas neste padrão.</p><button type="button" id="admin-names-preview" class="bg-blue-600 text-white rounded p-2">Verificar nomes fora do padrão</button><p id="admin-names-status" role="status" class="text-sm my-3"></p><div id="admin-names-list" style="max-height:260px;overflow:auto"></div><button type="button" id="admin-names-apply" class="bg-emerald-600 text-white rounded p-2 mt-3" hidden>Padronizar nomes</button>';
         const nav=document.createElement('div');nav.className='admin-actions';nav.setAttribute('aria-label','Funções administrativas');
         const transferPanel=document.getElementById('transfer-form');
         transferPanel.classList.remove('hidden');
         document.getElementById('transfer-open').remove();
-        const adminSections={entry:entryHost,transfer:transferPanel,reversal:reversalPanel,deletion:deletePanel,users:userPanel,access:accessPanel,audit:auditPanel,logs:logPanel};
+        const adminSections={entry:entryHost,transfer:transferPanel,reversal:reversalPanel,deletion:deletePanel,users:userPanel,access:accessPanel,audit:auditPanel,logs:logPanel,names:namesPanel};
         entryButton.textContent='Entrada';entryButton.dataset.adminSection='entry';nav.append(entryButton);
-        for(const [key,title] of [['transfer','Transferir equipamento'],['reversal','Reversão de itens'],['deletion','Excluir registros'],['users','Novo usuário'],['access','Gerir acessos'],['audit','Auditoria'],['logs','Excluir logs']]){
+        for(const [key,title] of [['transfer','Transferir equipamento'],['reversal','Reversão de itens'],['deletion','Excluir registros'],['users','Novo usuário'],['access','Gerir acessos'],['audit','Auditoria'],['logs','Excluir logs'],['names','Padronizar nomes']]){
             const button=document.createElement('button');button.type='button';button.textContent=title;button.dataset.adminSection=key;nav.append(button);
         }
         const intro=document.createElement('p');intro.className='text-slate-500 text-sm mb-4';intro.textContent='Escolha uma opção para abrir os campos necessários.';
@@ -1987,12 +1991,12 @@ window.atualizarInterfaceEstoque = function() {
         adminContent.replaceChildren(adminHeader,intro,nav,...Object.values(adminSections));
         adminContent.classList.remove('h-full');
 
-        const actionIcons={entry:'fa-boxes',transfer:'fa-exchange-alt',reversal:'fa-undo-alt',deletion:'fa-trash-alt',users:'fa-user-plus',access:'fa-user-shield',audit:'fa-history',logs:'fa-eraser'};
+        const actionIcons={entry:'fa-boxes',transfer:'fa-exchange-alt',reversal:'fa-undo-alt',deletion:'fa-trash-alt',users:'fa-user-plus',access:'fa-user-shield',audit:'fa-history',logs:'fa-eraser',names:'fa-font'};
         document.querySelectorAll('[data-admin-section]').forEach(button=>{const icon=document.createElement('i');icon.className='fas '+actionIcons[button.dataset.adminSection];icon.setAttribute('aria-hidden','true');button.prepend(icon);});
         document.querySelectorAll('[data-cadastro-base]').forEach(button=>{const icon=document.createElement('i');icon.className='fas '+({estoque:'fa-boxes',loc:'fa-map-marker-alt',voip:'fa-phone-alt'})[button.dataset.cadastroBase];icon.setAttribute('aria-hidden','true');button.prepend(icon);});
 
         function closeAdminSections(){for(const section of Object.values(adminSections))section.hidden=true;nav.querySelectorAll('button').forEach(b=>b.setAttribute('aria-expanded','false'));}
-        function showAdminSection(key){const open=adminSections[key].hidden;closeAdminSections();if(open){adminSections[key].hidden=false;nav.querySelector(`[data-admin-section="${key}"]`).setAttribute('aria-expanded','true');if(key==='logs')renderAdminLogs();if(key==='transfer'){transferDirectionChanged();transferEl('direction').focus();}}}
+        function showAdminSection(key){const open=adminSections[key].hidden;closeAdminSections();if(open){adminSections[key].hidden=false;nav.querySelector(`[data-admin-section="${key}"]`).setAttribute('aria-expanded','true');if(key==='logs')renderAdminLogs();if(key==='names')mostrarNomesForaDoPadrao();if(key==='transfer'){transferDirectionChanged();transferEl('direction').focus();}}}
         nav.addEventListener('click',async event=>{const button=event.target.closest('[data-admin-section]');if(!button)return;try{await requireAdmin();showAdminSection(button.dataset.adminSection);}catch(e){showToast(e.message,'error');}});
         closeAdminSections();
         function renderAdminLogs(){
@@ -2011,6 +2015,37 @@ window.atualizarInterfaceEstoque = function() {
             if(!confirm(`Excluir definitivamente ${ids.length} logs? Esta ação não pode ser desfeita. Reversões vinculadas poderão deixar de estar disponíveis e os indicadores de retiradas poderão mudar.`))return;
             const button=document.getElementById('admin-log-delete');button.disabled=true;
             try{await deleteAdminLogs(ids);window.logsLocal=window.logsLocal.filter(log=>!ids.includes(log.id));renderAdminLogs();showToast('Logs selecionados excluídos.');}catch(e){showToast(e.message,'error');}finally{button.disabled=false;}
+        };
+
+        // Administrador → Padronizar nomes: mostra a lista antes e só grava após confirmação.
+        let nomesPendentes=[];
+        function mostrarNomesForaDoPadrao(){
+            nomesPendentes=(window.estoqueLocal||[]).filter(i=>nomeEquipamento(i.Componente)&&String(i.Componente)!==nomeEquipamento(i.Componente))
+                .map(i=>({id:i.id,de:String(i.Componente),para:nomeEquipamento(i.Componente),local:i.Local||'',patr:i.Patrimonio||''}))
+                .sort((a,b)=>a.para.localeCompare(b.para,'pt-BR',{numeric:true}));
+            const area=document.getElementById('admin-names-list'),status=document.getElementById('admin-names-status'),aplicar=document.getElementById('admin-names-apply');
+            area.replaceChildren();
+            if(!nomesPendentes.length){status.textContent='Todos os nomes do Estoque já estão no padrão.';aplicar.hidden=true;return;}
+            status.textContent=`${nomesPendentes.length} registro(s) serão alterados. Confira antes de confirmar:`;
+            nomesPendentes.forEach(n=>{const linha=document.createElement('p');linha.className='border-b py-1 text-sm';linha.textContent=`${n.de} → ${n.para} | Local: ${n.local||'-'} | Patrimônio: ${n.patr||'-'}`;area.append(linha);});
+            aplicar.hidden=false;aplicar.textContent=`Padronizar ${nomesPendentes.length} nome(s)`;
+        }
+        document.getElementById('admin-names-preview').onclick=async()=>{try{await requireAdmin();mostrarNomesForaDoPadrao();}catch(e){showToast(e.message,'error');}};
+        document.getElementById('admin-names-apply').onclick=async()=>{
+            const lista=[...nomesPendentes];if(!lista.length)return;
+            if(!confirm(`Padronizar ${lista.length} nome(s) do Estoque para letras MAIÚSCULAS?\n\nSomente o nome do componente muda. A alteração fica registrada na Auditoria com o nome anterior de cada registro.`))return;
+            const botao=document.getElementById('admin-names-apply');botao.disabled=true;let feitos=0;
+            try{
+                await requireAdmin();
+                for(let i=0;i<lista.length;i+=200){
+                    const parte=lista.slice(i,i+200),lote=writeBatch(db);
+                    parte.forEach(n=>lote.update(doc(db,'estoque',n.id),{Componente:n.para}));
+                    lote.set(doc(collection(db,'logs')),{tipo:'PADRONIZAÇÃO DE NOMES',itemNome:`${parte.length} registro(s) do Estoque`,qtd:parte.length,chamado:'Nomes de componentes convertidos para maiúsculas',alteracoes:parte.map(n=>({id:n.id,de:n.de,para:n.para})),usuario:auth.currentUser.email||'',dataHora:serverTimestamp()});
+                    await lote.commit();feitos+=parte.length;
+                }
+                showToast(`${feitos} nome(s) padronizado(s).`);
+            }catch(e){showToast((feitos?`${feitos} nome(s) padronizado(s); o restante falhou: `:'Não foi possível padronizar: ')+e.message,'error');}
+            finally{botao.disabled=false;setTimeout(mostrarNomesForaDoPadrao,600);}
         };
 
         // Each submitted operation has one stable destination and audit ID, including retries.
@@ -2033,7 +2068,7 @@ window.atualizarInterfaceEstoque = function() {
                 } else {
                     const minimum=Number(input.minimum);
                     if(!input.category.trim()||String(input.minimum).trim()===''||!Number.isSafeInteger(minimum)||minimum<0) throw new Error('Informe categoria e estoque mínimo válido.');
-                    target={...data,Categoria:input.category.trim(),Componente:data.Equipamento||'',Modelo:data.Marca||'',Série:data.Serie||'',Especificação:data.Especificação||'',EstoqueMinimo:minimum,Local:location,Quantidade:quantity};
+                    target={...data,Categoria:input.category.trim(),Componente:nomeEquipamento(data.Equipamento),Modelo:data.Marca||'',Série:data.Serie||'',Especificação:data.Especificação||'',EstoqueMinimo:minimum,Local:location,Quantidade:quantity};
                 }
                 // Store the original snapshot for audit, while keeping equipment metadata intact.
                 tx.set(destinationRef,target);
