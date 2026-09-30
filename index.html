@@ -486,7 +486,7 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
                         <div class="bg-blue-50/50 p-6 rounded-xl border border-blue-100 shadow-sm flex flex-col">
                             <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-blue-800"><i class="fas fa-keyboard mr-2"></i>Gestão Manual</h3><select id="estoque-action-type" aria-hidden="true" tabindex="-1" class="hidden border-blue-300 rounded text-xs py-1 px-2 focus:ring-blue-500 bg-white font-bold text-blue-700 shadow-sm cursor-pointer outline-none"><option value="new">Novo Registo</option><option value="edit">Editar Registo</option></select></div>
-                            <div id="estoque-edit-container" class="relative hidden mb-4"><i class="fas fa-search absolute left-3 top-3 text-orange-500"></i><input list="lista-edit-estoque" id="estoque-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500" placeholder="Pesquise Equipamento, Marca, Série ou Patr..."><datalist id="lista-edit-estoque"></datalist></div>
+                            <div id="edit-filtros" class="hidden mb-3"><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><div><label for="edit-filtro-categoria" class="block text-xs font-bold text-slate-700 uppercase">Categoria</label><select id="edit-filtro-categoria" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm bg-white"><option value="">Todas as categorias</option></select></div><div><label for="edit-filtro-equipamento" class="block text-xs font-bold text-slate-700 uppercase">Equipamento</label><select id="edit-filtro-equipamento" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm bg-white"><option value="">Todos os equipamentos</option></select></div></div></div><div id="estoque-edit-container" class="relative hidden mb-4"><i class="fas fa-search absolute left-3 top-3 text-orange-500"></i><input list="lista-edit-estoque" id="estoque-edit-input" class="w-full rounded border-orange-300 border py-2 pl-10 text-sm bg-orange-50 font-medium text-orange-900 outline-none focus:ring-orange-500 focus:border-orange-500" placeholder="Pesquise Equipamento, Marca, Série ou Patr..."><datalist id="lista-edit-estoque"></datalist></div>
                             <input type="hidden" id="estoque-edit-id">
                             <div class="space-y-4 flex-1">
                                 <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-700 uppercase">Categoria Macro *</label><input list="lista-categorias" id="form-cat" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div><div><label class="block text-xs font-bold text-slate-700 uppercase">Componente *</label><input list="lista-componentes" id="form-comp" class="mt-1 block w-full rounded border-gray-300 border p-2 text-sm"></div></div>
@@ -514,6 +514,7 @@
                             <div><label class="block text-sm font-semibold text-slate-700">Pesquisar Equipamento</label><div class="relative"><i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i><input list="lista-saida-items" id="saida-item-input" class="mt-1 block w-full rounded-md border-gray-300 border py-3 pl-10 shadow-sm focus:ring-red-500 focus:border-red-500 text-sm font-medium"><datalist id="lista-saida-items"></datalist></div></div><section id="saida-conferencia" hidden class="rounded-xl border border-blue-200 p-4 mt-4"><h3 class="font-bold text-lg mb-2">Confira o equipamento selecionado</h3><p class="text-sm text-slate-500 mb-3">Dados do cadastro para conferência. Para corrigir informações, utilize Atualizar.</p><div id="saida-ficha" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div><p id="saida-saldo-previsto" role="status" class="font-bold mt-4"></p></section>
                             <hr class="border-gray-200">
                             <div class="grid grid-cols-2 gap-5"><div><label class="block text-sm font-semibold text-slate-700">Qtd Retirada</label><input type="number" id="saida-qtd" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500" min="1" value="1"></div><div><label class="block text-sm font-semibold text-slate-700">Sistema / Chamado</label><input type="text" id="saida-chamado" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500"></div></div>
+                            <div><label for="saida-tecnico" class="block text-sm font-semibold text-slate-700">Técnico responsável *</label><input type="text" id="saida-tecnico" maxlength="80" autocomplete="off" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500" placeholder="Digite o nome do técnico que atendeu o chamado"><p class="text-xs text-slate-500 mt-1">O nome fica registrado junto ao chamado. O usuário que confirmou a baixa também é gravado automaticamente no histórico.</p></div>
                         </div>
                         <button id="btn-register-saida" class="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-md hover:bg-red-700 transition shadow text-lg"><i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa</button>
                     </div>
@@ -781,7 +782,7 @@
                 document.getElementById('print-simple-title').innerText = "Auditoria de Movimentações"; document.getElementById('print-simple-date').innerText = `Gerado por: ${window.userEmail} em ${new Date().toLocaleDateString('pt-BR')}`;
                 document.getElementById('print-simple-thead').innerHTML = `<tr><th>Data/Hora</th><th>Ação</th><th>Item</th><th style="text-align:center;">Qtd</th><th>Usuário / Ref.</th></tr>`;
                 const tb = document.getElementById('print-simple-tbody'); tb.innerHTML = '';
-                window.logsLocal.forEach(log => { let dateStr = log.dataHora ? log.dataHora.toDate().toLocaleDateString('pt-BR') + ' ' + log.dataHora.toDate().toLocaleTimeString('pt-BR').substring(0,5) : "N/A"; tb.innerHTML += `<tr><td>${dateStr}</td><td><b>${escHtml(log.tipo)}</b></td><td>${escHtml(log.itemNome)}</td><td style="text-align:center;">${escHtml(log.qtd)}</td><td>${escHtml((log.chamado||'') + (log.usuario ? ` (${log.usuario})` : ''))}</td></tr>`; });
+                window.logsLocal.forEach(log => { let dateStr = typeof log.dataHora?.toDate === 'function' ? log.dataHora.toDate().toLocaleDateString('pt-BR') + ' ' + log.dataHora.toDate().toLocaleTimeString('pt-BR').substring(0,5) : "N/A"; tb.innerHTML += `<tr><td>${dateStr}</td><td><b>${escHtml(log.tipo)}</b></td><td>${escHtml(log.itemNome)}</td><td style="text-align:center;">${escHtml(log.qtd)}</td><td>${escHtml((log.chamado||'') + (log.usuario ? ` (${log.usuario})` : ''))}</td></tr>`; });
                 executarImpressao(document.getElementById('printable-simple-table'));
                 return;
             }
@@ -1757,41 +1758,48 @@ window.atualizarInterfaceEstoque = function() {
         }
 
         // ================= GESTÃO MANUAL E UPLOADS =================
-        // ===== Baixa / Saída: filtros Categoria → Equipamento =====
-        let pesquisarSaida=null;
+        // ===== Filtros Categoria → Equipamento (Baixa / Saída e Atualizar — Estoque) =====
+        let pesquisarSaida=null,pesquisarEdicao=null;
         const chaveGrupo=g=>g?g.cat+'|'+chaveTexto(g.nome):'';
-        function filtroSaidaAtivo(){return !!(document.getElementById('saida-filtro-categoria')?.value||document.getElementById('saida-filtro-equipamento')?.value);}
-        function itemPassaFiltroSaida(item){
-            if(!item)return false;
-            const cat=document.getElementById('saida-filtro-categoria')?.value||'',equip=document.getElementById('saida-filtro-equipamento')?.value||'';
+        const FILTROS={saida:{cat:'saida-filtro-categoria',eq:'saida-filtro-equipamento',input:'saida-item-input'},estoque:{cat:'edit-filtro-categoria',eq:'edit-filtro-equipamento',input:'estoque-edit-input'}};
+        function filtroAtivo(kind){const f=FILTROS[kind];return !!f&&!!(document.getElementById(f.cat)?.value||document.getElementById(f.eq)?.value);}
+        function itemPassaFiltro(kind,item){
+            if(!item)return false;const f=FILTROS[kind];if(!f)return true;
+            const cat=document.getElementById(f.cat)?.value||'',equip=document.getElementById(f.eq)?.value||'';
             if(cat&&stockCategoryKey(item.Categoria)!==cat)return false;
             if(equip&&chaveGrupo(grupoDoItem(item))!==equip)return false;
             return true;
         }
-        function atualizarFiltrosSaida(){
-            const selCat=document.getElementById('saida-filtro-categoria'),selEq=document.getElementById('saida-filtro-equipamento');if(!selCat||!selEq)return;
+        function atualizarFiltros(kind){
+            const f=FILTROS[kind],selCat=document.getElementById(f.cat),selEq=document.getElementById(f.eq);if(!selCat||!selEq)return;
             const catAtual=selCat.value,eqAtual=selEq.value,cats=stockCategories();
             selCat.replaceChildren(new Option('Todas as categorias',''),...cats.map(c=>new Option(`${c.name} (${c.total})`,c.key)));
             selCat.value=cats.some(c=>c.key===catAtual)?catAtual:'';
             const grupos=gruposEstoque().filter(g=>!selCat.value||g.cat===selCat.value).sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR',{numeric:true}));
             selEq.replaceChildren(new Option(selCat.value?'Todos os equipamentos da categoria':'Todos os equipamentos',''),...grupos.map(g=>new Option(`${g.nome} (${g.total} un. · ${g.itens.length} registro(s))`,chaveGrupo(g))));
             selEq.value=grupos.some(g=>chaveGrupo(g)===eqAtual)?eqAtual:'';
-            const limpar=document.getElementById('saida-filtro-limpar');if(limpar)limpar.hidden=!filtroSaidaAtivo();
+            if(kind==='saida'){const limpar=document.getElementById('saida-filtro-limpar');if(limpar)limpar.hidden=!filtroAtivo('saida');}
         }
-        function aplicarFiltroSaida(){
-            atualizarFiltrosSaida();
-            const input=document.getElementById('saida-item-input'),selecionado=mapItensSaida[input.value];
-            // Se a unidade escolhida não pertence mais ao filtro, a seleção é desfeita.
-            if(selecionado&&!itemPassaFiltroSaida(selecionado)){input.value='';renderWithdrawalDetails();}
-            if(pesquisarSaida){if(filtroSaidaAtivo()||input.value.trim())pesquisarSaida();else document.getElementById('saida-item-input-suggestions')?.replaceChildren();}
+        function aplicarFiltro(kind){
+            atualizarFiltros(kind);
+            const f=FILTROS[kind],input=document.getElementById(f.input),mapa=kind==='saida'?mapItensSaida:mapEditEstoque,selecionado=mapa[input.value];
+            // Se o registro escolhido não pertence ao novo filtro, a seleção é desfeita.
+            if(selecionado&&!itemPassaFiltro(kind,selecionado)){input.value='';if(kind==='saida')renderWithdrawalDetails();else window.filtrarEdicao('estoque','');}
+            const pesquisar=kind==='saida'?pesquisarSaida:pesquisarEdicao;
+            if(pesquisar){if(filtroAtivo(kind)||input.value.trim())pesquisar();else document.getElementById(f.input+'-suggestions')?.replaceChildren();}
         }
-        document.getElementById('saida-filtro-categoria').addEventListener('change',()=>{document.getElementById('saida-filtro-equipamento').value='';aplicarFiltroSaida();});
-        document.getElementById('saida-filtro-equipamento').addEventListener('change',aplicarFiltroSaida);
-        document.getElementById('saida-filtro-limpar').addEventListener('click',()=>{document.getElementById('saida-filtro-categoria').value='';document.getElementById('saida-filtro-equipamento').value='';aplicarFiltroSaida();});
+        function limparFiltros(kind){const f=FILTROS[kind];document.getElementById(f.cat).value='';document.getElementById(f.eq).value='';aplicarFiltro(kind);}
+        // Compatibilidade com os nomes usados na Baixa / Saída
+        const filtroSaidaAtivo=()=>filtroAtivo('saida'),itemPassaFiltroSaida=item=>itemPassaFiltro('saida',item),atualizarFiltrosSaida=()=>atualizarFiltros('saida');
+        for(const kind of Object.keys(FILTROS)){
+            document.getElementById(FILTROS[kind].cat).addEventListener('change',()=>{document.getElementById(FILTROS[kind].eq).value='';aplicarFiltro(kind);});
+            document.getElementById(FILTROS[kind].eq).addEventListener('change',()=>aplicarFiltro(kind));
+        }
+        document.getElementById('saida-filtro-limpar').addEventListener('click',()=>limparFiltros('saida'));
 
         function atualizarDatalistSaida() { const dl = document.getElementById('lista-saida-items'); if(!dl) return; dl.innerHTML = ''; mapItensSaida = {}; [...window.estoqueLocal].sort((a,b) => String(a.Categoria||'').localeCompare(String(b.Categoria||''))).forEach(i => { const text = `[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||''}) | Série: ${i.Série||''} | Patrimônio: ${i.Patrimonio||''} - Qtd: ${i.Quantidade||0}`; mapItensSaida[text + ' [ID: ' + i.id + ']'] = i; }); renderWithdrawalDetails(); atualizarFiltrosSaida(); const campoSaida=document.getElementById('saida-item-input'); if(pesquisarSaida&&filtroSaidaAtivo()&&!campoSaida.value.trim())pesquisarSaida(); }
         function atualizarSelectEdicaoLocais() { const dl = document.getElementById('lista-edit-locais'); if(!dl) return; dl.innerHTML = ''; mapEditLocais = {}; [...window.localidadesLocais].sort((a,b) => String(a.Equipamento||'').localeCompare(String(b.Equipamento||''))).forEach(loc => { const text = `${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio || ''} | Série: ${loc.Serie || ''}`; mapEditLocais[text + ' [ID: ' + loc.id + ']'] = loc; }); }
-        function atualizarSelectEdicaoEstoque() { const dl = document.getElementById('lista-edit-estoque'); if(!dl) return; dl.innerHTML = ''; mapEditEstoque = {}; [...window.estoqueLocal].sort((a,b) => String(a.Componente||'').localeCompare(String(b.Componente||''))).forEach(item => { const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || ''} | Série: ${item.Série || ''}`; mapEditEstoque[text + ' [ID: ' + item.id + ']'] = item; }); }
+        function atualizarSelectEdicaoEstoque() { const dl = document.getElementById('lista-edit-estoque'); if(!dl) return; dl.innerHTML = ''; mapEditEstoque = {}; [...window.estoqueLocal].sort((a,b) => String(a.Componente||'').localeCompare(String(b.Componente||''))).forEach(item => { const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || ''} | Série: ${item.Série || ''}`; mapEditEstoque[text + ' [ID: ' + item.id + ']'] = item; }); atualizarFiltros('estoque'); const campoEdicao=document.getElementById('estoque-edit-input'); if(pesquisarEdicao&&filtroAtivo('estoque')&&!campoEdicao.value.trim())pesquisarEdicao(); }
         function atualizarSelectEdicaoVoip() { const dl = document.getElementById('lista-edit-voip'); if(!dl) return; dl.innerHTML = ''; mapEditVoip = {}; [...window.voipLocal].sort((a,b) => String(a.Ramal||'').localeCompare(String(b.Ramal||''))).forEach(v => { const text = `Ramal: ${v.Ramal} | Setor: ${v.Setor} | IP: ${v.Ip}`; mapEditVoip[text + ' [ID: ' + v.id + ']'] = v; }); }
 
         // Equipamento com patrimônio ou série é uma unidade individual: nunca é somado
@@ -1913,8 +1921,12 @@ window.atualizarInterfaceEstoque = function() {
 
         window.registrarSaida = async function(){
             const item=mapItensSaida[document.getElementById('saida-item-input').value],qty=Number(document.getElementById('saida-qtd').value),chamado=document.getElementById('saida-chamado').value.trim();
-            if(!item||!Number.isInteger(qty)||qty<=0)return showToast('Selecione um item e quantidade válida.','error');const button=document.getElementById('btn-register-saida');if(button.disabled)return;button.disabled=true;
-            try{const ref=doc(db,'estoque',item.id),logRef=doc(collection(db,'logs'));await runTransaction(db,async tx=>{const snap=await tx.get(ref);if(!snap.exists())throw new Error('Item não encontrado.');const data=snap.data(),saldo=Number(data.Quantidade);if(!Number.isFinite(saldo)||saldo<qty)throw new Error('Saldo insuficiente.');if(saldo!==Number(item.Quantidade))throw new Error('O saldo mudou desde a seleção. Pesquise novamente e confira a quantidade atual.');tx.update(ref,{Quantidade:saldo-qty});tx.set(logRef,{tipo:'SAÍDA',itemId:item.id,itemNome:`${data.Componente||''} (${data.Especificação||''})`,qtd:qty,chamado,usuario:window.userEmail,dataHora:serverTimestamp(),revertida:false});});showToast('Baixa registrada.');document.getElementById('saida-item-input').value='';document.getElementById('saida-qtd').value=1;document.getElementById('saida-chamado').value='';renderWithdrawalDetails();}catch(e){showToast(e.message,'error');}finally{button.disabled=false;}
+            if(!item||!Number.isInteger(qty)||qty<=0)return showToast('Selecione um item e quantidade válida.','error');
+            const tecnico=document.getElementById('saida-tecnico').value.trim().replace(/\s+/g,' ');
+            if(tecnico.length<3)return showToast('Digite o nome do técnico responsável (pelo menos 3 letras).','error');
+            // Sem campo novo no histórico (regras do Firestore inalteradas): o técnico vai junto ao texto do chamado.
+            const chamadoComTecnico=(chamado?chamado+' | ':'')+'Técnico responsável: '+tecnico;const button=document.getElementById('btn-register-saida');if(button.disabled)return;button.disabled=true;
+            try{const ref=doc(db,'estoque',item.id),logRef=doc(collection(db,'logs'));await runTransaction(db,async tx=>{const snap=await tx.get(ref);if(!snap.exists())throw new Error('Item não encontrado.');const data=snap.data(),saldo=Number(data.Quantidade);if(!Number.isFinite(saldo)||saldo<qty)throw new Error('Saldo insuficiente.');if(saldo!==Number(item.Quantidade))throw new Error('O saldo mudou desde a seleção. Pesquise novamente e confira a quantidade atual.');tx.update(ref,{Quantidade:saldo-qty});tx.set(logRef,{tipo:'SAÍDA',itemId:item.id,itemNome:`${data.Componente||''} (${data.Especificação||''})`,qtd:qty,chamado:chamadoComTecnico,usuario:window.userEmail,dataHora:serverTimestamp(),revertida:false});});showToast('Baixa registrada.');document.getElementById('saida-item-input').value='';document.getElementById('saida-qtd').value=1;document.getElementById('saida-chamado').value='';renderWithdrawalDetails();}catch(e){showToast(e.message,'error');}finally{button.disabled=false;}
         };
 
         window.processarUploadEstoque = async function() {
@@ -2533,17 +2545,18 @@ function addExplicitSearch(id,kind){
  const button=document.createElement('button');button.type='button';button.id=id+'-button';button.className='bg-blue-600 text-white rounded px-4 py-2 font-bold my-2';button.textContent='Pesquisar';input.after(button);
  const results=document.createElement('div');results.id=id+'-suggestions';results.style.cssText='max-height:260px;overflow:auto';button.after(results);
  if(kind==='saida')pesquisarSaida=search;
+ if(kind==='estoque')pesquisarEdicao=search;
  function search(){
   if(!kind){input.dispatchEvent(new Event('input',{bubbles:true}));return;}
   results.replaceChildren();const terms=transferNormalize(input.value).trim().split(/\s+/).filter(Boolean);
-  const comFiltro=kind==='saida'&&filtroSaidaAtivo();
+  const usaFiltro=kind==='saida'||kind==='estoque',comFiltro=usaFiltro&&filtroAtivo(kind);
   if(!terms.length&&!comFiltro){results.textContent='Digite um nome, identificador ou local.';return;}
   const map=kind==='saida'?mapItensSaida:kind==='estoque'?mapEditEstoque:kind==='loc'?mapEditLocais:mapEditVoip;
   let found=Object.keys(map).filter(label=>terms.every(term=>transferNormalize(label).includes(term)));
-  if(kind==='saida')found=found.filter(label=>itemPassaFiltroSaida(map[label])).sort((a,b)=>String(map[a].Local||'').localeCompare(String(map[b].Local||''),'pt-BR',{numeric:true})||String(map[a].Patrimonio||'').localeCompare(String(map[b].Patrimonio||''),'pt-BR',{numeric:true}));
-  const limite=kind==='saida'?200:30;
+  if(usaFiltro)found=found.filter(label=>itemPassaFiltro(kind,map[label])).sort((a,b)=>String(map[a].Local||'').localeCompare(String(map[b].Local||''),'pt-BR',{numeric:true})||String(map[a].Patrimonio||'').localeCompare(String(map[b].Patrimonio||''),'pt-BR',{numeric:true}));
+  const limite=usaFiltro?200:30;
   const status=document.createElement('p');status.setAttribute('role','status');
-  if(kind==='saida'&&found.length){const unidades=found.reduce((t,l)=>t+(Number(map[l].Quantidade)||0),0);status.textContent=`${found.length} registro(s) · ${unidades} unidade(s) em estoque. Selecione a unidade para dar baixa.${found.length>limite?` Mostrando os primeiros ${limite}; use a pesquisa para refinar.`:''}`;}
+  if(usaFiltro&&found.length){const unidades=found.reduce((t,l)=>t+(Number(map[l].Quantidade)||0),0);status.textContent=`${found.length} registro(s) · ${unidades} unidade(s) em estoque. ${kind==='saida'?'Selecione a unidade para dar baixa.':'Selecione o registro para atualizar.'}${found.length>limite?` Mostrando os primeiros ${limite}; use a pesquisa para refinar.`:''}`;}
   else status.textContent=found.length?found.length+` resultado(s). Selecione abaixo. Mostrando até ${limite} resultados.`:'Nenhum registro encontrado.';
   results.append(status);
   found.slice(0,limite).forEach(label=>{const option=document.createElement('button');option.type='button';option.className='block w-full text-left border rounded p-3 my-1';option.textContent=label;option.onclick=()=>{input.value=label;window.filtrarEdicao(kind,label);if(kind==='saida')renderWithdrawalDetails();results.replaceChildren();};results.append(option);});
@@ -2552,6 +2565,13 @@ function addExplicitSearch(id,kind){
 }
 [['estoque-edit-input','estoque'],['loc-edit-input','loc'],['voip-edit-input','voip'],['saida-item-input','saida'],['admin-reversal-search',null],['admin-single-search',null],['admin-search-est',null],['admin-search-loc',null],['admin-search-voip',null]].forEach(([id,kind])=>addExplicitSearch(id,kind));
 
+        (()=>{
+            const botao=document.createElement('button');botao.type='button';botao.id='estoque-edit-limpar';botao.className='border border-slate-300 bg-white text-slate-700 rounded px-4 py-2 font-bold my-2 ml-2';botao.textContent='Limpar filtro';
+            botao.addEventListener('click',()=>{const campo=document.getElementById('estoque-edit-input');campo.value='';window.filtrarEdicao('estoque','');document.getElementById('estoque-edit-input-suggestions')?.replaceChildren();limparFiltros('estoque');campo.focus();});
+            document.getElementById('estoque-edit-input-button').after(botao);
+            const mudarModoAnterior=window.mudarModoEdicao;
+            window.mudarModoEdicao=function(tipo,action){mudarModoAnterior(tipo,action);if(tipo==='estoque')document.getElementById('edit-filtros').classList.toggle('hidden',document.getElementById('estoque-edit-container').classList.contains('hidden'));};
+        })();
         showCadastro('edit','estoque');
 
     </script>
