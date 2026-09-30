@@ -453,7 +453,7 @@
  <p class="text-sm text-slate-500 mb-4">Selecione o equipamento e informe a quantidade e o local de destino. A transferência exige acesso de administrador.</p>
  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
  <label>Sentido<select id="transfer-direction" class="w-full border rounded p-2"><option value="estoque">Estoque → Rastreio</option><option value="localidades">Rastreio → Estoque</option></select></label>
- <label>Pesquisar equipamento<input id="transfer-search" autocomplete="off" aria-controls="transfer-suggestions" class="w-full border rounded p-2" placeholder="Nome, marca, série ou patrimônio"></label>
+ <div><label for="transfer-search">Pesquisar equipamento</label><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="transfer-search" autocomplete="off" aria-controls="transfer-suggestions" class="border rounded p-2" style="flex:1;min-width:160px" placeholder="Equipamento, patrimônio, série ou local"><button id="transfer-search-button" type="button" class="bg-emerald-600 text-white rounded px-4 py-2 font-bold" aria-controls="transfer-suggestions"><i class="fas fa-search mr-2" aria-hidden="true"></i>Pesquisar</button></div></div>
  <div id="transfer-suggestions" class="md:col-span-2" aria-label="Sugestões de equipamentos" hidden></div><div id="transfer-selected" class="md:col-span-2 rounded-lg border border-emerald-300 p-3" role="status" hidden></div><label class="md:col-span-2">Equipamento de origem<select id="transfer-item" required class="w-full border rounded p-2"></select></label>
  <label>Quantidade<input id="transfer-quantity" type="number" min="1" step="1" value="1" required class="w-full border rounded p-2"></label>
  <label>Local de destino<input id="transfer-location" required class="w-full border rounded p-2"></label>
@@ -1595,7 +1595,7 @@ window.atualizarInterfaceEstoque = function() {
         }
 
         // ================= GESTÃO MANUAL E UPLOADS =================
-        function atualizarDatalistSaida() { const dl = document.getElementById('lista-saida-items'); if(!dl) return; dl.innerHTML = ''; mapItensSaida = {}; [...window.estoqueLocal].sort((a,b) => String(a.Categoria||'').localeCompare(String(b.Categoria||''))).forEach(i => { const text = `[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||''}) - Qtd: ${i.Quantidade||0}`; mapItensSaida[text + ' [ID: ' + i.id + ']'] = i; }); renderWithdrawalDetails(); }
+        function atualizarDatalistSaida() { const dl = document.getElementById('lista-saida-items'); if(!dl) return; dl.innerHTML = ''; mapItensSaida = {}; [...window.estoqueLocal].sort((a,b) => String(a.Categoria||'').localeCompare(String(b.Categoria||''))).forEach(i => { const text = `[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||''}) | Série: ${i.Série||''} | Patrimônio: ${i.Patrimonio||''} - Qtd: ${i.Quantidade||0}`; mapItensSaida[text + ' [ID: ' + i.id + ']'] = i; }); renderWithdrawalDetails(); }
         function atualizarSelectEdicaoLocais() { const dl = document.getElementById('lista-edit-locais'); if(!dl) return; dl.innerHTML = ''; mapEditLocais = {}; [...window.localidadesLocais].sort((a,b) => String(a.Equipamento||'').localeCompare(String(b.Equipamento||''))).forEach(loc => { const text = `${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio || ''} | Série: ${loc.Serie || ''}`; mapEditLocais[text + ' [ID: ' + loc.id + ']'] = loc; }); }
         function atualizarSelectEdicaoEstoque() { const dl = document.getElementById('lista-edit-estoque'); if(!dl) return; dl.innerHTML = ''; mapEditEstoque = {}; [...window.estoqueLocal].sort((a,b) => String(a.Componente||'').localeCompare(String(b.Componente||''))).forEach(item => { const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || ''} | Série: ${item.Série || ''}`; mapEditEstoque[text + ' [ID: ' + item.id + ']'] = item; }); }
         function atualizarSelectEdicaoVoip() { const dl = document.getElementById('lista-edit-voip'); if(!dl) return; dl.innerHTML = ''; mapEditVoip = {}; [...window.voipLocal].sort((a,b) => String(a.Ramal||'').localeCompare(String(b.Ramal||''))).forEach(v => { const text = `Ramal: ${v.Ramal} | Setor: ${v.Setor} | IP: ${v.Ip}`; mapEditVoip[text + ' [ID: ' + v.id + ']'] = v; }); }
@@ -1774,7 +1774,7 @@ window.atualizarInterfaceEstoque = function() {
             const selected=rows.find(log=>reversalLabel(log)===input.value);
             if(!selected){
                 if(!term){area.textContent='Digite as primeiras letras para consultar baixas e exclusões desde 27/09/2026.';return;}
-                const matches=rows.filter(log=>normalized(reversalLabel(log)+' '+(log.chamado||'')+' '+(log.usuario||'')).includes(term));
+                const matches=rows.filter(log=>normalized(reversalLabel(log)+' '+(log.chamado||'')+' '+(log.usuario||'')+' '+Object.values(log.dadosOriginais||{}).join(' ')+' '+Object.values(window.estoqueLocal.find(item=>item.id===log.itemId)||{}).join(' ')).includes(term));
                 if(!matches.length)area.textContent='Nenhuma baixa ou exclusão disponível para esta pesquisa.';
                 matches.slice(0,50).forEach(log=>{const button=document.createElement('button');button.type='button';button.className='block w-full text-left border rounded p-2 mb-2';button.textContent=reversalLabel(log);button.onclick=()=>{input.value=reversalLabel(log);renderReversals();};area.append(button);});
                 return;
@@ -1988,6 +1988,18 @@ window.atualizarInterfaceEstoque = function() {
         transferEl('close').addEventListener('click',()=>{if(!transferBusy)closeAdminSections();});
         transferEl('direction').addEventListener('change',transferDirectionChanged);
         transferEl('search').addEventListener('input',refreshTransferItems);
+        function searchTransferExplicitly(){
+            if(transferBusy)return;
+            refreshTransferItems();
+            if(!transferEl('search').value.trim()){
+                transferEl('info').textContent='Digite o nome do equipamento, patrimônio, número de série ou local para pesquisar.';
+                transferEl('search').focus();
+            }
+        }
+        transferEl('search-button').addEventListener('click',searchTransferExplicitly);
+        transferEl('search').addEventListener('keydown',event=>{
+            if(event.key==='Enter'){event.preventDefault();searchTransferExplicitly();}
+        });
         transferEl('item').addEventListener('change',showTransferSelection);
         transferEl('form').addEventListener('submit',async event=>{
             event.preventDefault();if(transferBusy)return;
@@ -2122,6 +2134,25 @@ window.atualizarInterfaceEstoque = function() {
             const item=mapItensSaida[document.getElementById('saida-item-input').value];
             if(item)renderWithdrawalDetails();
         });
+
+
+function addExplicitSearch(id,kind){
+ const input=document.getElementById(id);if(!input)return;
+ input.placeholder=kind==='voip'?'Ramal, setor ou IP':'Equipamento, patrimônio, série ou local';
+ const button=document.createElement('button');button.type='button';button.id=id+'-button';button.className='bg-blue-600 text-white rounded px-4 py-2 font-bold my-2';button.textContent='Pesquisar';input.after(button);
+ const results=document.createElement('div');results.id=id+'-suggestions';results.style.cssText='max-height:260px;overflow:auto';button.after(results);
+ function search(){
+  if(!kind){input.dispatchEvent(new Event('input',{bubbles:true}));return;}
+  results.replaceChildren();const terms=transferNormalize(input.value).trim().split(/\s+/).filter(Boolean);
+  if(!terms.length){results.textContent='Digite um nome, identificador ou local.';return;}
+  const map=kind==='saida'?mapItensSaida:kind==='estoque'?mapEditEstoque:kind==='loc'?mapEditLocais:mapEditVoip;
+  const found=Object.keys(map).filter(label=>terms.every(term=>transferNormalize(label).includes(term)));
+  const status=document.createElement('p');status.setAttribute('role','status');status.textContent=found.length?found.length+' resultado(s). Selecione abaixo. Mostrando até 30 resultados.':'Nenhum registro encontrado.';results.append(status);
+  found.slice(0,30).forEach(label=>{const option=document.createElement('button');option.type='button';option.className='block w-full text-left border rounded p-3 my-1';option.textContent=label;option.onclick=()=>{input.value=label;window.filtrarEdicao(kind,label);if(kind==='saida')renderWithdrawalDetails();results.replaceChildren();};results.append(option);});
+ }
+ button.addEventListener('click',search);input.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();search();}});if(kind)input.addEventListener('input',search);
+}
+[['estoque-edit-input','estoque'],['loc-edit-input','loc'],['voip-edit-input','voip'],['saida-item-input','saida'],['admin-reversal-search',null],['admin-single-search',null],['admin-search-est',null],['admin-search-loc',null],['admin-search-voip',null]].forEach(([id,kind])=>addExplicitSearch(id,kind));
 
         showCadastro('edit','estoque');
 
