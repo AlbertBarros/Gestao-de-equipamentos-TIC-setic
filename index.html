@@ -1281,7 +1281,7 @@ SETIC_AI.init();
 window.atualizarInterfaceEstoque = function() {
             const tbody = document.getElementById('inventory-tbody'); if(!tbody) return;
             let tTotal = 0, tZerado = 0, tSaidas = 0;
-            window.estoqueLocal.forEach(item => { const qtd = Number(item.Quantidade) || 0; tTotal += qtd; if(qtd <= (estoqueMinimoValido(item.EstoqueMinimo))) tZerado++; });
+            window.estoqueLocal.forEach(item => { tTotal += Number(item.Quantidade) || 0; }); tZerado = gruposEstoque().filter(g => g.status !== 'regular').length;
             tSaidas = dashboardWithdrawals().reduce((total, item) => total + item.quantity, 0);
             if(document.getElementById('kpi-total-estoque')) document.getElementById('kpi-total-estoque').innerText = tTotal; 
             if(document.getElementById('kpi-total-saidas')) document.getElementById('kpi-total-saidas').innerText = tSaidas; 
@@ -1295,7 +1295,7 @@ window.atualizarInterfaceEstoque = function() {
             tbody.innerHTML = '';
             dadosPagina.forEach(item => {
                 const qtd = Number(item.Quantidade) || 0; const minEstoque = estoqueMinimoValido(item.EstoqueMinimo);
-                let badge = qtd === 0 ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>' : qtd <= minEstoque ? '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>' : '<span class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>';
+                const grupoItem = grupoDoItem(item); const situacao = grupoItem ? grupoItem.status : (qtd === 0 ? 'critico' : qtd <= minEstoque ? 'alerta' : 'regular'); const dicaStatus = grupoItem ? escHtml(`Total do equipamento: ${grupoItem.total} · Mínimo: ${grupoItem.minimo}`) : ''; let badge = situacao === 'critico' ? `<span title="${dicaStatus}" class="px-3 py-1 inline-flex text-xs font-bold rounded bg-red-100 text-red-700">Crítico</span>` : situacao === 'alerta' ? `<span title="${dicaStatus}" class="px-3 py-1 inline-flex text-xs font-bold rounded bg-yellow-100 text-yellow-800">Alerta</span>` : `<span title="${dicaStatus}" class="px-3 py-1 inline-flex text-xs font-bold rounded bg-emerald-100 text-emerald-700">Regular</span>`;
                 if(['Funcionando','Em manutenção','Não funcionando'].includes(item.Condicao)) badge += '<br><span class="text-xs font-bold">'+escHtml(item.Condicao)+'</span>';
                 tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${escHtml(item.Categoria||'')}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${escHtml(item.Componente||'')}<br><span class="text-xs font-normal text-slate-500">${escHtml(item.Modelo||'')} / ${escHtml(item.Especificação||'')}</span></td><td class="px-6 py-4 text-sm text-blue-600">${escHtml(item.Local||'')}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${escHtml(item.Série||'')}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${escHtml(item.Patrimonio||'')}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
             });
@@ -1421,7 +1421,7 @@ window.atualizarInterfaceEstoque = function() {
         }
         function stockChartRows(){
             const map=new Map();
-            window.estoqueLocal.forEach(item=>{const cat=stockCategoryKey(item.Categoria);if(selectedStockCategory!==null&&cat!==selectedStockCategory)return;const name=nomeEquipamento(item.Componente)||'SEM COMPONENTE';const key=JSON.stringify([cat,name]);if(!map.has(key))map.set(key,{name,cat,quantity:0});map.get(key).quantity+=Number(item.Quantidade)||0;});
+            gruposEstoque().forEach((g,i)=>{if(selectedStockCategory!==null&&g.cat!==selectedStockCategory)return;map.set(i,{name:g.nome,cat:g.cat,quantity:g.total});});
             return [...map.values()].sort((a,b)=>b.quantity-a.quantity||a.name.localeCompare(b.name,'pt-BR'));
         }
         function wrapStockLabel(name){
@@ -1439,7 +1439,7 @@ window.atualizarInterfaceEstoque = function() {
 
         const SAIDAS_GRAFICO_INICIO = Date.parse('2026-09-27T13:01:45Z');
         let chartAlertasEstoque=null;
-        function dashboardAlerts(){return window.estoqueLocal.filter(i=>(Number(i.Quantidade)||0)<=estoqueMinimoValido(i.EstoqueMinimo));}
+        function dashboardAlerts(){return gruposEstoque().filter(g=>g.status!=='regular');}
         function dashboardWithdrawals(){const map=new Map();window.logsLocal.forEach(l=>{let date;try{date=l.dataHora?.toDate?l.dataHora.toDate().getTime():Date.parse(l.dataHora);}catch{date=NaN;}if(l.tipo==='SAÍDA'&&!l.revertida&&date>=SAIDAS_GRAFICO_INICIO&&l.itemNome)map.set(l.itemNome,(map.get(l.itemNome)||0)+(Number(l.qtd)||0));});return [...map].map(([name,quantity])=>({name,quantity})).sort((a,b)=>b.quantity-a.quantity);}
         function openDashboardDetail(title,rows){
             const dialog=document.getElementById('dashboard-detail');document.getElementById('dashboard-detail-title').textContent=title;
@@ -1447,7 +1447,7 @@ window.atualizarInterfaceEstoque = function() {
             if(!rows.length){body.textContent='Nenhum item nesta situação.';}else [...rows].sort((a,b)=>a.name.localeCompare(b.name,'pt-BR',{sensitivity:'base',numeric:true})).forEach(row=>{const article=document.createElement('div');article.className='p-3 border-b border-slate-200';const name=document.createElement('strong');name.textContent=row.name;const detail=document.createElement('p');detail.className='text-sm text-slate-600 mt-1';detail.textContent=row.detail;article.append(name,detail);body.append(article);});
             if(!dialog.open)dialog.showModal();
         }
-        function showAlertDetails(){openDashboardDetail('Itens em alerta — quantidade igual ou abaixo do mínimo',dashboardAlerts().map(i=>({name:i.Componente||'Sem componente',detail:`Quantidade: ${Number(i.Quantidade)||0} · Mínimo: ${estoqueMinimoValido(i.EstoqueMinimo)} · Categoria: ${i.Categoria||'-'} · Local: ${i.Local||'-'}`})));}
+        function showAlertDetails(){openDashboardDetail('Equipamentos em alerta — quantidade total igual ou abaixo do mínimo',dashboardAlerts().map(g=>({name:g.nome,detail:`Quantidade total: ${g.total} · Mínimo: ${g.minimo}${g.divergente?` (atenção: mínimos diferentes cadastrados: ${g.minimos.join(', ')})`:''} · Registros: ${g.itens.length} · Categoria: ${g.categoria}`})));}
         function showConcentration(){const saved=selectedStockCategory;selectedStockCategory=null;const rows=stockChartRows();selectedStockCategory=saved;const max=rows[0]?.quantity;openDashboardDetail('Componentes com maior quantidade no estoque',rows.filter(r=>r.quantity===max).map(r=>({name:r.name,detail:`Quantidade: ${r.quantity} · Categoria: ${stockCategories().find(c=>c.key===r.cat)?.name||r.cat}`})));}
         function dashboardLegend(id,entries){const area=document.getElementById(id);if(!area)return;area.replaceChildren();entries.forEach(e=>{const b=document.createElement('button');b.type='button';b.className='text-xs px-2 py-1 rounded border flex items-center gap-2';const sw=document.createElement('span');sw.style.cssText=`width:10px;height:10px;border-radius:3px;background:${e.color};display:inline-block`;b.append(sw,document.createTextNode(`${e.name} (${e.quantity})`));b.onclick=e.click;area.append(b);});}
         function compactDashboardChart(canvasId,rows,color,onClick){
@@ -1459,7 +1459,7 @@ window.atualizarInterfaceEstoque = function() {
             if(chartTopSaidas)chartTopSaidas.destroy();if(chartAlertasEstoque)chartAlertasEstoque.destroy();
             const withdrawn=dashboardWithdrawals();
             chartTopSaidas=compactDashboardChart('chartTopSaidas',withdrawn,'#2563eb',r=>openDashboardDetail('Retiradas após a atualização',[{name:r.name,detail:`Quantidade retirada: ${r.quantity}`} ]));
-            chartAlertasEstoque=compactDashboardChart('chartAlertasEstoque',dashboardAlerts().map(i=>({name:nomeEquipamento(i.Componente)||'SEM COMPONENTE',quantity:Number(i.Quantidade)||0})),'#ef4444',showAlertDetails);
+            chartAlertasEstoque=compactDashboardChart('chartAlertasEstoque',dashboardAlerts().map(g=>({name:g.nome,quantity:g.total})),'#ef4444',showAlertDetails);
             const status=document.getElementById('withdrawals-caption');if(status)status.textContent=withdrawn.length?'Somente saídas desde 27/09/2026, 10:01 (Brasília). Base: últimos 100 logs carregados.':'Nenhuma retirada desde a atualização. Histórico anterior preservado.';
         }
 
@@ -1513,9 +1513,9 @@ window.atualizarInterfaceEstoque = function() {
 
         function gerarInsights() {
             const container = document.getElementById('insights-container'); if(!container) return; container.innerHTML = ''; 
-            let zerados = [], baixos = [], maiorVolume = null, totalItens = 0;
+            let zerados = [], baixos = [], maiorVolume = null, totalItens = 0; const gruposInsight = gruposEstoque();
             if (!window.estoqueLocal || window.estoqueLocal.length === 0) { container.innerHTML = `<div class="col-span-3 bg-gray-50 border-l-4 border-gray-400 p-4 rounded-xl shadow-sm text-gray-500 font-medium flex items-center"><i class="fas fa-info-circle mr-2 text-xl"></i> Sem dados no estoque.</div>`; return; }
-            window.estoqueLocal.forEach(item => { const qtd = Number(item.Quantidade) || 0; totalItens += qtd; const minEstoque = estoqueMinimoValido(item.EstoqueMinimo); if (qtd === 0) zerados.push(item); else if (qtd <= minEstoque) baixos.push(item); if (!maiorVolume || qtd > (Number(maiorVolume.Quantidade)||0)) maiorVolume = item; });
+            window.estoqueLocal.forEach(item => { const qtd = Number(item.Quantidade) || 0; totalItens += qtd; const minEstoque = estoqueMinimoValido(item.EstoqueMinimo); if (qtd === 0) zerados.push(item); else if (qtd <= minEstoque) baixos.push(item); if (!maiorVolume || qtd > (Number(maiorVolume.Quantidade)||0)) maiorVolume = item; }); zerados = gruposInsight.filter(g => g.status === 'critico'); baixos = gruposInsight.filter(g => g.status === 'alerta'); maiorVolume = gruposInsight.reduce((m, g) => !m || g.total > m.Quantidade ? { Componente: g.nome, Quantidade: g.total } : m, null);
             let alertHtml = '';
             if (zerados.length > 0 || baixos.length > 0) { let desc = ''; if (zerados.length > 0) desc += `<span class="text-red-600 font-bold">${zerados.length} itens esgotados.</span> `; if (baixos.length > 0) desc += `<span class="text-orange-600 font-bold">${baixos.length} em alerta.</span>`; alertHtml = `<div class="bg-red-50 border-l-4 border-red-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-exclamation-triangle text-red-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-red-800 uppercase tracking-wide">Reposição Prioritária</h4><p class="text-xs text-red-700 mt-2">${desc}</p></div></div>`; } 
             else { alertHtml = `<div class="bg-emerald-50 border-l-4 border-emerald-500 p-5 rounded-xl shadow-sm flex items-start"><i class="fas fa-check-circle text-emerald-500 text-3xl mt-1 mr-4"></i><div><h4 class="text-sm font-bold text-emerald-800 uppercase tracking-wide">Estoque Saudável</h4><p class="text-xs text-emerald-700 mt-2">Nenhum equipamento em nível crítico.</p></div></div>`; }
@@ -1579,8 +1579,8 @@ window.atualizarInterfaceEstoque = function() {
             
             if(tipoRelatorio === 'estoque') {
                 titleDoc.textContent = `Relatório Consolidado - ${localStorage.getItem('pref_title') || 'SETIC'}`; let tTotal = 0, tZerados = 0, tBaixos = 0; let categorias = new Set(); tbody.innerHTML = ''; let totaisEquip = {}; document.getElementById('print-resumo-title').innerText = "Resumo de Totais por Equipamento";
-                [...window.estoqueLocal].sort((a, b) => { let cmp = String(a.Componente || '').localeCompare(String(b.Componente || '')); if (cmp !== 0) return cmp; return String(a.Local || '').localeCompare(String(b.Local || '')); }).forEach(i => { tTotal += (Number(i.Quantidade) || 0); categorias.add(String(i.Categoria || 'Geral')); let minEstoque = estoqueMinimoValido(i.EstoqueMinimo); if((Number(i.Quantidade)||0) === 0) tZerados++; else if((Number(i.Quantidade)||0) <= minEstoque) tBaixos++; let eqName = String(i.Componente || 'Geral'); totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (Number(i.Quantidade) || 0); tbody.innerHTML += `<tr><td class="border px-2 py-1">${escHtml(i.Categoria||'')}</td><td class="border px-2 py-1">${escHtml(i.Componente||'')}</td><td class="border px-2 py-1">${escHtml(i.Modelo||'')} / ${escHtml(i.Especificação||'')}</td><td class="border px-2 py-1">${escHtml(i.Local||'')}</td><td class="border px-2 py-1 font-mono">${escHtml(i.Série||'')}</td><td class="border px-2 py-1 font-mono">${escHtml(i.Patrimonio||'')}</td><td class="border px-2 py-1 text-center font-bold">${escHtml(i.Quantidade||0)}</td></tr>`; });
-                let taxaCritica = window.estoqueLocal.length > 0 ? (((tZerados + tBaixos) / window.estoqueLocal.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1); parecer.innerHTML = `Extração consolidou <b>${window.estoqueLocal.length}</b> registos de estoque físico. Emitido por ${escHtml(window.userEmail)} em ${dataAtual}.`; let listTotais = Object.keys(totaisEquip).sort().map(k => `<li><b>${escHtml(k)}:</b> ${totaisEquip[k]} und.</li>`).join(''); resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. <br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${window.estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`; 
+                [...window.estoqueLocal].sort((a, b) => { let cmp = String(a.Componente || '').localeCompare(String(b.Componente || '')); if (cmp !== 0) return cmp; return String(a.Local || '').localeCompare(String(b.Local || '')); }).forEach(i => { tTotal += (Number(i.Quantidade) || 0); categorias.add(String(i.Categoria || 'Geral')); let minEstoque = estoqueMinimoValido(i.EstoqueMinimo);  let eqName = grupoDoItem(i)?.nome || String(i.Componente || 'Geral'); totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (Number(i.Quantidade) || 0); tbody.innerHTML += `<tr><td class="border px-2 py-1">${escHtml(i.Categoria||'')}</td><td class="border px-2 py-1">${escHtml(i.Componente||'')}</td><td class="border px-2 py-1">${escHtml(i.Modelo||'')} / ${escHtml(i.Especificação||'')}</td><td class="border px-2 py-1">${escHtml(i.Local||'')}</td><td class="border px-2 py-1 font-mono">${escHtml(i.Série||'')}</td><td class="border px-2 py-1 font-mono">${escHtml(i.Patrimonio||'')}</td><td class="border px-2 py-1 text-center font-bold">${escHtml(i.Quantidade||0)}</td></tr>`; });
+                const gruposRelatorio = gruposEstoque(); tZerados = gruposRelatorio.filter(g => g.status === 'critico').length; tBaixos = gruposRelatorio.filter(g => g.status === 'alerta').length; let taxaCritica = gruposRelatorio.length > 0 ? (((tZerados + tBaixos) / gruposRelatorio.length) * 100).toFixed(1) : 0, saude = (100 - taxaCritica).toFixed(1); parecer.innerHTML = `Extração consolidou <b>${window.estoqueLocal.length}</b> registos de estoque físico. Emitido por ${escHtml(window.userEmail)} em ${dataAtual}.`; let listTotais = Object.keys(totaisEquip).sort().map(k => `<li><b>${escHtml(k)}:</b> ${totaisEquip[k]} und.</li>`).join(''); resumo.innerHTML = `O período aponta <b>${tTotal}</b> unidades, distribuídas em ${categorias.size} categorias. <br><br><b>Subtotais Físicos:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${listTotais}</ul>`; kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Volume Total</p><p class="text-2xl font-black text-slate-800">${tTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Categorias</p><p class="text-2xl font-black text-slate-800">${categorias.size}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Variedade</p><p class="text-2xl font-black text-slate-800">${window.estoqueLocal.length}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Saúde</p><p class="text-2xl font-black text-emerald-600">${saude}%</p></div>`; thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Categoria</th><th class="border px-2 py-1 text-left">Componente</th><th class="border px-2 py-1 text-left">Especificação</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th></tr>`; 
                 
                 visualTitle.style.display = 'block'; chartsContainer.style.display = 'grid'; chartsContainer.className = "grid grid-cols-3 gap-4 mb-8";
                 document.getElementById('print-col-1').style.display = 'block'; document.getElementById('print-col-2').style.display = 'block'; document.getElementById('print-col-3').style.display = 'block'; document.getElementById('print-col-3').className = "";
@@ -1634,7 +1634,7 @@ window.atualizarInterfaceEstoque = function() {
             report.classList.remove('active-print'); report.classList.add('hidden');
             simple.classList.remove('hidden'); simple.classList.add('active-print'); const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5); const titleObj = document.getElementById('print-simple-title'), dateObj = document.getElementById('print-simple-date'), theadObj = document.getElementById('print-simple-thead'), tbodyObj = document.getElementById('print-simple-tbody'); tbodyObj.innerHTML = '';
             if(tipo === 'estoque') {
-                titleObj.innerText = "Extrato: Inventário Consolidado"; theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente / Espec.</th><th>Local</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`; let filtrados = window.estoqueLocal.filter(item => { let matchBusca = true; if (window.currentSearchText) { const searchTerms = window.currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !window.currentFilterCat || stockCategoryKey(item.Categoria) === window.currentFilterCat; return matchBusca && matchCat; }); let totaisEquip = {}; filtrados.sort((a, b) => { let cmp = String(a.Componente || '').localeCompare(String(b.Componente || '')); if (cmp !== 0) return cmp; return String(a.Local || '').localeCompare(String(b.Local || '')); }).forEach(i => { let eqName = String(i.Componente || 'Geral'); totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (Number(i.Quantidade) || 0); tbodyObj.innerHTML += `<tr><td>${escHtml(i.Categoria||'')}</td><td><b>${escHtml(i.Componente||'')}</b><br><span style="font-size:10px; color:#555;">${escHtml(i.Modelo||'')} / ${escHtml(i.Especificação||'')}</span></td><td>${escHtml(i.Local||'')}</td><td style="font-family:monospace;">${escHtml(i.Série||'')}</td><td style="font-family:monospace;">${escHtml(i.Patrimonio||'')}</td><td style="text-align:center; font-weight:bold;">${escHtml(i.Quantidade||0)}</td></tr>`; }); let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${escHtml(k)}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${escHtml(window.userEmail)} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
+                titleObj.innerText = "Extrato: Inventário Consolidado"; theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente / Espec.</th><th>Local</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`; let filtrados = window.estoqueLocal.filter(item => { let matchBusca = true; if (window.currentSearchText) { const searchTerms = window.currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !window.currentFilterCat || stockCategoryKey(item.Categoria) === window.currentFilterCat; return matchBusca && matchCat; }); let totaisEquip = {}; filtrados.sort((a, b) => { let cmp = String(a.Componente || '').localeCompare(String(b.Componente || '')); if (cmp !== 0) return cmp; return String(a.Local || '').localeCompare(String(b.Local || '')); }).forEach(i => { let eqName = grupoDoItem(i)?.nome || String(i.Componente || 'Geral'); totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (Number(i.Quantidade) || 0); tbodyObj.innerHTML += `<tr><td>${escHtml(i.Categoria||'')}</td><td><b>${escHtml(i.Componente||'')}</b><br><span style="font-size:10px; color:#555;">${escHtml(i.Modelo||'')} / ${escHtml(i.Especificação||'')}</span></td><td>${escHtml(i.Local||'')}</td><td style="font-family:monospace;">${escHtml(i.Série||'')}</td><td style="font-family:monospace;">${escHtml(i.Patrimonio||'')}</td><td style="text-align:center; font-weight:bold;">${escHtml(i.Quantidade||0)}</td></tr>`; }); let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${escHtml(k)}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${escHtml(window.userEmail)} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
             } else if(tipo === 'rastreio') {
                 titleObj.innerText = "Extrato: Rastreamento Físico"; theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Local SIPAC</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`; let filtradosRastreio = window.localidadesLocais.filter(item => { if (!window.currentSearchRastreio) return true; const searchTerms = window.currentSearchRastreio.toLowerCase().split(' '); const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); }); let totaisEquip = {}; filtradosRastreio.sort((a, b) => { let cmp = String(a.Equipamento || '').localeCompare(String(b.Equipamento || '')); if (cmp !== 0) return cmp; return String(a.Local || '').localeCompare(String(b.Local || '')); }).forEach(loc => { let eqName = String(loc.Equipamento || 'Geral'); totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (Number(loc.Quantidade) || 0); tbodyObj.innerHTML += `<tr><td><b>${escHtml(loc.Equipamento||'')}</b></td><td>${escHtml(loc.Local||'')}</td><td>${escHtml(loc.LocalSipac||'')}</td><td>${escHtml(loc.Marca||'')}</td><td style="font-family:monospace;">${escHtml(loc.Serie||'')}</td><td style="font-family:monospace;">${escHtml(loc.Patrimonio||'')}</td><td style="text-align:center; font-weight:bold;">${escHtml(loc.Quantidade||0)}</td></tr>`; }); let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${escHtml(k)}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${escHtml(window.userEmail)} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
             } else if(tipo === 'voip') {
@@ -1656,6 +1656,68 @@ window.atualizarInterfaceEstoque = function() {
         const idEstoque = v => String(v ?? '').trim().toUpperCase();
         // Padrão único para nomes de equipamentos do Estoque (ex.: "Switchs" → "SWITCHS").
         function nomeEquipamento(v) { return String(v ?? '').trim().replace(/\s+/g, ' ').toLocaleUpperCase('pt-BR'); }
+        // ---- Mesmo equipamento = mesma categoria + nome equivalente ----
+        // Ignora maiúsculas, acentos, pontuação, plural (SWITCHS/SWITCH, FONTES/FONTE, MONITORES/MONITOR)
+        // e 1 letra trocada/faltando/sobrando em palavras de 6+ letras (SWICTH/SWITCH).
+        // Números nunca são aproximados: DDR 4 (16 GB) e DDR 4 (32 GB) continuam diferentes.
+        function chaveTexto(v) { return String(v ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/[^A-Z0-9]+/g, ' ').trim(); }
+        function formasPlural(w) { const f = new Set([w]); if (!/\d/.test(w) && w.length >= 4) { if (w.endsWith('S')) f.add(w.slice(0, -1)); if (w.endsWith('ES') && w.length >= 6) f.add(w.slice(0, -2)); } return f; }
+        function distanciaNomes(a, b) {
+            let antes = null, anterior = Array.from({ length: b.length + 1 }, (_, i) => i);
+            for (let i = 1; i <= a.length; i++) { const linha = [i];
+                for (let j = 1; j <= b.length; j++) { linha[j] = Math.min(linha[j - 1] + 1, anterior[j] + 1, anterior[j - 1] + (a[i - 1] !== b[j - 1] ? 1 : 0));
+                    if (antes && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) linha[j] = Math.min(linha[j], antes[j - 2] + 1); }
+                antes = anterior; anterior = linha; }
+            return anterior[b.length];
+        }
+        function palavrasEquivalentes(a, b, aceitarDigitacao = true) {
+            if (a === b) return true; if (/\d/.test(a) || /\d/.test(b)) return false;
+            const fb = formasPlural(b); for (const x of formasPlural(a)) if (fb.has(x)) return true;
+            return aceitarDigitacao && a.length >= 6 && b.length >= 6 && Math.abs(a.length - b.length) <= 1 && distanciaNomes(a, b) <= 1;
+        }
+        // Erro de digitação só é aceito palavra por palavra (nunca no nome inteiro colado:
+        // "FONTE HP" e "FONTE HB" continuam diferentes).
+        function nomesEquivalentes(a, b, aceitarDigitacao = true) {
+            const A = chaveTexto(a), B = chaveTexto(b); if (A === B) return true; if (!A || !B) return false;
+            const ca = A.replace(/ /g, ''), cb = B.replace(/ /g, '');
+            if (ca === cb || palavrasEquivalentes(ca, cb, false)) return true;
+            const pa = A.split(' '), pb = B.split(' ');
+            return pa.length === pb.length && pa.every((p, i) => palavrasEquivalentes(p, pb[i], aceitarDigitacao));
+        }
+        // Agrupa os registros do Estoque por equipamento. O mínimo vale para o TOTAL do equipamento.
+        let cacheGrupos = { fonte: null, grupos: [], porId: new Map() };
+        function gruposEstoque() {
+            const fonte = window.estoqueLocal || []; if (cacheGrupos.fonte === fonte) return cacheGrupos.grupos;
+            const grupos = [], porId = new Map();
+            for (const item of fonte) {
+                const cat = stockCategoryKey(item.Categoria), nome = nomeEquipamento(item.Componente) || 'SEM COMPONENTE';
+                let g = grupos.find(x => x.cat === cat && x.nomes.some(n => nomesEquivalentes(n, nome)));
+                if (!g) { g = { cat, categoria: String(item.Categoria || 'Sem categoria').trim(), nomes: [], contagem: new Map(), itens: [], total: 0 }; grupos.push(g); }
+                if (!g.nomes.includes(nome)) g.nomes.push(nome);
+                g.contagem.set(nome, (g.contagem.get(nome) || 0) + 1); g.itens.push(item); g.total += Number(item.Quantidade) || 0; porId.set(item.id, g);
+            }
+            for (const g of grupos) {
+                // Nome exibido: a grafia com mais registros apoiando (somando singular/plural, sem
+                // contar erros de digitação); depois a mais curta (singular); depois a mais usada.
+                const apoio = n => g.nomes.filter(m => nomesEquivalentes(n, m, false)).reduce((t, m) => t + g.contagem.get(m), 0);
+                g.nome = [...g.nomes].sort((a, b) => apoio(b) - apoio(a) || chaveTexto(a).replace(/ /g, '').length - chaveTexto(b).replace(/ /g, '').length || g.contagem.get(b) - g.contagem.get(a) || a.localeCompare(b, 'pt-BR'))[0];
+                const mins = new Map(); g.itens.forEach(i => { const m = minimoInformado(i.EstoqueMinimo); if (m !== null) mins.set(m, (mins.get(m) || 0) + 1); });
+                g.minimos = [...mins.keys()].sort((a, b) => a - b); g.divergente = mins.size > 1;
+                g.minimo = mins.size ? [...mins].sort((a, b) => b[1] - a[1] || a[0] - b[0])[0][0] : 0;
+                g.status = g.total === 0 ? 'critico' : g.total <= g.minimo ? 'alerta' : 'regular';
+            }
+            cacheGrupos = { fonte, grupos, porId }; return grupos;
+        }
+        function grupoDoItem(item) { gruposEstoque(); return cacheGrupos.porId.get(item.id); }
+        function grupoEquipamento(cat, nome) { const c = stockCategoryKey(cat), n = nomeEquipamento(nome); return gruposEstoque().find(g => g.cat === c && g.nomes.some(x => nomesEquivalentes(x, n))); }
+        function nomeCanonicoEstoque(cat, nome) { const g = grupoEquipamento(cat, nome); return g ? g.nome : nomeEquipamento(nome); }
+        // Grava o mesmo mínimo em todos os registros do equipamento (usado por entrada, importação e transferência).
+        async function aplicarMinimoAoEquipamento(cat, nome, minimo, exceto) {
+            const g = grupoEquipamento(cat, nome); if (!g || minimo === null || !Number.isSafeInteger(minimo)) return 0;
+            const alvo = g.itens.filter(i => i.id !== exceto && minimoInformado(i.EstoqueMinimo) !== minimo);
+            for (let i = 0; i < alvo.length; i += 400) { const lote = writeBatch(db); alvo.slice(i, i + 400).forEach(it => lote.update(doc(db, 'estoque', it.id), { EstoqueMinimo: minimo })); await lote.commit(); }
+            return alvo.length;
+        }
         function localizarCadastroEstoque(lista, d) {
             const pat = idEstoque(d.patrim), ser = idEstoque(d.serie);
             if (pat || ser) {
@@ -1676,7 +1738,7 @@ window.atualizarInterfaceEstoque = function() {
             const btn = document.getElementById('btn-save-item'); const originalText = btn.innerText; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
             try {
                 if(actionType === 'edit' && editId) { await saveInventoryEdit("estoque",editId,{ Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque },"estoque"); showToast("Alteração gravada com sucesso!"); } 
-                else { const r = localizarCadastroEstoque(window.estoqueLocal, { comp, mod, esp, local, serie, patrim }); if (r.tipo === 'duplicado') throw new Error('Já existe um cadastro com este patrimônio/série: ' + descreverCadastro(r.item) + '. Nada foi somado. Para alterar esse cadastro, use Atualizar.'); if (r.tipo === 'somar') await updateDoc(doc(db, "estoque", r.item.id), { Quantidade: increment(qtd), EstoqueMinimo: minEstoque }); else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque }); await registrarLog("ENTRADA", `${comp} (${esp})`, qtd, local); showToast(r.tipo === 'somar' ? "Quantidade somada ao registro existente." : "Entrada registada!"); }
+                else { const compNovo = nomeCanonicoEstoque(cat, comp); const r = localizarCadastroEstoque(window.estoqueLocal, { comp: compNovo, mod, esp, local, serie, patrim }); if (r.tipo === 'duplicado') throw new Error('Já existe um cadastro com este patrimônio/série: ' + descreverCadastro(r.item) + '. Nada foi somado. Para alterar esse cadastro, use Atualizar.'); if (r.tipo === 'somar') await updateDoc(doc(db, "estoque", r.item.id), { Quantidade: increment(qtd), EstoqueMinimo: minEstoque }); else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: compNovo, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque }); const minimosAjustados = await aplicarMinimoAoEquipamento(cat, compNovo, minEstoque, r.item?.id); await registrarLog("ENTRADA", `${compNovo} (${esp})`, qtd, local + (minimosAjustados ? ` | Mínimo ${minEstoque} aplicado a mais ${minimosAjustados} registro(s) do equipamento` : '')); showToast((r.tipo === 'somar' ? "Quantidade somada ao registro existente." : "Entrada registada!") + (compNovo !== comp ? ` Nome unificado como ${compNovo}.` : '')); }
                 ['form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque', 'estoque-edit-id', 'estoque-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = ''; if(document.getElementById('estoque-action-type')) { document.getElementById('estoque-action-type').value = 'new'; document.getElementById('estoque-action-type').dispatchEvent(new Event('change')); }
             } catch (e) { showToast("Erro: " + e.message, "error");} btn.innerText = originalText;
         };
@@ -1732,7 +1794,11 @@ window.atualizarInterfaceEstoque = function() {
                         for (const valor of new Set([idEstoque(patrim), idEstoque(serie)].filter(Boolean))) {
                             if (vistos.has(valor)) problemas.push(`linha ${numero}: patrimônio/série ${valor} repetido (também na linha ${vistos.get(valor)})`); else vistos.set(valor, numero);
                         }
-                        linhas.push({ cat, comp, mod, esp, local, serie, patrim, minEst: minimoDaPlanilha(row), qtd });
+                        const anterior = linhas.find(l => stockCategoryKey(l.cat) === stockCategoryKey(cat) && nomesEquivalentes(l.comp, comp));
+                        const compFinal = grupoEquipamento(cat, comp) ? nomeCanonicoEstoque(cat, comp) : (anterior ? anterior.comp : comp);
+                        const minEst = minimoDaPlanilha(row);
+                        if (anterior && anterior.minEst !== minEst) problemas.push(`linha ${numero}: mínimo ${minEst} diferente do informado para ${compFinal} na linha ${anterior.numero} (${anterior.minEst}). O mínimo vale para o equipamento inteiro`);
+                        linhas.push({ cat, comp: compFinal, mod, esp, local, serie, patrim, minEst, qtd, numero });
                     });
                     if (problemas.length) throw new Error('Importação cancelada. Nenhum registro foi gravado.\n\nCorrija a planilha:\n• ' + problemas.slice(0, 8).join('\n• ') + (problemas.length > 8 ? `\n• e mais ${problemas.length - 8} problema(s).` : ''));
                     // Um cadastro existente que junta várias unidades sob um único patrimônio/série
@@ -1749,7 +1815,11 @@ window.atualizarInterfaceEstoque = function() {
                         await setDoc(novoRef, novoCadastro); novos++;
                         criadosNestaImportacao.push({ id: novoRef.id, ...novoCadastro }); // evita duplicar antes da tela atualizar
                     }
-                    await registrarLog("ENTRADA", `Upload Lote`, novos + somados, `Novos: ${novos} | Somados: ${somados} | Já cadastrados (ignorados): ${ignorados}`);
+                    // O mínimo da planilha passa a valer para todos os registros de cada equipamento.
+                    let minimosAjustados = 0; const equipamentosPlanilha = new Map();
+                    linhas.forEach(d => equipamentosPlanilha.set(stockCategoryKey(d.cat) + '|' + chaveTexto(d.comp), d));
+                    for (const d of equipamentosPlanilha.values()) minimosAjustados += await aplicarMinimoAoEquipamento(d.cat, d.comp, d.minEst, null);
+                    await registrarLog("ENTRADA", `Upload Lote`, novos + somados, `Novos: ${novos} | Somados: ${somados} | Já cadastrados (ignorados): ${ignorados} | Mínimos ajustados: ${minimosAjustados}`);
                     showToast(`Importação concluída: ${novos} novo(s), ${somados} somado(s), ${ignorados} já cadastrado(s).`); fileInput.value = "";
                     if (ignorados) alert(`Importação concluída.\n\nNovos registros: ${novos}\nQuantidades somadas: ${somados}\nJá cadastrados (ignorados, nada foi somado): ${ignorados}`);
                 } catch (error) { showToast('Importação não concluída. Veja a mensagem na tela.', 'error'); alert(error.message || "Erro na leitura da planilha."); } btn.innerHTML = 'Processar Planilha de Estoque';
@@ -1976,14 +2046,16 @@ window.atualizarInterfaceEstoque = function() {
         const logPanel=document.createElement('section');
         logPanel.innerHTML='<h3 class="font-bold text-lg mb-2">Excluir logs</h3><p class="text-sm mb-3">Apagar logs pode remover os dados de reversão e alterar o indicador de itens retirados. Os cadastros de estoque, rastreio e ramais não serão excluídos.</p><input id="admin-log-search" class="border rounded p-2 w-full mb-3" placeholder="Pesquisar entre os 100 logs mais recentes"><div id="admin-log-list" style="max-height:260px;overflow:auto"></div><button type="button" id="admin-log-delete" class="bg-red-600 text-white rounded p-2 mt-3">Excluir logs selecionados</button>';
         const namesPanel=document.createElement('section');
-        namesPanel.innerHTML='<h3 class="font-bold text-lg mb-2">Padronizar nomes do estoque</h3><p class="text-sm mb-3">Converte os nomes dos componentes do Estoque para letras MAIÚSCULAS, no mesmo padrão dos demais (exemplo: "Switchs" → "SWITCHS"). Quantidade, série, patrimônio, local e categoria não são alterados. Novas entradas, importações e transferências já são gravadas neste padrão.</p><button type="button" id="admin-names-preview" class="bg-blue-600 text-white rounded p-2">Verificar nomes fora do padrão</button><p id="admin-names-status" role="status" class="text-sm my-3"></p><div id="admin-names-list" style="max-height:260px;overflow:auto"></div><button type="button" id="admin-names-apply" class="bg-emerald-600 text-white rounded p-2 mt-3" hidden>Padronizar nomes</button>';
+        namesPanel.innerHTML='<h3 class="font-bold text-lg mb-2">Padronizar nomes do estoque</h3><p class="text-sm mb-3">Converte os nomes dos componentes do Estoque para letras MAIÚSCULAS e unifica grafias diferentes do mesmo equipamento na mesma categoria (exemplo: "Switchs" → "SWITCH"). Quantidade, série, patrimônio, local e categoria não são alterados. Novas entradas, importações e transferências já são gravadas neste padrão.</p><button type="button" id="admin-names-preview" class="bg-blue-600 text-white rounded p-2">Verificar nomes fora do padrão</button><p id="admin-names-status" role="status" class="text-sm my-3"></p><div id="admin-names-list" style="max-height:260px;overflow:auto"></div><button type="button" id="admin-names-apply" class="bg-emerald-600 text-white rounded p-2 mt-3" hidden>Padronizar nomes</button>';
+        const minimosPanel=document.createElement('section');
+        minimosPanel.innerHTML='<h3 class="font-bold text-lg mb-2">Estoque mínimo por equipamento</h3><p class="text-sm mb-3">O mínimo vale para a quantidade TOTAL de cada equipamento (todos os registros da mesma categoria e nome, somados). Ao salvar, o valor é gravado em todos os registros do equipamento.</p><input id="admin-minimos-search" class="border rounded p-2 w-full mb-3" placeholder="Pesquisar equipamento ou categoria" autocomplete="off"><p id="admin-minimos-status" role="status" class="text-sm mb-2"></p><div id="admin-minimos-list" style="max-height:360px;overflow:auto"></div>';
         const nav=document.createElement('div');nav.className='admin-actions';nav.setAttribute('aria-label','Funções administrativas');
         const transferPanel=document.getElementById('transfer-form');
         transferPanel.classList.remove('hidden');
         document.getElementById('transfer-open').remove();
-        const adminSections={entry:entryHost,transfer:transferPanel,reversal:reversalPanel,deletion:deletePanel,users:userPanel,access:accessPanel,audit:auditPanel,logs:logPanel,names:namesPanel};
+        const adminSections={entry:entryHost,transfer:transferPanel,reversal:reversalPanel,deletion:deletePanel,users:userPanel,access:accessPanel,audit:auditPanel,logs:logPanel,names:namesPanel,minimos:minimosPanel};
         entryButton.textContent='Entrada';entryButton.dataset.adminSection='entry';nav.append(entryButton);
-        for(const [key,title] of [['transfer','Transferir equipamento'],['reversal','Reversão de itens'],['deletion','Excluir registros'],['users','Novo usuário'],['access','Gerir acessos'],['audit','Auditoria'],['logs','Excluir logs'],['names','Padronizar nomes']]){
+        for(const [key,title] of [['transfer','Transferir equipamento'],['reversal','Reversão de itens'],['deletion','Excluir registros'],['users','Novo usuário'],['access','Gerir acessos'],['audit','Auditoria'],['logs','Excluir logs'],['names','Padronizar nomes'],['minimos','Estoque mínimo']]){
             const button=document.createElement('button');button.type='button';button.textContent=title;button.dataset.adminSection=key;nav.append(button);
         }
         const intro=document.createElement('p');intro.className='text-slate-500 text-sm mb-4';intro.textContent='Escolha uma opção para abrir os campos necessários.';
@@ -1991,12 +2063,12 @@ window.atualizarInterfaceEstoque = function() {
         adminContent.replaceChildren(adminHeader,intro,nav,...Object.values(adminSections));
         adminContent.classList.remove('h-full');
 
-        const actionIcons={entry:'fa-boxes',transfer:'fa-exchange-alt',reversal:'fa-undo-alt',deletion:'fa-trash-alt',users:'fa-user-plus',access:'fa-user-shield',audit:'fa-history',logs:'fa-eraser',names:'fa-font'};
+        const actionIcons={entry:'fa-boxes',transfer:'fa-exchange-alt',reversal:'fa-undo-alt',deletion:'fa-trash-alt',users:'fa-user-plus',access:'fa-user-shield',audit:'fa-history',logs:'fa-eraser',names:'fa-font',minimos:'fa-sliders-h'};
         document.querySelectorAll('[data-admin-section]').forEach(button=>{const icon=document.createElement('i');icon.className='fas '+actionIcons[button.dataset.adminSection];icon.setAttribute('aria-hidden','true');button.prepend(icon);});
         document.querySelectorAll('[data-cadastro-base]').forEach(button=>{const icon=document.createElement('i');icon.className='fas '+({estoque:'fa-boxes',loc:'fa-map-marker-alt',voip:'fa-phone-alt'})[button.dataset.cadastroBase];icon.setAttribute('aria-hidden','true');button.prepend(icon);});
 
         function closeAdminSections(){for(const section of Object.values(adminSections))section.hidden=true;nav.querySelectorAll('button').forEach(b=>b.setAttribute('aria-expanded','false'));}
-        function showAdminSection(key){const open=adminSections[key].hidden;closeAdminSections();if(open){adminSections[key].hidden=false;nav.querySelector(`[data-admin-section="${key}"]`).setAttribute('aria-expanded','true');if(key==='logs')renderAdminLogs();if(key==='names')mostrarNomesForaDoPadrao();if(key==='transfer'){transferDirectionChanged();transferEl('direction').focus();}}}
+        function showAdminSection(key){const open=adminSections[key].hidden;closeAdminSections();if(open){adminSections[key].hidden=false;nav.querySelector(`[data-admin-section="${key}"]`).setAttribute('aria-expanded','true');if(key==='logs')renderAdminLogs();if(key==='names')mostrarNomesForaDoPadrao();if(key==='minimos')renderMinimosEquipamentos();if(key==='transfer'){transferDirectionChanged();transferEl('direction').focus();}}}
         nav.addEventListener('click',async event=>{const button=event.target.closest('[data-admin-section]');if(!button)return;try{await requireAdmin();showAdminSection(button.dataset.adminSection);}catch(e){showToast(e.message,'error');}});
         closeAdminSections();
         function renderAdminLogs(){
@@ -2020,8 +2092,8 @@ window.atualizarInterfaceEstoque = function() {
         // Administrador → Padronizar nomes: mostra a lista antes e só grava após confirmação.
         let nomesPendentes=[];
         function mostrarNomesForaDoPadrao(){
-            nomesPendentes=(window.estoqueLocal||[]).filter(i=>nomeEquipamento(i.Componente)&&String(i.Componente)!==nomeEquipamento(i.Componente))
-                .map(i=>({id:i.id,de:String(i.Componente),para:nomeEquipamento(i.Componente),local:i.Local||'',patr:i.Patrimonio||''}))
+            nomesPendentes=(window.estoqueLocal||[]).map(i=>({i,para:grupoDoItem(i)?.nome||nomeEquipamento(i.Componente)})).filter(({i,para})=>para&&String(i.Componente??'')!==para)
+                .map(({i,para})=>({id:i.id,de:String(i.Componente),para,local:i.Local||'',patr:i.Patrimonio||''}))
                 .sort((a,b)=>a.para.localeCompare(b.para,'pt-BR',{numeric:true}));
             const area=document.getElementById('admin-names-list'),status=document.getElementById('admin-names-status'),aplicar=document.getElementById('admin-names-apply');
             area.replaceChildren();
@@ -2040,13 +2112,48 @@ window.atualizarInterfaceEstoque = function() {
                 for(let i=0;i<lista.length;i+=200){
                     const parte=lista.slice(i,i+200),lote=writeBatch(db);
                     parte.forEach(n=>lote.update(doc(db,'estoque',n.id),{Componente:n.para}));
-                    lote.set(doc(collection(db,'logs')),{tipo:'PADRONIZAÇÃO DE NOMES',itemNome:`${parte.length} registro(s) do Estoque`,qtd:parte.length,chamado:'Nomes de componentes convertidos para maiúsculas',alteracoes:parte.map(n=>({id:n.id,de:n.de,para:n.para})),usuario:auth.currentUser.email||'',dataHora:serverTimestamp()});
+                    lote.set(doc(collection(db,'logs')),{tipo:'PADRONIZAÇÃO DE NOMES',itemNome:`${parte.length} registro(s) do Estoque`,qtd:parte.length,chamado:'Nomes de componentes padronizados (maiúsculas e grafias unificadas)',alteracoes:parte.map(n=>({id:n.id,de:n.de,para:n.para})),usuario:auth.currentUser.email||'',dataHora:serverTimestamp()});
                     await lote.commit();feitos+=parte.length;
                 }
                 showToast(`${feitos} nome(s) padronizado(s).`);
             }catch(e){showToast((feitos?`${feitos} nome(s) padronizado(s); o restante falhou: `:'Não foi possível padronizar: ')+e.message,'error');}
             finally{botao.disabled=false;setTimeout(mostrarNomesForaDoPadrao,600);}
         };
+
+        // Administrador → Estoque mínimo: um valor por equipamento.
+        function renderMinimosEquipamentos(){
+            const area=document.getElementById('admin-minimos-list'),status=document.getElementById('admin-minimos-status');area.replaceChildren();
+            const termo=normalized(document.getElementById('admin-minimos-search').value).trim();
+            const grupos=gruposEstoque().filter(g=>!termo||normalized(g.nome+' '+g.categoria+' '+g.nomes.join(' ')).includes(termo)).sort((a,b)=>(b.divergente-a.divergente)||a.nome.localeCompare(b.nome,'pt-BR',{numeric:true}));
+            const divergentes=gruposEstoque().filter(g=>g.divergente).length;
+            status.textContent=`${grupos.length} equipamento(s).`+(divergentes?` ${divergentes} com mínimos diferentes entre os registros (aparecem primeiro, marcados em laranja).`:'');
+            grupos.forEach(g=>{
+                const linha=document.createElement('div');linha.className='border rounded p-3 mb-2';if(g.divergente)linha.style.borderColor='#f97316';
+                const titulo=document.createElement('strong');titulo.textContent=g.nome;
+                const info=document.createElement('p');info.className='text-sm';info.textContent=`Categoria: ${g.categoria} · Quantidade total: ${g.total} · Registros: ${g.itens.length} · Mínimo atual: ${g.minimo}`+(g.divergente?` · ATENÇÃO: mínimos diferentes gravados (${g.minimos.join(', ')})`:'')+(g.nomes.length>1?` · Grafias: ${g.nomes.join(', ')}`:'');
+                const rotulo=document.createElement('label');rotulo.className='text-sm font-semibold';rotulo.textContent='Novo mínimo ';
+                const campo=document.createElement('input');campo.type='number';campo.min='0';campo.step='1';campo.value=String(g.minimo);campo.className='border rounded p-1 w-24 ml-2';campo.setAttribute('aria-label','Estoque mínimo de '+g.nome);rotulo.append(campo);
+                const botao=document.createElement('button');botao.type='button';botao.className='bg-blue-600 text-white rounded px-3 py-1 ml-3';botao.textContent='Salvar';
+                botao.onclick=async()=>{
+                    const minimo=minimoInformado(campo.value);if(minimo===null)return showToast('Informe um mínimo inteiro, maior ou igual a zero.','error');
+                    const alvo=g.itens.filter(i=>minimoInformado(i.EstoqueMinimo)!==minimo);
+                    if(!alvo.length)return showToast('Todos os registros deste equipamento já têm este mínimo.');
+                    botao.disabled=true;
+                    try{
+                        await requireAdmin();
+                        for(let i=0;i<alvo.length;i+=400){
+                            const lote=writeBatch(db);alvo.slice(i,i+400).forEach(it=>lote.update(doc(db,'estoque',it.id),{EstoqueMinimo:minimo}));
+                            if(i===0)lote.set(doc(collection(db,'logs')),{tipo:'AJUSTE DE MÍNIMO',itemNome:g.nome,qtd:minimo,chamado:`Estoque mínimo do equipamento definido como ${minimo} em ${alvo.length} registro(s). Valores anteriores: ${g.minimos.join(', ')||'não informado'}`,usuario:auth.currentUser.email||'',dataHora:serverTimestamp()});
+                            await lote.commit();
+                        }
+                        showToast(`Mínimo de ${g.nome} definido como ${minimo}.`);
+                    }catch(e){showToast('Não foi possível salvar: '+e.message,'error');}
+                    finally{botao.disabled=false;setTimeout(renderMinimosEquipamentos,600);}
+                };
+                linha.append(titulo,info,rotulo,botao);area.append(linha);
+            });
+        }
+        document.getElementById('admin-minimos-search').addEventListener('input',renderMinimosEquipamentos);
 
         // Each submitted operation has one stable destination and audit ID, including retries.
         async function transferEquipment(input, destinationRef, auditRef) {
@@ -2068,13 +2175,14 @@ window.atualizarInterfaceEstoque = function() {
                 } else {
                     const minimum=Number(input.minimum);
                     if(!input.category.trim()||String(input.minimum).trim()===''||!Number.isSafeInteger(minimum)||minimum<0) throw new Error('Informe categoria e estoque mínimo válido.');
-                    target={...data,Categoria:input.category.trim(),Componente:nomeEquipamento(data.Equipamento),Modelo:data.Marca||'',Série:data.Serie||'',Especificação:data.Especificação||'',EstoqueMinimo:minimum,Local:location,Quantidade:quantity};
+                    target={...data,Categoria:input.category.trim(),Componente:nomeCanonicoEstoque(input.category,data.Equipamento),Modelo:data.Marca||'',Série:data.Serie||'',Especificação:data.Especificação||'',EstoqueMinimo:minimum,Local:location,Quantidade:quantity};
                 }
                 // Store the original snapshot for audit, while keeping equipment metadata intact.
                 tx.set(destinationRef,target);
                 if(balance===quantity) tx.delete(sourceRef); else tx.update(sourceRef,{Quantidade:balance-quantity});
                 tx.set(auditRef,{tipo:'TRANSFERÊNCIA',itemId:input.id,itemNome:data.Componente||data.Equipamento||'',qtd:quantity,baseOrigem:input.base,baseDestino:input.base==='estoque'?'localidades':'estoque',destinoId:destinationRef.id,localOrigem:data.Local||'',localDestino:location,motivo:reason,dadosOriginais:data,usuario:auth.currentUser.email||'',dataHora:serverTimestamp()});
             });
+            if(input.base==='localidades')await aplicarMinimoAoEquipamento(input.category,nomeCanonicoEstoque(input.category,input.equipamentoNome||''),Number(input.minimum),destinationRef.id);
         }
         const transferEl=id=>document.getElementById('transfer-'+id);
         let transferBusy=false;
@@ -2137,7 +2245,7 @@ window.atualizarInterfaceEstoque = function() {
         transferEl('item').addEventListener('change',showTransferSelection);
         transferEl('form').addEventListener('submit',async event=>{
             event.preventDefault();if(transferBusy)return;
-            const input={base:transferEl('direction').value,id:transferEl('item').value,quantity:transferEl('quantity').value,location:transferEl('location').value,reason:transferEl('reason').value,sipac:transferEl('sipac').value,category:transferEl('category').value,minimum:transferEl('minimum').value};
+            const origemTransferencia=transferRows().find(row=>row.id===transferEl('item').value);const input={equipamentoNome:origemTransferencia?.Equipamento||origemTransferencia?.Componente||'',base:transferEl('direction').value,id:transferEl('item').value,quantity:transferEl('quantity').value,location:transferEl('location').value,reason:transferEl('reason').value,sipac:transferEl('sipac').value,category:transferEl('category').value,minimum:transferEl('minimum').value};
             if(!input.id)return;
             transferBusy=true;const controls=[...transferEl('form').querySelectorAll('input,select,button')];controls.forEach(control=>control.disabled=true);
             try{
@@ -2188,6 +2296,8 @@ window.atualizarInterfaceEstoque = function() {
             const reason=document.getElementById(kind+'-reason').value.trim(),expected=quantityBaseline[kind];
             if(!Number.isSafeInteger(patch.Quantidade)||patch.Quantidade<0)throw Error('Informe uma quantidade inteira válida.');
             const ref=doc(db,base,id),audit=doc(collection(db,'logs'));
+            const grupoEditado=base==='estoque'?grupoEquipamento(patch.Categoria,patch.Componente):null;
+            const outrosDoEquipamento=grupoEditado&&patch.EstoqueMinimo!=null?grupoEditado.itens.filter(i=>i.id!==id&&minimoInformado(i.EstoqueMinimo)!==patch.EstoqueMinimo).slice(0,400):[];
             await runTransaction(db,async tx=>{
                 const snap=await tx.get(ref);if(!snap.exists())throw Error('O equipamento não existe mais. Selecione novamente.');
                 const before=snap.data(),old=Number(before.Quantidade);
@@ -2195,7 +2305,9 @@ window.atualizarInterfaceEstoque = function() {
                 const changed=old!==patch.Quantidade;
                 if(changed&&(!reason||reason.length>1000))throw Error('Informe a justificativa da alteração de quantidade (até 1000 caracteres).');
                 tx.update(ref,patch);
-                tx.set(audit,{tipo:base==='estoque'?'MOVIMENTAÇÃO (ESTOQUE)':'MOVIMENTAÇÃO',itemId:id,itemNome:patch.Componente||patch.Equipamento||'',qtd:patch.Quantidade,chamado:changed?`AJUSTE DE QUANTIDADE | Base: ${base} | Saldo anterior: ${old} | Saldo corrigido: ${patch.Quantidade} | Diferença: ${patch.Quantidade-old} | Justificativa: ${reason}`:`ATUALIZAÇÃO DE CADASTRO | Base: ${base} | Quantidade mantida: ${old}`,usuario:auth.currentUser.email||'',dataHora:serverTimestamp()});
+                outrosDoEquipamento.forEach(i=>tx.update(doc(db,'estoque',i.id),{EstoqueMinimo:patch.EstoqueMinimo}));
+                const avisoMinimo=outrosDoEquipamento.length?` | Mínimo ${patch.EstoqueMinimo} aplicado a mais ${outrosDoEquipamento.length} registro(s) do mesmo equipamento`:'';
+                tx.set(audit,{tipo:base==='estoque'?'MOVIMENTAÇÃO (ESTOQUE)':'MOVIMENTAÇÃO',itemId:id,itemNome:patch.Componente||patch.Equipamento||'',qtd:patch.Quantidade,chamado:(changed?`AJUSTE DE QUANTIDADE | Base: ${base} | Saldo anterior: ${old} | Saldo corrigido: ${patch.Quantidade} | Diferença: ${patch.Quantidade-old} | Justificativa: ${reason}`:`ATUALIZAÇÃO DE CADASTRO | Base: ${base} | Quantidade mantida: ${old}`)+avisoMinimo,usuario:auth.currentUser.email||'',dataHora:serverTimestamp()});
             });
         }
         ['estoque','loc'].forEach(kind=>{
