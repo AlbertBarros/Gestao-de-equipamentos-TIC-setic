@@ -78,6 +78,11 @@
 [data-admin-section="audit"]{--action-color:#0e7490!important;--action-tint:#ecfeff!important;}
 [aria-label="Selecionar base"]{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
 .ai-prf-crest{display:inline-block;width:25px;height:31px;object-fit:contain;vertical-align:middle;margin-left:5px;}
+/* Linha de gráficos: altura fixa. O Gráfico do estoque rola por dentro e os 3 cartões dividem a mesma altura. */
+#stock-chart-card{height:560px;box-sizing:border-box}
+#dashboard-side-stack{display:grid;gap:16px;grid-template-rows:repeat(3,330px)}
+@media(min-width:768px){#stock-chart-card{height:960px}#dashboard-side-stack{height:960px;grid-template-rows:repeat(3,minmax(0,1fr))}}
+#dashboard-side-stack > .modern-card{min-height:0}
 @media(max-width:480px){[data-cadastro-base]{padding:10px 6px;gap:5px;font-size:12px;}[data-cadastro-base] i{font-size:16px;}.ai-prf-crest{width:20px;height:26px;}}
 </style>
 <style>
@@ -137,7 +142,7 @@
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 no-print">
             
             <!-- KPIS GLOBAIS -->
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
                 <div class="modern-card p-4 flex items-start justify-between relative overflow-hidden group border-l-4 border-l-blue-500">
                     <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-boxes text-5xl text-blue-600"></i></div>
                     <div class="z-10"><div class="flex items-center gap-2 mb-1"><i class="fas fa-boxes text-blue-500 text-xs"></i><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Total no Estoque</p></div><p id="kpi-total-estoque" class="text-2xl font-extrabold text-slate-800">0</p></div>
@@ -158,24 +163,33 @@
                     <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-exclamation-triangle text-5xl text-red-600"></i></div>
                     <div class="z-10"><div class="flex items-center gap-2 mb-1"><i class="fas fa-exclamation-triangle text-red-500 text-xs"></i><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Itens em Alerta</p></div><p id="kpi-zerado" class="text-2xl font-extrabold text-red-600">0</p></div>
                 </div>
+                <div class="modern-card p-4 flex items-start justify-between relative overflow-hidden group border-l-4 border-l-amber-500" title="Soma das unidades com condição Em manutenção ou Não funcionando (Estoque + Rastreio)">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition"><i class="fas fa-tools text-5xl text-amber-600"></i></div>
+                    <div class="z-10"><div class="flex items-center gap-2 mb-1"><i class="fas fa-tools text-amber-500 text-xs"></i><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Manutenção / Defeito</p></div><p id="kpi-manutencao" class="text-2xl font-extrabold text-amber-600">0</p><p id="kpi-manutencao-detalhe" class="text-[10px] text-slate-500 mt-1">0 em manutenção · 0 com defeito</p></div>
+                </div>
             </div>
 
             <!-- GRÁFICOS PARTE 1 -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                <div class="modern-card p-6 md:col-span-2 flex flex-col">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6" style="align-items:start">
+                <div id="stock-chart-card" class="modern-card p-6 md:col-span-2 flex flex-col">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-sm font-bold text-slate-800 flex items-center"><i class="fas fa-chart-area text-blue-500 mr-2"></i> Gráfico do estoque</h3>
                         <span class="text-xs font-semibold text-emerald-500 bg-emerald-50 px-2 py-1 rounded-md">Atualizado em Tempo Real</span>
                     </div>
                     <div class="flex justify-between items-center gap-2 mb-3 text-xs"><span id="stock-chart-caption" class="text-slate-500" aria-live="polite">Todas as categorias</span><button type="button" id="stock-chart-reset" class="text-blue-600 font-semibold underline">Mostrar todas</button></div>
-                    <div style="max-height:720px;overflow:auto"><div id="stock-chart-size" style="position:relative;height:320px;min-width:520px"><canvas id="chartComponentesAmpliado" aria-label="Componentes e quantidades em estoque"></canvas></div></div>
+                    <div style="flex:1;min-height:0;overflow:auto"><div id="stock-chart-size" style="position:relative;height:320px;min-width:520px"><canvas id="chartComponentesAmpliado" aria-label="Componentes e quantidades em estoque"></canvas></div></div>
                 </div>
-                <div id="dashboard-side-stack" style="display:grid;grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:16px;min-height:480px">
-                <div class="modern-card p-6 flex flex-col justify-center items-center relative">
-                    <h3 class="text-sm font-bold text-slate-800 absolute top-6 left-6 flex items-center"><i class="fas fa-sitemap text-indigo-500 mr-2"></i> Divisão por categoria</h3>
-                    <div class="h-48 w-full flex justify-center mt-10"><canvas id="chartPizzaCategorias" aria-label="Clique em uma categoria para filtrar o gráfico do estoque"></canvas></div><p class="text-xs text-slate-500 mt-2">Clique em uma cor para filtrar o estoque.</p><div id="stock-category-buttons" class="flex flex-wrap gap-2 mt-3 w-full" aria-label="Categorias do estoque"></div>
+                <div id="dashboard-side-stack">
+                <div class="modern-card p-4 flex flex-col" style="min-height:0;overflow:hidden">
+                    <h3 class="text-sm font-bold text-slate-800 flex items-center"><i class="fas fa-sitemap text-indigo-500 mr-2"></i> Divisão por categoria</h3>
+                    <div class="w-full flex justify-center mt-1" style="position:relative;flex:1;min-height:70px"><canvas id="chartPizzaCategorias" aria-label="Clique em uma categoria para filtrar o gráfico do estoque"></canvas></div><p class="text-slate-500 mt-1 text-center" style="font-size:10px">Clique em uma cor para filtrar o estoque.</p><div id="stock-category-buttons" class="flex flex-wrap mt-1 w-full" style="gap:4px" aria-label="Categorias do estoque"></div>
                 </div>
-                    <div class="modern-card p-4 flex flex-col" style="min-height:0"><h3 class="text-sm font-bold text-slate-800 mb-2">Componentes em alerta</h3><p class="text-xs text-slate-500 mb-2">Quantidade igual ou abaixo do mínimo. Clique para ver os detalhes.</p><div style="overflow:auto;flex:1;min-height:0"><div style="position:relative"><canvas id="chartAlertasEstoque"></canvas></div></div></div>
+                <div class="modern-card p-4 flex flex-col" style="min-height:0"><h3 class="text-sm font-bold text-slate-800 mb-1 flex items-center"><i class="fas fa-exclamation-triangle text-red-500 mr-2"></i> Componentes em alerta</h3><p id="alert-chart-caption" class="text-xs text-slate-500 mb-2">Quantidade igual ou abaixo do mínimo. Clique para ver os detalhes.</p><div style="overflow:hidden;flex:1;min-height:0"><div style="position:relative;height:100%"><canvas id="chartAlertasEstoque"></canvas></div></div><button type="button" id="alert-chart-full" class="mt-2 text-xs font-bold text-blue-600 underline self-start" hidden>Ver gráfico completo</button></div>
+                <div class="modern-card p-4 flex flex-col" style="min-height:0;overflow:hidden">
+                    <div class="flex justify-between items-center gap-2"><h3 class="text-sm font-bold text-slate-800 flex items-center"><i class="fas fa-tools text-amber-500 mr-2"></i> Condição dos equipamentos</h3><button type="button" id="cond-chart-reset" class="text-xs text-blue-600 font-semibold underline" hidden>Mostrar todas</button></div>
+                    <div class="w-full flex justify-center mt-2" style="position:relative;flex:1;min-height:120px"><canvas id="chartCondicao" aria-label="Clique em uma condição para filtrar as tabelas"></canvas><p id="cond-chart-empty" class="text-xs text-slate-500 absolute" style="top:45%" hidden>Nenhum equipamento em manutenção ou com defeito.</p></div>
+                    <p id="cond-chart-caption" class="text-xs text-slate-500 mt-1 text-center" aria-live="polite">Clique em uma cor para filtrar Estoque e Rastreio.</p><div id="cond-buttons" class="flex flex-wrap gap-2 mt-2 w-full" aria-label="Condições dos equipamentos"></div>
+                </div>
                 </div>
             </div>
 
@@ -428,6 +442,7 @@
         </div>
     </div>
 
+    <dialog id="alert-chart-dialog" style="width:min(900px,95vw);max-height:90vh;border:0;border-radius:16px;padding:24px"><div class="flex justify-between gap-4 mb-3"><h3 class="font-bold text-slate-800">Componentes em alerta — gráfico completo</h3><button type="button" onclick="document.getElementById('alert-chart-dialog').close()" aria-label="Fechar gráfico completo">✕</button></div><p class="text-xs text-slate-500 mb-2">Clique em uma barra para ver os detalhes.</p><div style="overflow:auto;max-height:72vh"><div style="position:relative"><canvas id="chartAlertasCompleto"></canvas></div></div></dialog>
     <dialog id="dashboard-detail" style="width:min(720px,94vw);max-height:80vh;border:0;border-radius:16px;padding:24px"><div class="flex justify-between gap-4 mb-4"><h3 id="dashboard-detail-title" class="font-bold text-slate-800"></h3><button type="button" id="print-dashboard-detail" class="bg-blue-600 text-white rounded px-3 py-2">Imprimir</button><button type="button" onclick="document.getElementById('dashboard-detail').close()" aria-label="Fechar detalhes">✕</button></div><div id="dashboard-detail-body" style="overflow:auto;max-height:60vh"></div></dialog>
     <!-- MODAL PAINEL DE FERRAMENTAS -->
     <div id="tools-modal" class="hidden fixed inset-0 bg-slate-900 bg-opacity-80 flex justify-center items-center z-50 p-4">
@@ -436,7 +451,6 @@
             <div class="w-full md:w-64 bg-slate-50 border-r border-gray-200 p-6 flex flex-col h-full">
                 <div class="flex items-center mb-8 border-b pb-4"><i class="fas fa-toolbox text-[#161B33] text-2xl mr-3 btn-primary-text"></i><h3 class="text-lg font-bold text-slate-800">Ferramentas</h3></div>
                 <ul class="space-y-2 flex-1">
-                    <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-cadastros" data-cadastro-mode="edit"><i class="fas fa-pen w-6"></i> Atualizar</button></li>
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-saida"><i class="fas fa-minus-circle w-6"></i> Baixa / Saída</button></li>
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold flex items-center text-sm" data-target="tab-maintenance"><i class="fas fa-tools w-6"></i> Condição / Manutenção</button></li><li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm mt-4" data-target="tab-relatorio"><i class="fas fa-file-contract w-6"></i> Exportações / Relatórios</button></li>
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-pref"><i class="fas fa-sliders-h w-6"></i> Preferências</button></li>
@@ -496,6 +510,7 @@
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Baixa de Material</h2>
                     <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm flex-1">
                         <div class="space-y-5 mb-8">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div><label for="saida-filtro-categoria" class="block text-sm font-semibold text-slate-700">Categoria</label><select id="saida-filtro-categoria" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm bg-white text-sm"><option value="">Todas as categorias</option></select></div><div><label for="saida-filtro-equipamento" class="block text-sm font-semibold text-slate-700">Equipamento</label><select id="saida-filtro-equipamento" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm bg-white text-sm"><option value="">Todos os equipamentos</option></select></div></div><div class="flex justify-end -mt-3"><button type="button" id="saida-filtro-limpar" class="text-xs text-blue-600 font-semibold underline" hidden>Limpar filtros</button></div>
                             <div><label class="block text-sm font-semibold text-slate-700">Pesquisar Equipamento</label><div class="relative"><i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i><input list="lista-saida-items" id="saida-item-input" class="mt-1 block w-full rounded-md border-gray-300 border py-3 pl-10 shadow-sm focus:ring-red-500 focus:border-red-500 text-sm font-medium"><datalist id="lista-saida-items"></datalist></div></div><section id="saida-conferencia" hidden class="rounded-xl border border-blue-200 p-4 mt-4"><h3 class="font-bold text-lg mb-2">Confira o equipamento selecionado</h3><p class="text-sm text-slate-500 mb-3">Dados do cadastro para conferência. Para corrigir informações, utilize Atualizar.</p><div id="saida-ficha" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div><p id="saida-saldo-previsto" role="status" class="font-bold mt-4"></p></section>
                             <hr class="border-gray-200">
                             <div class="grid grid-cols-2 gap-5"><div><label class="block text-sm font-semibold text-slate-700">Qtd Retirada</label><input type="number" id="saida-qtd" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500" min="1" value="1"></div><div><label class="block text-sm font-semibold text-slate-700">Sistema / Chamado</label><input type="text" id="saida-chamado" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500"></div></div>
@@ -552,10 +567,11 @@
                 <div id="tab-relatorio" class="tab-tool-content hidden h-full flex flex-col justify-center items-center">
                     <i class="fas fa-file-contract text-6xl text-slate-300 mb-6"></i>
                     <h2 class="text-2xl font-bold text-slate-800 mb-2">Exportações e Relatórios Oficiais</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl mb-8">
                         <div class="border rounded-xl p-6 bg-blue-50 shadow-sm text-center"><i class="fas fa-boxes text-blue-500 text-3xl mb-3"></i><h3 class="font-bold text-slate-800 mb-4">Relatório Consolidado</h3><button id="btn-relatorio-analitico-estoque" class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700 transition shadow flex justify-center items-center cursor-pointer"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF Estoque</button></div>
                         <div class="border rounded-xl p-6 bg-indigo-50 shadow-sm text-center"><i class="fas fa-map-marker-alt text-indigo-500 text-3xl mb-3"></i><h3 class="font-bold text-slate-800 mb-4">Relatório de Rastreio</h3><button id="btn-relatorio-analitico-rastreio" class="w-full bg-indigo-600 text-white font-bold py-3 rounded hover:bg-indigo-700 transition shadow flex justify-center items-center cursor-pointer"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF Locais</button></div>
                         <div class="border rounded-xl p-6 bg-purple-50 shadow-sm text-center"><i class="fas fa-phone-volume text-purple-500 text-3xl mb-3"></i><h3 class="font-bold text-slate-800 mb-4">Relatório VoIP</h3><button id="btn-relatorio-analitico-voip" class="w-full bg-purple-600 text-white font-bold py-3 rounded hover:bg-purple-700 transition shadow flex justify-center items-center cursor-pointer"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF Ramais</button></div>
+                        <div class="border rounded-xl p-6 bg-amber-50 shadow-sm text-center"><i class="fas fa-tools text-amber-500 text-3xl mb-3"></i><h3 class="font-bold text-slate-800 mb-4">Relatório Gerencial de Manutenção</h3><button id="btn-relatorio-manutencao" class="w-full bg-amber-600 text-white font-bold py-3 rounded hover:bg-amber-700 transition shadow flex justify-center items-center cursor-pointer"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF Manutenção</button></div>
                     </div>
                     <button id="btn-export-csv" class="text-slate-500 hover:text-slate-800 font-bold transition flex items-center underline"><i class="fas fa-file-csv mr-2"></i> Ou exportar dados brutos em CSV</button>
                 </div>
@@ -757,6 +773,7 @@
             if (e.target.closest('#btn-relatorio-analitico-estoque')) { window.gerarRelatorioAnalitico('estoque'); return; }
             if (e.target.closest('#btn-relatorio-analitico-rastreio')) { window.gerarRelatorioAnalitico('rastreio'); return; }
             if (e.target.closest('#btn-relatorio-analitico-voip')) { window.gerarRelatorioAnalitico('voip'); return; }
+            if (e.target.closest('#btn-relatorio-manutencao')) { window.gerarRelatorioAnalitico('manutencao'); return; }
 
             // PDF dos Logs
             if (e.target.closest('#btn-export-logs-pdf')) {
@@ -1080,6 +1097,7 @@
             // Qualquer coleção que ainda não tenha respondido simplesmente fica vazia.
             try {
                 atualizarFiltroCategoriaTabela();
+                renderCondicaoControles();
                 atualizarInterfaceEstoque();
                 atualizarInterfaceRastreio();
                 atualizarInterfaceVoip();
@@ -1287,7 +1305,7 @@ window.atualizarInterfaceEstoque = function() {
             if(document.getElementById('kpi-total-saidas')) document.getElementById('kpi-total-saidas').innerText = tSaidas; 
             if(document.getElementById('kpi-zerado')) document.getElementById('kpi-zerado').innerText = tZerado;
 
-            let filtrados = window.estoqueLocal.filter(item => { let matchBusca = true; if (window.currentSearchText) { const searchTerms = window.currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !window.currentFilterCat || stockCategoryKey(item.Categoria) === window.currentFilterCat; return matchBusca && matchCat; });
+            let filtrados = window.estoqueLocal.filter(item => { let matchBusca = true; if (window.currentSearchText) { const searchTerms = window.currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !window.currentFilterCat || stockCategoryKey(item.Categoria) === window.currentFilterCat; return matchBusca && matchCat && (!window.currentFilterCond || item.Condicao === window.currentFilterCond); });
             filtrados.sort((a,b)=>String(a.Componente||'').localeCompare(String(b.Componente||''),'pt-BR',{sensitivity:'base',numeric:true}) || String(a.Local||'').localeCompare(String(b.Local||''),'pt-BR',{sensitivity:'base',numeric:true}));
             const totalPaginas = Math.ceil(filtrados.length / window.itemsPerPage) || 1; if(window.currentPageEstoque > totalPaginas) window.currentPageEstoque = totalPaginas;
             const inicio = (window.currentPageEstoque - 1) * window.itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + window.itemsPerPage);
@@ -1299,7 +1317,7 @@ window.atualizarInterfaceEstoque = function() {
                 if(['Funcionando','Em manutenção','Não funcionando'].includes(item.Condicao)) badge += '<br><span class="text-xs font-bold">'+escHtml(item.Condicao)+'</span>';
                 tbody.innerHTML += `<tr class="hover:bg-slate-50 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-semibold text-slate-700">${escHtml(item.Categoria||'')}</td><td class="px-6 py-4 text-sm font-bold text-slate-900">${escHtml(item.Componente||'')}<br><span class="text-xs font-normal text-slate-500">${escHtml(item.Modelo||'')} / ${escHtml(item.Especificação||'')}</span></td><td class="px-6 py-4 text-sm text-blue-600">${escHtml(item.Local||'')}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${escHtml(item.Série||'')}</td><td class="px-6 py-4 text-sm font-mono text-slate-500">${escHtml(item.Patrimonio||'')}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${qtd}</td><td class="px-6 py-4">${badge}</td></tr>`;
             });
-            if(document.getElementById('estoque-page-info')) { const unidadesFiltradas = filtrados.reduce((soma, item) => soma + (Number(item.Quantidade) || 0), 0); const filtroAtivo = window.currentFilterCat || window.currentSearchText; document.getElementById('estoque-page-info').innerText = filtrados.length ? `Mostrando ${inicio + 1} a ${Math.min(inicio + window.itemsPerPage, filtrados.length)} de ${filtrados.length} registros${filtroAtivo ? ` · ${unidadesFiltradas} unidade(s) no filtro` : ''}` : 'Nenhum registro encontrado para este filtro.'; }
+            if(document.getElementById('estoque-page-info')) { const unidadesFiltradas = filtrados.reduce((soma, item) => soma + (Number(item.Quantidade) || 0), 0); const filtroAtivo = window.currentFilterCat || window.currentSearchText || window.currentFilterCond; document.getElementById('estoque-page-info').innerText = filtrados.length ? `Mostrando ${inicio + 1} a ${Math.min(inicio + window.itemsPerPage, filtrados.length)} de ${filtrados.length} registros${filtroAtivo ? ` · ${unidadesFiltradas} unidade(s) no filtro` : ''}` : 'Nenhum registro encontrado para este filtro.'; }
             if(document.getElementById('btn-prev-estoque')) document.getElementById('btn-prev-estoque').disabled = window.currentPageEstoque === 1;
             if(document.getElementById('btn-next-estoque')) document.getElementById('btn-next-estoque').disabled = window.currentPageEstoque === totalPaginas;
         }
@@ -1309,7 +1327,7 @@ window.atualizarInterfaceEstoque = function() {
             let tTotalRastreio = 0; window.localidadesLocais.forEach(item => tTotalRastreio += (Number(item.Quantidade) || 0));
             if(document.getElementById('kpi-total-rastreio')) document.getElementById('kpi-total-rastreio').innerText = tTotalRastreio;
 
-            let filtrados = window.localidadesLocais.filter(item => { if (!window.currentSearchRastreio) return true; const searchTerms = window.currentSearchRastreio.toLowerCase().split(' '); const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); });
+            let filtrados = window.localidadesLocais.filter(item => { if (window.currentFilterCond && item.Condicao !== window.currentFilterCond) return false; if (!window.currentSearchRastreio) return true; const searchTerms = window.currentSearchRastreio.toLowerCase().split(' '); const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); });
             filtrados.sort((a,b)=>String(a.Equipamento||'').localeCompare(String(b.Equipamento||''),'pt-BR',{sensitivity:'base',numeric:true}) || String(a.Local||'').localeCompare(String(b.Local||''),'pt-BR',{sensitivity:'base',numeric:true}));
             const totalPaginas = Math.ceil(filtrados.length / window.itemsPerPage) || 1; if(window.currentPageRastreio > totalPaginas) window.currentPageRastreio = totalPaginas;
             const inicio = (window.currentPageRastreio - 1) * window.itemsPerPage; const dadosPagina = filtrados.slice(inicio, inicio + window.itemsPerPage);
@@ -1397,6 +1415,7 @@ window.atualizarInterfaceEstoque = function() {
         // Liga o gráfico "Divisão por categoria" à tabela "Estoque Consolidado".
         // A tabela lista cada registro separadamente (série, patrimônio, local e quantidade).
         function aplicarCategoriaNaTabela(key,mostrarTabela){
+            if(key&&window.currentFilterCond){window.currentFilterCond='';window.currentPageRastreio=1;renderCondicaoControles();atualizarInterfaceRastreio();}
             window.currentFilterCat=key||'';window.currentPageEstoque=1;
             if(key){window.currentSearchText='';const busca=document.getElementById('search-table-estoque');if(busca)busca.value='';}
             atualizarFiltroCategoriaTabela();atualizarInterfaceEstoque();
@@ -1415,7 +1434,7 @@ window.atualizarInterfaceEstoque = function() {
         }
         function renderStockCategoryButtons(){
             const area=document.getElementById('stock-category-buttons');if(!area)return;area.replaceChildren();
-            stockCategories().forEach(c=>{const button=document.createElement('button');button.type='button';button.className='text-xs px-2 py-1 rounded border flex items-center gap-2';button.setAttribute('aria-pressed',String(c.key===selectedStockCategory));button.style.borderColor=c.key===selectedStockCategory?c.color:'#cbd5e1';button.style.fontWeight=c.key===selectedStockCategory?'700':'400';const swatch=document.createElement('span');swatch.style.cssText=`display:inline-block;width:10px;height:10px;border-radius:3px;background:${c.color}`;button.append(swatch,document.createTextNode(`${c.name} (${c.total})`));button.addEventListener('click',()=>selectStockCategory(c.key));area.appendChild(button);});
+            stockCategories().forEach(c=>{const button=document.createElement('button');button.type='button';button.className='rounded border flex items-center';button.style.cssText='font-size:10px;line-height:1.2;padding:2px 6px;gap:4px';button.setAttribute('aria-pressed',String(c.key===selectedStockCategory));button.style.borderColor=c.key===selectedStockCategory?c.color:'#cbd5e1';button.style.fontWeight=c.key===selectedStockCategory?'700':'400';const swatch=document.createElement('span');swatch.style.cssText=`display:inline-block;width:8px;height:8px;border-radius:2px;background:${c.color}`;button.append(swatch,document.createTextNode(`${c.name} (${c.total})`));button.addEventListener('click',()=>selectStockCategory(c.key));area.appendChild(button);});
             const reset=document.getElementById('stock-chart-reset');if(reset)reset.onclick=()=>{selectedStockCategory=null;renderStockDetail();renderStockCategoryButtons();aplicarCategoriaNaTabela(null,false);};
             atualizarFiltroCategoriaTabela();
         }
@@ -1455,11 +1474,67 @@ window.atualizarInterfaceEstoque = function() {
             canvas.parentElement.style.height=Math.max(160,rows.reduce((n,r)=>n+Math.max(40,wrapStockLabel(r.name).length*16+12),0)+35)+'px';
             return new window.Chart(canvas,{type:'bar',plugins:[{id:'dashboardNumbers',afterDatasetsDraw(c){const ctx=c.ctx;ctx.save();ctx.font='bold 11px Arial';ctx.fillStyle=document.body.classList.contains('dark')?'#f8fafc':'#334155';ctx.textBaseline='middle';c.getDatasetMeta(0).data.forEach((bar,i)=>ctx.fillText(String(c.data.datasets[0].data[i]),bar.x+5,bar.y));ctx.restore();}}],data:{labels:rows.length?rows.map(r=>wrapStockLabel(r.name)):['Nenhum registro'],datasets:[{data:rows.length?rows.map(r=>r.quantity):[0],backgroundColor:color,borderRadius:4,barThickness:16}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:{right:40}},animation:{onComplete:function(){if(canvasId==='chartTopSaidas')window.imgChart2=this.toBase64Image();}},plugins:{legend:{display:false},datalabels:{display:false},tooltip:{callbacks:{title:items=>rows[items[0]?.dataIndex]?.name||'Sem dados'}}},scales:{x:{beginAtZero:true,grace:'15%',ticks:{precision:0}},y:{ticks:{autoSkip:false,font:{size:10}},grid:{display:false}}},onClick:(event,elements)=>{if(elements.length&&rows.length)onClick?.(rows[elements[0].index]);}}});
         }
+        const LIMITE_ALERTAS_CARTAO=5;let alertasCompletos=[],chartAlertasCompleto=null;
+        function abrirAlertasCompletos(){
+            const janela=document.getElementById('alert-chart-dialog');if(!janela.open)janela.showModal();
+            if(chartAlertasCompleto){try{chartAlertasCompleto.destroy();}catch{}}
+            chartAlertasCompleto=compactDashboardChart('chartAlertasCompleto',alertasCompletos,'#ef4444',showAlertDetails);
+        }
+        // ===== Condição dos equipamentos (Estoque + Rastreio) =====
+        const CONDICOES=[{nome:'Em manutenção',cor:'#f59e0b'},{nome:'Não funcionando',cor:'#ef4444'}];
+        let chartCondicao=null;window.currentFilterCond='';
+        function dadosCondicao(){
+            return CONDICOES.map(c=>{const est=(window.estoqueLocal||[]).filter(i=>i.Condicao===c.nome),ras=(window.localidadesLocais||[]).filter(i=>i.Condicao===c.nome);
+                return {...c,est,ras,registros:est.length+ras.length,unidades:[...est,...ras].reduce((t,i)=>t+(Number(i.Quantidade)||0),0)};});
+        }
+        function selecionarCondicao(nome){
+            window.currentFilterCond=window.currentFilterCond===nome?'':nome;
+            if(window.currentFilterCond){
+                window.currentSearchText='';window.currentSearchRastreio='';['search-table-estoque','search-table-rastreio'].forEach(id=>{const campo=document.getElementById(id);if(campo)campo.value='';});
+                if(window.currentFilterCat||selectedStockCategory!==null){selectedStockCategory=null;window.currentFilterCat='';renderStockDetail();renderStockCategoryButtons();atualizarFiltroCategoriaTabela();}
+            }
+            window.currentPageEstoque=1;window.currentPageRastreio=1;
+            atualizarInterfaceEstoque();atualizarInterfaceRastreio();renderCondicaoControles();
+            if(window.currentFilterCond){
+                const d=dadosCondicao().find(c=>c.nome===window.currentFilterCond);
+                document.getElementById(d&&(d.est.length||!d.ras.length)?'view-estoque-btn':'view-rastreio-btn')?.click();
+                const ancora=document.getElementById('tabelas-ancora');if(ancora)setTimeout(()=>ancora.scrollIntoView({behavior:'smooth',block:'start'}),50);
+            }
+        }
+        function renderCondicaoControles(){
+            const area=document.getElementById('cond-buttons');if(!area)return;area.replaceChildren();
+            const dados=dadosCondicao(),ativo=window.currentFilterCond;
+            dados.forEach(c=>{const botao=document.createElement('button');botao.type='button';botao.className='text-xs px-2 py-1 rounded border flex items-center gap-2';
+                botao.setAttribute('aria-pressed',String(c.nome===ativo));botao.style.borderColor=c.nome===ativo?c.cor:'#cbd5e1';botao.style.fontWeight=c.nome===ativo?'700':'400';
+                const cor=document.createElement('span');cor.style.cssText=`display:inline-block;width:10px;height:10px;border-radius:3px;background:${c.cor}`;
+                botao.append(cor,document.createTextNode(`${c.nome} (${c.unidades})`));botao.addEventListener('click',()=>selecionarCondicao(c.nome));area.appendChild(botao);});
+            const limpar=document.getElementById('cond-chart-reset');if(limpar){limpar.hidden=!ativo;limpar.onclick=()=>{if(window.currentFilterCond)selecionarCondicao(window.currentFilterCond);};}
+            const legenda=document.getElementById('cond-chart-caption'),sel=dados.find(c=>c.nome===ativo),total=dados.reduce((t,c)=>t+c.registros,0);
+            if(legenda)legenda.textContent=sel?`${sel.nome}: ${sel.est.length} registro(s) no Estoque e ${sel.ras.length} no Rastreio.`:`${total} registro(s) em manutenção ou com defeito. Clique em uma cor para filtrar Estoque e Rastreio.`;
+            const vazio=document.getElementById('cond-chart-empty');if(vazio)vazio.hidden=dados.some(c=>c.unidades>0);
+            // KPI: soma das unidades em manutenção e com defeito (Não funcionando), Estoque + Rastreio.
+            const emManutencao=dados.find(c=>c.nome==='Em manutenção').unidades,comDefeito=dados.find(c=>c.nome==='Não funcionando').unidades;
+            const kpi=document.getElementById('kpi-manutencao');if(kpi)kpi.textContent=String(emManutencao+comDefeito);
+            const kpiDetalhe=document.getElementById('kpi-manutencao-detalhe');if(kpiDetalhe)kpiDetalhe.textContent=`${emManutencao} em manutenção · ${comDefeito} com defeito`;
+        }
+        function renderGraficoCondicao(){
+            renderCondicaoControles();
+            const canvas=document.getElementById('chartCondicao');if(!canvas||typeof window.Chart!=='function')return;
+            if(chartCondicao){try{chartCondicao.destroy();}catch{}}
+            const dados=dadosCondicao();
+            chartCondicao=new window.Chart(canvas,{type:'doughnut',data:{labels:dados.map(c=>c.nome),datasets:[{data:dados.map(c=>c.unidades),backgroundColor:dados.map(c=>c.cor),borderWidth:2,borderColor:'#fff',hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',rotation:-90,circumference:180,animation:{onComplete:function(){window.imgChartCondicao=this.toBase64Image();}},plugins:{legend:{display:false},datalabels:{display:false},tooltip:{callbacks:{label:c=>`${c.label}: ${c.raw} unidade(s)`}}},onClick:(event,elements)=>{const escolhida=elements.length?dados[elements[0].index]:null;if(escolhida)selecionarCondicao(escolhida.nome);},onHover:(event,elements)=>{if(event.native)event.native.target.style.cursor=elements.length?'pointer':'default';}}});
+        }
         function renderDashboardSides(){
             if(chartTopSaidas)chartTopSaidas.destroy();if(chartAlertasEstoque)chartAlertasEstoque.destroy();
             const withdrawn=dashboardWithdrawals();
             chartTopSaidas=compactDashboardChart('chartTopSaidas',withdrawn,'#2563eb',r=>openDashboardDetail('Retiradas após a atualização',[{name:r.name,detail:`Quantidade retirada: ${r.quantity}`} ]));
-            chartAlertasEstoque=compactDashboardChart('chartAlertasEstoque',dashboardAlerts().map(g=>({name:g.nome,quantity:g.total})),'#ef4444',showAlertDetails);
+            // Mostra só os mais críticos no cartão; o gráfico completo abre em janela.
+            alertasCompletos=dashboardAlerts().sort((a,b)=>(a.status==='critico'?0:1)-(b.status==='critico'?0:1)||(a.total-a.minimo)-(b.total-b.minimo)||a.nome.localeCompare(b.nome,'pt-BR')).map(g=>({name:g.nome,quantity:g.total}));
+            chartAlertasEstoque=compactDashboardChart('chartAlertasEstoque',alertasCompletos.slice(0,LIMITE_ALERTAS_CARTAO),'#ef4444',showAlertDetails);
+            const areaAlerta=document.getElementById('chartAlertasEstoque')?.parentElement;if(areaAlerta){areaAlerta.style.height='100%';try{chartAlertasEstoque?.resize();}catch{}}
+            const legendaAlerta=document.getElementById('alert-chart-caption'),botaoAlerta=document.getElementById('alert-chart-full');
+            if(legendaAlerta)legendaAlerta.textContent=alertasCompletos.length>LIMITE_ALERTAS_CARTAO?`Mostrando os ${LIMITE_ALERTAS_CARTAO} mais críticos de ${alertasCompletos.length} equipamentos. Clique para ver os detalhes.`:'Quantidade igual ou abaixo do mínimo. Clique para ver os detalhes.';
+            if(botaoAlerta){botaoAlerta.hidden=alertasCompletos.length<=LIMITE_ALERTAS_CARTAO;botaoAlerta.textContent=`Ver gráfico completo (${alertasCompletos.length} equipamentos)`;botaoAlerta.onclick=abrirAlertasCompletos;}
             const status=document.getElementById('withdrawals-caption');if(status)status.textContent=withdrawn.length?'Somente saídas desde 27/09/2026, 10:01 (Brasília). Base: últimos 100 logs carregados.':'Nenhuma retirada desde a atualização. Histórico anterior preservado.';
         }
 
@@ -1490,6 +1565,7 @@ window.atualizarInterfaceEstoque = function() {
                 chartPizzaCategorias = new ChartLib(ctxPizza, {type:'doughnut', data:{labels:cats.map(c=>c.name),datasets:[{data:cats.map(c=>c.total),backgroundColor:cats.map(c=>c.color),borderWidth:2,borderColor:'#fff',hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',rotation:-90,circumference:180,animation:{onComplete:function(){window.imgChart3=this.toBase64Image();}},plugins:{legend:{display:false},datalabels:{display:false},tooltip:{callbacks:{label:c=>`${c.label}: ${c.raw} unidades`}}},onClick:(event,elements)=>{if(elements.length)selectStockCategory(cats[elements[0].index].key);},onHover:(event,elements)=>{if(event.native)event.native.target.style.cursor=elements.length?'pointer':'default';}}});
             }
             renderStockCategoryButtons();
+            renderGraficoCondicao();
 
             const ramalGroups=[{name:'Em uso',color:'#2563eb',rows:[]},{name:'Livres',color:'#10b981',rows:[]},{name:'Sem IP informado',color:'#94a3b8',rows:[]}];
             window.voipLocal.forEach(v=>{const ip=String(v.Ip||'').trim();ramalGroups[ip.toUpperCase()==='DESATIVADO'?1:ip?0:2].rows.push(v);});
@@ -1610,6 +1686,42 @@ window.atualizarInterfaceEstoque = function() {
                 document.getElementById('print-col-3').style.display = 'block'; document.getElementById('print-col-3').className = "w-1/2";
                 
                 if(window.imgChartVoip) { document.getElementById('print-chart-3').src = window.imgChartVoip; document.getElementById('print-chart-3-title').innerText = "Status de Disponibilidade VoIP"; }
+            } else if (tipoRelatorio === 'manutencao') {
+                // Relatório gerencial: equipamentos Em manutenção ou Não funcionando (Estoque + Rastreio).
+                const agora = Date.now();
+                const dataCondicao = v => { try { const d = v && typeof v.toDate === 'function' ? v.toDate() : (v ? new Date(v) : null); return d && !isNaN(d.getTime()) ? d : null; } catch { return null; } };
+                const comProblema = i => i.Condicao === 'Em manutenção' || i.Condicao === 'Não funcionando';
+                const registros = [
+                    ...(window.estoqueLocal || []).filter(comProblema).map(i => ({ base: 'Estoque', nome: grupoDoItem(i)?.nome || nomeEquipamento(i.Componente) || 'SEM NOME', local: i.Local, serie: i.Série, patrimonio: i.Patrimonio, qtd: Number(i.Quantidade) || 0, condicao: i.Condicao, obs: i.ObservacaoCondicao, em: dataCondicao(i.CondicaoAtualizadaEm), por: i.CondicaoAtualizadaPor })),
+                    ...(window.localidadesLocais || []).filter(comProblema).map(l => ({ base: 'Rastreio', nome: nomeEquipamento(l.Equipamento) || 'SEM NOME', local: l.Local, serie: l.Serie, patrimonio: l.Patrimonio, qtd: Number(l.Quantidade) || 0, condicao: l.Condicao, obs: l.ObservacaoCondicao, em: dataCondicao(l.CondicaoAtualizadaEm), por: l.CondicaoAtualizadaPor }))
+                ].map(r => ({ ...r, dias: r.em ? Math.max(0, Math.floor((agora - r.em.getTime()) / 86400000)) : null }));
+                // Não funcionando primeiro; dentro de cada condição, os mais antigos primeiro.
+                registros.sort((a, b) => (a.condicao === 'Não funcionando' ? 0 : 1) - (b.condicao === 'Não funcionando' ? 0 : 1) || (b.dias ?? -1) - (a.dias ?? -1) || a.nome.localeCompare(b.nome, 'pt-BR', { numeric: true }));
+                const unidades = cond => registros.filter(r => r.condicao === cond).reduce((t, r) => t + r.qtd, 0);
+                const uManut = unidades('Em manutenção'), uDefeito = unidades('Não funcionando'), uTotal = uManut + uDefeito;
+                const maiorTempo = registros.reduce((m, r) => r.dias !== null && r.dias > m ? r.dias : m, -1);
+                const acima30 = registros.filter(r => r.dias !== null && r.dias > 30).length;
+                titleDoc.textContent = `Relatório Gerencial de Manutenção - ${localStorage.getItem('pref_title') || 'SETIC'}`;
+                document.getElementById('print-resumo-title').innerText = "Resumo Gerencial";
+                parecer.innerHTML = `Equipamentos <b>em manutenção</b> ou <b>não funcionando</b> registrados no Estoque e no Rastreio: <b>${registros.length}</b> registro(s), <b>${uTotal}</b> unidade(s). Emitido por ${escHtml(window.userEmail)} em ${dataAtual}.`;
+                if (!registros.length) {
+                    resumo.innerHTML = 'Nenhum equipamento está registrado como <b>em manutenção</b> ou <b>não funcionando</b> no momento.';
+                } else {
+                    const porEquipamento = new Map();
+                    registros.forEach(r => { const e = porEquipamento.get(r.nome) || { manut: 0, defeito: 0 }; if (r.condicao === 'Em manutenção') e.manut += r.qtd; else e.defeito += r.qtd; porEquipamento.set(r.nome, e); });
+                    const lista = [...porEquipamento].sort((a, b) => (b[1].manut + b[1].defeito) - (a[1].manut + a[1].defeito) || a[0].localeCompare(b[0], 'pt-BR')).map(([nome, e]) => `<li><b>${escHtml(nome)}:</b> ${e.manut} em manutenção · ${e.defeito} não funcionando</li>`).join('');
+                    const regEstoque = registros.filter(r => r.base === 'Estoque').length, regRastreio = registros.length - regEstoque;
+                    resumo.innerHTML = `<b>${uManut}</b> unidade(s) em manutenção e <b>${uDefeito}</b> não funcionando. Registros: <b>${regEstoque}</b> no Estoque e <b>${regRastreio}</b> no Rastreio.` + (acima30 ? ` <b style="color:#b91c1c">${acima30} registro(s) estão nesta condição há mais de 30 dias.</b>` : '') + `<br><br><b>Por equipamento:</b><ul style="column-count: 2; font-size: 11px; margin-top: 5px; list-style-type: square; margin-left: 15px;">${lista}</ul>`;
+                }
+                kpisContainer.innerHTML = `<div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Unidades afetadas</p><p class="text-2xl font-black text-slate-800">${uTotal}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Em manutenção</p><p class="text-2xl font-black" style="color:#d97706">${uManut}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Não funcionando</p><p class="text-2xl font-black" style="color:#dc2626">${uDefeito}</p></div><div class="bg-slate-50 border border-slate-200 p-3 text-center print-bg"><p class="text-[10px] text-slate-500 font-bold uppercase">Maior tempo parado</p><p class="text-2xl font-black text-slate-800">${maiorTempo >= 0 ? maiorTempo + ' dia(s)' : '-'}</p></div>`;
+                thead.innerHTML = `<tr class="bg-slate-100 print-bg"><th class="border px-2 py-1 text-left">Condição</th><th class="border px-2 py-1 text-left">Base</th><th class="border px-2 py-1 text-left">Equipamento</th><th class="border px-2 py-1 text-left">Local</th><th class="border px-2 py-1 text-left">Nº Série</th><th class="border px-2 py-1 text-left">Nº Patrimônio</th><th class="border px-2 py-1 text-center">Qtd</th><th class="border px-2 py-1 text-left">Observação</th><th class="border px-2 py-1 text-left">Registrado em / por</th><th class="border px-2 py-1 text-center">Dias</th></tr>`;
+                tbody.innerHTML = registros.length ? registros.map(r => `<tr><td class="border px-2 py-1 font-bold" style="color:${r.condicao === 'Não funcionando' ? '#dc2626' : '#d97706'}">${escHtml(r.condicao)}</td><td class="border px-2 py-1">${r.base}</td><td class="border px-2 py-1">${escHtml(r.nome)}</td><td class="border px-2 py-1">${escHtml(r.local || '-')}</td><td class="border px-2 py-1 font-mono">${escHtml(r.serie || '-')}</td><td class="border px-2 py-1 font-mono">${escHtml(r.patrimonio || '-')}</td><td class="border px-2 py-1 text-center font-bold">${r.qtd}</td><td class="border px-2 py-1">${escHtml(r.obs || '-')}</td><td class="border px-2 py-1">${r.em ? r.em.toLocaleDateString('pt-BR') : '-'}${r.por ? '<br>' + escHtml(r.por) : ''}</td><td class="border px-2 py-1 text-center">${r.dias ?? '-'}</td></tr>`).join('') : `<tr><td colspan="10" class="border px-2 py-3 text-center">Nenhum equipamento em manutenção ou não funcionando.</td></tr>`;
+                if (window.imgChartCondicao && uTotal > 0) {
+                    visualTitle.style.display = 'block'; chartsContainer.style.display = 'flex'; chartsContainer.className = "flex justify-center mb-8";
+                    document.getElementById('print-col-1').style.display = 'none'; document.getElementById('print-col-2').style.display = 'none';
+                    document.getElementById('print-col-3').style.display = 'block'; document.getElementById('print-col-3').className = "w-1/2";
+                    document.getElementById('print-chart-3').src = window.imgChartCondicao; document.getElementById('print-chart-3-title').innerText = "Em manutenção x Não funcionando";
+                } else { visualTitle.style.display = 'none'; chartsContainer.style.display = 'none'; }
             }
             const generatedAt = document.getElementById('print-generated-at');
             if (generatedAt) generatedAt.textContent = `${dataAtual} ${horaAtual}`;
@@ -1634,9 +1746,9 @@ window.atualizarInterfaceEstoque = function() {
             report.classList.remove('active-print'); report.classList.add('hidden');
             simple.classList.remove('hidden'); simple.classList.add('active-print'); const dataAtual = new Date().toLocaleDateString('pt-BR'), horaAtual = new Date().toLocaleTimeString('pt-BR').substring(0,5); const titleObj = document.getElementById('print-simple-title'), dateObj = document.getElementById('print-simple-date'), theadObj = document.getElementById('print-simple-thead'), tbodyObj = document.getElementById('print-simple-tbody'); tbodyObj.innerHTML = '';
             if(tipo === 'estoque') {
-                titleObj.innerText = "Extrato: Inventário Consolidado"; theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente / Espec.</th><th>Local</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`; let filtrados = window.estoqueLocal.filter(item => { let matchBusca = true; if (window.currentSearchText) { const searchTerms = window.currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !window.currentFilterCat || stockCategoryKey(item.Categoria) === window.currentFilterCat; return matchBusca && matchCat; }); let totaisEquip = {}; filtrados.sort((a, b) => { let cmp = String(a.Componente || '').localeCompare(String(b.Componente || '')); if (cmp !== 0) return cmp; return String(a.Local || '').localeCompare(String(b.Local || '')); }).forEach(i => { let eqName = grupoDoItem(i)?.nome || String(i.Componente || 'Geral'); totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (Number(i.Quantidade) || 0); tbodyObj.innerHTML += `<tr><td>${escHtml(i.Categoria||'')}</td><td><b>${escHtml(i.Componente||'')}</b><br><span style="font-size:10px; color:#555;">${escHtml(i.Modelo||'')} / ${escHtml(i.Especificação||'')}</span></td><td>${escHtml(i.Local||'')}</td><td style="font-family:monospace;">${escHtml(i.Série||'')}</td><td style="font-family:monospace;">${escHtml(i.Patrimonio||'')}</td><td style="text-align:center; font-weight:bold;">${escHtml(i.Quantidade||0)}</td></tr>`; }); let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${escHtml(k)}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${escHtml(window.userEmail)} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
+                titleObj.innerText = "Extrato: Inventário Consolidado"; theadObj.innerHTML = `<tr><th>Categoria</th><th>Componente / Espec.</th><th>Local</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`; let filtrados = window.estoqueLocal.filter(item => { let matchBusca = true; if (window.currentSearchText) { const searchTerms = window.currentSearchText.toLowerCase().split(' '); const itemText = [item.Categoria, item.Componente, item.Modelo, item.Especificação, item.Local, item.Série, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); matchBusca = searchTerms.every(term => itemText.includes(term)); } let matchCat = !window.currentFilterCat || stockCategoryKey(item.Categoria) === window.currentFilterCat; return matchBusca && matchCat && (!window.currentFilterCond || item.Condicao === window.currentFilterCond); }); let totaisEquip = {}; filtrados.sort((a, b) => { let cmp = String(a.Componente || '').localeCompare(String(b.Componente || '')); if (cmp !== 0) return cmp; return String(a.Local || '').localeCompare(String(b.Local || '')); }).forEach(i => { let eqName = grupoDoItem(i)?.nome || String(i.Componente || 'Geral'); totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (Number(i.Quantidade) || 0); tbodyObj.innerHTML += `<tr><td>${escHtml(i.Categoria||'')}</td><td><b>${escHtml(i.Componente||'')}</b><br><span style="font-size:10px; color:#555;">${escHtml(i.Modelo||'')} / ${escHtml(i.Especificação||'')}</span></td><td>${escHtml(i.Local||'')}</td><td style="font-family:monospace;">${escHtml(i.Série||'')}</td><td style="font-family:monospace;">${escHtml(i.Patrimonio||'')}</td><td style="text-align:center; font-weight:bold;">${escHtml(i.Quantidade||0)}</td></tr>`; }); let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${escHtml(k)}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${escHtml(window.userEmail)} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
             } else if(tipo === 'rastreio') {
-                titleObj.innerText = "Extrato: Rastreamento Físico"; theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Local SIPAC</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`; let filtradosRastreio = window.localidadesLocais.filter(item => { if (!window.currentSearchRastreio) return true; const searchTerms = window.currentSearchRastreio.toLowerCase().split(' '); const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); }); let totaisEquip = {}; filtradosRastreio.sort((a, b) => { let cmp = String(a.Equipamento || '').localeCompare(String(b.Equipamento || '')); if (cmp !== 0) return cmp; return String(a.Local || '').localeCompare(String(b.Local || '')); }).forEach(loc => { let eqName = String(loc.Equipamento || 'Geral'); totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (Number(loc.Quantidade) || 0); tbodyObj.innerHTML += `<tr><td><b>${escHtml(loc.Equipamento||'')}</b></td><td>${escHtml(loc.Local||'')}</td><td>${escHtml(loc.LocalSipac||'')}</td><td>${escHtml(loc.Marca||'')}</td><td style="font-family:monospace;">${escHtml(loc.Serie||'')}</td><td style="font-family:monospace;">${escHtml(loc.Patrimonio||'')}</td><td style="text-align:center; font-weight:bold;">${escHtml(loc.Quantidade||0)}</td></tr>`; }); let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${escHtml(k)}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${escHtml(window.userEmail)} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
+                titleObj.innerText = "Extrato: Rastreamento Físico"; theadObj.innerHTML = `<tr><th>Equipamento</th><th>Local Físico</th><th>Local SIPAC</th><th>Marca/Modelo</th><th>Nº Série</th><th>Nº Patrimônio</th><th style="text-align:center;">Qtd</th></tr>`; let filtradosRastreio = window.localidadesLocais.filter(item => { if (window.currentFilterCond && item.Condicao !== window.currentFilterCond) return false; if (!window.currentSearchRastreio) return true; const searchTerms = window.currentSearchRastreio.toLowerCase().split(' '); const itemText = [item.Equipamento, item.Local, item.LocalSipac, item.Marca, item.Serie, item.Patrimonio].map(v => String(v || '')).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); }); let totaisEquip = {}; filtradosRastreio.sort((a, b) => { let cmp = String(a.Equipamento || '').localeCompare(String(b.Equipamento || '')); if (cmp !== 0) return cmp; return String(a.Local || '').localeCompare(String(b.Local || '')); }).forEach(loc => { let eqName = String(loc.Equipamento || 'Geral'); totaisEquip[eqName] = (totaisEquip[eqName] || 0) + (Number(loc.Quantidade) || 0); tbodyObj.innerHTML += `<tr><td><b>${escHtml(loc.Equipamento||'')}</b></td><td>${escHtml(loc.Local||'')}</td><td>${escHtml(loc.LocalSipac||'')}</td><td>${escHtml(loc.Marca||'')}</td><td style="font-family:monospace;">${escHtml(loc.Serie||'')}</td><td style="font-family:monospace;">${escHtml(loc.Patrimonio||'')}</td><td style="text-align:center; font-weight:bold;">${escHtml(loc.Quantidade||0)}</td></tr>`; }); let sumStr = Object.keys(totaisEquip).sort().map(k => `<b>${escHtml(k)}:</b> ${totaisEquip[k]}`).join(' &nbsp;|&nbsp; '); dateObj.innerHTML = `Emitido por: ${escHtml(window.userEmail)} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Subtotais:</b> ${sumStr}</span>`;
             } else if(tipo === 'voip') {
                 titleObj.innerText = "Extrato: Telefonia VoIP"; theadObj.innerHTML = `<tr><th>Ramal</th><th>Setor</th><th>Endereço IP</th><th>Equipamento / Obs</th></tr>`; let filtrados = window.voipLocal.filter(item => { if (!window.currentSearchVoip) return true; if (window.currentSearchVoip === '[Livres]') return String(item.Ip || '').toUpperCase() === 'DESATIVADO'; if (window.currentSearchVoip === '[Em Uso]') return String(item.Ip || '').toUpperCase() !== 'DESATIVADO' && String(item.Ip || '').trim() !== ''; const searchTerms = window.currentSearchVoip.toLowerCase().split(' '); const itemText = [item.Ramal, item.Setor, item.Ip, item.Equipamento].map(v => String(v || '')).join(' ').toLowerCase(); return searchTerms.every(term => itemText.includes(term)); }); let tLivres = 0; filtrados.sort((a, b) => String(a.Ramal||'').localeCompare(String(b.Ramal||''))).forEach(v => { let ipStr = String(v.Ip || ''); if(ipStr.toUpperCase() === 'DESATIVADO') { tLivres++; ipStr = 'LIVRE (DESATIVADO)'; } tbodyObj.innerHTML += `<tr><td style="text-align:center; font-weight:bold;">${escHtml(v.Ramal||'')}</td><td>${escHtml(v.Setor||'')}</td><td style="font-family:monospace;">${escHtml(ipStr)}</td><td>${escHtml(v.Equipamento||'-')}</td></tr>`; }); dateObj.innerHTML = `Emitido por: ${escHtml(window.userEmail)} em ${dataAtual} às ${horaAtual}<br><span style="color:#161B33; font-size: 11px; display:inline-block; margin-top:5px;"><b>Total de Ramais:</b> ${filtrados.length} &nbsp;|&nbsp; <b>Livres:</b> ${tLivres}</span>`;
             }
@@ -1645,7 +1757,39 @@ window.atualizarInterfaceEstoque = function() {
         }
 
         // ================= GESTÃO MANUAL E UPLOADS =================
-        function atualizarDatalistSaida() { const dl = document.getElementById('lista-saida-items'); if(!dl) return; dl.innerHTML = ''; mapItensSaida = {}; [...window.estoqueLocal].sort((a,b) => String(a.Categoria||'').localeCompare(String(b.Categoria||''))).forEach(i => { const text = `[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||''}) | Série: ${i.Série||''} | Patrimônio: ${i.Patrimonio||''} - Qtd: ${i.Quantidade||0}`; mapItensSaida[text + ' [ID: ' + i.id + ']'] = i; }); renderWithdrawalDetails(); }
+        // ===== Baixa / Saída: filtros Categoria → Equipamento =====
+        let pesquisarSaida=null;
+        const chaveGrupo=g=>g?g.cat+'|'+chaveTexto(g.nome):'';
+        function filtroSaidaAtivo(){return !!(document.getElementById('saida-filtro-categoria')?.value||document.getElementById('saida-filtro-equipamento')?.value);}
+        function itemPassaFiltroSaida(item){
+            if(!item)return false;
+            const cat=document.getElementById('saida-filtro-categoria')?.value||'',equip=document.getElementById('saida-filtro-equipamento')?.value||'';
+            if(cat&&stockCategoryKey(item.Categoria)!==cat)return false;
+            if(equip&&chaveGrupo(grupoDoItem(item))!==equip)return false;
+            return true;
+        }
+        function atualizarFiltrosSaida(){
+            const selCat=document.getElementById('saida-filtro-categoria'),selEq=document.getElementById('saida-filtro-equipamento');if(!selCat||!selEq)return;
+            const catAtual=selCat.value,eqAtual=selEq.value,cats=stockCategories();
+            selCat.replaceChildren(new Option('Todas as categorias',''),...cats.map(c=>new Option(`${c.name} (${c.total})`,c.key)));
+            selCat.value=cats.some(c=>c.key===catAtual)?catAtual:'';
+            const grupos=gruposEstoque().filter(g=>!selCat.value||g.cat===selCat.value).sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR',{numeric:true}));
+            selEq.replaceChildren(new Option(selCat.value?'Todos os equipamentos da categoria':'Todos os equipamentos',''),...grupos.map(g=>new Option(`${g.nome} (${g.total} un. · ${g.itens.length} registro(s))`,chaveGrupo(g))));
+            selEq.value=grupos.some(g=>chaveGrupo(g)===eqAtual)?eqAtual:'';
+            const limpar=document.getElementById('saida-filtro-limpar');if(limpar)limpar.hidden=!filtroSaidaAtivo();
+        }
+        function aplicarFiltroSaida(){
+            atualizarFiltrosSaida();
+            const input=document.getElementById('saida-item-input'),selecionado=mapItensSaida[input.value];
+            // Se a unidade escolhida não pertence mais ao filtro, a seleção é desfeita.
+            if(selecionado&&!itemPassaFiltroSaida(selecionado)){input.value='';renderWithdrawalDetails();}
+            if(pesquisarSaida){if(filtroSaidaAtivo()||input.value.trim())pesquisarSaida();else document.getElementById('saida-item-input-suggestions')?.replaceChildren();}
+        }
+        document.getElementById('saida-filtro-categoria').addEventListener('change',()=>{document.getElementById('saida-filtro-equipamento').value='';aplicarFiltroSaida();});
+        document.getElementById('saida-filtro-equipamento').addEventListener('change',aplicarFiltroSaida);
+        document.getElementById('saida-filtro-limpar').addEventListener('click',()=>{document.getElementById('saida-filtro-categoria').value='';document.getElementById('saida-filtro-equipamento').value='';aplicarFiltroSaida();});
+
+        function atualizarDatalistSaida() { const dl = document.getElementById('lista-saida-items'); if(!dl) return; dl.innerHTML = ''; mapItensSaida = {}; [...window.estoqueLocal].sort((a,b) => String(a.Categoria||'').localeCompare(String(b.Categoria||''))).forEach(i => { const text = `[${i.Categoria||'Geral'}] ${i.Componente||'Item'} ${i.Modelo||''} (Local: ${i.Local||''}) | Série: ${i.Série||''} | Patrimônio: ${i.Patrimonio||''} - Qtd: ${i.Quantidade||0}`; mapItensSaida[text + ' [ID: ' + i.id + ']'] = i; }); renderWithdrawalDetails(); atualizarFiltrosSaida(); const campoSaida=document.getElementById('saida-item-input'); if(pesquisarSaida&&filtroSaidaAtivo()&&!campoSaida.value.trim())pesquisarSaida(); }
         function atualizarSelectEdicaoLocais() { const dl = document.getElementById('lista-edit-locais'); if(!dl) return; dl.innerHTML = ''; mapEditLocais = {}; [...window.localidadesLocais].sort((a,b) => String(a.Equipamento||'').localeCompare(String(b.Equipamento||''))).forEach(loc => { const text = `${loc.Equipamento} | Local: ${loc.Local} | Patr: ${loc.Patrimonio || ''} | Série: ${loc.Serie || ''}`; mapEditLocais[text + ' [ID: ' + loc.id + ']'] = loc; }); }
         function atualizarSelectEdicaoEstoque() { const dl = document.getElementById('lista-edit-estoque'); if(!dl) return; dl.innerHTML = ''; mapEditEstoque = {}; [...window.estoqueLocal].sort((a,b) => String(a.Componente||'').localeCompare(String(b.Componente||''))).forEach(item => { const text = `[${item.Categoria}] ${item.Componente} | Local: ${item.Local} | Patr: ${item.Patrimonio || ''} | Série: ${item.Série || ''}`; mapEditEstoque[text + ' [ID: ' + item.id + ']'] = item; }); }
         function atualizarSelectEdicaoVoip() { const dl = document.getElementById('lista-edit-voip'); if(!dl) return; dl.innerHTML = ''; mapEditVoip = {}; [...window.voipLocal].sort((a,b) => String(a.Ramal||'').localeCompare(String(b.Ramal||''))).forEach(v => { const text = `Ramal: ${v.Ramal} | Setor: ${v.Setor} | IP: ${v.Ip}`; mapEditVoip[text + ' [ID: ' + v.id + ']'] = v; }); }
@@ -1730,7 +1874,7 @@ window.atualizarInterfaceEstoque = function() {
         function descreverCadastro(i) { return `"${i.Componente||'item'}" (patrimônio ${i.Patrimonio||'-'}, série ${i.Série||'-'}, quantidade ${i.Quantidade ?? '-'})`; }
 
         window.salvarEstoque = async function() {
-            if(document.getElementById('estoque-action-type').value==='new'){try{await requireAdmin();}catch(e){return showToast(e.message,'error');}}
+            try{await requireAdmin();}catch(e){return showToast(e.message,'error');}
             const actionType = document.getElementById('estoque-action-type') ? document.getElementById('estoque-action-type').value : 'new'; const editId = document.getElementById('estoque-edit-id') ? document.getElementById('estoque-edit-id').value : '';
             const cat = document.getElementById('form-cat').value.trim(); const comp = nomeEquipamento(document.getElementById('form-comp').value); const mod = sanitizeVal(document.getElementById('form-mod').value); const esp = sanitizeVal(document.getElementById('form-esp').value); const local = document.getElementById('form-local').value.trim(); const serie = sanitizeVal(document.getElementById('form-serie-estoque').value); const patrim = sanitizeVal(document.getElementById('form-patrimonio-estoque').value); const qtd = Number(document.getElementById('form-qtd').value); const minEstoque = minimoInformado(document.getElementById('form-minimo').value); if(minEstoque===null)return showToast('Informe um estoque mínimo inteiro, maior ou igual a zero.','error'); 
             if(actionType === 'edit' && !editId) return showToast('Selecione um registro existente para atualizar.', 'error');
@@ -1744,7 +1888,7 @@ window.atualizarInterfaceEstoque = function() {
         };
 
         window.salvarRastreio = async function() {
-            if(document.getElementById('loc-action-type').value==='new'){try{await requireAdmin();}catch(e){return showToast(e.message,'error');}}
+            try{await requireAdmin();}catch(e){return showToast(e.message,'error');}
             const action = document.getElementById('loc-action-type').value, eId = document.getElementById('loc-edit-id').value;
             const eq = document.getElementById('loc-equip').value.trim(), loc = document.getElementById('loc-local').value.trim(), sip = sanitizeVal(document.getElementById('loc-sipac').value), mar = sanitizeVal(document.getElementById('loc-marca').value), ser = sanitizeVal(document.getElementById('loc-serie').value), pat = sanitizeVal(document.getElementById('loc-patrimonio').value), qt = Number(document.getElementById('loc-qtd').value);
             if(action === 'edit' && !eId) return showToast('Selecione um registro existente para atualizar.', 'error');
@@ -1754,7 +1898,7 @@ window.atualizarInterfaceEstoque = function() {
         };
 
         window.salvarVoip = async function() {
-            if(document.getElementById('voip-action-type').value==='new'){try{await requireAdmin();}catch(e){return showToast(e.message,'error');}}
+            try{await requireAdmin();}catch(e){return showToast(e.message,'error');}
             const action = document.getElementById('voip-action-type').value, eId = document.getElementById('voip-edit-id').value;
             const ramal = document.getElementById('voip-ramal').value.trim(), setor = document.getElementById('voip-setor').value.trim(), ip = document.getElementById('voip-ip').value.trim(), equip = document.getElementById('voip-equip').value.trim();
             if(action === 'edit' && !eId) return showToast('Selecione um registro existente para atualizar.', 'error');
@@ -2053,9 +2197,10 @@ window.atualizarInterfaceEstoque = function() {
         const transferPanel=document.getElementById('transfer-form');
         transferPanel.classList.remove('hidden');
         document.getElementById('transfer-open').remove();
-        const adminSections={entry:entryHost,transfer:transferPanel,reversal:reversalPanel,deletion:deletePanel,users:userPanel,access:accessPanel,audit:auditPanel,logs:logPanel,names:namesPanel,minimos:minimosPanel};
+        const updateHost=document.createElement('div');
+        const adminSections={entry:entryHost,update:updateHost,transfer:transferPanel,reversal:reversalPanel,deletion:deletePanel,users:userPanel,access:accessPanel,audit:auditPanel,logs:logPanel,names:namesPanel,minimos:minimosPanel};
         entryButton.textContent='Entrada';entryButton.dataset.adminSection='entry';nav.append(entryButton);
-        for(const [key,title] of [['transfer','Transferir equipamento'],['reversal','Reversão de itens'],['deletion','Excluir registros'],['users','Novo usuário'],['access','Gerir acessos'],['audit','Auditoria'],['logs','Excluir logs'],['names','Padronizar nomes'],['minimos','Estoque mínimo']]){
+        for(const [key,title] of [['update','Atualizar cadastro'],['transfer','Transferir equipamento'],['reversal','Reversão de itens'],['deletion','Excluir registros'],['users','Novo usuário'],['access','Gerir acessos'],['audit','Auditoria'],['logs','Excluir logs'],['names','Padronizar nomes'],['minimos','Estoque mínimo']]){
             const button=document.createElement('button');button.type='button';button.textContent=title;button.dataset.adminSection=key;nav.append(button);
         }
         const intro=document.createElement('p');intro.className='text-slate-500 text-sm mb-4';intro.textContent='Escolha uma opção para abrir os campos necessários.';
@@ -2063,12 +2208,12 @@ window.atualizarInterfaceEstoque = function() {
         adminContent.replaceChildren(adminHeader,intro,nav,...Object.values(adminSections));
         adminContent.classList.remove('h-full');
 
-        const actionIcons={entry:'fa-boxes',transfer:'fa-exchange-alt',reversal:'fa-undo-alt',deletion:'fa-trash-alt',users:'fa-user-plus',access:'fa-user-shield',audit:'fa-history',logs:'fa-eraser',names:'fa-font',minimos:'fa-sliders-h'};
+        const actionIcons={entry:'fa-boxes',update:'fa-pen',transfer:'fa-exchange-alt',reversal:'fa-undo-alt',deletion:'fa-trash-alt',users:'fa-user-plus',access:'fa-user-shield',audit:'fa-history',logs:'fa-eraser',names:'fa-font',minimos:'fa-sliders-h'};
         document.querySelectorAll('[data-admin-section]').forEach(button=>{const icon=document.createElement('i');icon.className='fas '+actionIcons[button.dataset.adminSection];icon.setAttribute('aria-hidden','true');button.prepend(icon);});
         document.querySelectorAll('[data-cadastro-base]').forEach(button=>{const icon=document.createElement('i');icon.className='fas '+({estoque:'fa-boxes',loc:'fa-map-marker-alt',voip:'fa-phone-alt'})[button.dataset.cadastroBase];icon.setAttribute('aria-hidden','true');button.prepend(icon);});
 
         function closeAdminSections(){for(const section of Object.values(adminSections))section.hidden=true;nav.querySelectorAll('button').forEach(b=>b.setAttribute('aria-expanded','false'));}
-        function showAdminSection(key){const open=adminSections[key].hidden;closeAdminSections();if(open){adminSections[key].hidden=false;nav.querySelector(`[data-admin-section="${key}"]`).setAttribute('aria-expanded','true');if(key==='logs')renderAdminLogs();if(key==='names')mostrarNomesForaDoPadrao();if(key==='minimos')renderMinimosEquipamentos();if(key==='transfer'){transferDirectionChanged();transferEl('direction').focus();}}}
+        function showAdminSection(key){const open=adminSections[key].hidden;closeAdminSections();if(open){adminSections[key].hidden=false;nav.querySelector(`[data-admin-section="${key}"]`).setAttribute('aria-expanded','true');if(key==='logs')renderAdminLogs();if(key==='update')showCadastro('edit',cadastroBase);if(key==='names')mostrarNomesForaDoPadrao();if(key==='minimos')renderMinimosEquipamentos();if(key==='transfer'){transferDirectionChanged();transferEl('direction').focus();}}}
         nav.addEventListener('click',async event=>{const button=event.target.closest('[data-admin-section]');if(!button)return;try{await requireAdmin();showAdminSection(button.dataset.adminSection);}catch(e){showToast(e.message,'error');}});
         closeAdminSections();
         function renderAdminLogs(){
@@ -2266,8 +2411,8 @@ window.atualizarInterfaceEstoque = function() {
         function showCadastro(mode,base){
             if(mode==='new'&&!adminAuthorized){showToast('Abra Administrador e valide sua permissão.','error');return;}
             const hub=document.getElementById('tab-cadastros');
-            (mode==='new'?document.getElementById('admin-entry-host'):cadastroHome).appendChild(hub);
-            hub.classList.toggle('tab-tool-content',mode!=='new');
+            (mode==='new'?document.getElementById('admin-entry-host'):updateHost).appendChild(hub);
+            hub.classList.remove('tab-tool-content','hidden');
             const changed=mode!==cadastroMode;
             if(changed)Object.keys(cadastroPanels).forEach(k=>window.filtrarEdicao(k,''));
             cadastroMode=mode;cadastroBase=base;
@@ -2387,14 +2532,21 @@ function addExplicitSearch(id,kind){
  input.placeholder=kind==='voip'?'Ramal, setor ou IP':'Equipamento, patrimônio, série ou local';
  const button=document.createElement('button');button.type='button';button.id=id+'-button';button.className='bg-blue-600 text-white rounded px-4 py-2 font-bold my-2';button.textContent='Pesquisar';input.after(button);
  const results=document.createElement('div');results.id=id+'-suggestions';results.style.cssText='max-height:260px;overflow:auto';button.after(results);
+ if(kind==='saida')pesquisarSaida=search;
  function search(){
   if(!kind){input.dispatchEvent(new Event('input',{bubbles:true}));return;}
   results.replaceChildren();const terms=transferNormalize(input.value).trim().split(/\s+/).filter(Boolean);
-  if(!terms.length){results.textContent='Digite um nome, identificador ou local.';return;}
+  const comFiltro=kind==='saida'&&filtroSaidaAtivo();
+  if(!terms.length&&!comFiltro){results.textContent='Digite um nome, identificador ou local.';return;}
   const map=kind==='saida'?mapItensSaida:kind==='estoque'?mapEditEstoque:kind==='loc'?mapEditLocais:mapEditVoip;
-  const found=Object.keys(map).filter(label=>terms.every(term=>transferNormalize(label).includes(term)));
-  const status=document.createElement('p');status.setAttribute('role','status');status.textContent=found.length?found.length+' resultado(s). Selecione abaixo. Mostrando até 30 resultados.':'Nenhum registro encontrado.';results.append(status);
-  found.slice(0,30).forEach(label=>{const option=document.createElement('button');option.type='button';option.className='block w-full text-left border rounded p-3 my-1';option.textContent=label;option.onclick=()=>{input.value=label;window.filtrarEdicao(kind,label);if(kind==='saida')renderWithdrawalDetails();results.replaceChildren();};results.append(option);});
+  let found=Object.keys(map).filter(label=>terms.every(term=>transferNormalize(label).includes(term)));
+  if(kind==='saida')found=found.filter(label=>itemPassaFiltroSaida(map[label])).sort((a,b)=>String(map[a].Local||'').localeCompare(String(map[b].Local||''),'pt-BR',{numeric:true})||String(map[a].Patrimonio||'').localeCompare(String(map[b].Patrimonio||''),'pt-BR',{numeric:true}));
+  const limite=kind==='saida'?200:30;
+  const status=document.createElement('p');status.setAttribute('role','status');
+  if(kind==='saida'&&found.length){const unidades=found.reduce((t,l)=>t+(Number(map[l].Quantidade)||0),0);status.textContent=`${found.length} registro(s) · ${unidades} unidade(s) em estoque. Selecione a unidade para dar baixa.${found.length>limite?` Mostrando os primeiros ${limite}; use a pesquisa para refinar.`:''}`;}
+  else status.textContent=found.length?found.length+` resultado(s). Selecione abaixo. Mostrando até ${limite} resultados.`:'Nenhum registro encontrado.';
+  results.append(status);
+  found.slice(0,limite).forEach(label=>{const option=document.createElement('button');option.type='button';option.className='block w-full text-left border rounded p-3 my-1';option.textContent=label;option.onclick=()=>{input.value=label;window.filtrarEdicao(kind,label);if(kind==='saida')renderWithdrawalDetails();results.replaceChildren();};results.append(option);});
  }
  button.addEventListener('click',search);input.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();search();}});if(kind)input.addEventListener('input',search);
 }
