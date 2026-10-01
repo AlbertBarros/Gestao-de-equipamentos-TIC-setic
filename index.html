@@ -479,6 +479,7 @@
             <div class="w-full md:w-64 bg-slate-50 border-r border-gray-200 p-6 flex flex-col h-full">
                 <div class="flex items-center mb-8 border-b pb-4"><i class="fas fa-toolbox text-[#161B33] text-2xl mr-3 btn-primary-text"></i><h3 class="text-lg font-bold text-slate-800">Ferramentas</h3></div>
                 <ul class="space-y-2 flex-1">
+                    <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-cadastros" data-cadastro-mode="new"><i class="fas fa-plus-circle w-6"></i> Entrada</button></li>
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-saida"><i class="fas fa-minus-circle w-6"></i> Baixa / Saída</button></li>
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold flex items-center text-sm" data-target="tab-maintenance"><i class="fas fa-tools w-6"></i> Condição / Manutenção</button></li><li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm mt-4" data-target="tab-relatorio"><i class="fas fa-file-contract w-6"></i> Exportações / Relatórios</button></li>
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-pref"><i class="fas fa-sliders-h w-6"></i> Preferências</button></li>
@@ -942,7 +943,7 @@
         }
 
         // Versão do sistema: confira na tela de login se a página está atualizada.
-        const VERSAO_SISTEMA = '2026.10.01-4';
+        const VERSAO_SISTEMA = '2026.10.01-5';
         document.getElementById('versao-sistema').textContent = 'Versão ' + VERSAO_SISTEMA;
         document.getElementById('navbar-title').title = 'Versão ' + VERSAO_SISTEMA;
 
@@ -2064,7 +2065,8 @@ window.atualizarInterfaceEstoque = function() {
         function descreverCadastro(i) { return `"${i.Componente||'item'}" (patrimônio ${i.Patrimonio||'-'}, série ${i.Série||'-'}, quantidade ${i.Quantidade ?? '-'})`; }
 
         window.salvarEstoque = async function() {
-            try{await requireAdmin();}catch(e){return showToast(e.message,'error');}
+            // Cadastro novo: qualquer usuário autorizado. Editar (Atualizar): somente administrador.
+            if(document.getElementById('estoque-action-type').value==='edit'){try{await requireAdmin();}catch(e){return showToast(e.message,'error');}}
             const actionType = document.getElementById('estoque-action-type') ? document.getElementById('estoque-action-type').value : 'new'; const editId = document.getElementById('estoque-edit-id') ? document.getElementById('estoque-edit-id').value : '';
             const cat = document.getElementById('form-cat').value.trim(); const comp = nomeEquipamento(document.getElementById('form-comp').value); const mod = sanitizeVal(document.getElementById('form-mod').value); const esp = sanitizeVal(document.getElementById('form-esp').value); const local = document.getElementById('form-local').value.trim(); const serie = sanitizeVal(document.getElementById('form-serie-estoque').value); const patrim = sanitizeVal(document.getElementById('form-patrimonio-estoque').value); const qtd = Number(document.getElementById('form-qtd').value); const minEstoque = minimoInformado(document.getElementById('form-minimo').value); if(minEstoque===null)return showToast('Informe um estoque mínimo inteiro, maior ou igual a zero.','error'); 
             if(actionType === 'edit' && !editId) return showToast('Selecione um registro existente para atualizar.', 'error');
@@ -2078,7 +2080,8 @@ window.atualizarInterfaceEstoque = function() {
         };
 
         window.salvarRastreio = async function() {
-            try{await requireAdmin();}catch(e){return showToast(e.message,'error');}
+            // Cadastro novo: qualquer usuário autorizado. Editar (Atualizar): somente administrador.
+            if(document.getElementById('loc-action-type').value==='edit'){try{await requireAdmin();}catch(e){return showToast(e.message,'error');}}
             const action = document.getElementById('loc-action-type').value, eId = document.getElementById('loc-edit-id').value;
             const eq = document.getElementById('loc-equip').value.trim(), loc = document.getElementById('loc-local').value.trim(), sip = sanitizeVal(document.getElementById('loc-sipac').value), mar = sanitizeVal(document.getElementById('loc-marca').value), ser = sanitizeVal(document.getElementById('loc-serie').value), pat = sanitizeVal(document.getElementById('loc-patrimonio').value), qt = Number(document.getElementById('loc-qtd').value);
             if(action === 'edit' && !eId) return showToast('Selecione um registro existente para atualizar.', 'error');
@@ -2088,7 +2091,8 @@ window.atualizarInterfaceEstoque = function() {
         };
 
         window.salvarVoip = async function() {
-            try{await requireAdmin();}catch(e){return showToast(e.message,'error');}
+            // Cadastro novo: qualquer usuário autorizado. Editar (Atualizar): somente administrador.
+            if(document.getElementById('voip-action-type').value==='edit'){try{await requireAdmin();}catch(e){return showToast(e.message,'error');}}
             const action = document.getElementById('voip-action-type').value, eId = document.getElementById('voip-edit-id').value;
             const ramal = document.getElementById('voip-ramal').value.trim(), setor = document.getElementById('voip-setor').value.trim(), ip = document.getElementById('voip-ip').value.trim(), equip = document.getElementById('voip-equip').value.trim();
             if(action === 'edit' && !eId) return showToast('Selecione um registro existente para atualizar.', 'error');
@@ -2114,7 +2118,7 @@ window.atualizarInterfaceEstoque = function() {
         };
 
         window.processarUploadEstoque = async function() {
-            try{await requireAdmin();}catch(e){return showToast(e.message,'error');}
+            if(!auth.currentUser)return showToast('Entre no sistema para importar.','error');
             const fileInput = document.getElementById('estoque-file-upload'), btn = document.getElementById('btn-estoque-upload'); if (!fileInput.files.length) return showToast("Selecione Excel.", "error"); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Importando...'; const reader = new FileReader();
             reader.onload = async (e) => {
                 try {
@@ -2130,6 +2134,7 @@ window.atualizarInterfaceEstoque = function() {
                         const cat = getVal(row, ['CATEGORIA', 'TIPO', 'GRUPO']) || 'Geral'; const mod = getVal(row, ['MODELO', 'MARCA/MODELO', 'MARCA MODELO', 'MARCA']); const esp = getVal(row, ['ESPECIFICAÇÃO', 'ESPECIFICACAO', 'Especificação', 'Especificacao']); const local = getVal(row, ['LOCAL FISICO', 'LOCAL', 'Local', 'LOCAL FÍSICO']); const serie = getVal(row, ['Nº DE SÉRIE', 'N DE SERIE', 'Nº DE SERIE', 'Nº Série', 'N Serie', 'SÉRIE', 'Série', 'SERIE', 'NUMERO DE SERIE']); const patrim = getVal(row, ['Nº PATRIMÔNIO', 'Nº PATRIMONIO', 'N Patrimônio', 'N Patrimonio', 'PATRIMÔNIO', 'PATRIMONIO', 'Patrimônio', 'Patrimonio']);
                         const qtdTexto = getVal(row, ['QUANTIDADE', 'Quantidade', 'QTD', 'Qtd']);
                         const qtd = qtdTexto === '' ? 1 : Number(String(qtdTexto).replace(',', '.'));
+                        if (!local) problemas.push(`linha ${numero}: local físico não informado`);
                         if (!Number.isSafeInteger(qtd) || qtd < 1) { problemas.push(`linha ${numero}: quantidade inválida (${qtdTexto})`); return; }
                         for (const valor of new Set([idEstoque(patrim), idEstoque(serie)].filter(Boolean))) {
                             if (vistos.has(valor)) problemas.push(`linha ${numero}: patrimônio/série ${valor} repetido (também na linha ${vistos.get(valor)})`); else vistos.set(valor, numero);
@@ -2167,7 +2172,7 @@ window.atualizarInterfaceEstoque = function() {
         };
 
         window.processarUploadRastreio = async function() {
-            try{await requireAdmin();}catch(e){return showToast(e.message,'error');}
+            if(!auth.currentUser)return showToast('Entre no sistema para importar.','error');
             const fi = document.getElementById('loc-file-upload'), b = document.getElementById('btn-loc-upload'); if (!fi.files.length) return showToast("Selecione planilha.", "error"); b.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mapeando...'; 
             const r = new FileReader(); r.onload = async (e) => {
                 try {
@@ -2202,7 +2207,7 @@ window.atualizarInterfaceEstoque = function() {
         };
 
         window.processarUploadVoip = async function() {
-            try{await requireAdmin();}catch(e){return showToast(e.message,'error');}
+            if(!auth.currentUser)return showToast('Entre no sistema para importar.','error');
             const fi = document.getElementById('voip-file-upload'), b = document.getElementById('btn-voip-upload'); if (!fi.files.length) return showToast("Selecione planilha.", "error"); b.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Lendo...'; 
             const r = new FileReader(); r.onload = async (e) => {
                 try {
@@ -2437,8 +2442,8 @@ window.atualizarInterfaceEstoque = function() {
         transferPanel.classList.remove('hidden');
         document.getElementById('transfer-open').remove();
         const updateHost=document.createElement('div');
-        const adminSections={entry:entryHost,update:updateHost,transfer:transferPanel,reversal:reversalPanel,deletion:deletePanel,users:userPanel,access:accessPanel,audit:auditPanel,logs:logPanel,names:namesPanel,minimos:minimosPanel,backup:backupPanel,conferencia:conferenciaPanel};
-        entryButton.textContent='Entrada';entryButton.dataset.adminSection='entry';nav.append(entryButton);
+        const adminSections={update:updateHost,transfer:transferPanel,reversal:reversalPanel,deletion:deletePanel,users:userPanel,access:accessPanel,audit:auditPanel,logs:logPanel,names:namesPanel,minimos:minimosPanel,backup:backupPanel,conferencia:conferenciaPanel};
+        entryButton.remove();entryHost.remove();
         for(const [key,title] of [['update','Atualizar cadastro'],['transfer','Transferir equipamento'],['reversal','Reversão de itens'],['deletion','Excluir registros'],['users','Novo usuário'],['access','Gerir acessos'],['audit','Auditoria'],['logs','Excluir logs'],['names','Padronizar nomes'],['minimos','Estoque mínimo'],['backup','Backup'],['conferencia','Conferência trimestral']]){
             const button=document.createElement('button');button.type='button';button.textContent=title;button.dataset.adminSection=key;nav.append(button);
         }
@@ -2822,10 +2827,9 @@ window.atualizarInterfaceEstoque = function() {
         };
         const cadastroHome=document.getElementById('tab-cadastros').parentElement;
         function showCadastro(mode,base){
-            if(mode==='new'&&!adminAuthorized){showToast('Abra Administrador e valide sua permissão.','error');return;}
             const hub=document.getElementById('tab-cadastros');
-            (mode==='new'?document.getElementById('admin-entry-host'):updateHost).appendChild(hub);
-            hub.classList.remove('tab-tool-content','hidden');
+            if(mode==='new'){cadastroHome.appendChild(hub);hub.classList.add('tab-tool-content');}
+            else{updateHost.appendChild(hub);hub.classList.remove('tab-tool-content','hidden');}
             const changed=mode!==cadastroMode;
             if(changed)Object.keys(cadastroPanels).forEach(k=>window.filtrarEdicao(k,''));
             cadastroMode=mode;cadastroBase=base;
