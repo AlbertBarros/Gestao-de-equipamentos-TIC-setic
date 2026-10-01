@@ -131,6 +131,7 @@
                     </div>
                     <div class="flex items-center space-x-4">
                         <span class="bg-green-500 text-white text-xs px-2.5 py-1.5 rounded-md flex items-center font-bold shadow-sm hidden md:flex"><i class="fas fa-check-circle mr-1.5"></i> Sincronizado</span>
+                        <span id="navbar-user" class="hidden flex items-center gap-2 text-sm font-semibold" style="color:rgba(255,255,255,.92)"><i class="fas fa-user-circle text-lg" aria-hidden="true"></i><span>Olá, <span id="navbar-user-name"></span></span></span>
                         <button id="btn-theme" class="p-2 rounded-full hover:bg-white hover:bg-opacity-10 transition" title="Modo Noturno"><i class="fas fa-moon text-lg"></i></button>
                         <button id="btn-tools" class="bg-white bg-opacity-10 hover:bg-opacity-20 border border-white border-opacity-10 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-sm flex items-center backdrop-blur-sm"><i class="fas fa-toolbox mr-2"></i> <span class="hidden md:inline">Painel de Ferramentas</span></button>
                         <button id="btn-logout" class="bg-[#E53935] hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-sm flex items-center"><i class="fas fa-sign-out-alt mr-2"></i> <span class="hidden md:inline">Sair</span></button>
@@ -461,7 +462,7 @@
             </div>
 
             <div class="flex-1 p-8 overflow-y-auto bg-white relative">
-                <section id="tab-maintenance" class="tab-tool-content hidden"><h2 class="text-2xl font-bold text-blue-900 mb-3">Condição / Manutenção</h2><p class="mb-4">Pesquise e confira o equipamento antes de registrar sua condição. O registro mantém a quantidade e o local atuais.</p><form id="maintenance-form"><label>Base<select id="maintenance-base" class="w-full border rounded p-2 mb-3"><option value="estoque">Estoque</option><option value="localidades">Rastreio</option></select></label><label>Pesquisar equipamento<input id="maintenance-search" autocomplete="off" class="w-full border rounded p-2 mb-3" placeholder="Nome, patrimônio, série ou local"></label><div id="maintenance-results" aria-live="polite" style="max-height:260px;overflow:auto"></div><div id="maintenance-details" class="border rounded p-4 my-3" role="status" hidden></div><p class="text-sm mb-3">A condição será aplicada a todas as unidades do registro selecionado. Para condições diferentes, separe os equipamentos em registros distintos.</p><label>Condição<select id="maintenance-condition" required class="w-full border rounded p-2 mb-3"><option>Em manutenção</option><option>Não funcionando</option><option>Funcionando</option></select></label><label>Observação / motivo *<textarea id="maintenance-notes" maxlength="1000" required class="w-full border rounded p-2 mb-3" placeholder="Descreva o defeito, a manutenção ou o retorno ao funcionamento."></textarea></label><button id="maintenance-save" disabled class="bg-amber-600 text-white rounded px-4 py-2 font-bold">Salvar condição</button></form></section><div id="tab-cadastros" class="tab-tool-content flex flex-col"><h2 id="cadastro-title" class="text-2xl font-bold text-blue-900 mb-3">Entrada</h2><div class="flex gap-2 mb-4" role="group" aria-label="Selecionar base"><button type="button" data-cadastro-base="estoque" class="px-4 py-2 rounded border">Estoque</button><button type="button" data-cadastro-base="loc" class="px-4 py-2 rounded border">Rastreio</button><button type="button" data-cadastro-base="voip" class="px-4 py-2 rounded border">Ramais</button></div><p id="cadastro-help" class="text-sm text-slate-500 mb-4"></p><button type="button" id="transfer-open" class="px-4 py-2 rounded-lg bg-emerald-600 text-white font-bold mb-4"><i class="fas fa-exchange-alt mr-2"></i>Transferir equipamento</button>
+                <section id="tab-maintenance" class="tab-tool-content hidden"><h2 class="text-2xl font-bold text-blue-900 mb-3">Condição / Manutenção</h2><p class="mb-4">Pesquise e confira o equipamento antes de registrar sua condição. O registro mantém a quantidade e o local atuais.</p><form id="maintenance-form"><label>Base<select id="maintenance-base" class="w-full border rounded p-2 mb-3"><option value="estoque">Estoque</option><option value="localidades">Rastreio</option></select></label><div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-1"><label>Categoria<select id="maintenance-filtro-categoria" class="w-full border rounded p-2"><option value="">Todas as categorias</option></select></label><label>Equipamento<select id="maintenance-filtro-equipamento" class="w-full border rounded p-2"><option value="">Todos os equipamentos</option></select></label></div><div class="flex justify-end mb-2"><button type="button" id="maintenance-filtro-limpar" class="text-xs text-blue-600 font-semibold underline" hidden>Limpar filtros</button></div><label for="maintenance-search">Pesquisar equipamento</label><div class="flex gap-2 mb-3" style="flex-wrap:wrap"><input id="maintenance-search" autocomplete="off" class="border rounded p-2" style="flex:1;min-width:180px" placeholder="Nome, patrimônio, série, local ou categoria"><button type="button" id="maintenance-search-button" class="bg-blue-600 text-white rounded px-4 py-2 font-bold"><i class="fas fa-search mr-2" aria-hidden="true"></i>Pesquisar</button></div><div id="maintenance-results" aria-live="polite" style="max-height:260px;overflow:auto"></div><div id="maintenance-details" class="border rounded p-4 my-3" role="status" hidden></div><p class="text-sm mb-3">A condição será aplicada a todas as unidades do registro selecionado. Para condições diferentes, separe os equipamentos em registros distintos.</p><label>Condição<select id="maintenance-condition" required class="w-full border rounded p-2 mb-3"><option>Em manutenção</option><option>Não funcionando</option><option>Funcionando</option></select></label><label>Observação / motivo *<textarea id="maintenance-notes" maxlength="1000" required class="w-full border rounded p-2 mb-3" placeholder="Descreva o defeito, a manutenção ou o retorno ao funcionamento."></textarea></label><button id="maintenance-save" disabled class="bg-amber-600 text-white rounded px-4 py-2 font-bold">Salvar condição</button></form></section><div id="tab-cadastros" class="tab-tool-content flex flex-col"><h2 id="cadastro-title" class="text-2xl font-bold text-blue-900 mb-3">Entrada</h2><div class="flex gap-2 mb-4" role="group" aria-label="Selecionar base"><button type="button" data-cadastro-base="estoque" class="px-4 py-2 rounded border">Estoque</button><button type="button" data-cadastro-base="loc" class="px-4 py-2 rounded border">Rastreio</button><button type="button" data-cadastro-base="voip" class="px-4 py-2 rounded border">Ramais</button></div><p id="cadastro-help" class="text-sm text-slate-500 mb-4"></p><button type="button" id="transfer-open" class="px-4 py-2 rounded-lg bg-emerald-600 text-white font-bold mb-4"><i class="fas fa-exchange-alt mr-2"></i>Transferir equipamento</button>
 <form id="transfer-form" class="hidden rounded-xl border border-emerald-200 p-5 mb-5 bg-slate-50">
  <h3 class="text-xl font-bold mb-2">Transferir equipamento</h3>
  <p class="text-sm text-slate-500 mb-4">Selecione o equipamento e informe a quantidade e o local de destino. A transferência exige acesso de administrador.</p>
@@ -951,6 +952,18 @@
                 return 'indisponivel';
             }
         }
+        // Primeiro nome a partir do e-mail: "albert.einstein@prf.gov.br" → "Albert".
+        // Sem separador (ex.: "albertbarros18@gmail.com") usa a parte antes do @, sem números → "Albertbarros".
+        function primeiroNomeDoEmail(email) {
+            const local = String(email || '').split('@')[0];
+            const parte = (local.split(/[._+\-]+/).find(p => /[a-zA-ZÀ-ÿ]/.test(p)) || local).replace(/[0-9]+/g, '');
+            return parte ? parte.charAt(0).toLocaleUpperCase('pt-BR') + parte.slice(1).toLocaleLowerCase('pt-BR') : 'Usuário';
+        }
+        function mostrarUsuarioNoCabecalho(email) {
+            const area = document.getElementById('navbar-user'); if (!area) return;
+            area.classList.toggle('hidden', !email); area.title = email ? `Conectado como ${email}` : '';
+            document.getElementById('navbar-user-name').textContent = email ? primeiroNomeDoEmail(email) : '';
+        }
         let sessaoAutenticacao = 0;
         onAuthStateChanged(auth, async (user) => {
             const sessao = ++sessaoAutenticacao;
@@ -968,6 +981,7 @@
                     return;
                 }
                 window.userEmail = user.email;
+                mostrarUsuarioNoCabecalho(user.email);
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('main-system').classList.remove('hidden');
 
@@ -981,6 +995,7 @@
 
                 iniciarSistema();
             } else {
+                mostrarUsuarioNoCabecalho('');
                 document.getElementById('login-screen').classList.remove('hidden');
                 document.getElementById('main-system').classList.add('hidden');
             }
@@ -1099,6 +1114,7 @@
             try {
                 atualizarFiltroCategoriaTabela();
                 renderCondicaoControles();
+                atualizarFiltrosManutencao();
                 atualizarInterfaceEstoque();
                 atualizarInterfaceRastreio();
                 atualizarInterfaceVoip();
@@ -2487,20 +2503,61 @@ window.atualizarInterfaceEstoque = function() {
         const maintenanceRows=()=>maintenanceEl('base').value==='estoque'?window.estoqueLocal:window.localidadesLocais;
         function conditionLabel(row){return ['Funcionando','Em manutenção','Não funcionando'].includes(row.Condicao)?row.Condicao:'Não informada';}
         function maintenanceLabel(row){const stock=maintenanceEl('base').value==='estoque';return `${(stock?row.Componente:row.Equipamento)||'Sem nome'} | Marca/modelo: ${(stock?row.Modelo:row.Marca)||'—'} | Local: ${row.Local||'—'} | Série: ${(stock?row.Série:row.Serie)||'—'} | Patrimônio: ${row.Patrimonio||'—'} | Quantidade: ${row.Quantidade??'—'} | Condição: ${conditionLabel(row)} | Registro: ${row.id}`;}
+        // ---- Filtros Categoria → Equipamento da Condição / Manutenção ----
+        // Estoque: categorias e equipamentos agrupados (mesmo critério do painel).
+        // Rastreio: não tem categoria; equipamentos agrupados pelo nome (SWITCH/Switchs = um só).
+        let cacheGruposRastreio={fonte:null,grupos:[],porId:new Map()};
+        function gruposRastreio(){
+            const fonte=window.localidadesLocais||[];if(cacheGruposRastreio.fonte===fonte)return cacheGruposRastreio.grupos;
+            const grupos=[],porId=new Map();
+            for(const item of fonte){const nome=nomeEquipamento(item.Equipamento)||'SEM NOME';let g=grupos.find(x=>x.nomes.some(n=>nomesEquivalentes(n,nome)));
+                if(!g){g={nomes:[],contagem:new Map(),itens:[],total:0};grupos.push(g);}
+                if(!g.nomes.includes(nome))g.nomes.push(nome);g.contagem.set(nome,(g.contagem.get(nome)||0)+1);g.itens.push(item);g.total+=Number(item.Quantidade)||0;porId.set(item.id,g);}
+            for(const g of grupos){g.nome=[...g.nomes].sort((a,b)=>g.contagem.get(b)-g.contagem.get(a)||a.length-b.length||a.localeCompare(b,'pt-BR'))[0];g.chave='R|'+chaveTexto(g.nome);}
+            cacheGruposRastreio={fonte,grupos,porId};return grupos;
+        }
+        const chaveEquipManutencao=row=>maintenanceEl('base').value==='estoque'?chaveGrupo(grupoDoItem(row)):(gruposRastreio(),cacheGruposRastreio.porId.get(row.id)?.chave||'');
+        function filtroManutencaoAtivo(){return !!(maintenanceEl('filtro-categoria').value||maintenanceEl('filtro-equipamento').value);}
+        function passaFiltroManutencao(row){
+            const cat=maintenanceEl('filtro-categoria').value,eq=maintenanceEl('filtro-equipamento').value;
+            if(cat&&stockCategoryKey(row.Categoria)!==cat)return false;
+            if(eq&&chaveEquipManutencao(row)!==eq)return false;
+            return true;
+        }
+        function atualizarFiltrosManutencao(){
+            const selCat=maintenanceEl('filtro-categoria'),selEq=maintenanceEl('filtro-equipamento');if(!selCat||!selEq)return;
+            const estoque=maintenanceEl('base').value==='estoque',catAtual=selCat.value,eqAtual=selEq.value;
+            if(estoque){const cats=stockCategories();selCat.disabled=false;selCat.replaceChildren(new Option('Todas as categorias',''),...cats.map(c=>new Option(`${c.name} (${c.total})`,c.key)));selCat.value=cats.some(c=>c.key===catAtual)?catAtual:'';}
+            else{selCat.replaceChildren(new Option('O Rastreio não usa categoria',''));selCat.value='';selCat.disabled=true;}
+            const grupos=estoque?gruposEstoque().filter(g=>!selCat.value||g.cat===selCat.value).map(g=>({chave:chaveGrupo(g),nome:g.nome,total:g.total,n:g.itens.length})):gruposRastreio().map(g=>({chave:g.chave,nome:g.nome,total:g.total,n:g.itens.length}));
+            grupos.sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR',{numeric:true}));
+            selEq.replaceChildren(new Option(selCat.value?'Todos os equipamentos da categoria':'Todos os equipamentos',''),...grupos.map(g=>new Option(`${g.nome} (${g.total} un. · ${g.n} registro(s))`,g.chave)));
+            selEq.value=grupos.some(g=>g.chave===eqAtual)?eqAtual:'';
+            maintenanceEl('filtro-limpar').hidden=!filtroManutencaoAtivo();
+        }
         function searchMaintenance(){
             maintenanceSelected=null;maintenanceEl('details').hidden=true;maintenanceEl('save').disabled=true;
             const area=maintenanceEl('results');area.replaceChildren();
-            const terms=transferNormalize(maintenanceEl('search').value).trim().split(/\s+/).filter(Boolean);if(!terms.length)return;
-            const rows=maintenanceRows().filter(row=>terms.every(term=>transferNormalize([row.Componente,row.Equipamento,row.Modelo,row.Marca,row.Série,row.Serie,row.Patrimonio,row.Local].join(' ')).includes(term)));
-            const info=document.createElement('p');info.textContent=rows.length?`${rows.length} resultado(s). Selecione o equipamento.${rows.length>20?' Refine a pesquisa para localizar os demais resultados.':''}`:'Nenhum equipamento encontrado nesta base.';area.append(info);
-            rows.slice(0,20).forEach(row=>{const button=document.createElement('button');button.type='button';button.className='w-full text-left border rounded p-3 my-1';button.textContent=maintenanceLabel(row);button.onclick=()=>{
+            const terms=transferNormalize(maintenanceEl('search').value).trim().split(/\s+/).filter(Boolean),comFiltro=filtroManutencaoAtivo();
+            if(!terms.length&&!comFiltro)return;
+            const rows=maintenanceRows().filter(row=>passaFiltroManutencao(row)&&terms.every(term=>transferNormalize([row.Componente,row.Equipamento,row.Modelo,row.Marca,row.Série,row.Serie,row.Patrimonio,row.Local,row.LocalSipac,row.Categoria].join(' ')).includes(term)))
+                .sort((a,b)=>String(a.Local||'').localeCompare(String(b.Local||''),'pt-BR',{numeric:true})||String(a.Patrimonio||'').localeCompare(String(b.Patrimonio||''),'pt-BR',{numeric:true}));
+            const limite=comFiltro?200:20;
+            const info=document.createElement('p');info.setAttribute('role','status');info.textContent=rows.length?`${rows.length} resultado(s). Selecione o equipamento.${rows.length>limite?` Mostrando os primeiros ${limite}; refine a pesquisa para localizar os demais.`:''}`:'Nenhum equipamento encontrado nesta base.';area.append(info);
+            rows.slice(0,limite).forEach(row=>{const button=document.createElement('button');button.type='button';button.className='w-full text-left border rounded p-3 my-1';button.textContent=maintenanceLabel(row);button.onclick=()=>{
                 if(maintenanceBusy)return;maintenanceSelected={id:row.id,base:maintenanceEl('base').value,condition:conditionLabel(row)};
                 maintenanceEl('details').textContent=maintenanceLabel(row);maintenanceEl('details').hidden=false;maintenanceEl('save').disabled=false;
                 maintenanceEl('condition').value=row.Condicao||'Em manutenção';maintenanceEl('notes').value='';area.replaceChildren();
             };area.append(button);});
         }
         maintenanceEl('search').addEventListener('input',searchMaintenance);
-        maintenanceEl('base').addEventListener('change',()=>{maintenanceEl('search').value='';searchMaintenance();});
+        maintenanceEl('search-button').addEventListener('click',()=>{if(maintenanceBusy)return;searchMaintenance();if(!maintenanceEl('search').value.trim()&&!filtroManutencaoAtivo()){const area=maintenanceEl('results');area.textContent='Digite o nome, patrimônio, série, local ou categoria, ou escolha um filtro.';}});
+        // Enter no campo de pesquisa pesquisa (e NÃO envia o formulário, que salvaria a condição).
+        maintenanceEl('search').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();maintenanceEl('search-button').click();}});
+        maintenanceEl('base').addEventListener('change',()=>{maintenanceEl('search').value='';maintenanceEl('filtro-categoria').value='';maintenanceEl('filtro-equipamento').value='';atualizarFiltrosManutencao();searchMaintenance();});
+        maintenanceEl('filtro-categoria').addEventListener('change',()=>{maintenanceEl('filtro-equipamento').value='';atualizarFiltrosManutencao();searchMaintenance();});
+        maintenanceEl('filtro-equipamento').addEventListener('change',()=>{atualizarFiltrosManutencao();searchMaintenance();});
+        maintenanceEl('filtro-limpar').addEventListener('click',()=>{maintenanceEl('filtro-categoria').value='';maintenanceEl('filtro-equipamento').value='';atualizarFiltrosManutencao();searchMaintenance();});
         maintenanceEl('form').addEventListener('submit',async event=>{
             event.preventDefault();if(!maintenanceSelected||maintenanceBusy)return;
             const selection={...maintenanceSelected},condition=maintenanceEl('condition').value,notes=maintenanceEl('notes').value.trim();
@@ -2514,7 +2571,7 @@ window.atualizarInterfaceEstoque = function() {
                     tx.update(ref,{Condicao:condition,ObservacaoCondicao:notes,CondicaoAtualizadaEm:serverTimestamp(),CondicaoAtualizadaPor:auth.currentUser.email||''});
                     tx.set(audit,{tipo:selection.base==='estoque'?'MOVIMENTAÇÃO (ESTOQUE)':'MOVIMENTAÇÃO',itemId:selection.id,itemNome:(selection.base==='estoque'?row.Componente:row.Equipamento)||'',qtd:Number(row.Quantidade)||0,chamado:`CONDIÇÃO DO EQUIPAMENTO | Base: ${selection.base} | Anterior: ${conditionLabel(row)} | Nova: ${condition} | Observação: ${notes}`,usuario:auth.currentUser.email||'',dataHora:serverTimestamp()});
                 });
-                maintenanceEl('form').reset();searchMaintenance();showToast('Condição registrada com sucesso.');
+                const manterBase=maintenanceEl('base').value,manterCat=maintenanceEl('filtro-categoria').value,manterEq=maintenanceEl('filtro-equipamento').value;maintenanceEl('form').reset();maintenanceEl('base').value=manterBase;atualizarFiltrosManutencao();maintenanceEl('filtro-categoria').value=manterCat;atualizarFiltrosManutencao();maintenanceEl('filtro-equipamento').value=manterEq;atualizarFiltrosManutencao();searchMaintenance();showToast('Condição registrada com sucesso.');
             }catch(error){showToast(error.message,'error');}finally{maintenanceBusy=false;controls.forEach(el=>el.disabled=false);maintenanceEl('save').disabled=!maintenanceSelected;}
         });
 
