@@ -479,7 +479,7 @@
             <div class="w-full md:w-64 bg-slate-50 border-r border-gray-200 p-6 flex flex-col h-full">
                 <div class="flex items-center mb-8 border-b pb-4"><i class="fas fa-toolbox text-[#161B33] text-2xl mr-3 btn-primary-text"></i><h3 class="text-lg font-bold text-slate-800">Ferramentas</h3></div>
                 <ul class="space-y-2 flex-1">
-                    <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-cadastros" data-cadastro-mode="new"><i class="fas fa-plus-circle w-6"></i> Entrada</button></li>
+                    <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-cadastros" data-cadastro-mode="edit"><i class="fas fa-pen w-6"></i> Atualizar</button></li>
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-saida"><i class="fas fa-minus-circle w-6"></i> Baixa / Saída</button></li>
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold flex items-center text-sm" data-target="tab-maintenance"><i class="fas fa-tools w-6"></i> Condição / Manutenção</button></li><li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm mt-4" data-target="tab-relatorio"><i class="fas fa-file-contract w-6"></i> Exportações / Relatórios</button></li>
                     <li><button class="tab-btn-tool w-full text-left px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 font-semibold transition flex items-center text-sm" data-target="tab-pref"><i class="fas fa-sliders-h w-6"></i> Preferências</button></li>
@@ -943,7 +943,7 @@
         }
 
         // Versão do sistema: confira na tela de login se a página está atualizada.
-        const VERSAO_SISTEMA = '2026.10.01-5';
+        const VERSAO_SISTEMA = '2026.10.01-6';
         document.getElementById('versao-sistema').textContent = 'Versão ' + VERSAO_SISTEMA;
         document.getElementById('navbar-title').title = 'Versão ' + VERSAO_SISTEMA;
 
@@ -2065,8 +2065,8 @@ window.atualizarInterfaceEstoque = function() {
         function descreverCadastro(i) { return `"${i.Componente||'item'}" (patrimônio ${i.Patrimonio||'-'}, série ${i.Série||'-'}, quantidade ${i.Quantidade ?? '-'})`; }
 
         window.salvarEstoque = async function() {
-            // Cadastro novo: qualquer usuário autorizado. Editar (Atualizar): somente administrador.
-            if(document.getElementById('estoque-action-type').value==='edit'){try{await requireAdmin();}catch(e){return showToast(e.message,'error');}}
+            // Cadastro novo (Entrada): somente administrador. Editar (Atualizar): qualquer usuário autorizado.
+            if(document.getElementById('estoque-action-type').value!=='edit'){try{await requireAdmin();}catch(e){return showToast(e.message,'error');}}
             const actionType = document.getElementById('estoque-action-type') ? document.getElementById('estoque-action-type').value : 'new'; const editId = document.getElementById('estoque-edit-id') ? document.getElementById('estoque-edit-id').value : '';
             const cat = document.getElementById('form-cat').value.trim(); const comp = nomeEquipamento(document.getElementById('form-comp').value); const mod = sanitizeVal(document.getElementById('form-mod').value); const esp = sanitizeVal(document.getElementById('form-esp').value); const local = document.getElementById('form-local').value.trim(); const serie = sanitizeVal(document.getElementById('form-serie-estoque').value); const patrim = sanitizeVal(document.getElementById('form-patrimonio-estoque').value); const qtd = Number(document.getElementById('form-qtd').value); const minEstoque = minimoInformado(document.getElementById('form-minimo').value); if(minEstoque===null)return showToast('Informe um estoque mínimo inteiro, maior ou igual a zero.','error'); 
             if(actionType === 'edit' && !editId) return showToast('Selecione um registro existente para atualizar.', 'error');
@@ -2075,24 +2075,24 @@ window.atualizarInterfaceEstoque = function() {
             try {
                 if(actionType === 'edit' && editId) { await saveInventoryEdit("estoque",editId,{ Categoria: cat, Componente: comp, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque },"estoque"); showToast("Alteração gravada com sucesso!"); } 
                 else { const compNovo = nomeCanonicoEstoque(cat, comp); const r = localizarCadastroEstoque(window.estoqueLocal, { comp: compNovo, mod, esp, local, serie, patrim }); if (r.tipo === 'duplicado') throw new Error('Já existe um cadastro com este patrimônio/série: ' + descreverCadastro(r.item) + '. Nada foi somado. Para alterar esse cadastro, use Atualizar.'); if (r.tipo === 'somar') await updateDoc(doc(db, "estoque", r.item.id), { Quantidade: increment(qtd), EstoqueMinimo: minEstoque }); else await setDoc(doc(collection(db, "estoque")), { Categoria: cat, Componente: compNovo, Modelo: mod, Especificação: esp, Local: local, Série: serie, Patrimonio: patrim, Quantidade: qtd, EstoqueMinimo: minEstoque }); const minimosAjustados = await aplicarMinimoAoEquipamento(cat, compNovo, minEstoque, r.item?.id); await registrarLog("ENTRADA", `${compNovo} (${esp})`, qtd, local + (minimosAjustados ? ` | Mínimo ${minEstoque} aplicado a mais ${minimosAjustados} registro(s) do equipamento` : '')); showToast((r.tipo === 'somar' ? "Quantidade somada ao registro existente." : "Entrada registada!") + (compNovo !== comp ? ` Nome unificado como ${compNovo}.` : '')); }
-                ['form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque', 'estoque-edit-id', 'estoque-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = ''; if(document.getElementById('estoque-action-type')) { document.getElementById('estoque-action-type').value = 'new'; document.getElementById('estoque-action-type').dispatchEvent(new Event('change')); }
+                ['form-cat','form-comp','form-mod','form-esp','form-local','form-serie-estoque','form-patrimonio-estoque', 'estoque-edit-id', 'estoque-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('form-qtd').value = 1; document.getElementById('form-minimo').value = ''; if(document.getElementById('estoque-action-type')) { document.getElementById('estoque-action-type').value = cadastroMode === 'edit' ? 'edit' : 'new'; document.getElementById('estoque-action-type').dispatchEvent(new Event('change')); }
             } catch (e) { showToast("Erro: " + e.message, "error");} btn.innerText = originalText;
         };
 
         window.salvarRastreio = async function() {
-            // Cadastro novo: qualquer usuário autorizado. Editar (Atualizar): somente administrador.
-            if(document.getElementById('loc-action-type').value==='edit'){try{await requireAdmin();}catch(e){return showToast(e.message,'error');}}
+            // Cadastro novo (Entrada): somente administrador. Editar (Atualizar): qualquer usuário autorizado.
+            if(document.getElementById('loc-action-type').value!=='edit'){try{await requireAdmin();}catch(e){return showToast(e.message,'error');}}
             const action = document.getElementById('loc-action-type').value, eId = document.getElementById('loc-edit-id').value;
             const eq = document.getElementById('loc-equip').value.trim(), loc = document.getElementById('loc-local').value.trim(), sip = sanitizeVal(document.getElementById('loc-sipac').value), mar = sanitizeVal(document.getElementById('loc-marca').value), ser = sanitizeVal(document.getElementById('loc-serie').value), pat = sanitizeVal(document.getElementById('loc-patrimonio').value), qt = Number(document.getElementById('loc-qtd').value);
             if(action === 'edit' && !eId) return showToast('Selecione um registro existente para atualizar.', 'error');
             if(!eq || !loc || !Number.isSafeInteger(qt) || qt < 0) return showToast("Preencha Equipamento, Local Físico e Quantidade.", "error");
             const b = document.getElementById('btn-save-loc'); const o = b.innerText; b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-            try { if(action === 'edit' && eId) { const repetidoEdicao = rastreioComMesmoId(pat, ser, eId); if (repetidoEdicao) throw new Error(`Outro registro do Rastreio já usa este patrimônio/série: ${repetidoEdicao.Equipamento || 'equipamento'} (local ${repetidoEdicao.Local || '-'}).`); await saveInventoryEdit("localidades",eId,{ Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: qt },"loc"); showToast("Alteração gravada e movimentada com sucesso!"); } else { const repetido = rastreioComMesmoId(pat, ser); if (repetido) throw new Error(`Já existe no Rastreio um registro com este patrimônio/série: ${repetido.Equipamento || 'equipamento'} (local ${repetido.Local || '-'}, patrimônio ${repetido.Patrimonio || '-'}, série ${repetido.Serie || '-'}). Para alterar, use Atualizar.`); await addDoc(collection(db, "localidades"), { Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: qt }); await registrarLog("MAP_LOCAL", `${eq} (${loc})`, qt, `SIPAC: ${sip || '-'} | Série: ${ser || '-'}`); showToast("Equipamento mapeado com sucesso!"); } ['loc-equip','loc-local', 'loc-sipac','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id', 'loc-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; document.getElementById('loc-action-type').value = 'new'; document.getElementById('loc-action-type').dispatchEvent(new Event('change')); } catch (e) { showToast("Erro: " + e.message, "error"); } b.innerText = o;
+            try { if(action === 'edit' && eId) { const repetidoEdicao = rastreioComMesmoId(pat, ser, eId); if (repetidoEdicao) throw new Error(`Outro registro do Rastreio já usa este patrimônio/série: ${repetidoEdicao.Equipamento || 'equipamento'} (local ${repetidoEdicao.Local || '-'}).`); await saveInventoryEdit("localidades",eId,{ Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: qt },"loc"); showToast("Alteração gravada e movimentada com sucesso!"); } else { const repetido = rastreioComMesmoId(pat, ser); if (repetido) throw new Error(`Já existe no Rastreio um registro com este patrimônio/série: ${repetido.Equipamento || 'equipamento'} (local ${repetido.Local || '-'}, patrimônio ${repetido.Patrimonio || '-'}, série ${repetido.Serie || '-'}). Para alterar, use Atualizar.`); await addDoc(collection(db, "localidades"), { Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: qt }); await registrarLog("MAP_LOCAL", `${eq} (${loc})`, qt, `SIPAC: ${sip || '-'} | Série: ${ser || '-'}`); showToast("Equipamento mapeado com sucesso!"); } ['loc-equip','loc-local', 'loc-sipac','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id', 'loc-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; document.getElementById('loc-action-type').value = cadastroMode === 'edit' ? 'edit' : 'new'; document.getElementById('loc-action-type').dispatchEvent(new Event('change')); } catch (e) { showToast("Erro: " + e.message, "error"); } b.innerText = o;
         };
 
         window.salvarVoip = async function() {
-            // Cadastro novo: qualquer usuário autorizado. Editar (Atualizar): somente administrador.
-            if(document.getElementById('voip-action-type').value==='edit'){try{await requireAdmin();}catch(e){return showToast(e.message,'error');}}
+            // Cadastro novo (Entrada): somente administrador. Editar (Atualizar): qualquer usuário autorizado.
+            if(document.getElementById('voip-action-type').value!=='edit'){try{await requireAdmin();}catch(e){return showToast(e.message,'error');}}
             const action = document.getElementById('voip-action-type').value, eId = document.getElementById('voip-edit-id').value;
             const ramal = document.getElementById('voip-ramal').value.trim(), setor = document.getElementById('voip-setor').value.trim(), ip = document.getElementById('voip-ip').value.trim(), equip = document.getElementById('voip-equip').value.trim();
             if(action === 'edit' && !eId) return showToast('Selecione um registro existente para atualizar.', 'error');
@@ -2101,7 +2101,7 @@ window.atualizarInterfaceEstoque = function() {
             try {
                 if(action === 'edit' && eId) { const outroRamal = ramalExistente(ramal, eId); if (outroRamal) throw new Error(`O ramal ${ramal} já está cadastrado (setor ${outroRamal.Setor || '-'}).`); const ref = doc(db, "voip", eId), audit = doc(collection(db, "logs")); await runTransaction(db, async tx => { const snap = await tx.get(ref); if (!snap.exists()) throw new Error('Este ramal não existe mais. Pesquise e selecione novamente.'); tx.update(ref, { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: equip }); tx.set(audit, { tipo: "MOVIMENTAÇÃO (VOIP)", itemId: eId, itemNome: `Ramal ${ramal}`, qtd: 1, chamado: `Setor: ${setor}`, usuario: window.userEmail, dataHora: serverTimestamp() }); }); showToast("Alteração gravada!"); } 
                 else { const jaExiste = ramalExistente(ramal); if (jaExiste) throw new Error(`O ramal ${ramal} já está cadastrado (setor ${jaExiste.Setor || '-'}). Para alterar, use Atualizar.`); await addDoc(collection(db, "voip"), { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: equip }); await registrarLog("ENTRADA (VOIP)", `Ramal ${ramal}`, 1, `Setor: ${setor}`); showToast("Ramal registado!"); }
-                ['voip-ramal','voip-setor','voip-ip','voip-equip','voip-edit-id','voip-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('voip-action-type').value = 'new'; document.getElementById('voip-action-type').dispatchEvent(new Event('change'));
+                ['voip-ramal','voip-setor','voip-ip','voip-equip','voip-edit-id','voip-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('voip-action-type').value = cadastroMode === 'edit' ? 'edit' : 'new'; document.getElementById('voip-action-type').dispatchEvent(new Event('change'));
             } catch (e) { showToast("Erro: " + e.message, "error"); } b.innerText = o;
         };
 
@@ -2118,7 +2118,7 @@ window.atualizarInterfaceEstoque = function() {
         };
 
         window.processarUploadEstoque = async function() {
-            if(!auth.currentUser)return showToast('Entre no sistema para importar.','error');
+            try{await requireAdmin();}catch(e){return showToast(e.message,'error');}
             const fileInput = document.getElementById('estoque-file-upload'), btn = document.getElementById('btn-estoque-upload'); if (!fileInput.files.length) return showToast("Selecione Excel.", "error"); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Importando...'; const reader = new FileReader();
             reader.onload = async (e) => {
                 try {
@@ -2172,7 +2172,7 @@ window.atualizarInterfaceEstoque = function() {
         };
 
         window.processarUploadRastreio = async function() {
-            if(!auth.currentUser)return showToast('Entre no sistema para importar.','error');
+            try{await requireAdmin();}catch(e){return showToast(e.message,'error');}
             const fi = document.getElementById('loc-file-upload'), b = document.getElementById('btn-loc-upload'); if (!fi.files.length) return showToast("Selecione planilha.", "error"); b.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mapeando...'; 
             const r = new FileReader(); r.onload = async (e) => {
                 try {
@@ -2207,7 +2207,7 @@ window.atualizarInterfaceEstoque = function() {
         };
 
         window.processarUploadVoip = async function() {
-            if(!auth.currentUser)return showToast('Entre no sistema para importar.','error');
+            try{await requireAdmin();}catch(e){return showToast(e.message,'error');}
             const fi = document.getElementById('voip-file-upload'), b = document.getElementById('btn-voip-upload'); if (!fi.files.length) return showToast("Selecione planilha.", "error"); b.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Lendo...'; 
             const r = new FileReader(); r.onload = async (e) => {
                 try {
@@ -2442,9 +2442,9 @@ window.atualizarInterfaceEstoque = function() {
         transferPanel.classList.remove('hidden');
         document.getElementById('transfer-open').remove();
         const updateHost=document.createElement('div');
-        const adminSections={update:updateHost,transfer:transferPanel,reversal:reversalPanel,deletion:deletePanel,users:userPanel,access:accessPanel,audit:auditPanel,logs:logPanel,names:namesPanel,minimos:minimosPanel,backup:backupPanel,conferencia:conferenciaPanel};
-        entryButton.remove();entryHost.remove();
-        for(const [key,title] of [['update','Atualizar cadastro'],['transfer','Transferir equipamento'],['reversal','Reversão de itens'],['deletion','Excluir registros'],['users','Novo usuário'],['access','Gerir acessos'],['audit','Auditoria'],['logs','Excluir logs'],['names','Padronizar nomes'],['minimos','Estoque mínimo'],['backup','Backup'],['conferencia','Conferência trimestral']]){
+        const adminSections={entry:entryHost,transfer:transferPanel,reversal:reversalPanel,deletion:deletePanel,users:userPanel,access:accessPanel,audit:auditPanel,logs:logPanel,names:namesPanel,minimos:minimosPanel,backup:backupPanel,conferencia:conferenciaPanel};
+        entryButton.textContent='Entrada';entryButton.dataset.adminSection='entry';nav.append(entryButton);
+        for(const [key,title] of [['transfer','Transferir equipamento'],['reversal','Reversão de itens'],['deletion','Excluir registros'],['users','Novo usuário'],['access','Gerir acessos'],['audit','Auditoria'],['logs','Excluir logs'],['names','Padronizar nomes'],['minimos','Estoque mínimo'],['backup','Backup'],['conferencia','Conferência trimestral']]){
             const button=document.createElement('button');button.type='button';button.textContent=title;button.dataset.adminSection=key;nav.append(button);
         }
         const intro=document.createElement('p');intro.className='text-slate-500 text-sm mb-4';intro.textContent='Escolha uma opção para abrir os campos necessários.';
@@ -2827,9 +2827,10 @@ window.atualizarInterfaceEstoque = function() {
         };
         const cadastroHome=document.getElementById('tab-cadastros').parentElement;
         function showCadastro(mode,base){
+            if(mode==='new'&&!adminAuthorized){showToast('Abra Administrador e valide sua permissão.','error');return;}
             const hub=document.getElementById('tab-cadastros');
-            if(mode==='new'){cadastroHome.appendChild(hub);hub.classList.add('tab-tool-content');}
-            else{updateHost.appendChild(hub);hub.classList.remove('tab-tool-content','hidden');}
+            if(mode==='new'){document.getElementById('admin-entry-host').appendChild(hub);hub.classList.remove('tab-tool-content','hidden');}
+            else{cadastroHome.appendChild(hub);hub.classList.add('tab-tool-content');}
             const changed=mode!==cadastroMode;
             if(changed)Object.keys(cadastroPanels).forEach(k=>window.filtrarEdicao(k,''));
             cadastroMode=mode;cadastroBase=base;
