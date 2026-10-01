@@ -83,6 +83,9 @@
 #dashboard-side-stack{display:grid;gap:16px;grid-template-rows:repeat(3,330px)}
 @media(min-width:768px){#stock-chart-card{height:960px}#dashboard-side-stack{height:960px;grid-template-rows:repeat(3,minmax(0,1fr))}}
 #dashboard-side-stack > .modern-card{min-height:0}
+#maintenance-save:disabled{opacity:.45;cursor:not-allowed}
+#maintenance-save-hint{display:none}
+#maintenance-save:disabled + #maintenance-save-hint{display:block}
 @media(max-width:480px){[data-cadastro-base]{padding:10px 6px;gap:5px;font-size:12px;}[data-cadastro-base] i{font-size:16px;}.ai-prf-crest{width:20px;height:26px;}}
 </style>
 <style>
@@ -131,7 +134,7 @@
                     </div>
                     <div class="flex items-center space-x-4">
                         <span class="bg-green-500 text-white text-xs px-2.5 py-1.5 rounded-md flex items-center font-bold shadow-sm hidden md:flex"><i class="fas fa-check-circle mr-1.5"></i> Sincronizado</span>
-                        <span id="navbar-user" class="hidden flex items-center gap-2 text-sm font-semibold" style="color:rgba(255,255,255,.92)"><i class="fas fa-user-circle text-lg" aria-hidden="true"></i><span>Olá, <span id="navbar-user-name"></span></span></span>
+                        <button type="button" id="navbar-user" class="hidden flex items-center gap-2 text-sm font-semibold rounded-full px-2 py-1 hover:bg-white hover:bg-opacity-10 transition" style="color:rgba(255,255,255,.92)" aria-haspopup="dialog" aria-label="Abrir meu perfil"><span id="navbar-avatar" class="inline-flex items-center justify-center" style="width:28px;height:28px"><i class="fas fa-user-circle" style="font-size:24px" aria-hidden="true"></i></span><span>Olá, <span id="navbar-user-name"></span></span></button>
                         <button id="btn-theme" class="p-2 rounded-full hover:bg-white hover:bg-opacity-10 transition" title="Modo Noturno"><i class="fas fa-moon text-lg"></i></button>
                         <button id="btn-tools" class="bg-white bg-opacity-10 hover:bg-opacity-20 border border-white border-opacity-10 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-sm flex items-center backdrop-blur-sm"><i class="fas fa-toolbox mr-2"></i> <span class="hidden md:inline">Painel de Ferramentas</span></button>
                         <button id="btn-logout" class="bg-[#E53935] hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-sm flex items-center"><i class="fas fa-sign-out-alt mr-2"></i> <span class="hidden md:inline">Sair</span></button>
@@ -443,6 +446,20 @@
         </div>
     </div>
 
+    <dialog id="perfil-dialog" style="width:min(460px,94vw);border:0;border-radius:16px;padding:24px" aria-labelledby="perfil-titulo">
+        <div class="flex justify-between items-center mb-4"><h3 id="perfil-titulo" class="font-bold text-lg text-slate-800">Meu perfil</h3><button type="button" id="perfil-fechar" aria-label="Fechar perfil">✕</button></div>
+        <div class="flex items-center gap-4 mb-2"><span id="perfil-foto" class="inline-flex items-center justify-center rounded-full overflow-hidden bg-slate-200" style="width:88px;height:88px;flex:0 0 88px"><i class="fas fa-user text-3xl text-slate-500" aria-hidden="true"></i></span>
+            <div><p id="perfil-email" class="text-sm font-semibold text-slate-700 break-all"></p><label class="inline-block mt-2 bg-blue-600 text-white rounded px-3 py-1 text-sm font-bold cursor-pointer">Escolher foto<input type="file" id="perfil-foto-arquivo" accept="image/png,image/jpeg,image/webp" class="hidden"></label> <button type="button" id="perfil-foto-remover" class="text-sm text-red-600 underline ml-2">Remover foto</button></div></div>
+        <p class="text-xs text-slate-500 mb-5">A foto fica guardada neste navegador.</p>
+        <h4 class="font-bold text-slate-800 mb-2">Alterar senha</h4>
+        <form id="perfil-senha-form" autocomplete="off">
+            <label class="block text-sm mb-2">Senha atual<input type="password" id="perfil-senha-atual" autocomplete="current-password" class="w-full border rounded p-2 mt-1" required></label>
+            <label class="block text-sm mb-2">Nova senha (mínimo 6 caracteres)<input type="password" id="perfil-senha-nova" autocomplete="new-password" minlength="6" class="w-full border rounded p-2 mt-1" required></label>
+            <label class="block text-sm mb-3">Confirmar nova senha<input type="password" id="perfil-senha-confirma" autocomplete="new-password" minlength="6" class="w-full border rounded p-2 mt-1" required></label>
+            <button type="submit" id="perfil-senha-salvar" class="bg-emerald-600 text-white rounded px-4 py-2 font-bold">Alterar senha</button>
+            <p id="perfil-senha-status" role="status" class="text-sm mt-2"></p>
+        </form>
+    </dialog>
     <dialog id="alert-chart-dialog" style="width:min(900px,95vw);max-height:90vh;border:0;border-radius:16px;padding:24px"><div class="flex justify-between gap-4 mb-3"><h3 class="font-bold text-slate-800">Componentes em alerta — gráfico completo</h3><button type="button" onclick="document.getElementById('alert-chart-dialog').close()" aria-label="Fechar gráfico completo">✕</button></div><p class="text-xs text-slate-500 mb-2">Clique em uma barra para ver os detalhes.</p><div style="overflow:auto;max-height:72vh"><div style="position:relative"><canvas id="chartAlertasCompleto"></canvas></div></div></dialog>
     <dialog id="dashboard-detail" style="width:min(720px,94vw);max-height:80vh;border:0;border-radius:16px;padding:24px"><div class="flex justify-between gap-4 mb-4"><h3 id="dashboard-detail-title" class="font-bold text-slate-800"></h3><button type="button" id="print-dashboard-detail" class="bg-blue-600 text-white rounded px-3 py-2">Imprimir</button><button type="button" onclick="document.getElementById('dashboard-detail').close()" aria-label="Fechar detalhes">✕</button></div><div id="dashboard-detail-body" style="overflow:auto;max-height:60vh"></div></dialog>
     <!-- MODAL PAINEL DE FERRAMENTAS -->
@@ -462,7 +479,7 @@
             </div>
 
             <div class="flex-1 p-8 overflow-y-auto bg-white relative">
-                <section id="tab-maintenance" class="tab-tool-content hidden"><h2 class="text-2xl font-bold text-blue-900 mb-3">Condição / Manutenção</h2><p class="mb-4">Pesquise e confira o equipamento antes de registrar sua condição. O registro mantém a quantidade e o local atuais.</p><form id="maintenance-form"><label>Base<select id="maintenance-base" class="w-full border rounded p-2 mb-3"><option value="estoque">Estoque</option><option value="localidades">Rastreio</option></select></label><div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-1"><label>Categoria<select id="maintenance-filtro-categoria" class="w-full border rounded p-2"><option value="">Todas as categorias</option></select></label><label>Equipamento<select id="maintenance-filtro-equipamento" class="w-full border rounded p-2"><option value="">Todos os equipamentos</option></select></label></div><div class="flex justify-end mb-2"><button type="button" id="maintenance-filtro-limpar" class="text-xs text-blue-600 font-semibold underline" hidden>Limpar filtros</button></div><label for="maintenance-search">Pesquisar equipamento</label><div class="flex gap-2 mb-3" style="flex-wrap:wrap"><input id="maintenance-search" autocomplete="off" class="border rounded p-2" style="flex:1;min-width:180px" placeholder="Nome, patrimônio, série, local ou categoria"><button type="button" id="maintenance-search-button" class="bg-blue-600 text-white rounded px-4 py-2 font-bold"><i class="fas fa-search mr-2" aria-hidden="true"></i>Pesquisar</button></div><div id="maintenance-results" aria-live="polite" style="max-height:260px;overflow:auto"></div><div id="maintenance-details" class="border rounded p-4 my-3" role="status" hidden></div><p class="text-sm mb-3">A condição será aplicada a todas as unidades do registro selecionado. Para condições diferentes, separe os equipamentos em registros distintos.</p><label>Condição<select id="maintenance-condition" required class="w-full border rounded p-2 mb-3"><option>Em manutenção</option><option>Não funcionando</option><option>Funcionando</option></select></label><label>Observação / motivo *<textarea id="maintenance-notes" maxlength="1000" required class="w-full border rounded p-2 mb-3" placeholder="Descreva o defeito, a manutenção ou o retorno ao funcionamento."></textarea></label><button id="maintenance-save" disabled class="bg-amber-600 text-white rounded px-4 py-2 font-bold">Salvar condição</button></form></section><div id="tab-cadastros" class="tab-tool-content flex flex-col"><h2 id="cadastro-title" class="text-2xl font-bold text-blue-900 mb-3">Entrada</h2><div class="flex gap-2 mb-4" role="group" aria-label="Selecionar base"><button type="button" data-cadastro-base="estoque" class="px-4 py-2 rounded border">Estoque</button><button type="button" data-cadastro-base="loc" class="px-4 py-2 rounded border">Rastreio</button><button type="button" data-cadastro-base="voip" class="px-4 py-2 rounded border">Ramais</button></div><p id="cadastro-help" class="text-sm text-slate-500 mb-4"></p><button type="button" id="transfer-open" class="px-4 py-2 rounded-lg bg-emerald-600 text-white font-bold mb-4"><i class="fas fa-exchange-alt mr-2"></i>Transferir equipamento</button>
+                <section id="tab-maintenance" class="tab-tool-content hidden"><h2 class="text-2xl font-bold text-blue-900 mb-3">Condição / Manutenção</h2><p class="mb-4">Pesquise e confira o equipamento antes de registrar sua condição. O registro mantém a quantidade e o local atuais.</p><form id="maintenance-form"><label>Base<select id="maintenance-base" class="w-full border rounded p-2 mb-3"><option value="estoque">Estoque</option><option value="localidades">Rastreio</option></select></label><div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-1"><label>Categoria<select id="maintenance-filtro-categoria" class="w-full border rounded p-2"><option value="">Todas as categorias</option></select></label><label>Equipamento<select id="maintenance-filtro-equipamento" class="w-full border rounded p-2"><option value="">Todos os equipamentos</option></select></label></div><div class="flex justify-end mb-2"><button type="button" id="maintenance-filtro-limpar" class="text-xs text-blue-600 font-semibold underline" hidden>Limpar filtros</button></div><label for="maintenance-search">Pesquisar equipamento</label><div class="flex gap-2 mb-3" style="flex-wrap:wrap"><input id="maintenance-search" autocomplete="off" class="border rounded p-2" style="flex:1;min-width:180px" placeholder="Nome, patrimônio, série, local ou categoria"><button type="button" id="maintenance-search-button" class="bg-blue-600 text-white rounded px-4 py-2 font-bold"><i class="fas fa-search mr-2" aria-hidden="true"></i>Pesquisar</button></div><div id="maintenance-results" aria-live="polite" style="max-height:260px;overflow:auto"></div><div id="maintenance-details" class="border rounded p-4 my-3" role="status" hidden></div><p class="text-sm mb-3">A condição será aplicada a todas as unidades do registro selecionado. Para condições diferentes, separe os equipamentos em registros distintos.</p><label>Condição<select id="maintenance-condition" required class="w-full border rounded p-2 mb-3"><option>Em manutenção</option><option>Não funcionando</option><option>Funcionando</option></select></label><label>Observação / motivo *<textarea id="maintenance-notes" maxlength="1000" required class="w-full border rounded p-2 mb-3" placeholder="Descreva o defeito, a manutenção ou o retorno ao funcionamento."></textarea></label><button id="maintenance-save" disabled class="bg-amber-600 text-white rounded px-4 py-2 font-bold">Salvar condição</button><p id="maintenance-save-hint" class="text-xs text-slate-500 mt-2">Clique no equipamento da lista para selecioná-lo e liberar o botão.</p></form></section><div id="tab-cadastros" class="tab-tool-content flex flex-col"><h2 id="cadastro-title" class="text-2xl font-bold text-blue-900 mb-3">Entrada</h2><div class="flex gap-2 mb-4" role="group" aria-label="Selecionar base"><button type="button" data-cadastro-base="estoque" class="px-4 py-2 rounded border">Estoque</button><button type="button" data-cadastro-base="loc" class="px-4 py-2 rounded border">Rastreio</button><button type="button" data-cadastro-base="voip" class="px-4 py-2 rounded border">Ramais</button></div><p id="cadastro-help" class="text-sm text-slate-500 mb-4"></p><button type="button" id="transfer-open" class="px-4 py-2 rounded-lg bg-emerald-600 text-white font-bold mb-4"><i class="fas fa-exchange-alt mr-2"></i>Transferir equipamento</button>
 <form id="transfer-form" class="hidden rounded-xl border border-emerald-200 p-5 mb-5 bg-slate-50">
  <h3 class="text-xl font-bold mb-2">Transferir equipamento</h3>
  <p class="text-sm text-slate-500 mb-4">Selecione o equipamento e informe a quantidade e o local de destino. A transferência exige acesso de administrador.</p>
@@ -664,7 +681,7 @@
     <!-- SCRIPT DE CONFIGURAÇÃO E EXECUÇÃO GERAL -->
     <script type="module">
         import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, initializeAuth, inMemoryPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getAuth, initializeAuth, inMemoryPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, doc, getDoc, getDocs, setDoc, increment, writeBatch, updateDoc, addDoc, serverTimestamp, query, orderBy, limit, deleteDoc, runTransaction, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         // Chart.js pode carregar antes/depois do plugin dependendo da rede/CDN.
@@ -915,7 +932,7 @@
         }
 
         // Versão do sistema: confira na tela de login se a página está atualizada.
-        const VERSAO_SISTEMA = '2026.10.01-1';
+        const VERSAO_SISTEMA = '2026.10.01-2';
         document.getElementById('versao-sistema').textContent = 'Versão ' + VERSAO_SISTEMA;
         document.getElementById('navbar-title').title = 'Versão ' + VERSAO_SISTEMA;
 
@@ -983,10 +1000,68 @@
             const parte = (local.split(/[._+\-]+/).find(p => /[a-zA-ZÀ-ÿ]/.test(p)) || local).replace(/[0-9]+/g, '');
             return parte ? parte.charAt(0).toLocaleUpperCase('pt-BR') + parte.slice(1).toLocaleLowerCase('pt-BR') : 'Usuário';
         }
+        // ===== Meu perfil: foto (guardada neste navegador) e alteração de senha =====
+        const chaveFoto = email => 'foto_perfil_' + String(email || '').toLowerCase();
+        function desenharFoto(alvo, foto, tamanho) {
+            const area = document.getElementById(alvo); if (!area) return;
+            if (foto) { const img = document.createElement('img'); img.src = foto; img.alt = 'Foto do perfil'; img.style.cssText = `width:${tamanho}px;height:${tamanho}px;border-radius:50%;object-fit:cover`; area.replaceChildren(img); }
+            else { const i = document.createElement('i'); i.className = alvo === 'navbar-avatar' ? 'fas fa-user-circle' : 'fas fa-user text-3xl text-slate-500'; if (alvo === 'navbar-avatar') i.style.fontSize = '24px'; i.setAttribute('aria-hidden', 'true'); area.replaceChildren(i); }
+        }
+        function fotoDoUsuario(email) { try { return localStorage.getItem(chaveFoto(email)) || ''; } catch { return ''; } }
+        function atualizarFotos() { const email = auth.currentUser?.email || ''; const foto = email ? fotoDoUsuario(email) : ''; desenharFoto('navbar-avatar', foto, 28); desenharFoto('perfil-foto', foto, 88); }
+        // Reduz a foto para 160 x 160 (recorte central), para ocupar pouco espaço.
+        function reduzirFoto(arquivo) {
+            return new Promise((resolver, rejeitar) => {
+                if (!/^image\/(png|jpeg|webp)$/.test(arquivo.type)) return rejeitar(new Error('Escolha uma imagem PNG, JPG ou WEBP.'));
+                if (arquivo.size > 8 * 1024 * 1024) return rejeitar(new Error('A imagem é muito grande (máximo 8 MB).'));
+                const leitor = new FileReader();
+                leitor.onerror = () => rejeitar(new Error('Não foi possível ler a imagem.'));
+                leitor.onload = () => { const img = new Image(); img.onerror = () => rejeitar(new Error('Arquivo de imagem inválido.'));
+                    img.onload = () => { const lado = Math.min(img.width, img.height), tela = document.createElement('canvas'); tela.width = tela.height = 160;
+                        tela.getContext('2d').drawImage(img, (img.width - lado) / 2, (img.height - lado) / 2, lado, lado, 0, 0, 160, 160); resolver(tela.toDataURL('image/jpeg', 0.85)); };
+                    img.src = leitor.result; };
+                leitor.readAsDataURL(arquivo);
+            });
+        }
+        function abrirPerfil() {
+            const janela = document.getElementById('perfil-dialog'); document.getElementById('perfil-email').textContent = auth.currentUser?.email || '';
+            document.getElementById('perfil-senha-form').reset(); document.getElementById('perfil-senha-status').textContent = ''; atualizarFotos();
+            if (!janela.open) janela.showModal();
+        }
+        document.getElementById('navbar-user').addEventListener('click', abrirPerfil);
+        document.getElementById('perfil-fechar').addEventListener('click', () => document.getElementById('perfil-dialog').close());
+        document.getElementById('perfil-foto-arquivo').addEventListener('change', async e => {
+            const arquivo = e.target.files[0]; e.target.value = ''; if (!arquivo) return;
+            try { const foto = await reduzirFoto(arquivo); localStorage.setItem(chaveFoto(auth.currentUser?.email), foto); atualizarFotos(); showToast('Foto atualizada.'); }
+            catch (erro) { showToast(erro.message || 'Não foi possível salvar a foto.', 'error'); }
+        });
+        document.getElementById('perfil-foto-remover').addEventListener('click', () => { try { localStorage.removeItem(chaveFoto(auth.currentUser?.email)); } catch {} atualizarFotos(); showToast('Foto removida.'); });
+        document.getElementById('perfil-senha-form').addEventListener('submit', async e => {
+            e.preventDefault();
+            const atual = document.getElementById('perfil-senha-atual').value, nova = document.getElementById('perfil-senha-nova').value, confirma = document.getElementById('perfil-senha-confirma').value;
+            const status = document.getElementById('perfil-senha-status'), botao = document.getElementById('perfil-senha-salvar');
+            if (nova.length < 6) { status.textContent = 'A nova senha precisa ter pelo menos 6 caracteres.'; return; }
+            if (nova !== confirma) { status.textContent = 'A confirmação não é igual à nova senha.'; return; }
+            if (nova === atual) { status.textContent = 'A nova senha deve ser diferente da atual.'; return; }
+            botao.disabled = true; status.textContent = 'Alterando…';
+            try {
+                const usuario = auth.currentUser; if (!usuario) throw Object.assign(new Error(''), { code: 'sem-sessao' });
+                // O Firebase exige confirmar a senha atual antes de trocar.
+                await reauthenticateWithCredential(usuario, EmailAuthProvider.credential(usuario.email, atual));
+                await updatePassword(usuario, nova);
+                document.getElementById('perfil-senha-form').reset(); status.textContent = 'Senha alterada com sucesso.'; showToast('Senha alterada com sucesso.');
+            } catch (erro) {
+                const mensagens = { 'auth/wrong-password': 'Senha atual incorreta.', 'auth/invalid-credential': 'Senha atual incorreta.', 'auth/invalid-login-credentials': 'Senha atual incorreta.', 'auth/weak-password': 'A nova senha é muito fraca. Use pelo menos 6 caracteres.', 'auth/too-many-requests': 'Muitas tentativas. Aguarde alguns minutos e tente novamente.', 'auth/network-request-failed': 'Sem conexão. Verifique a internet e tente novamente.', 'sem-sessao': 'Sua sessão terminou. Entre novamente.' };
+                status.textContent = mensagens[erro.code] || 'Não foi possível alterar a senha. Tente novamente.';
+            } finally { botao.disabled = false; document.getElementById('perfil-senha-atual').value = ''; }
+        });
+
         function mostrarUsuarioNoCabecalho(email) {
             const area = document.getElementById('navbar-user'); if (!area) return;
             area.classList.toggle('hidden', !email); area.title = email ? `Conectado como ${email}` : '';
             document.getElementById('navbar-user-name').textContent = email ? primeiroNomeDoEmail(email) : '';
+            desenharFoto('navbar-avatar', email ? fotoDoUsuario(email) : '', 28);
+            if (!email) document.getElementById('perfil-dialog')?.close();
         }
         let sessaoAutenticacao = 0;
         onAuthStateChanged(auth, async (user) => {
@@ -2226,7 +2301,7 @@ window.atualizarInterfaceEstoque = function() {
             area.append(title,detail,label,reason,button);
         }
         async function openAdmin(){
-            try{await requireAdmin();document.getElementById('admin-login-section').classList.add('hidden');document.getElementById('admin-content-section').classList.remove('hidden');
+            try{await requireAdmin();document.getElementById('admin-login-section').classList.add('hidden');document.getElementById('admin-content-section').classList.remove('hidden');carregarConferencias();
                 if(!reverseUnsubscribe)reverseUnsubscribe=onSnapshot(query(collection(db,'logs'),where('dataHora','>=',new Date(REVERSAL_START))),snap=>{withdrawalRows=[];snap.forEach(d=>withdrawalRows.push({...d.data(),id:d.id}));withdrawalRows.sort((a,b)=>logMillis(b)-logMillis(a));renderReversals();},()=>{document.getElementById('admin-reversal-list').textContent='Erro ao consultar o histórico. Confira as regras do Firebase.';});
             }catch(e){showToast(e.message,'error');}
         }
@@ -2325,27 +2400,30 @@ window.atualizarInterfaceEstoque = function() {
         minimosPanel.innerHTML='<h3 class="font-bold text-lg mb-2">Estoque mínimo por equipamento</h3><p class="text-sm mb-3">O mínimo vale para a quantidade TOTAL de cada equipamento (todos os registros da mesma categoria e nome, somados). Ao salvar, o valor é gravado em todos os registros do equipamento.</p><input id="admin-minimos-search" class="border rounded p-2 w-full mb-3" placeholder="Pesquisar equipamento ou categoria" autocomplete="off"><p id="admin-minimos-status" role="status" class="text-sm mb-2"></p><div id="admin-minimos-list" style="max-height:360px;overflow:auto"></div>';
         const backupPanel=document.createElement('section');
         backupPanel.innerHTML='<h3 class="font-bold text-lg mb-2">Backup completo</h3><p class="text-sm mb-3">Baixa um arquivo (.json) com todas as bases (Estoque, Rastreio, Ramais), o histórico completo e a lista de usuários autorizados. Guarde o arquivo em local seguro: ele contém todos os dados do sistema. Nada é alterado no banco.</p><button type="button" id="admin-backup-baixar" class="bg-blue-600 text-white rounded p-2 font-bold"><i class="fas fa-download mr-2"></i>Baixar backup completo</button><p id="admin-backup-status" role="status" class="text-sm mt-3"></p>';
+        const conferenciaPanel=document.createElement('section');
+        conferenciaPanel.innerHTML='<h3 class="font-bold text-lg mb-1">Conferência trimestral</h3><p class="text-sm text-slate-600 mb-3">A cada 3 meses, confira se o local e a quantidade de cada equipamento estão corretos. Altere o que for preciso, salve e conclua a conferência para registrar a data.</p><div id="conf-lembretes" class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4"></div><div class="flex flex-wrap gap-3 items-end mb-3"><label class="text-sm font-semibold">Base<select id="conf-base" class="block border rounded p-2 mt-1"><option value="estoque">Estoque</option><option value="localidades">Rastreio</option><option value="voip">Ramais</option></select></label><label class="text-sm font-semibold" style="flex:1;min-width:200px">Pesquisar<input id="conf-busca" class="block w-full border rounded p-2 mt-1" placeholder="Equipamento, patrimônio, série, local ou ramal" autocomplete="off"></label><label class="text-sm flex items-center gap-2 mb-2"><input type="checkbox" id="conf-so-alterados"> Mostrar só os alterados</label></div><p id="conf-status" role="status" class="text-sm mb-2"></p><div id="conf-lista" style="max-height:420px;overflow:auto" class="border rounded"></div><div class="flex flex-wrap gap-2 mt-3"><button type="button" id="conf-salvar" class="bg-blue-600 text-white rounded px-4 py-2 font-bold">Salvar alterações</button><button type="button" id="conf-concluir" class="bg-emerald-600 text-white rounded px-4 py-2 font-bold">Concluir conferência</button><button type="button" id="conf-descartar" class="border rounded px-4 py-2">Descartar alterações</button></div>';
+        const avisoConferencia=document.createElement('div');avisoConferencia.id='conf-aviso-admin';avisoConferencia.className='rounded-lg p-3 mb-3 text-sm font-semibold';avisoConferencia.hidden=true;
         const nav=document.createElement('div');nav.className='admin-actions';nav.setAttribute('aria-label','Funções administrativas');
         const transferPanel=document.getElementById('transfer-form');
         transferPanel.classList.remove('hidden');
         document.getElementById('transfer-open').remove();
         const updateHost=document.createElement('div');
-        const adminSections={entry:entryHost,update:updateHost,transfer:transferPanel,reversal:reversalPanel,deletion:deletePanel,users:userPanel,access:accessPanel,audit:auditPanel,logs:logPanel,names:namesPanel,minimos:minimosPanel,backup:backupPanel};
+        const adminSections={entry:entryHost,update:updateHost,transfer:transferPanel,reversal:reversalPanel,deletion:deletePanel,users:userPanel,access:accessPanel,audit:auditPanel,logs:logPanel,names:namesPanel,minimos:minimosPanel,backup:backupPanel,conferencia:conferenciaPanel};
         entryButton.textContent='Entrada';entryButton.dataset.adminSection='entry';nav.append(entryButton);
-        for(const [key,title] of [['update','Atualizar cadastro'],['transfer','Transferir equipamento'],['reversal','Reversão de itens'],['deletion','Excluir registros'],['users','Novo usuário'],['access','Gerir acessos'],['audit','Auditoria'],['logs','Excluir logs'],['names','Padronizar nomes'],['minimos','Estoque mínimo'],['backup','Backup']]){
+        for(const [key,title] of [['update','Atualizar cadastro'],['transfer','Transferir equipamento'],['reversal','Reversão de itens'],['deletion','Excluir registros'],['users','Novo usuário'],['access','Gerir acessos'],['audit','Auditoria'],['logs','Excluir logs'],['names','Padronizar nomes'],['minimos','Estoque mínimo'],['backup','Backup'],['conferencia','Conferência trimestral']]){
             const button=document.createElement('button');button.type='button';button.textContent=title;button.dataset.adminSection=key;nav.append(button);
         }
         const intro=document.createElement('p');intro.className='text-slate-500 text-sm mb-4';intro.textContent='Escolha uma opção para abrir os campos necessários.';
         for(const section of Object.values(adminSections)){section.classList.add('admin-section');section.hidden=true;}
-        adminContent.replaceChildren(adminHeader,intro,nav,...Object.values(adminSections));
+        adminContent.replaceChildren(adminHeader,intro,avisoConferencia,nav,...Object.values(adminSections));
         adminContent.classList.remove('h-full');
 
-        const actionIcons={entry:'fa-boxes',update:'fa-pen',transfer:'fa-exchange-alt',reversal:'fa-undo-alt',deletion:'fa-trash-alt',users:'fa-user-plus',access:'fa-user-shield',audit:'fa-history',logs:'fa-eraser',names:'fa-font',minimos:'fa-sliders-h',backup:'fa-download'};
+        const actionIcons={entry:'fa-boxes',update:'fa-pen',transfer:'fa-exchange-alt',reversal:'fa-undo-alt',deletion:'fa-trash-alt',users:'fa-user-plus',access:'fa-user-shield',audit:'fa-history',logs:'fa-eraser',names:'fa-font',minimos:'fa-sliders-h',backup:'fa-download',conferencia:'fa-clipboard-check'};
         document.querySelectorAll('[data-admin-section]').forEach(button=>{const icon=document.createElement('i');icon.className='fas '+actionIcons[button.dataset.adminSection];icon.setAttribute('aria-hidden','true');button.prepend(icon);});
         document.querySelectorAll('[data-cadastro-base]').forEach(button=>{const icon=document.createElement('i');icon.className='fas '+({estoque:'fa-boxes',loc:'fa-map-marker-alt',voip:'fa-phone-alt'})[button.dataset.cadastroBase];icon.setAttribute('aria-hidden','true');button.prepend(icon);});
 
         function closeAdminSections(){for(const section of Object.values(adminSections))section.hidden=true;nav.querySelectorAll('button').forEach(b=>b.setAttribute('aria-expanded','false'));}
-        function showAdminSection(key){const open=adminSections[key].hidden;closeAdminSections();if(open){adminSections[key].hidden=false;nav.querySelector(`[data-admin-section="${key}"]`).setAttribute('aria-expanded','true');if(key==='logs')renderAdminLogs();if(key==='update')showCadastro('edit',cadastroBase);if(key==='names')mostrarNomesForaDoPadrao();if(key==='minimos')renderMinimosEquipamentos();if(key==='transfer'){transferDirectionChanged();transferEl('direction').focus();}}}
+        function showAdminSection(key){const open=adminSections[key].hidden;closeAdminSections();if(open){adminSections[key].hidden=false;nav.querySelector(`[data-admin-section="${key}"]`).setAttribute('aria-expanded','true');if(key==='logs')renderAdminLogs();if(key==='update')showCadastro('edit',cadastroBase);if(key==='names')mostrarNomesForaDoPadrao();if(key==='minimos')renderMinimosEquipamentos();if(key==='conferencia'){renderConferencia();carregarConferencias();}if(key==='transfer'){transferDirectionChanged();transferEl('direction').focus();}}}
         nav.addEventListener('click',async event=>{const button=event.target.closest('[data-admin-section]');if(!button)return;try{await requireAdmin();showAdminSection(button.dataset.adminSection);}catch(e){showToast(e.message,'error');}});
         closeAdminSections();
         function renderAdminLogs(){
@@ -2458,6 +2536,131 @@ window.atualizarInterfaceEstoque = function() {
             }catch(e){status.textContent='Não foi possível gerar o backup: '+e.message;showToast('Não foi possível gerar o backup: '+e.message,'error');}
             finally{botao.disabled=false;}
         };
+
+        // ===== Administrador → Conferência trimestral =====
+        // A data da última conferência fica no histórico (tipo CONFERÊNCIA), visível a todos os administradores.
+        const PRAZO_CONFERENCIA_DIAS=90;
+        const BASES_CONFERENCIA={
+            estoque:{titulo:'Estoque',lista:()=>window.estoqueLocal||[],tipoLog:'MOVIMENTAÇÃO (ESTOQUE)',campos:[['Local','Local','text'],['Quantidade','Quantidade','number']],nome:i=>nomeEquipamento(i.Componente)||'SEM NOME',detalhe:i=>`${i.Categoria||'-'} · Série: ${i.Série||'-'} · Patrimônio: ${i.Patrimonio||'-'}`},
+            localidades:{titulo:'Rastreio',lista:()=>window.localidadesLocais||[],tipoLog:'MOVIMENTAÇÃO',campos:[['Local','Local','text'],['Quantidade','Quantidade','number']],nome:i=>i.Equipamento||'SEM NOME',detalhe:i=>`${i.Marca||'-'} · Série: ${i.Serie||'-'} · Patrimônio: ${i.Patrimonio||'-'}`},
+            voip:{titulo:'Ramais',lista:()=>window.voipLocal||[],tipoLog:'MOVIMENTAÇÃO (VOIP)',campos:[['Setor','Setor','text'],['IP / Status','Ip','text']],nome:i=>`Ramal ${i.Ramal||'-'}`,detalhe:i=>i.Equipamento||'-'}
+        };
+        let ultimasConferencias={},conferenciaPendente=new Map(),conferenciaAlterados={estoque:0,localidades:0,voip:0};
+        const dataDoLog=l=>{try{return l.dataHora?.toDate?l.dataHora.toDate():null;}catch{return null;}};
+        async function carregarConferencias(){
+            try{
+                const snap=await getDocs(query(collection(db,'logs'),where('tipo','==','CONFERÊNCIA')));ultimasConferencias={};
+                snap.forEach(d=>{const l=d.data(),data=dataDoLog(l);if(l.tipo!=='CONFERÊNCIA'||!data||!BASES_CONFERENCIA[l.base])return;if(!ultimasConferencias[l.base]||data>ultimasConferencias[l.base].data)ultimasConferencias[l.base]={data,usuario:l.usuario||''};});
+            }catch(erro){console.warn('Não foi possível ler as conferências:',erro);}
+            renderLembretesConferencia();
+        }
+        function situacaoConferencia(base){
+            const u=ultimasConferencias[base];if(!u)return {nivel:'atrasada',texto:'Nunca realizada'};
+            const dias=Math.floor((Date.now()-u.data.getTime())/86400000),proxima=new Date(u.data.getTime()+PRAZO_CONFERENCIA_DIAS*86400000),restam=PRAZO_CONFERENCIA_DIAS-dias;
+            const base_=`Última: ${u.data.toLocaleDateString('pt-BR')} (há ${dias} dia(s)) · Próxima até ${proxima.toLocaleDateString('pt-BR')}`;
+            return restam<0?{nivel:'atrasada',texto:`${base_} · ATRASADA há ${-restam} dia(s)`}:restam<=15?{nivel:'perto',texto:`${base_} · vence em ${restam} dia(s)`}:{nivel:'ok',texto:`${base_} · em dia`};
+        }
+        function renderLembretesConferencia(){
+            const cores={atrasada:['#fef2f2','#b91c1c'],perto:['#fffbeb','#b45309'],ok:['#ecfdf5','#047857']};
+            const area=document.getElementById('conf-lembretes');
+            if(area){area.replaceChildren();for(const [base,cfg] of Object.entries(BASES_CONFERENCIA)){const s=situacaoConferencia(base),c=document.createElement('div');c.className='rounded-lg p-3 border';c.style.background=cores[s.nivel][0];c.style.borderColor=cores[s.nivel][1];const t=document.createElement('strong');t.style.color=cores[s.nivel][1];t.textContent=cfg.titulo;const p=document.createElement('p');p.className='text-xs mt-1';p.style.color='#334155';p.textContent=s.texto;c.append(t,p);area.append(c);}}
+            const atrasadas=Object.keys(BASES_CONFERENCIA).filter(b=>situacaoConferencia(b).nivel==='atrasada').map(b=>BASES_CONFERENCIA[b].titulo);
+            const aviso=document.getElementById('conf-aviso-admin');
+            if(aviso){aviso.hidden=!atrasadas.length;aviso.style.background='#fef2f2';aviso.style.color='#b91c1c';aviso.style.border='1px solid #fca5a5';aviso.textContent=atrasadas.length?`⚠ Conferência trimestral pendente: ${atrasadas.join(', ')}. Abra "Conferência trimestral" para realizar.`:'';}
+            const botao=nav.querySelector('[data-admin-section="conferencia"]');
+            if(botao){botao.querySelector('.conf-ponto')?.remove();if(atrasadas.length){const ponto=document.createElement('span');ponto.className='conf-ponto';ponto.setAttribute('aria-label','Conferência pendente');ponto.style.cssText='width:9px;height:9px;border-radius:50%;background:#dc2626;display:inline-block;margin-left:auto';botao.append(ponto);}}
+        }
+        avisoConferencia.addEventListener('click',()=>{if(conferenciaPanel.hidden)nav.querySelector('[data-admin-section="conferencia"]').click();});
+        avisoConferencia.style.cursor='pointer';
+        const baseConferencia=()=>document.getElementById('conf-base').value;
+        function valorAtual(item,campo){const p=conferenciaPendente.get(item.id);return p&&campo in p.novos?p.novos[campo]:item[campo];}
+        function renderConferencia(){
+            const base=baseConferencia(),cfg=BASES_CONFERENCIA[base],area=document.getElementById('conf-lista'),termo=normalized(document.getElementById('conf-busca').value).trim(),soAlterados=document.getElementById('conf-so-alterados').checked;
+            const todos=[...cfg.lista()].sort((a,b)=>cfg.nome(a).localeCompare(cfg.nome(b),'pt-BR',{numeric:true})||String(a.Local||a.Setor||'').localeCompare(String(b.Local||b.Setor||''),'pt-BR',{numeric:true}));
+            const visiveis=todos.filter(i=>(!soAlterados||conferenciaPendente.has(i.id))&&(!termo||termo.split(/\s+/).every(t=>normalized(Object.values(i).join(' ')).includes(t))));
+            const limite=300,tabela=document.createElement('table');tabela.className='min-w-full text-sm';
+            const cab=document.createElement('tr');['Equipamento','Detalhes',...cfg.campos.map(c=>c[0])].forEach(t=>{const th=document.createElement('th');th.className='px-2 py-2 text-left bg-slate-100 sticky top-0';th.textContent=t;cab.append(th);});
+            const thead=document.createElement('thead');thead.append(cab);const corpo=document.createElement('tbody');
+            visiveis.slice(0,limite).forEach(item=>{
+                const tr=document.createElement('tr');tr.className='border-t';if(conferenciaPendente.has(item.id))tr.style.background='#fef9c3';
+                const nome=document.createElement('td');nome.className='px-2 py-1 font-semibold';nome.textContent=cfg.nome(item);
+                const det=document.createElement('td');det.className='px-2 py-1 text-xs text-slate-500';det.textContent=cfg.detalhe(item);tr.append(nome,det);
+                cfg.campos.forEach(([rotulo,campo,tipo])=>{const td=document.createElement('td');td.className='px-2 py-1';const campoInput=document.createElement('input');campoInput.type=tipo;campoInput.className='border rounded p-1 w-full';if(tipo==='number'){campoInput.min='0';campoInput.step='1';campoInput.style.width='90px';}
+                    campoInput.value=String(valorAtual(item,campo)??'');campoInput.setAttribute('aria-label',`${rotulo} de ${cfg.nome(item)}`);
+                    campoInput.addEventListener('input',()=>{const original=item[campo];let novo=tipo==='number'?(campoInput.value===''?'':Number(campoInput.value)):campoInput.value;
+                        const p=conferenciaPendente.get(item.id)||{base,item,originais:{},novos:{}};
+                        if(String(novo)===String(original??'')){delete p.novos[campo];delete p.originais[campo];}else{if(!(campo in p.originais))p.originais[campo]=original;p.novos[campo]=novo;}
+                        if(Object.keys(p.novos).length)conferenciaPendente.set(item.id,p);else conferenciaPendente.delete(item.id);
+                        tr.style.background=conferenciaPendente.has(item.id)?'#fef9c3':'';atualizarStatusConferencia(visiveis.length,todos.length);});
+                    td.append(campoInput);tr.append(td);});
+                corpo.append(tr);
+            });
+            tabela.append(thead,corpo);area.replaceChildren(tabela);
+            atualizarStatusConferencia(visiveis.length,todos.length,visiveis.length>limite?limite:null);
+        }
+        function atualizarStatusConferencia(visiveis,total,limitado){
+            const base=baseConferencia(),n=conferenciaPendente.size;
+            document.getElementById('conf-status').textContent=`${BASES_CONFERENCIA[base].titulo}: ${total} registro(s), ${visiveis} na lista${limitado?` (mostrando os primeiros ${limitado}; use a pesquisa)`:''}. Alterações não salvas: ${n}. Já salvas nesta conferência: ${conferenciaAlterados[base]}.`;
+            document.getElementById('conf-salvar').textContent=n?`Salvar alterações (${n})`:'Salvar alterações';
+            document.getElementById('conf-concluir').textContent=`Concluir conferência de ${BASES_CONFERENCIA[base].titulo}`;
+        }
+        document.getElementById('conf-busca').addEventListener('input',renderConferencia);
+        document.getElementById('conf-so-alterados').addEventListener('change',renderConferencia);
+        let baseConferenciaAnterior='estoque';
+        document.getElementById('conf-base').addEventListener('change',e=>{
+            if(conferenciaPendente.size&&!confirm(`Há ${conferenciaPendente.size} alteração(ões) não salva(s) em ${BASES_CONFERENCIA[baseConferenciaAnterior].titulo}. Trocar de base descarta essas alterações. Continuar?`)){e.target.value=baseConferenciaAnterior;return;}
+            conferenciaPendente.clear();baseConferenciaAnterior=e.target.value;document.getElementById('conf-busca').value='';renderConferencia();
+        });
+        document.getElementById('conf-descartar').addEventListener('click',()=>{if(!conferenciaPendente.size)return;if(confirm('Descartar todas as alterações não salvas?')){conferenciaPendente.clear();renderConferencia();}});
+        document.getElementById('conf-salvar').addEventListener('click',async()=>{
+            const botao=document.getElementById('conf-salvar');if(botao.disabled)return;
+            const base=baseConferencia(),cfg=BASES_CONFERENCIA[base],lista=[...conferenciaPendente.values()];
+            if(!lista.length)return showToast('Nenhuma alteração para salvar.','error');
+            for(const p of lista){
+                if('Quantidade' in p.novos&&(!Number.isSafeInteger(p.novos.Quantidade)||p.novos.Quantidade<0))return showToast(`Quantidade inválida em ${cfg.nome(p.item)}. Use um número inteiro, zero ou maior.`,'error');
+                for(const campo of ['Local','Setor'])if(campo in p.novos&&!String(p.novos[campo]).trim())return showToast(`${campo} não pode ficar vazio (${cfg.nome(p.item)}).`,'error');
+            }
+            if(!confirm(`Salvar ${lista.length} alteração(ões) em ${cfg.titulo}?`))return;
+            botao.disabled=true;let salvos=0;
+            try{
+                await requireAdmin();
+                for(let i=0;i<lista.length;i+=100){
+                    const parte=lista.slice(i,i+100);
+                    await runTransaction(db,async tx=>{
+                        const refs=parte.map(p=>doc(db,base,p.item.id)),snaps=[];
+                        for(const r of refs)snaps.push(await tx.get(r));
+                        parte.forEach((p,k)=>{
+                            if(!snaps[k].exists())throw new Error(`${cfg.nome(p.item)} não existe mais. Recarregue a lista.`);
+                            const atual=snaps[k].data();
+                            for(const [campo,original] of Object.entries(p.originais))if(String(atual[campo]??'')!==String(original??''))throw new Error(`${cfg.nome(p.item)} foi alterado por outra pessoa durante a conferência. Nada foi sobrescrito; recarregue e confira de novo.`);
+                        });
+                        parte.forEach((p,k)=>{
+                            const novos={...p.novos};for(const c of ['Local','Setor','Ip'])if(c in novos)novos[c]=String(novos[c]).trim();
+                            tx.update(refs[k],novos);
+                            const mudancas=Object.keys(novos).map(c=>`${c==='Ip'?'IP':c}: ${p.originais[c]??'-'} → ${novos[c]}`).join(' | ');
+                            tx.set(doc(collection(db,'logs')),{tipo:cfg.tipoLog,itemId:p.item.id,itemNome:cfg.nome(p.item),qtd:Number(novos.Quantidade??p.item.Quantidade??1)||0,chamado:`CONFERÊNCIA TRIMESTRAL | ${mudancas}`,usuario:auth.currentUser.email||'',dataHora:serverTimestamp()});
+                        });
+                    });
+                    parte.forEach(p=>conferenciaPendente.delete(p.item.id));salvos+=parte.length;
+                }
+                conferenciaAlterados[base]+=salvos;showToast(`${salvos} alteração(ões) salva(s).`);
+            }catch(e){showToast((salvos?`${salvos} salva(s); o restante não: `:'Não foi possível salvar: ')+e.message,'error');conferenciaAlterados[base]+=salvos;}
+            finally{botao.disabled=false;setTimeout(renderConferencia,400);}
+        });
+        document.getElementById('conf-concluir').addEventListener('click',async()=>{
+            const botao=document.getElementById('conf-concluir');if(botao.disabled)return;
+            const base=baseConferencia(),cfg=BASES_CONFERENCIA[base],total=cfg.lista().length;
+            if(conferenciaPendente.size)return showToast('Salve ou descarte as alterações antes de concluir a conferência.','error');
+            if(!confirm(`Concluir a conferência de ${cfg.titulo} (${total} registros, ${conferenciaAlterados[base]} alterado(s) nesta conferência)?\n\nA data de hoje será registrada e o próximo prazo será daqui a 3 meses.`))return;
+            botao.disabled=true;
+            try{
+                await requireAdmin();
+                await addDoc(collection(db,'logs'),{tipo:'CONFERÊNCIA',base,itemNome:`Conferência de ${cfg.titulo}`,qtd:total,chamado:`Registros conferidos: ${total} | Alterados nesta conferência: ${conferenciaAlterados[base]}`,usuario:auth.currentUser.email||'',dataHora:serverTimestamp()});
+                conferenciaAlterados[base]=0;showToast(`Conferência de ${cfg.titulo} concluída.`);
+                ultimasConferencias[base]={data:new Date(),usuario:auth.currentUser.email||''};renderLembretesConferencia();renderConferencia();
+            }catch(e){showToast('Não foi possível concluir: '+e.message,'error');}
+            finally{botao.disabled=false;}
+        });
 
         // Each submitted operation has one stable destination and audit ID, including retries.
         async function transferEquipment(input, destinationRef, auditRef) {
@@ -2675,11 +2878,14 @@ window.atualizarInterfaceEstoque = function() {
                 .sort((a,b)=>String(a.Local||'').localeCompare(String(b.Local||''),'pt-BR',{numeric:true})||String(a.Patrimonio||'').localeCompare(String(b.Patrimonio||''),'pt-BR',{numeric:true}));
             const limite=comFiltro?200:20;
             const info=document.createElement('p');info.setAttribute('role','status');info.textContent=rows.length?`${rows.length} resultado(s). Selecione o equipamento.${rows.length>limite?` Mostrando os primeiros ${limite}; refine a pesquisa para localizar os demais.`:''}`:'Nenhum equipamento encontrado nesta base.';area.append(info);
+            const selecionarSozinho=rows.length===1;
             rows.slice(0,limite).forEach(row=>{const button=document.createElement('button');button.type='button';button.className='w-full text-left border rounded p-3 my-1';button.textContent=maintenanceLabel(row);button.onclick=()=>{
                 if(maintenanceBusy)return;maintenanceSelected={id:row.id,base:maintenanceEl('base').value,condition:conditionLabel(row)};
                 maintenanceEl('details').textContent=maintenanceLabel(row);maintenanceEl('details').hidden=false;maintenanceEl('save').disabled=false;
                 maintenanceEl('condition').value=row.Condicao||'Em manutenção';maintenanceEl('notes').value='';area.replaceChildren();
             };area.append(button);});
+            // Um único resultado: já fica selecionado.
+            if(selecionarSozinho)area.querySelector('button')?.click();
         }
         maintenanceEl('search').addEventListener('input',searchMaintenance);
         maintenanceEl('search-button').addEventListener('click',()=>{if(maintenanceBusy)return;searchMaintenance();if(!maintenanceEl('search').value.trim()&&!filtroManutencaoAtivo()){const area=maintenanceEl('results');area.textContent='Digite o nome, patrimônio, série, local ou categoria, ou escolha um filtro.';}});
