@@ -107,7 +107,7 @@
             <div class="text-center mb-8">
                 <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
                 <h2 id="login-title" class="text-2xl font-bold text-slate-800">Almoxarifado TIC</h2>
-                <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p>
+                <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p><p id="versao-sistema" class="text-slate-400 mt-1" style="font-size:10px"></p>
             </div>
             <div class="space-y-5">
                 <div><label class="block text-sm font-semibold text-slate-700">E-mail Corporativo</label><input type="email" id="login-email" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-blue-500 focus:border-blue-500 transition"></div>
@@ -515,7 +515,7 @@
                             <div><label class="block text-sm font-semibold text-slate-700">Pesquisar Equipamento</label><div class="relative"><i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i><input list="lista-saida-items" id="saida-item-input" class="mt-1 block w-full rounded-md border-gray-300 border py-3 pl-10 shadow-sm focus:ring-red-500 focus:border-red-500 text-sm font-medium"><datalist id="lista-saida-items"></datalist></div></div><section id="saida-conferencia" hidden class="rounded-xl border border-blue-200 p-4 mt-4"><h3 class="font-bold text-lg mb-2">Confira o equipamento selecionado</h3><p class="text-sm text-slate-500 mb-3">Dados do cadastro para conferência. Para corrigir informações, utilize Atualizar.</p><div id="saida-ficha" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div><p id="saida-saldo-previsto" role="status" class="font-bold mt-4"></p></section>
                             <hr class="border-gray-200">
                             <div class="grid grid-cols-2 gap-5"><div><label class="block text-sm font-semibold text-slate-700">Qtd Retirada</label><input type="number" id="saida-qtd" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500" min="1" value="1"></div><div><label class="block text-sm font-semibold text-slate-700">Sistema / Chamado</label><input type="text" id="saida-chamado" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500"></div></div>
-                            <div><label for="saida-tecnico" class="block text-sm font-semibold text-slate-700">Técnico responsável *</label><input type="text" id="saida-tecnico" maxlength="80" autocomplete="off" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500" placeholder="Digite o nome do técnico que atendeu o chamado"><p class="text-xs text-slate-500 mt-1">O nome fica registrado junto ao chamado. O usuário que confirmou a baixa também é gravado automaticamente no histórico.</p></div>
+                            <div><label for="saida-tecnico" class="block text-sm font-semibold text-slate-700">Técnico responsável *</label><datalist id="lista-tecnicos"></datalist><input type="text" id="saida-tecnico" list="lista-tecnicos" maxlength="80" autocomplete="off" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500" placeholder="Digite o nome do técnico que atendeu o chamado"><p class="text-xs text-slate-500 mt-1">O nome fica registrado junto ao chamado. O usuário que confirmou a baixa também é gravado automaticamente no histórico.</p></div>
                         </div>
                         <button id="btn-register-saida" class="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-md hover:bg-red-700 transition shadow text-lg"><i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa</button>
                     </div>
@@ -575,7 +575,7 @@
                         <div class="border rounded-xl p-6 bg-purple-50 shadow-sm text-center"><i class="fas fa-phone-volume text-purple-500 text-3xl mb-3"></i><h3 class="font-bold text-slate-800 mb-4">Relatório VoIP</h3><button id="btn-relatorio-analitico-voip" class="w-full bg-purple-600 text-white font-bold py-3 rounded hover:bg-purple-700 transition shadow flex justify-center items-center cursor-pointer"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF Ramais</button></div>
                         <div class="border rounded-xl p-6 bg-amber-50 shadow-sm text-center"><i class="fas fa-tools text-amber-500 text-3xl mb-3"></i><h3 class="font-bold text-slate-800 mb-4">Relatório Gerencial de Manutenção</h3><button id="btn-relatorio-manutencao" class="w-full bg-amber-600 text-white font-bold py-3 rounded hover:bg-amber-700 transition shadow flex justify-center items-center cursor-pointer"><i class="fas fa-file-pdf mr-2 text-lg"></i> Gerar PDF Manutenção</button></div>
                     </div>
-                    <button id="btn-export-csv" class="text-slate-500 hover:text-slate-800 font-bold transition flex items-center underline"><i class="fas fa-file-csv mr-2"></i> Ou exportar dados brutos em CSV</button>
+                    <div class="flex flex-wrap items-center justify-center gap-3 text-sm"><span class="text-slate-500 font-bold"><i class="fas fa-file-csv mr-2"></i>Exportar dados brutos (CSV para Excel):</span><button type="button" data-exportar-csv="estoque" class="border border-slate-300 rounded px-3 py-1 font-bold text-slate-700 hover:bg-slate-100">Estoque</button><button type="button" data-exportar-csv="localidades" class="border border-slate-300 rounded px-3 py-1 font-bold text-slate-700 hover:bg-slate-100">Rastreio</button><button type="button" data-exportar-csv="voip" class="border border-slate-300 rounded px-3 py-1 font-bold text-slate-700 hover:bg-slate-100">Ramais</button></div>
                 </div>
 
                 <div id="tab-pref" class="tab-tool-content hidden">
@@ -665,7 +665,7 @@
     <script type="module">
         import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, initializeAuth, inMemoryPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, doc, getDoc, setDoc, increment, writeBatch, updateDoc, addDoc, serverTimestamp, query, orderBy, limit, deleteDoc, runTransaction, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, getDoc, getDocs, setDoc, increment, writeBatch, updateDoc, addDoc, serverTimestamp, query, orderBy, limit, deleteDoc, runTransaction, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         // Chart.js pode carregar antes/depois do plugin dependendo da rede/CDN.
         // O painel continua funcional mesmo se o plugin de rótulos não estiver disponível.
@@ -731,7 +731,7 @@
             if (e.target.closest('#btn-tools')) { document.getElementById('tools-modal').classList.remove('hidden'); return; }
 
             // Modo Noturno
-            if (e.target.closest('#btn-theme')) { document.body.classList.toggle('dark'); Object.values(window.Chart?.instances||{}).forEach(chart=>chart.update('none')); return; }
+            if (e.target.closest('#btn-theme')) { const escuro = document.body.classList.toggle('dark'); try { localStorage.setItem('pref_tema', escuro ? 'escuro' : 'claro'); } catch {} Object.values(window.Chart?.instances||{}).forEach(chart=>chart.update('none')); return; }
 
             // Controles exclusivos do assistente: minimizar preserva; fechar limpa.
             if(e.target.closest('#btn-ai-dismiss-greeting')) { SETIC_AI.dismissGreeting(); return; }
@@ -797,12 +797,8 @@
             if (e.target.closest('#btn-next-voip')) { window.currentPageVoip++; atualizarInterfaceVoip(); return; }
 
             // Exportar CSV
-            if (e.target.closest('#btn-export-csv')) {
-                let csv = "data:text/csv;charset=utf-8,Categoria,Componente,Modelo,Especificacao,Local,Serie,Patrimonio,Quantidade\n";
-                window.estoqueLocal.forEach(r => csv += `"${r.Categoria||''}","${r.Componente||''}","${r.Modelo||''}","${r.Especificação||''}","${r.Local||''}","${r.Série||''}","${r.Patrimonio||''}","${r.Quantidade||0}"\n`);
-                const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", "estoque_setic.csv"); document.body.appendChild(link); link.click();
-                return;
-            }
+            const botaoCsv = e.target.closest('[data-exportar-csv]');
+            if (botaoCsv) { exportarCSV(botaoCsv.dataset.exportarCsv); return; }
 
             // Ações de Salvamento de Dados (Inputs Manuais)
             if (e.target.closest('#btn-save-item')) { await window.salvarEstoque(); return; }
@@ -858,6 +854,28 @@
         // ================= FUNÇÕES UTILITÁRIAS GERAIS =================
         // Proteção contra XSS: todo texto vindo do banco é exibido como texto, nunca como código.
         function escHtml(value) { return String(value ?? '').replace(/[&<>"'`]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[ch])); }
+        // ===== Exportação CSV (Excel em português: separador ";" e acentos corretos) =====
+        function celulaCSV(valor) {
+            let v = String(valor ?? '');
+            if (/^\d{11,}$/.test(v) || /^0\d+$/.test(v)) return '="' + v + '"';   // número longo ou com zero à esquerda continua como texto
+            if (/^[=+\-@\t\r]/.test(v)) v = "'" + v;                             // nunca vira fórmula no Excel
+            return '"' + v.replace(/"/g, '""') + '"';
+        }
+        function exportarCSV(base) {
+            const modelos = {
+                estoque: { nome: 'estoque', dados: window.estoqueLocal || [], colunas: [['Categoria','Categoria'],['Componente','Componente'],['Modelo','Modelo'],['Especificação','Especificação'],['Local','Local'],['Série','Série'],['Patrimônio','Patrimonio'],['Quantidade','Quantidade'],['Estoque mínimo','EstoqueMinimo'],['Condição','Condicao'],['Observação da condição','ObservacaoCondicao'],['ID do registro','id']] },
+                localidades: { nome: 'rastreio', dados: window.localidadesLocais || [], colunas: [['Equipamento','Equipamento'],['Local físico','Local'],['Local SIPAC','LocalSipac'],['Marca/Modelo','Marca'],['Série','Serie'],['Patrimônio','Patrimonio'],['Quantidade','Quantidade'],['Condição','Condicao'],['Observação da condição','ObservacaoCondicao'],['ID do registro','id']] },
+                voip: { nome: 'ramais', dados: window.voipLocal || [], colunas: [['Ramal','Ramal'],['Setor','Setor'],['IP / Status','Ip'],['Equipamento / Observação','Equipamento'],['ID do registro','id']] }
+            };
+            const m = modelos[base]; if (!m) return;
+            if (!m.dados.length) return showToast('Não há registros para exportar nesta base.', 'error');
+            const linhas = [m.colunas.map(c => celulaCSV(c[0])).join(';'), ...m.dados.map(r => m.colunas.map(c => celulaCSV(r[c[1]])).join(';'))];
+            const arquivo = new Blob(['\ufeff' + linhas.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+            const link = document.createElement('a'); link.href = URL.createObjectURL(arquivo); link.download = `setic_${m.nome}_${new Date().toISOString().slice(0,10)}.csv`;
+            document.body.appendChild(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(link.href), 2000);
+            showToast(`${m.dados.length} registro(s) exportado(s).`);
+        }
+
         function showToast(msg, type = 'success') {
             const container = document.getElementById('toast-container'); if(!container) return;
             const toast = document.createElement('div');
@@ -896,6 +914,11 @@
             } return '';
         }
 
+        // Versão do sistema: confira na tela de login se a página está atualizada.
+        const VERSAO_SISTEMA = '2026.10.01-1';
+        document.getElementById('versao-sistema').textContent = 'Versão ' + VERSAO_SISTEMA;
+        document.getElementById('navbar-title').title = 'Versão ' + VERSAO_SISTEMA;
+
         function carregarPreferencias() {
             const titlePainel = localStorage.getItem('pref_title') || 'Painel de Gestão de Estoque - SETIC';
             const color = localStorage.getItem('pref_color') || '#161B33';
@@ -915,6 +938,7 @@
             if(document.getElementById('login-screen')) document.getElementById('login-screen').style.backgroundImage = `url('${bgImage}')`;
         }
         carregarPreferencias(); 
+        try { if (localStorage.getItem('pref_tema') === 'escuro') document.body.classList.add('dark'); } catch {}
 
         if(document.getElementById('pref-bg-upload')) document.getElementById('pref-bg-upload').addEventListener('change', function(e) { const file = e.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = function(event) { window.tempBgBase64 = event.target.result; }; reader.readAsDataURL(file); } });
         if(document.getElementById('btn-clear-bg')) document.getElementById('btn-clear-bg').addEventListener('click', () => { localStorage.removeItem('pref_bg'); window.tempBgBase64 = null; document.getElementById('pref-bg-upload').value = ''; carregarPreferencias(); showToast("Imagem restaurada!"); });
@@ -967,6 +991,8 @@
         let sessaoAutenticacao = 0;
         onAuthStateChanged(auth, async (user) => {
             const sessao = ++sessaoAutenticacao;
+            pararAssinaturasDados();
+            if (!user) { window.estoqueLocal = []; window.localidadesLocais = []; window.voipLocal = []; window.logsLocal = []; window.logsRetiradas = null; }
             SETIC_AI.close();
             resetAdminAccess();
             if (user) {
@@ -1001,10 +1027,19 @@
             }
         });
 
+        // Conexões em tempo real abertas no login; todas são encerradas ao sair ou trocar de usuário.
+        let assinaturasDados = [];
+        function pararAssinaturasDados() { assinaturasDados.forEach(parar => { try { parar(); } catch {} }); assinaturasDados = []; }
+        function ouvir(...args) { const parar = onSnapshot(...args); assinaturasDados.push(parar); return parar; }
         function iniciarSistema() {
+            pararAssinaturasDados();
+            // 6) Itens Retirados: todas as saídas desde o início do indicador (consulta simples por data, sem índice extra).
+            ouvir(query(collection(db, "logs"), where("dataHora", ">=", new Date(SAIDAS_GRAFICO_INICIO))),
+                (snapshot) => { window.logsRetiradas = []; snapshot.forEach(d => window.logsRetiradas.push({ ...d.data(), id: d.id })); tentarAtualizarDashboard(); },
+                (error) => { console.warn('Histórico de retiradas indisponível; usando os últimos 100 registros.', error); window.logsRetiradas = null; tentarAtualizarDashboard(); });
             // Cada fonte de dados é independente. Um erro em Logs, por exemplo,
             // não pode impedir os gráficos de Estoque/Rastreio/VoIP de aparecerem.
-            onSnapshot(
+            ouvir(
                 collection(db, "estoque"),
                 (snapshot) => {
                     window.estoqueLocal = [];
@@ -1019,7 +1054,7 @@
                 }
             );
 
-            onSnapshot(
+            ouvir(
                 collection(db, "localidades"),
                 (snapshot) => {
                     window.localidadesLocais = [];
@@ -1034,7 +1069,7 @@
                 }
             );
 
-            onSnapshot(
+            ouvir(
                 collection(db, "voip"),
                 (snapshot) => {
                     window.voipLocal = [];
@@ -1049,7 +1084,7 @@
                 }
             );
 
-            onSnapshot(
+            ouvir(
                 query(collection(db, "logs"), orderBy("dataHora", "desc"), limit(100)),
                 (snapshot) => {
                     const tbody = document.getElementById('logs-tbody');
@@ -1106,7 +1141,7 @@
             );
         }
 
-        async function registrarLog(tipo, itemNome, qtd, chamado = "") { try { await addDoc(collection(db, "logs"), { tipo, itemNome, qtd: Number(qtd), chamado, usuario: window.userEmail, dataHora: serverTimestamp() }); } catch(e) {} }
+        async function registrarLog(tipo, itemNome, qtd, chamado = "") { try { await addDoc(collection(db, "logs"), { tipo, itemNome, qtd: Number(qtd), chamado, usuario: window.userEmail, dataHora: serverTimestamp() }); } catch(e) { console.error('Falha ao gravar o histórico:', e); setTimeout(() => showToast('Atenção: a operação foi gravada, mas o registro no histórico falhou (' + (e.code || e.message) + '). Avise o administrador.', 'error'), 3200); } }
 
         function tentarAtualizarDashboard() {
             // A interface e os gráficos são independentes das consultas entre si.
@@ -1115,6 +1150,7 @@
                 atualizarFiltroCategoriaTabela();
                 renderCondicaoControles();
                 atualizarFiltrosManutencao();
+                atualizarListaTecnicos();
                 atualizarInterfaceEstoque();
                 atualizarInterfaceRastreio();
                 atualizarInterfaceVoip();
@@ -1353,7 +1389,7 @@ window.atualizarInterfaceEstoque = function() {
             dadosPagina.forEach(loc => {
                 tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-bold text-slate-800">${escHtml(loc.Equipamento||'')}<br><span class="text-xs font-normal">${['Funcionando','Em manutenção','Não funcionando'].includes(loc.Condicao)?escHtml(loc.Condicao):''}</span></td><td class="px-6 py-4 text-sm font-semibold text-indigo-700"><i class="fas fa-map-pin mr-1 opacity-50"></i>${escHtml(loc.Local||'')}</td><td class="px-6 py-4 text-sm text-slate-500">${escHtml(loc.LocalSipac||'')}</td><td class="px-6 py-4 text-sm text-slate-500">${escHtml(loc.Marca||'')}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${escHtml(loc.Serie||'')}</td><td class="px-6 py-4 text-sm font-mono text-slate-600">${escHtml(loc.Patrimonio||'')}</td><td class="px-6 py-4 text-sm font-black text-slate-800 text-center">${Number(loc.Quantidade)||0}</td></tr>`;
             });
-            if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + window.itemsPerPage, filtrados.length)} de ${filtrados.length} registros`;
+            if(document.getElementById('rastreio-page-info')) document.getElementById('rastreio-page-info').innerText = filtrados.length ? `Mostrando ${inicio + 1} a ${Math.min(inicio + window.itemsPerPage, filtrados.length)} de ${filtrados.length} registros` : 'Nenhum registro encontrado para este filtro.';
             if(document.getElementById('btn-prev-rastreio')) document.getElementById('btn-prev-rastreio').disabled = window.currentPageRastreio === 1;
             if(document.getElementById('btn-next-rastreio')) document.getElementById('btn-next-rastreio').disabled = window.currentPageRastreio === totalPaginas;
         }
@@ -1379,7 +1415,7 @@ window.atualizarInterfaceEstoque = function() {
                 else badgeIp = `<span class="px-2 py-1 inline-flex text-xs font-bold rounded bg-blue-50 text-blue-700 font-mono border border-blue-200">${escHtml(strIp)}</span>`;
                 tbody.innerHTML += `<tr class="hover:bg-indigo-50/30 transition border-b border-gray-100"><td class="px-6 py-4 text-sm font-black text-indigo-700 text-lg">${escHtml(v.Ramal||'')}</td><td class="px-6 py-4 text-sm font-bold text-slate-800">${escHtml(v.Setor||'')}</td><td class="px-6 py-4">${badgeIp}</td><td class="px-6 py-4 text-sm text-slate-500">${escHtml(v.Equipamento||'-')}</td></tr>`;
             });
-            if(document.getElementById('voip-page-info')) document.getElementById('voip-page-info').innerText = `Mostrando ${inicio + 1} a ${Math.min(inicio + window.itemsPerPage, filtrados.length)} de ${filtrados.length} ramais`;
+            if(document.getElementById('voip-page-info')) document.getElementById('voip-page-info').innerText = filtrados.length ? `Mostrando ${inicio + 1} a ${Math.min(inicio + window.itemsPerPage, filtrados.length)} de ${filtrados.length} ramais` : 'Nenhum ramal encontrado para esta pesquisa.';
             if(document.getElementById('btn-prev-voip')) document.getElementById('btn-prev-voip').disabled = window.currentPageVoip === 1;
             if(document.getElementById('btn-next-voip')) document.getElementById('btn-next-voip').disabled = window.currentPageVoip === totalPaginas;
         }
@@ -1476,7 +1512,7 @@ window.atualizarInterfaceEstoque = function() {
         const SAIDAS_GRAFICO_INICIO = Date.parse('2026-09-27T13:01:45Z');
         let chartAlertasEstoque=null;
         function dashboardAlerts(){return gruposEstoque().filter(g=>g.status!=='regular');}
-        function dashboardWithdrawals(){const map=new Map();window.logsLocal.forEach(l=>{let date;try{date=l.dataHora?.toDate?l.dataHora.toDate().getTime():Date.parse(l.dataHora);}catch{date=NaN;}if(l.tipo==='SAÍDA'&&!l.revertida&&date>=SAIDAS_GRAFICO_INICIO&&l.itemNome)map.set(l.itemNome,(map.get(l.itemNome)||0)+(Number(l.qtd)||0));});return [...map].map(([name,quantity])=>({name,quantity})).sort((a,b)=>b.quantity-a.quantity);}
+        function dashboardWithdrawals(){const map=new Map();(window.logsRetiradas||window.logsLocal).forEach(l=>{let date;try{date=l.dataHora?.toDate?l.dataHora.toDate().getTime():Date.parse(l.dataHora);}catch{date=NaN;}if(l.tipo==='SAÍDA'&&!l.revertida&&date>=SAIDAS_GRAFICO_INICIO&&l.itemNome)map.set(l.itemNome,(map.get(l.itemNome)||0)+(Number(l.qtd)||0));});return [...map].map(([name,quantity])=>({name,quantity})).sort((a,b)=>b.quantity-a.quantity);}
         function openDashboardDetail(title,rows){
             const dialog=document.getElementById('dashboard-detail');document.getElementById('dashboard-detail-title').textContent=title;
             const body=document.getElementById('dashboard-detail-body');body.replaceChildren();
@@ -1552,7 +1588,7 @@ window.atualizarInterfaceEstoque = function() {
             const legendaAlerta=document.getElementById('alert-chart-caption'),botaoAlerta=document.getElementById('alert-chart-full');
             if(legendaAlerta)legendaAlerta.textContent=alertasCompletos.length>LIMITE_ALERTAS_CARTAO?`Mostrando os ${LIMITE_ALERTAS_CARTAO} mais críticos de ${alertasCompletos.length} equipamentos. Clique para ver os detalhes.`:'Quantidade igual ou abaixo do mínimo. Clique para ver os detalhes.';
             if(botaoAlerta){botaoAlerta.hidden=alertasCompletos.length<=LIMITE_ALERTAS_CARTAO;botaoAlerta.textContent=`Ver gráfico completo (${alertasCompletos.length} equipamentos)`;botaoAlerta.onclick=abrirAlertasCompletos;}
-            const status=document.getElementById('withdrawals-caption');if(status)status.textContent=withdrawn.length?'Somente saídas desde 27/09/2026, 10:01 (Brasília). Base: últimos 100 logs carregados.':'Nenhuma retirada desde a atualização. Histórico anterior preservado.';
+            const status=document.getElementById('withdrawals-caption');if(status)status.textContent=withdrawn.length?(window.logsRetiradas?'Somente saídas desde 27/09/2026, 10:01 (Brasília). Base: histórico completo desde essa data.':'Somente saídas desde 27/09/2026, 10:01 (Brasília). Base: últimos 100 logs carregados.'):'Nenhuma retirada desde a atualização. Histórico anterior preservado.';
         }
 
         function renderChartsUIUX() {
@@ -1774,6 +1810,26 @@ window.atualizarInterfaceEstoque = function() {
         }
 
         // ================= GESTÃO MANUAL E UPLOADS =================
+        // ===== Técnico responsável: sugestões a partir das baixas já registradas =====
+        // Grafias que diferem só em maiúsculas, acentos ou espaços são o mesmo técnico
+        // (erro de digitação NÃO junta nomes, para não misturar pessoas diferentes).
+        function nomesTecnicosUsados() {
+            const vistos = new Set(), porChave = new Map();
+            for (const log of [...(window.logsRetiradas || []), ...(window.logsLocal || [])]) {
+                if (!log || vistos.has(log.id)) continue; vistos.add(log.id);
+                const achado = String(log.chamado || '').match(/Técnico responsável: (.+)$/); if (!achado) continue;
+                const nome = achado[1].trim(); const chave = chaveTexto(nome); if (!chave) continue;
+                const grafias = porChave.get(chave) || new Map(); grafias.set(nome, (grafias.get(nome) || 0) + 1); porChave.set(chave, grafias);
+            }
+            return [...porChave.values()].map(g => [...g].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'pt-BR'))[0][0]).sort((a, b) => a.localeCompare(b, 'pt-BR'));
+        }
+        function atualizarListaTecnicos() {
+            const lista = document.getElementById('lista-tecnicos'); if (!lista) return;
+            lista.replaceChildren(...nomesTecnicosUsados().map(n => { const o = document.createElement('option'); o.value = n; return o; }));
+            const campo = document.getElementById('saida-tecnico');
+            if (campo && !campo.value) { try { campo.value = localStorage.getItem('ultimo_tecnico') || ''; } catch {} }
+        }
+
         // ===== Filtros Categoria → Equipamento (Baixa / Saída e Atualizar — Estoque) =====
         let pesquisarSaida=null,pesquisarEdicao=null;
         const chaveGrupo=g=>g?g.cat+'|'+chaveTexto(g.nome):'';
@@ -1895,6 +1951,12 @@ window.atualizarInterfaceEstoque = function() {
             const item = lista.find(i => !idEstoque(i.Patrimonio) && !idEstoque(i.Série) && nomeEquipamento(i.Componente) === nomeEquipamento(d.comp) && String(i.Modelo||'') === d.mod && String(i.Especificação||'') === d.esp && String(i.Local||'') === d.local);
             return item ? { tipo: 'somar', item } : { tipo: 'novo' };
         }
+        // Duplicados no Rastreio (patrimônio ou série) e nos Ramais (número do ramal).
+        function rastreioComMesmoId(pat, ser, excetoId) {
+            const p = idEstoque(pat), sr = idEstoque(ser); if (!p && !sr) return null;
+            return (window.localidadesLocais || []).find(i => i.id !== excetoId && ((p && (idEstoque(i.Patrimonio) === p || idEstoque(i.Serie) === p)) || (sr && (idEstoque(i.Serie) === sr || idEstoque(i.Patrimonio) === sr)))) || null;
+        }
+        function ramalExistente(ramal, excetoId) { const r = idEstoque(ramal); return r ? (window.voipLocal || []).find(v => v.id !== excetoId && idEstoque(v.Ramal) === r) || null : null; }
         function descreverCadastro(i) { return `"${i.Componente||'item'}" (patrimônio ${i.Patrimonio||'-'}, série ${i.Série||'-'}, quantidade ${i.Quantidade ?? '-'})`; }
 
         window.salvarEstoque = async function() {
@@ -1918,7 +1980,7 @@ window.atualizarInterfaceEstoque = function() {
             if(action === 'edit' && !eId) return showToast('Selecione um registro existente para atualizar.', 'error');
             if(!eq || !loc || !Number.isSafeInteger(qt) || qt < 0) return showToast("Preencha Equipamento, Local Físico e Quantidade.", "error");
             const b = document.getElementById('btn-save-loc'); const o = b.innerText; b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-            try { if(action === 'edit' && eId) { await saveInventoryEdit("localidades",eId,{ Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: qt },"loc"); showToast("Alteração gravada e movimentada com sucesso!"); } else { await addDoc(collection(db, "localidades"), { Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: qt }); await registrarLog("MAP_LOCAL", `${eq} (${loc})`, qt, `SIPAC: ${sip || '-'} | Série: ${ser || '-'}`); showToast("Equipamento mapeado com sucesso!"); } ['loc-equip','loc-local', 'loc-sipac','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id', 'loc-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; document.getElementById('loc-action-type').value = 'new'; document.getElementById('loc-action-type').dispatchEvent(new Event('change')); } catch (e) { showToast("Erro: " + e.message, "error"); } b.innerText = o;
+            try { if(action === 'edit' && eId) { const repetidoEdicao = rastreioComMesmoId(pat, ser, eId); if (repetidoEdicao) throw new Error(`Outro registro do Rastreio já usa este patrimônio/série: ${repetidoEdicao.Equipamento || 'equipamento'} (local ${repetidoEdicao.Local || '-'}).`); await saveInventoryEdit("localidades",eId,{ Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: qt },"loc"); showToast("Alteração gravada e movimentada com sucesso!"); } else { const repetido = rastreioComMesmoId(pat, ser); if (repetido) throw new Error(`Já existe no Rastreio um registro com este patrimônio/série: ${repetido.Equipamento || 'equipamento'} (local ${repetido.Local || '-'}, patrimônio ${repetido.Patrimonio || '-'}, série ${repetido.Serie || '-'}). Para alterar, use Atualizar.`); await addDoc(collection(db, "localidades"), { Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: qt }); await registrarLog("MAP_LOCAL", `${eq} (${loc})`, qt, `SIPAC: ${sip || '-'} | Série: ${ser || '-'}`); showToast("Equipamento mapeado com sucesso!"); } ['loc-equip','loc-local', 'loc-sipac','loc-marca','loc-serie','loc-patrimonio', 'loc-edit-id', 'loc-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('loc-qtd').value = 1; document.getElementById('loc-action-type').value = 'new'; document.getElementById('loc-action-type').dispatchEvent(new Event('change')); } catch (e) { showToast("Erro: " + e.message, "error"); } b.innerText = o;
         };
 
         window.salvarVoip = async function() {
@@ -1929,8 +1991,8 @@ window.atualizarInterfaceEstoque = function() {
             if(!ramal || !setor || !ip) return showToast("Preencha Ramal, Setor e IP.", "error");
             const b = document.getElementById('btn-save-voip'); const o = b.innerText; b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
             try {
-                if(action === 'edit' && eId) { await updateDoc(doc(db, "voip", eId), { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: equip }); await registrarLog("MOVIMENTAÇÃO (VOIP)", `Ramal ${ramal}`, 1, `Setor: ${setor}`); showToast("Alteração gravada!"); } 
-                else { await addDoc(collection(db, "voip"), { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: equip }); await registrarLog("ENTRADA (VOIP)", `Ramal ${ramal}`, 1, `Setor: ${setor}`); showToast("Ramal registado!"); }
+                if(action === 'edit' && eId) { const outroRamal = ramalExistente(ramal, eId); if (outroRamal) throw new Error(`O ramal ${ramal} já está cadastrado (setor ${outroRamal.Setor || '-'}).`); const ref = doc(db, "voip", eId), audit = doc(collection(db, "logs")); await runTransaction(db, async tx => { const snap = await tx.get(ref); if (!snap.exists()) throw new Error('Este ramal não existe mais. Pesquise e selecione novamente.'); tx.update(ref, { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: equip }); tx.set(audit, { tipo: "MOVIMENTAÇÃO (VOIP)", itemId: eId, itemNome: `Ramal ${ramal}`, qtd: 1, chamado: `Setor: ${setor}`, usuario: window.userEmail, dataHora: serverTimestamp() }); }); showToast("Alteração gravada!"); } 
+                else { const jaExiste = ramalExistente(ramal); if (jaExiste) throw new Error(`O ramal ${ramal} já está cadastrado (setor ${jaExiste.Setor || '-'}). Para alterar, use Atualizar.`); await addDoc(collection(db, "voip"), { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: equip }); await registrarLog("ENTRADA (VOIP)", `Ramal ${ramal}`, 1, `Setor: ${setor}`); showToast("Ramal registado!"); }
                 ['voip-ramal','voip-setor','voip-ip','voip-equip','voip-edit-id','voip-edit-input'].forEach(id => document.getElementById(id).value = ''); document.getElementById('voip-action-type').value = 'new'; document.getElementById('voip-action-type').dispatchEvent(new Event('change'));
             } catch (e) { showToast("Erro: " + e.message, "error"); } b.innerText = o;
         };
@@ -1940,8 +2002,10 @@ window.atualizarInterfaceEstoque = function() {
             if(!item||!Number.isInteger(qty)||qty<=0)return showToast('Selecione um item e quantidade válida.','error');
             const tecnico=document.getElementById('saida-tecnico').value.trim().replace(/\s+/g,' ');
             if(tecnico.length<3)return showToast('Digite o nome do técnico responsável (pelo menos 3 letras).','error');
+            const tecnicoConhecido=nomesTecnicosUsados().find(n=>chaveTexto(n)===chaveTexto(tecnico));
+            const tecnicoFinal=tecnicoConhecido||tecnico;try{localStorage.setItem('ultimo_tecnico',tecnicoFinal);}catch{}
             // Sem campo novo no histórico (regras do Firestore inalteradas): o técnico vai junto ao texto do chamado.
-            const chamadoComTecnico=(chamado?chamado+' | ':'')+'Técnico responsável: '+tecnico;const button=document.getElementById('btn-register-saida');if(button.disabled)return;button.disabled=true;
+            const chamadoComTecnico=(chamado?chamado+' | ':'')+'Técnico responsável: '+tecnicoFinal;const button=document.getElementById('btn-register-saida');if(button.disabled)return;button.disabled=true;
             try{const ref=doc(db,'estoque',item.id),logRef=doc(collection(db,'logs'));await runTransaction(db,async tx=>{const snap=await tx.get(ref);if(!snap.exists())throw new Error('Item não encontrado.');const data=snap.data(),saldo=Number(data.Quantidade);if(!Number.isFinite(saldo)||saldo<qty)throw new Error('Saldo insuficiente.');if(saldo!==Number(item.Quantidade))throw new Error('O saldo mudou desde a seleção. Pesquise novamente e confira a quantidade atual.');tx.update(ref,{Quantidade:saldo-qty});tx.set(logRef,{tipo:'SAÍDA',itemId:item.id,itemNome:`${data.Componente||''} (${data.Especificação||''})`,qtd:qty,chamado:chamadoComTecnico,usuario:window.userEmail,dataHora:serverTimestamp(),revertida:false});});showToast('Baixa registrada.');document.getElementById('saida-item-input').value='';document.getElementById('saida-qtd').value=1;document.getElementById('saida-chamado').value='';renderWithdrawalDetails();}catch(e){showToast(e.message,'error');}finally{button.disabled=false;}
         };
 
@@ -2003,10 +2067,33 @@ window.atualizarInterfaceEstoque = function() {
             const fi = document.getElementById('loc-file-upload'), b = document.getElementById('btn-loc-upload'); if (!fi.files.length) return showToast("Selecione planilha.", "error"); b.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mapeando...'; 
             const r = new FileReader(); r.onload = async (e) => {
                 try {
-                    const js = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let c = 0;
-                    for (let row of js) { const sip = getVal(row, ['LOCAL SIPAC', 'Local SIPAC', 'Local Sipac', 'LOCAL_SIPAC']); const ser = getVal(row, ['Nº DE SÉRIE', 'N DE SERIE', 'Nº DE SERIE', 'Nº Série', 'N Serie', 'SÉRIE', 'Série', 'SERIE', 'NUMERO DE SERIE']); const pat = getVal(row, ['Nº PATRIMÔNIO', 'Nº PATRIMONIO', 'N Patrimônio', 'N Patrimonio', 'PATRIMÔNIO', 'PATRIMONIO', 'Patrimônio', 'Patrimonio']); const eq = getVal(row, ['EQUIPAMENTO', 'Equipamento', 'Nome']); const loc = getVal(row, ['LOCAL FISICO', 'Local Físico', 'LOCAL FÍSICO', 'Local']); const mar = getVal(row, ['MARCA/MODELO', 'Marca/Modelo', 'MARCA', 'Marca', 'MODELO', 'Modelo']); await addDoc(collection(db, "localidades"), { Equipamento: eq, Local: loc, LocalSipac: sip, Marca: mar, Serie: ser, Patrimonio: pat, Quantidade: parseInt(row['QUANTIDADE']||row['Quantidade']||1) }); c++; }
-                    await registrarLog("MAP_LOCAL", `Upload Excel`, c, ""); showToast(`Sucesso! ${c} locais mapeados.`); fi.value = "";
-                } catch (error) { showToast("Erro leitura.", "error"); } b.innerHTML = 'Iniciar Importação';
+                    const planilha = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+                    const js = XLSX.utils.sheet_to_json(planilha.Sheets[planilha.SheetNames[0]]);
+                    // 1) Conferir TODAS as linhas antes de gravar.
+                    const linhas = [], problemas = [], vistos = new Map(); let vazias = 0;
+                    js.forEach((row, index) => {
+                        const numero = index + 2;
+                        const sip = getVal(row, ['LOCAL SIPAC', 'Local SIPAC', 'Local Sipac', 'LOCAL_SIPAC']); const ser = getVal(row, ['Nº DE SÉRIE', 'N DE SERIE', 'Nº DE SERIE', 'Nº Série', 'N Serie', 'SÉRIE', 'Série', 'SERIE', 'NUMERO DE SERIE']); const pat = getVal(row, ['Nº PATRIMÔNIO', 'Nº PATRIMONIO', 'N Patrimônio', 'N Patrimonio', 'PATRIMÔNIO', 'PATRIMONIO', 'Patrimônio', 'Patrimonio']); const eq = getVal(row, ['EQUIPAMENTO', 'Equipamento', 'Nome']); const loc = getVal(row, ['LOCAL FISICO', 'Local Físico', 'LOCAL FÍSICO', 'Local']); const mar = getVal(row, ['MARCA/MODELO', 'Marca/Modelo', 'MARCA', 'Marca', 'MODELO', 'Modelo']);
+                        const qtdTexto = getVal(row, ['QUANTIDADE', 'Quantidade', 'QTD', 'Qtd']);
+                        if (![eq, loc, sip, ser, pat, mar].some(v => String(v).trim())) { vazias++; return; }
+                        if (!eq) problemas.push(`linha ${numero}: equipamento não informado`);
+                        if (!loc) problemas.push(`linha ${numero}: local físico não informado`);
+                        const qtd = qtdTexto === '' ? 1 : Number(String(qtdTexto).replace(',', '.'));
+                        if (!Number.isSafeInteger(qtd) || qtd < 1) problemas.push(`linha ${numero}: quantidade inválida (${qtdTexto})`);
+                        for (const valor of new Set([idEstoque(pat), idEstoque(ser)].filter(Boolean))) { if (vistos.has(valor)) problemas.push(`linha ${numero}: patrimônio/série ${valor} repetido (também na linha ${vistos.get(valor)})`); else vistos.set(valor, numero); }
+                        linhas.push({ eq, loc, sip, mar, ser, pat, qtd });
+                    });
+                    if (problemas.length) throw new Error('Importação cancelada. Nenhum registro foi gravado.\n\nCorrija a planilha:\n• ' + problemas.slice(0, 8).join('\n• ') + (problemas.length > 8 ? `\n• e mais ${problemas.length - 8} problema(s).` : ''));
+                    // 2) Gravar; patrimônio/série que já existe no Rastreio é ignorado (nada é duplicado).
+                    let novos = 0, ignorados = 0;
+                    for (const d of linhas) {
+                        if (rastreioComMesmoId(d.pat, d.ser)) { ignorados++; continue; }
+                        await addDoc(collection(db, "localidades"), { Equipamento: d.eq, Local: d.loc, LocalSipac: d.sip, Marca: d.mar, Serie: d.ser, Patrimonio: d.pat, Quantidade: d.qtd }); novos++;
+                    }
+                    await registrarLog("MAP_LOCAL", `Upload Excel`, novos, `Novos: ${novos} | Já cadastrados (ignorados): ${ignorados} | Linhas vazias: ${vazias}`);
+                    showToast(`Importação concluída: ${novos} novo(s), ${ignorados} já cadastrado(s).`); fi.value = "";
+                    if (ignorados) alert(`Importação concluída.\n\nNovos registros: ${novos}\nJá cadastrados no Rastreio (ignorados): ${ignorados}`);
+                } catch (error) { showToast('Importação não concluída. Veja a mensagem na tela.', 'error'); alert(error.message || 'Erro na leitura da planilha.'); } b.innerHTML = 'Iniciar Importação';
             }; r.readAsArrayBuffer(fi.files[0]);
         };
 
@@ -2015,13 +2102,28 @@ window.atualizarInterfaceEstoque = function() {
             const fi = document.getElementById('voip-file-upload'), b = document.getElementById('btn-voip-upload'); if (!fi.files.length) return showToast("Selecione planilha.", "error"); b.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Lendo...'; 
             const r = new FileReader(); r.onload = async (e) => {
                 try {
-                    const js = XLSX.utils.sheet_to_json(XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).Sheets[XLSX.read(new Uint8Array(e.target.result), { type: 'array' }).SheetNames[0]]); let c = 0;
-                    for (let row of js) {
+                    const planilha = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+                    const js = XLSX.utils.sheet_to_json(planilha.Sheets[planilha.SheetNames[0]]);
+                    const linhas = [], problemas = [], vistos = new Map(); let vazias = 0;
+                    js.forEach((row, index) => {
+                        const numero = index + 2;
                         const ramal = getVal(row, ['RAMAL', 'Ramal', 'NÚMERO']); const setor = getVal(row, ['SETOR', 'Setor', 'LOCAL']); const ip = getVal(row, ['IP', 'Ip', 'ENDEREÇO IP']); const eq = getVal(row, ['EQUIPAMENTO', 'Equipamento', 'OBSERVAÇÃO', 'MODELO']);
-                        if(!ramal) continue; await addDoc(collection(db, "voip"), { Ramal: ramal, Setor: setor, Ip: ip, Equipamento: eq }); c++;
+                        if (![ramal, setor, ip, eq].some(v => String(v).trim())) { vazias++; return; }
+                        if (!ramal) { problemas.push(`linha ${numero}: ramal não informado`); return; }
+                        const chave = idEstoque(ramal);
+                        if (vistos.has(chave)) problemas.push(`linha ${numero}: ramal ${ramal} repetido (também na linha ${vistos.get(chave)})`); else vistos.set(chave, numero);
+                        linhas.push({ ramal, setor, ip, eq });
+                    });
+                    if (problemas.length) throw new Error('Importação cancelada. Nenhum registro foi gravado.\n\nCorrija a planilha:\n• ' + problemas.slice(0, 8).join('\n• ') + (problemas.length > 8 ? `\n• e mais ${problemas.length - 8} problema(s).` : ''));
+                    let novos = 0, ignorados = 0;
+                    for (const d of linhas) {
+                        if (ramalExistente(d.ramal)) { ignorados++; continue; }
+                        await addDoc(collection(db, "voip"), { Ramal: d.ramal, Setor: d.setor, Ip: d.ip, Equipamento: d.eq }); novos++;
                     }
-                    await registrarLog("MAP_LOCAL (VOIP)", `Upload Excel`, c, ""); showToast(`Sucesso! ${c} ramais importados.`); fi.value = "";
-                } catch (er) { showToast("Erro leitura.", "error"); } b.innerHTML = 'Iniciar Importação';
+                    await registrarLog("MAP_LOCAL (VOIP)", `Upload Excel`, novos, `Novos: ${novos} | Já cadastrados (ignorados): ${ignorados} | Linhas vazias: ${vazias}`);
+                    showToast(`Importação concluída: ${novos} ramal(is) novo(s), ${ignorados} já cadastrado(s).`); fi.value = "";
+                    if (ignorados) alert(`Importação concluída.\n\nRamais novos: ${novos}\nJá cadastrados (ignorados): ${ignorados}`);
+                } catch (error) { showToast('Importação não concluída. Veja a mensagem na tela.', 'error'); alert(error.message || 'Erro na leitura da planilha.'); } b.innerHTML = 'Iniciar Importação';
             }; r.readAsArrayBuffer(fi.files[0]);
         };
 
@@ -2221,14 +2323,16 @@ window.atualizarInterfaceEstoque = function() {
         namesPanel.innerHTML='<h3 class="font-bold text-lg mb-2">Padronizar nomes do estoque</h3><p class="text-sm mb-3">Converte os nomes dos componentes do Estoque para letras MAIÚSCULAS e unifica grafias diferentes do mesmo equipamento na mesma categoria (exemplo: "Switchs" → "SWITCH"). Quantidade, série, patrimônio, local e categoria não são alterados. Novas entradas, importações e transferências já são gravadas neste padrão.</p><button type="button" id="admin-names-preview" class="bg-blue-600 text-white rounded p-2">Verificar nomes fora do padrão</button><p id="admin-names-status" role="status" class="text-sm my-3"></p><div id="admin-names-list" style="max-height:260px;overflow:auto"></div><button type="button" id="admin-names-apply" class="bg-emerald-600 text-white rounded p-2 mt-3" hidden>Padronizar nomes</button>';
         const minimosPanel=document.createElement('section');
         minimosPanel.innerHTML='<h3 class="font-bold text-lg mb-2">Estoque mínimo por equipamento</h3><p class="text-sm mb-3">O mínimo vale para a quantidade TOTAL de cada equipamento (todos os registros da mesma categoria e nome, somados). Ao salvar, o valor é gravado em todos os registros do equipamento.</p><input id="admin-minimos-search" class="border rounded p-2 w-full mb-3" placeholder="Pesquisar equipamento ou categoria" autocomplete="off"><p id="admin-minimos-status" role="status" class="text-sm mb-2"></p><div id="admin-minimos-list" style="max-height:360px;overflow:auto"></div>';
+        const backupPanel=document.createElement('section');
+        backupPanel.innerHTML='<h3 class="font-bold text-lg mb-2">Backup completo</h3><p class="text-sm mb-3">Baixa um arquivo (.json) com todas as bases (Estoque, Rastreio, Ramais), o histórico completo e a lista de usuários autorizados. Guarde o arquivo em local seguro: ele contém todos os dados do sistema. Nada é alterado no banco.</p><button type="button" id="admin-backup-baixar" class="bg-blue-600 text-white rounded p-2 font-bold"><i class="fas fa-download mr-2"></i>Baixar backup completo</button><p id="admin-backup-status" role="status" class="text-sm mt-3"></p>';
         const nav=document.createElement('div');nav.className='admin-actions';nav.setAttribute('aria-label','Funções administrativas');
         const transferPanel=document.getElementById('transfer-form');
         transferPanel.classList.remove('hidden');
         document.getElementById('transfer-open').remove();
         const updateHost=document.createElement('div');
-        const adminSections={entry:entryHost,update:updateHost,transfer:transferPanel,reversal:reversalPanel,deletion:deletePanel,users:userPanel,access:accessPanel,audit:auditPanel,logs:logPanel,names:namesPanel,minimos:minimosPanel};
+        const adminSections={entry:entryHost,update:updateHost,transfer:transferPanel,reversal:reversalPanel,deletion:deletePanel,users:userPanel,access:accessPanel,audit:auditPanel,logs:logPanel,names:namesPanel,minimos:minimosPanel,backup:backupPanel};
         entryButton.textContent='Entrada';entryButton.dataset.adminSection='entry';nav.append(entryButton);
-        for(const [key,title] of [['update','Atualizar cadastro'],['transfer','Transferir equipamento'],['reversal','Reversão de itens'],['deletion','Excluir registros'],['users','Novo usuário'],['access','Gerir acessos'],['audit','Auditoria'],['logs','Excluir logs'],['names','Padronizar nomes'],['minimos','Estoque mínimo']]){
+        for(const [key,title] of [['update','Atualizar cadastro'],['transfer','Transferir equipamento'],['reversal','Reversão de itens'],['deletion','Excluir registros'],['users','Novo usuário'],['access','Gerir acessos'],['audit','Auditoria'],['logs','Excluir logs'],['names','Padronizar nomes'],['minimos','Estoque mínimo'],['backup','Backup']]){
             const button=document.createElement('button');button.type='button';button.textContent=title;button.dataset.adminSection=key;nav.append(button);
         }
         const intro=document.createElement('p');intro.className='text-slate-500 text-sm mb-4';intro.textContent='Escolha uma opção para abrir os campos necessários.';
@@ -2236,7 +2340,7 @@ window.atualizarInterfaceEstoque = function() {
         adminContent.replaceChildren(adminHeader,intro,nav,...Object.values(adminSections));
         adminContent.classList.remove('h-full');
 
-        const actionIcons={entry:'fa-boxes',update:'fa-pen',transfer:'fa-exchange-alt',reversal:'fa-undo-alt',deletion:'fa-trash-alt',users:'fa-user-plus',access:'fa-user-shield',audit:'fa-history',logs:'fa-eraser',names:'fa-font',minimos:'fa-sliders-h'};
+        const actionIcons={entry:'fa-boxes',update:'fa-pen',transfer:'fa-exchange-alt',reversal:'fa-undo-alt',deletion:'fa-trash-alt',users:'fa-user-plus',access:'fa-user-shield',audit:'fa-history',logs:'fa-eraser',names:'fa-font',minimos:'fa-sliders-h',backup:'fa-download'};
         document.querySelectorAll('[data-admin-section]').forEach(button=>{const icon=document.createElement('i');icon.className='fas '+actionIcons[button.dataset.adminSection];icon.setAttribute('aria-hidden','true');button.prepend(icon);});
         document.querySelectorAll('[data-cadastro-base]').forEach(button=>{const icon=document.createElement('i');icon.className='fas '+({estoque:'fa-boxes',loc:'fa-map-marker-alt',voip:'fa-phone-alt'})[button.dataset.cadastroBase];icon.setAttribute('aria-hidden','true');button.prepend(icon);});
 
@@ -2327,6 +2431,33 @@ window.atualizarInterfaceEstoque = function() {
             });
         }
         document.getElementById('admin-minimos-search').addEventListener('input',renderMinimosEquipamentos);
+
+        // Administrador → Backup completo (somente leitura).
+        function serializarBackup(v){
+            if(v&&typeof v.toDate==='function'){try{return v.toDate().toISOString();}catch{return null;}}
+            if(Array.isArray(v))return v.map(serializarBackup);
+            if(v&&typeof v==='object'){const o={};for(const [k,x] of Object.entries(v))o[k]=serializarBackup(x);return o;}
+            return v;
+        }
+        document.getElementById('admin-backup-baixar').onclick=async()=>{
+            const botao=document.getElementById('admin-backup-baixar'),status=document.getElementById('admin-backup-status');if(botao.disabled)return;botao.disabled=true;status.textContent='Lendo as bases…';
+            try{
+                await requireAdmin();
+                const colecoes={},contagem=[];
+                for(const nome of ['estoque','localidades','voip','logs','usuarios']){
+                    try{const snap=await getDocs(collection(db,nome));colecoes[nome]=[];snap.forEach(d=>colecoes[nome].push({id:d.id,...serializarBackup(d.data())}));contagem.push(`${nome}: ${colecoes[nome].length}`);}
+                    catch(erro){if(nome==='usuarios'){colecoes[nome]=null;contagem.push('usuarios: sem acesso');}else throw erro;}
+                }
+                const conteudo={sistema:'SETIC — Gestão de Equipamentos TIC',versao:VERSAO_SISTEMA,geradoEm:new Date().toISOString(),geradoPor:auth.currentUser.email||'',colecoes};
+                const arquivo=new Blob([JSON.stringify(conteudo,null,2)],{type:'application/json'}),agora=new Date();
+                const link=document.createElement('a');link.href=URL.createObjectURL(arquivo);link.download=`setic_backup_${agora.toISOString().slice(0,10)}_${String(agora.getHours()).padStart(2,'0')}${String(agora.getMinutes()).padStart(2,'0')}.json`;
+                document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(link.href),2000);
+                status.textContent='Backup gerado: '+contagem.join(' · ')+'.';
+                await registrarLog('BACKUP','Backup completo',Object.values(colecoes).reduce((t,c)=>t+(c?c.length:0),0),contagem.join(' | '));
+                showToast('Backup baixado.');
+            }catch(e){status.textContent='Não foi possível gerar o backup: '+e.message;showToast('Não foi possível gerar o backup: '+e.message,'error');}
+            finally{botao.disabled=false;}
+        };
 
         // Each submitted operation has one stable destination and audit ID, including retries.
         async function transferEquipment(input, destinationRef, auditRef) {
