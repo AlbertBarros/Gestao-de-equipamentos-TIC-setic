@@ -446,11 +446,21 @@
         </div>
     </div>
 
+    <dialog id="conf-popup" style="width:min(520px,94vw);border:0;border-radius:16px;padding:0;overflow:hidden" aria-labelledby="conf-popup-titulo">
+        <div style="background:#b91c1c;color:#fff" class="px-5 py-4 flex justify-between items-center"><h3 id="conf-popup-titulo" class="font-bold text-lg"><i class="fas fa-exclamation-triangle mr-2" aria-hidden="true"></i>Conferência trimestral pendente</h3><button type="button" id="conf-popup-x" aria-label="Fechar aviso" class="text-2xl leading-none" style="color:#fff">✕</button></div>
+        <div class="px-5 py-4"><p class="text-sm mb-3" style="color:#334155">Já se passaram 3 meses (ou a conferência ainda não foi feita). Confira o local e a quantidade dos equipamentos:</p><ul id="conf-popup-lista" class="text-sm mb-4" style="color:#991b1b"></ul>
+            <div class="flex flex-wrap gap-2 justify-end"><button type="button" id="conf-popup-fechar" class="border rounded px-4 py-2">Fechar</button><button type="button" id="conf-popup-ir" class="text-white rounded px-4 py-2 font-bold" style="background:#b91c1c">Ir para a conferência</button></div></div>
+    </dialog>
     <dialog id="perfil-dialog" style="width:min(460px,94vw);border:0;border-radius:16px;padding:24px" aria-labelledby="perfil-titulo">
         <div class="flex justify-between items-center mb-4"><h3 id="perfil-titulo" class="font-bold text-lg text-slate-800">Meu perfil</h3><button type="button" id="perfil-fechar" aria-label="Fechar perfil">✕</button></div>
         <div class="flex items-center gap-4 mb-2"><span id="perfil-foto" class="inline-flex items-center justify-center rounded-full overflow-hidden bg-slate-200" style="width:88px;height:88px;flex:0 0 88px"><i class="fas fa-user text-3xl text-slate-500" aria-hidden="true"></i></span>
             <div><p id="perfil-email" class="text-sm font-semibold text-slate-700 break-all"></p><label class="inline-block mt-2 bg-blue-600 text-white rounded px-3 py-1 text-sm font-bold cursor-pointer">Escolher foto<input type="file" id="perfil-foto-arquivo" accept="image/png,image/jpeg,image/webp" class="hidden"></label> <button type="button" id="perfil-foto-remover" class="text-sm text-red-600 underline ml-2">Remover foto</button></div></div>
-        <p class="text-xs text-slate-500 mb-5">A foto fica guardada neste navegador.</p>
+        <h4 class="font-bold text-slate-800 mt-4 mb-2">Nome exibido</h4>
+        <form id="perfil-nome-form" class="mb-5" autocomplete="off">
+            <label class="block text-sm mb-2">Como você quer ser chamado no sistema<input type="text" id="perfil-nome" maxlength="30" class="w-full border rounded p-2 mt-1" required></label>
+            <div class="flex flex-wrap gap-2 items-center"><button type="submit" id="perfil-nome-salvar" class="bg-blue-600 text-white rounded px-4 py-2 font-bold">Salvar nome</button><button type="button" id="perfil-nome-padrao" class="text-sm text-blue-600 underline">Usar o nome do e-mail</button></div>
+            <p id="perfil-nome-status" role="status" class="text-sm mt-2"></p>
+        </form>
         <h4 class="font-bold text-slate-800 mb-2">Alterar senha</h4>
         <form id="perfil-senha-form" autocomplete="off">
             <label class="block text-sm mb-2">Senha atual<input type="password" id="perfil-senha-atual" autocomplete="current-password" class="w-full border rounded p-2 mt-1" required></label>
@@ -681,7 +691,7 @@
     <!-- SCRIPT DE CONFIGURAÇÃO E EXECUÇÃO GERAL -->
     <script type="module">
         import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, initializeAuth, inMemoryPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getAuth, initializeAuth, inMemoryPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut, updatePassword, updateProfile, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, doc, getDoc, getDocs, setDoc, increment, writeBatch, updateDoc, addDoc, serverTimestamp, query, orderBy, limit, deleteDoc, runTransaction, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         // Chart.js pode carregar antes/depois do plugin dependendo da rede/CDN.
@@ -932,7 +942,7 @@
         }
 
         // Versão do sistema: confira na tela de login se a página está atualizada.
-        const VERSAO_SISTEMA = '2026.10.01-2';
+        const VERSAO_SISTEMA = '2026.10.01-4';
         document.getElementById('versao-sistema').textContent = 'Versão ' + VERSAO_SISTEMA;
         document.getElementById('navbar-title').title = 'Versão ' + VERSAO_SISTEMA;
 
@@ -1026,6 +1036,7 @@
         function abrirPerfil() {
             const janela = document.getElementById('perfil-dialog'); document.getElementById('perfil-email').textContent = auth.currentUser?.email || '';
             document.getElementById('perfil-senha-form').reset(); document.getElementById('perfil-senha-status').textContent = ''; atualizarFotos();
+            document.getElementById('perfil-nome').value = nomeExibido(auth.currentUser?.email || ''); document.getElementById('perfil-nome-status').textContent = '';
             if (!janela.open) janela.showModal();
         }
         document.getElementById('navbar-user').addEventListener('click', abrirPerfil);
@@ -1036,6 +1047,22 @@
             catch (erro) { showToast(erro.message || 'Não foi possível salvar a foto.', 'error'); }
         });
         document.getElementById('perfil-foto-remover').addEventListener('click', () => { try { localStorage.removeItem(chaveFoto(auth.currentUser?.email)); } catch {} atualizarFotos(); showToast('Foto removida.'); });
+        async function salvarNomeExibido(nome) {
+            const status = document.getElementById('perfil-nome-status'), botao = document.getElementById('perfil-nome-salvar'); botao.disabled = true;
+            try {
+                if (!auth.currentUser) throw new Error('Sua sessão terminou. Entre novamente.');
+                await updateProfile(auth.currentUser, { displayName: nome || null });
+                mostrarUsuarioNoCabecalho(auth.currentUser.email); document.getElementById('perfil-nome').value = nomeExibido(auth.currentUser.email);
+                status.textContent = nome ? 'Nome atualizado.' : 'Voltou a usar o nome do e-mail.'; showToast(nome ? 'Nome atualizado.' : 'Nome restaurado.');
+            } catch (erro) { status.textContent = erro.code === 'auth/network-request-failed' ? 'Sem conexão. Tente novamente.' : (erro.message || 'Não foi possível salvar o nome.'); }
+            finally { botao.disabled = false; }
+        }
+        document.getElementById('perfil-nome-form').addEventListener('submit', e => {
+            e.preventDefault(); const nome = document.getElementById('perfil-nome').value.trim().replace(/\s+/g, ' ');
+            if (nome.length < 2) { document.getElementById('perfil-nome-status').textContent = 'Digite um nome com pelo menos 2 letras.'; return; }
+            salvarNomeExibido(nome);
+        });
+        document.getElementById('perfil-nome-padrao').addEventListener('click', () => salvarNomeExibido(''));
         document.getElementById('perfil-senha-form').addEventListener('submit', async e => {
             e.preventDefault();
             const atual = document.getElementById('perfil-senha-atual').value, nova = document.getElementById('perfil-senha-nova').value, confirma = document.getElementById('perfil-senha-confirma').value;
@@ -1056,10 +1083,11 @@
             } finally { botao.disabled = false; document.getElementById('perfil-senha-atual').value = ''; }
         });
 
+        function nomeExibido(email) { const escolhido = String(auth.currentUser?.displayName || '').trim(); return escolhido || primeiroNomeDoEmail(email); }
         function mostrarUsuarioNoCabecalho(email) {
             const area = document.getElementById('navbar-user'); if (!area) return;
             area.classList.toggle('hidden', !email); area.title = email ? `Conectado como ${email}` : '';
-            document.getElementById('navbar-user-name').textContent = email ? primeiroNomeDoEmail(email) : '';
+            document.getElementById('navbar-user-name').textContent = email ? nomeExibido(email) : '';
             desenharFoto('navbar-avatar', email ? fotoDoUsuario(email) : '', 28);
             if (!email) document.getElementById('perfil-dialog')?.close();
         }
@@ -1095,6 +1123,7 @@
                 });
 
                 iniciarSistema();
+                avisarConferenciaAoAbrir(user);
             } else {
                 mostrarUsuarioNoCabecalho('');
                 document.getElementById('login-screen').classList.remove('hidden');
@@ -2536,6 +2565,28 @@ window.atualizarInterfaceEstoque = function() {
             }catch(e){status.textContent='Não foi possível gerar o backup: '+e.message;showToast('Não foi possível gerar o backup: '+e.message,'error');}
             finally{botao.disabled=false;}
         };
+
+        // ===== Aviso (janela) ao abrir o sistema: conferência vencida — somente para administradores =====
+        async function avisarConferenciaAoAbrir(user){
+            try{
+                const token=await user.getIdTokenResult();if(token.claims.admin!==true)return;
+                await carregarConferencias();
+                if(auth.currentUser?.uid!==user.uid)return;
+                const pendentes=Object.keys(BASES_CONFERENCIA).filter(b=>situacaoConferencia(b).nivel==='atrasada');if(!pendentes.length)return;
+                const lista=document.getElementById('conf-popup-lista');
+                lista.replaceChildren(...pendentes.map(b=>{const li=document.createElement('li');li.className='mb-1';const t=document.createElement('strong');t.textContent=BASES_CONFERENCIA[b].titulo+': ';li.append(t,document.createTextNode(situacaoConferencia(b).texto));return li;}));
+                const janela=document.getElementById('conf-popup');if(!janela.open)janela.showModal();
+            }catch(erro){console.warn('Aviso de conferência indisponível:',erro);}
+        }
+        document.getElementById('conf-popup-x').addEventListener('click',()=>document.getElementById('conf-popup').close());
+        document.getElementById('conf-popup-fechar').addEventListener('click',()=>document.getElementById('conf-popup').close());
+        document.getElementById('conf-popup-ir').addEventListener('click',async()=>{
+            document.getElementById('conf-popup').close();
+            document.getElementById('tools-modal').classList.remove('hidden');
+            document.querySelector('.tab-btn-tool[data-target="tab-admin"]').click();
+            await openAdmin();
+            if(adminAuthorized&&conferenciaPanel.hidden)showAdminSection('conferencia');
+        });
 
         // ===== Administrador → Conferência trimestral =====
         // A data da última conferência fica no histórico (tipo CONFERÊNCIA), visível a todos os administradores.
