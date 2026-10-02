@@ -544,6 +544,7 @@
                             <hr class="border-gray-200">
                             <div class="grid grid-cols-2 gap-5"><div><label class="block text-sm font-semibold text-slate-700">Qtd Retirada</label><input type="number" id="saida-qtd" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500" min="1" value="1"></div><div><label class="block text-sm font-semibold text-slate-700">Sistema / Chamado</label><input type="text" id="saida-chamado" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500"></div></div>
                             <div><label for="saida-tecnico" class="block text-sm font-semibold text-slate-700">Técnico responsável *</label><datalist id="lista-tecnicos"></datalist><input type="text" id="saida-tecnico" list="lista-tecnicos" maxlength="80" autocomplete="off" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500" placeholder="Digite o nome do técnico que atendeu o chamado"><p class="text-xs text-slate-500 mt-1">O nome fica registrado junto ao chamado. O usuário que confirmou a baixa também é gravado automaticamente no histórico.</p></div>
+                            <div><label for="saida-observacao" class="block text-sm font-semibold text-slate-700">Observação <span class="font-normal text-slate-500">(opcional)</span></label><textarea id="saida-observacao" maxlength="500" rows="2" class="mt-1 block w-full rounded-md border-gray-300 border p-3 shadow-sm focus:ring-red-500 focus:border-red-500" placeholder="Ex.: equipamento substituído por defeito, entregue ao setor X…"></textarea><p class="text-xs text-slate-500 mt-1">Fica registrada no histórico junto ao chamado.</p></div>
                         </div>
                         <button id="btn-register-saida" class="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-md hover:bg-red-700 transition shadow text-lg"><i class="fas fa-sign-out-alt mr-2"></i> Confirmar Baixa</button>
                     </div>
@@ -943,7 +944,7 @@
         }
 
         // Versão do sistema: confira na tela de login se a página está atualizada.
-        const VERSAO_SISTEMA = '2026.10.01-6';
+        const VERSAO_SISTEMA = '2026.10.01-7';
         document.getElementById('versao-sistema').textContent = 'Versão ' + VERSAO_SISTEMA;
         document.getElementById('navbar-title').title = 'Versão ' + VERSAO_SISTEMA;
 
@@ -1922,7 +1923,7 @@ window.atualizarInterfaceEstoque = function() {
             const vistos = new Set(), porChave = new Map();
             for (const log of [...(window.logsRetiradas || []), ...(window.logsLocal || [])]) {
                 if (!log || vistos.has(log.id)) continue; vistos.add(log.id);
-                const achado = String(log.chamado || '').match(/Técnico responsável: (.+)$/); if (!achado) continue;
+                const achado = String(log.chamado || '').match(/.*Técnico responsável: (.+)$/); if (!achado) continue;
                 const nome = achado[1].trim(); const chave = chaveTexto(nome); if (!chave) continue;
                 const grafias = porChave.get(chave) || new Map(); grafias.set(nome, (grafias.get(nome) || 0) + 1); porChave.set(chave, grafias);
             }
@@ -2113,8 +2114,10 @@ window.atualizarInterfaceEstoque = function() {
             const tecnicoConhecido=nomesTecnicosUsados().find(n=>chaveTexto(n)===chaveTexto(tecnico));
             const tecnicoFinal=tecnicoConhecido||tecnico;try{localStorage.setItem('ultimo_tecnico',tecnicoFinal);}catch{}
             // Sem campo novo no histórico (regras do Firestore inalteradas): o técnico vai junto ao texto do chamado.
-            const chamadoComTecnico=(chamado?chamado+' | ':'')+'Técnico responsável: '+tecnicoFinal;const button=document.getElementById('btn-register-saida');if(button.disabled)return;button.disabled=true;
-            try{const ref=doc(db,'estoque',item.id),logRef=doc(collection(db,'logs'));await runTransaction(db,async tx=>{const snap=await tx.get(ref);if(!snap.exists())throw new Error('Item não encontrado.');const data=snap.data(),saldo=Number(data.Quantidade);if(!Number.isFinite(saldo)||saldo<qty)throw new Error('Saldo insuficiente.');if(saldo!==Number(item.Quantidade))throw new Error('O saldo mudou desde a seleção. Pesquise novamente e confira a quantidade atual.');tx.update(ref,{Quantidade:saldo-qty});tx.set(logRef,{tipo:'SAÍDA',itemId:item.id,itemNome:`${data.Componente||''} (${data.Especificação||''})`,qtd:qty,chamado:chamadoComTecnico,usuario:window.userEmail,dataHora:serverTimestamp(),revertida:false});});showToast('Baixa registrada.');document.getElementById('saida-item-input').value='';document.getElementById('saida-qtd').value=1;document.getElementById('saida-chamado').value='';renderWithdrawalDetails();}catch(e){showToast(e.message,'error');}finally{button.disabled=false;}
+            // A observação vem antes do técnico (a sugestão de nomes lê o técnico no fim do texto).
+            const observacao=document.getElementById('saida-observacao').value.replace(/\s+/g,' ').replace(/\|/g,'/').trim();
+            const chamadoComTecnico=(chamado?chamado+' | ':'')+(observacao?'Observação: '+observacao+' | ':'')+'Técnico responsável: '+tecnicoFinal;const button=document.getElementById('btn-register-saida');if(button.disabled)return;button.disabled=true;
+            try{const ref=doc(db,'estoque',item.id),logRef=doc(collection(db,'logs'));await runTransaction(db,async tx=>{const snap=await tx.get(ref);if(!snap.exists())throw new Error('Item não encontrado.');const data=snap.data(),saldo=Number(data.Quantidade);if(!Number.isFinite(saldo)||saldo<qty)throw new Error('Saldo insuficiente.');if(saldo!==Number(item.Quantidade))throw new Error('O saldo mudou desde a seleção. Pesquise novamente e confira a quantidade atual.');tx.update(ref,{Quantidade:saldo-qty});tx.set(logRef,{tipo:'SAÍDA',itemId:item.id,itemNome:`${data.Componente||''} (${data.Especificação||''})`,qtd:qty,chamado:chamadoComTecnico,usuario:window.userEmail,dataHora:serverTimestamp(),revertida:false});});showToast('Baixa registrada.');document.getElementById('saida-item-input').value='';document.getElementById('saida-qtd').value=1;document.getElementById('saida-chamado').value='';document.getElementById('saida-observacao').value='';renderWithdrawalDetails();}catch(e){showToast(e.message,'error');}finally{button.disabled=false;}
         };
 
         window.processarUploadEstoque = async function() {
