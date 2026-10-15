@@ -21,18 +21,59 @@
         const ehIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
         function atualizarInstalacao() {
             const botao = document.getElementById('btn-instalar');
-            if (botao) botao.classList.toggle('hidden', !pedidoInstalacao || instalado());
+            if (botao) botao.classList.toggle('hidden', instalado());
             const status = document.getElementById('pwa-status'), botaoPref = document.getElementById('btn-instalar-prefs');
             if (status) status.textContent = instalado() ? 'O sistema está aberto como aplicativo instalado neste aparelho.'
                 : pedidoInstalacao ? 'Este navegador permite instalar o aplicativo. Clique em "Instalar aplicativo".'
-                : ehIOS() ? 'No iPhone/iPad, a instalação é feita pelo Safari (veja as instruções abaixo).'
-                : 'Se o botão não aparecer, use o menu do navegador (veja as instruções abaixo).';
-            if (botaoPref) botaoPref.classList.toggle('hidden', !pedidoInstalacao || instalado());
+                : ehIOS() ? 'No iPhone/iPad, clique em "Instalar aplicativo" para ver o passo a passo do Safari.'
+                : 'Clique em "Instalar aplicativo". Se o navegador ainda não liberar a instalação direta, aparece o passo a passo.';
+            if (botaoPref) botaoPref.classList.toggle('hidden', instalado());
         }
         window.addEventListener('beforeinstallprompt', evento => { evento.preventDefault(); pedidoInstalacao = evento; atualizarInstalacao(); });
         window.addEventListener('appinstalled', () => { pedidoInstalacao = null; atualizarInstalacao(); });
+        function descreverAparelho() {
+            const ua = navigator.userAgent;
+            const navegador = /Edg\//.test(ua) ? 'Edge' : /SamsungBrowser/.test(ua) ? 'Samsung Internet' : /Firefox|FxiOS/.test(ua) ? 'Firefox' : /OPR\//.test(ua) ? 'Opera' : /CriOS|Chrome/.test(ua) ? 'Chrome' : /Safari/.test(ua) ? 'Safari' : 'navegador';
+            const sistema = ehIOS() ? 'iPhone/iPad' : /Android/i.test(ua) ? 'Android' : 'Computador';
+            return { navegador, sistema };
+        }
+        function passosInstalacao({ navegador, sistema }) {
+            if (sistema === 'iPhone/iPad') return navegador === 'Safari'
+                ? ['Toque em <b>Compartilhar</b> (o quadrado com uma seta para cima), na barra do Safari.', 'Role e toque em <b>Adicionar à Tela de Início</b>.', 'Toque em <b>Adicionar</b>. O ícone SETIC aparece na tela inicial.']
+                : ['No iPhone, a instalação só funciona pelo <b>Safari</b>.', 'Copie o endereço do sistema e abra no <b>Safari</b>.', 'Depois toque em <b>Compartilhar → Adicionar à Tela de Início</b>.'];
+            if (sistema === 'Android') return navegador === 'Samsung Internet'
+                ? ['Toque no menu <b>☰</b> (canto inferior).', 'Toque em <b>Adicionar página a → Tela inicial</b>.']
+                : ['Toque no menu <b>⋮</b> do Chrome (canto superior direito).', 'Toque em <b>Instalar aplicativo</b> (ou <b>Adicionar à tela inicial</b>).', 'Confirme em <b>Instalar</b>.'];
+            if (navegador === 'Firefox') return ['O Firefox para computador não instala aplicativos.', 'Abra o sistema no <b>Chrome</b> ou no <b>Edge</b> e clique em <b>Instalar app</b>.'];
+            if (navegador === 'Edge') return ['Clique no menu <b>⋯</b> (canto superior direito).', 'Vá em <b>Aplicativos → Instalar este site como um aplicativo</b>.', 'Confirme em <b>Instalar</b>.'];
+            return ['Clique no ícone de instalação (<b>monitor com seta</b>) no lado direito da barra de endereço,', 'ou no menu <b>⋮</b> do Chrome → <b>Transmitir, salvar e compartilhar → Instalar página como app</b> (ou <b>Instalar SETIC…</b>).', 'Confirme em <b>Instalar</b>.'];
+        }
+        // Diagnóstico: mostra o que impede o navegador de liberar a instalação direta.
+        async function diagnosticarInstalacao() {
+            const itens = [];
+            if (!window.isSecureContext) itens.push('❌ O endereço não é seguro (https). O aplicativo só instala em https.');
+            try { const r = await fetch('/manifest.webmanifest', { cache: 'no-store' }); const m = r.ok ? await r.json().catch(() => null) : null;
+                  itens.push(m && m.short_name ? '✅ Arquivo do aplicativo (manifesto) encontrado no servidor.' : '❌ Manifesto não encontrado no servidor: falta publicar <b>manifest.webmanifest</b> na raiz do repositório.'); }
+            catch (e) { itens.push('❌ Não foi possível ler o manifesto (sem conexão?).'); }
+            try { const r = await fetch('/icons/icon-192.png', { cache: 'no-store' }); itens.push(r.ok && (r.headers.get('content-type') || '').includes('image') ? '✅ Ícones encontrados.' : '❌ Ícones não encontrados: falta publicar a pasta <b>icons</b> na raiz.'); }
+            catch (e) {}
+            if (!('serviceWorker' in navigator)) itens.push('❌ Este navegador não aceita instalação de aplicativos.');
+            else { const reg = await navigator.serviceWorker.getRegistration().catch(() => null);
+                   itens.push(reg && reg.active ? '✅ Componente do aplicativo (sw.js) ativo.' : '❌ Componente do aplicativo inativo: confira se <b>sw.js</b> está na raiz do repositório e recarregue com Ctrl+F5.'); }
+            if (!pedidoInstalacao && itens.every(i => i.startsWith('✅'))) itens.push('ℹ️ Tudo publicado corretamente. O navegador ainda não liberou a instalação direta (às vezes leva alguns segundos ou exige uma segunda visita) — use os passos acima.');
+            return itens;
+        }
+        async function abrirAjudaInstalacao() {
+            const aparelho = descreverAparelho(), janela = document.getElementById('pwa-ajuda');
+            document.getElementById('pwa-ajuda-aparelho').textContent = `Seu aparelho: ${aparelho.sistema} · ${aparelho.navegador}`;
+            document.getElementById('pwa-ajuda-passos').innerHTML = passosInstalacao(aparelho).map(p => `<li>${p}</li>`).join('');
+            const diag = document.getElementById('pwa-ajuda-diagnostico'); diag.textContent = 'Verificando…';
+            if (!janela.open) janela.showModal();
+            diag.innerHTML = '<b>Verificação:</b><br>' + (await diagnosticarInstalacao()).join('<br>');
+        }
         window.instalarAplicativo = async function () {
-            if (!pedidoInstalacao) { atualizarInstalacao(); return; }
+            if (instalado()) { atualizarInstalacao(); return; }
+            if (!pedidoInstalacao) { abrirAjudaInstalacao(); return; }
             pedidoInstalacao.prompt();
             try { await pedidoInstalacao.userChoice; } catch (e) {}
             pedidoInstalacao = null; atualizarInstalacao();
@@ -174,7 +215,7 @@
                     <div class="flex items-center space-x-4">
                         <span class="bg-green-500 text-white text-xs px-2.5 py-1.5 rounded-md flex items-center font-bold shadow-sm hidden md:flex"><i class="fas fa-check-circle mr-1.5"></i> Sincronizado</span>
                         <button type="button" id="navbar-user" class="hidden flex items-center gap-2 text-sm font-semibold rounded-full px-2 py-1 hover:bg-white hover:bg-opacity-10 transition" style="color:rgba(255,255,255,.92)" aria-haspopup="dialog" aria-label="Abrir meu perfil"><span id="navbar-avatar" class="inline-flex items-center justify-center" style="width:28px;height:28px"><i class="fas fa-user-circle" style="font-size:24px" aria-hidden="true"></i></span><span>Olá, <span id="navbar-user-name"></span></span></button>
-                        <button type="button" id="btn-instalar" onclick="instalarAplicativo()" class="hidden items-center gap-1 text-xs font-bold rounded px-2 py-1 border border-yellow-500 text-yellow-400 hover:bg-white hover:bg-opacity-10 transition" title="Instalar o sistema como aplicativo"><i class="fas fa-download" aria-hidden="true"></i><span>Instalar</span></button>
+                        <button type="button" id="btn-instalar" onclick="instalarAplicativo()" class="hidden items-center gap-1 text-xs font-bold rounded px-2 py-1 border border-yellow-500 text-yellow-400 hover:bg-white hover:bg-opacity-10 transition" title="Instalar o sistema como aplicativo"><i class="fas fa-download" aria-hidden="true"></i><span>Instalar app</span></button>
                         <button id="btn-theme" class="p-2 rounded-full hover:bg-white hover:bg-opacity-10 transition" title="Modo Noturno"><i class="fas fa-moon text-lg"></i></button>
                         <button id="btn-tools" class="bg-white bg-opacity-10 hover:bg-opacity-20 border border-white border-opacity-10 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-sm flex items-center backdrop-blur-sm"><i class="fas fa-toolbox mr-2"></i> <span class="hidden md:inline">Painel de Ferramentas</span></button>
                         <button id="btn-logout" class="bg-[#E53935] hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-sm flex items-center"><i class="fas fa-sign-out-alt mr-2"></i> <span class="hidden md:inline">Sair</span></button>
@@ -486,6 +527,13 @@
         </div>
     </div>
 
+    <dialog id="pwa-ajuda" style="width:min(520px,94vw);border:0;border-radius:16px;padding:24px" aria-labelledby="pwa-ajuda-titulo">
+        <div class="flex justify-between items-center mb-3"><h3 id="pwa-ajuda-titulo" class="font-bold text-lg text-slate-800"><i class="fas fa-download mr-2 text-blue-600" aria-hidden="true"></i>Instalar o aplicativo</h3><button type="button" onclick="document.getElementById('pwa-ajuda').close()" aria-label="Fechar">✕</button></div>
+        <p id="pwa-ajuda-aparelho" class="text-sm font-semibold text-slate-700 mb-2"></p>
+        <ol id="pwa-ajuda-passos" class="text-sm text-slate-700 mb-4" style="list-style:decimal;padding-left:20px;line-height:1.7"></ol>
+        <div id="pwa-ajuda-diagnostico" class="text-xs rounded-lg p-3" style="background:#f1f5f9;color:#334155"></div>
+        <div class="flex justify-end mt-4"><button type="button" onclick="document.getElementById('pwa-ajuda').close()" class="bg-blue-600 text-white rounded px-4 py-2 font-bold">Entendi</button></div>
+    </dialog>
     <dialog id="conf-popup" style="width:min(520px,94vw);border:0;border-radius:16px;padding:0;overflow:hidden" aria-labelledby="conf-popup-titulo">
         <div style="background:#b91c1c;color:#fff" class="px-5 py-4 flex justify-between items-center"><h3 id="conf-popup-titulo" class="font-bold text-lg"><i class="fas fa-exclamation-triangle mr-2" aria-hidden="true"></i>Conferência trimestral pendente</h3><button type="button" id="conf-popup-x" aria-label="Fechar aviso" class="text-2xl leading-none" style="color:#fff">✕</button></div>
         <div class="px-5 py-4"><p class="text-sm mb-3" style="color:#334155">Já se passaram 3 meses (ou a conferência ainda não foi feita). Confira o local e a quantidade dos equipamentos:</p><ul id="conf-popup-lista" class="text-sm mb-4" style="color:#991b1b"></ul>
@@ -995,7 +1043,7 @@
         }
 
         // Versão do sistema: confira na tela de login se a página está atualizada.
-        const VERSAO_SISTEMA = '2026.10.01-9';
+        const VERSAO_SISTEMA = '2026.10.01-10';
         document.getElementById('versao-sistema').textContent = 'Versão ' + VERSAO_SISTEMA;
         document.getElementById('navbar-title').title = 'Versão ' + VERSAO_SISTEMA;
 
