@@ -4,6 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Gestão de Estoque - SETIC</title>
+    <!-- Aplicativo instalável (PWA) -->
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#161B33">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SETIC">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <script>
+    // ===== Aplicativo (PWA): instalação no computador e no celular =====
+    (function () {
+        let pedidoInstalacao = null;
+        const instalado = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        const ehIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        function atualizarInstalacao() {
+            const botao = document.getElementById('btn-instalar');
+            if (botao) botao.classList.toggle('hidden', !pedidoInstalacao || instalado());
+            const status = document.getElementById('pwa-status'), botaoPref = document.getElementById('btn-instalar-prefs');
+            if (status) status.textContent = instalado() ? 'O sistema está aberto como aplicativo instalado neste aparelho.'
+                : pedidoInstalacao ? 'Este navegador permite instalar o aplicativo. Clique em "Instalar aplicativo".'
+                : ehIOS() ? 'No iPhone/iPad, a instalação é feita pelo Safari (veja as instruções abaixo).'
+                : 'Se o botão não aparecer, use o menu do navegador (veja as instruções abaixo).';
+            if (botaoPref) botaoPref.classList.toggle('hidden', !pedidoInstalacao || instalado());
+        }
+        window.addEventListener('beforeinstallprompt', evento => { evento.preventDefault(); pedidoInstalacao = evento; atualizarInstalacao(); });
+        window.addEventListener('appinstalled', () => { pedidoInstalacao = null; atualizarInstalacao(); });
+        window.instalarAplicativo = async function () {
+            if (!pedidoInstalacao) { atualizarInstalacao(); return; }
+            pedidoInstalacao.prompt();
+            try { await pedidoInstalacao.userChoice; } catch (e) {}
+            pedidoInstalacao = null; atualizarInstalacao();
+        };
+        document.addEventListener('DOMContentLoaded', atualizarInstalacao);
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(erro => console.warn('Aplicativo (PWA) indisponível:', erro)));
+        }
+    })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
@@ -135,6 +174,7 @@
                     <div class="flex items-center space-x-4">
                         <span class="bg-green-500 text-white text-xs px-2.5 py-1.5 rounded-md flex items-center font-bold shadow-sm hidden md:flex"><i class="fas fa-check-circle mr-1.5"></i> Sincronizado</span>
                         <button type="button" id="navbar-user" class="hidden flex items-center gap-2 text-sm font-semibold rounded-full px-2 py-1 hover:bg-white hover:bg-opacity-10 transition" style="color:rgba(255,255,255,.92)" aria-haspopup="dialog" aria-label="Abrir meu perfil"><span id="navbar-avatar" class="inline-flex items-center justify-center" style="width:28px;height:28px"><i class="fas fa-user-circle" style="font-size:24px" aria-hidden="true"></i></span><span>Olá, <span id="navbar-user-name"></span></span></button>
+                        <button type="button" id="btn-instalar" onclick="instalarAplicativo()" class="hidden items-center gap-1 text-xs font-bold rounded px-2 py-1 border border-yellow-500 text-yellow-400 hover:bg-white hover:bg-opacity-10 transition" title="Instalar o sistema como aplicativo"><i class="fas fa-download" aria-hidden="true"></i><span>Instalar</span></button>
                         <button id="btn-theme" class="p-2 rounded-full hover:bg-white hover:bg-opacity-10 transition" title="Modo Noturno"><i class="fas fa-moon text-lg"></i></button>
                         <button id="btn-tools" class="bg-white bg-opacity-10 hover:bg-opacity-20 border border-white border-opacity-10 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-sm flex items-center backdrop-blur-sm"><i class="fas fa-toolbox mr-2"></i> <span class="hidden md:inline">Painel de Ferramentas</span></button>
                         <button id="btn-logout" class="bg-[#E53935] hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-sm flex items-center"><i class="fas fa-sign-out-alt mr-2"></i> <span class="hidden md:inline">Sair</span></button>
@@ -616,6 +656,17 @@
                         <div><label class="block text-sm font-semibold text-slate-700 mb-1">Fundo da Tela de Login</label><div class="flex items-center space-x-2"><input type="file" id="pref-bg-upload" accept="image/png, image/jpeg, image/jpg" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:font-bold file:bg-blue-50 file:text-blue-700 cursor-pointer border border-gray-300 rounded-md p-1 bg-white"><button id="btn-clear-bg" class="bg-red-100 text-red-600 py-1.5 px-3 rounded border border-red-200 hover:bg-red-200 transition"><i class="fas fa-trash-restore"></i></button></div></div>
                     </div>
                     <button id="btn-save-pref" class="btn-primary w-full bg-[#161B33] text-white font-bold py-3 px-4 rounded-md hover:opacity-90 transition shadow mt-4"><i class="fas fa-save mr-2"></i> Salvar Preferências</button>
+                    <div class="mt-8 border-t pt-6">
+                        <h3 class="text-lg font-bold text-slate-800 mb-1"><i class="fas fa-mobile-alt mr-2 text-blue-600" aria-hidden="true"></i>Aplicativo</h3>
+                        <p id="pwa-status" class="text-sm text-slate-600 mb-3" aria-live="polite"></p>
+                        <button type="button" id="btn-instalar-prefs" onclick="instalarAplicativo()" class="hidden bg-blue-600 text-white font-bold rounded px-4 py-2 mb-4"><i class="fas fa-download mr-2" aria-hidden="true"></i>Instalar aplicativo</button>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm text-slate-700">
+                            <div class="border rounded-lg p-3"><strong class="block mb-1">Computador (Chrome ou Edge)</strong>Clique no botão <b>Instalar</b> no topo da tela, ou no ícone de instalação na barra de endereço. O sistema abre em janela própria e ganha atalho na área de trabalho.</div>
+                            <div class="border rounded-lg p-3"><strong class="block mb-1">Android (Chrome)</strong>Toque em <b>Instalar</b> no topo, ou no menu ⋮ do Chrome → <b>Instalar aplicativo</b> / <b>Adicionar à tela inicial</b>.</div>
+                            <div class="border rounded-lg p-3"><strong class="block mb-1">iPhone / iPad (Safari)</strong>Abra o sistema no <b>Safari</b>, toque em <b>Compartilhar</b> (quadrado com seta) → <b>Adicionar à Tela de Início</b> → <b>Adicionar</b>.</div>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-3">O aplicativo usa sempre a versão mais nova publicada e precisa de internet para acessar os dados.</p>
+                    </div>
                 </div>
 
                 <div id="tab-admin" class="tab-tool-content hidden h-full">
@@ -944,7 +995,7 @@
         }
 
         // Versão do sistema: confira na tela de login se a página está atualizada.
-        const VERSAO_SISTEMA = '2026.10.01-7';
+        const VERSAO_SISTEMA = '2026.10.01-9';
         document.getElementById('versao-sistema').textContent = 'Versão ' + VERSAO_SISTEMA;
         document.getElementById('navbar-title').title = 'Versão ' + VERSAO_SISTEMA;
 
