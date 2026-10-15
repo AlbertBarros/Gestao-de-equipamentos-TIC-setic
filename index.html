@@ -17,20 +17,26 @@
     // ===== Aplicativo (PWA): instalação no computador e no celular =====
     (function () {
         let pedidoInstalacao = null;
-        const instalado = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        const abertoComoApp = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        // Lembra (neste navegador) que o app já foi instalado; se for desinstalado, o navegador volta a oferecer e o botão reaparece.
+        const marcadoInstalado = () => { try { return localStorage.getItem('pwa_instalado') === 'sim'; } catch (e) { return false; } };
+        const marcarInstalado = valor => { try { valor ? localStorage.setItem('pwa_instalado', 'sim') : localStorage.removeItem('pwa_instalado'); } catch (e) {} };
+        const instalado = () => abertoComoApp() || (marcadoInstalado() && !pedidoInstalacao);
         const ehIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
         function atualizarInstalacao() {
             const botao = document.getElementById('btn-instalar');
             if (botao) botao.classList.toggle('hidden', instalado());
             const status = document.getElementById('pwa-status'), botaoPref = document.getElementById('btn-instalar-prefs');
-            if (status) status.textContent = instalado() ? 'O sistema está aberto como aplicativo instalado neste aparelho.'
+            if (status) status.textContent = abertoComoApp() ? 'O sistema está aberto como aplicativo instalado neste aparelho.'
+                : instalado() ? 'O aplicativo SETIC já está instalado neste aparelho. Abra pelo atalho SETIC.'
                 : pedidoInstalacao ? 'Este navegador permite instalar o aplicativo. Clique em "Instalar aplicativo".'
                 : ehIOS() ? 'No iPhone/iPad, clique em "Instalar aplicativo" para ver o passo a passo do Safari.'
                 : 'Clique em "Instalar aplicativo". Se o navegador ainda não liberar a instalação direta, aparece o passo a passo.';
             if (botaoPref) botaoPref.classList.toggle('hidden', instalado());
         }
-        window.addEventListener('beforeinstallprompt', evento => { evento.preventDefault(); pedidoInstalacao = evento; atualizarInstalacao(); });
-        window.addEventListener('appinstalled', () => { pedidoInstalacao = null; atualizarInstalacao(); });
+        window.addEventListener('beforeinstallprompt', evento => { evento.preventDefault(); pedidoInstalacao = evento; marcarInstalado(false); atualizarInstalacao(); });
+        window.addEventListener('appinstalled', () => { pedidoInstalacao = null; marcarInstalado(true); atualizarInstalacao(); });
+        if (abertoComoApp()) marcarInstalado(true);
         function descreverAparelho() {
             const ua = navigator.userAgent;
             const navegador = /Edg\//.test(ua) ? 'Edge' : /SamsungBrowser/.test(ua) ? 'Samsung Internet' : /Firefox|FxiOS/.test(ua) ? 'Firefox' : /OPR\//.test(ua) ? 'Opera' : /CriOS|Chrome/.test(ua) ? 'Chrome' : /Safari/.test(ua) ? 'Safari' : 'navegador';
@@ -75,7 +81,8 @@
             if (instalado()) { atualizarInstalacao(); return; }
             if (!pedidoInstalacao) { abrirAjudaInstalacao(); return; }
             pedidoInstalacao.prompt();
-            try { await pedidoInstalacao.userChoice; } catch (e) {}
+            let escolha = null; try { escolha = await pedidoInstalacao.userChoice; } catch (e) {}
+            if (escolha && escolha.outcome === 'accepted') marcarInstalado(true);
             pedidoInstalacao = null; atualizarInstalacao();
         };
         document.addEventListener('DOMContentLoaded', atualizarInstalacao);
@@ -215,7 +222,7 @@
                     <div class="flex items-center space-x-4">
                         <span class="bg-green-500 text-white text-xs px-2.5 py-1.5 rounded-md flex items-center font-bold shadow-sm hidden md:flex"><i class="fas fa-check-circle mr-1.5"></i> Sincronizado</span>
                         <button type="button" id="navbar-user" class="hidden flex items-center gap-2 text-sm font-semibold rounded-full px-2 py-1 hover:bg-white hover:bg-opacity-10 transition" style="color:rgba(255,255,255,.92)" aria-haspopup="dialog" aria-label="Abrir meu perfil"><span id="navbar-avatar" class="inline-flex items-center justify-center" style="width:28px;height:28px"><i class="fas fa-user-circle" style="font-size:24px" aria-hidden="true"></i></span><span>Olá, <span id="navbar-user-name"></span></span></button>
-                        <button type="button" id="btn-instalar" onclick="instalarAplicativo()" class="hidden items-center gap-1 text-xs font-bold rounded px-2 py-1 border border-yellow-500 text-yellow-400 hover:bg-white hover:bg-opacity-10 transition" title="Instalar o sistema como aplicativo"><i class="fas fa-download" aria-hidden="true"></i><span>Instalar app</span></button>
+                        <button type="button" id="btn-instalar" onclick="instalarAplicativo()" class="hidden items-center gap-1 text-xs font-bold rounded px-2 py-1 whitespace-nowrap border border-yellow-500 text-yellow-400 hover:bg-white hover:bg-opacity-10 transition" style="white-space:nowrap" title="Instalar o sistema como aplicativo"><i class="fas fa-download" aria-hidden="true"></i><span>Instalar app</span></button>
                         <button id="btn-theme" class="p-2 rounded-full hover:bg-white hover:bg-opacity-10 transition" title="Modo Noturno"><i class="fas fa-moon text-lg"></i></button>
                         <button id="btn-tools" class="bg-white bg-opacity-10 hover:bg-opacity-20 border border-white border-opacity-10 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-sm flex items-center backdrop-blur-sm"><i class="fas fa-toolbox mr-2"></i> <span class="hidden md:inline">Painel de Ferramentas</span></button>
                         <button id="btn-logout" class="bg-[#E53935] hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold transition shadow-sm flex items-center"><i class="fas fa-sign-out-alt mr-2"></i> <span class="hidden md:inline">Sair</span></button>
@@ -1043,7 +1050,7 @@
         }
 
         // Versão do sistema: confira na tela de login se a página está atualizada.
-        const VERSAO_SISTEMA = '2026.10.01-10';
+        const VERSAO_SISTEMA = '2026.10.01-11';
         document.getElementById('versao-sistema').textContent = 'Versão ' + VERSAO_SISTEMA;
         document.getElementById('navbar-title').title = 'Versão ' + VERSAO_SISTEMA;
 
