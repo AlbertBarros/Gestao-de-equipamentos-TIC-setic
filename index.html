@@ -2180,12 +2180,6 @@ function addExplicitSearch(id,kind){
           'kpi-zerado':()=>showAlertDetails()
         };
         Object.entries(kpiDetails).forEach(([id,show])=>{const card=document.getElementById(id)?.closest('.modern-card');if(!card)return;card.classList.add('setic-kpi');card.setAttribute('role','button');card.tabIndex=0;card.setAttribute('aria-label','Ver detalhes: '+card.innerText);const hint=document.createElement('span');hint.className='setic-detail-hint';hint.textContent='Ver detalhes ↗';document.getElementById(id).parentElement.append(hint);card.addEventListener('click',show);card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();show();}});});
-        if(window.Chart)window.Chart.register({id:'seticBlueProfessional',beforeUpdate(chart){
-          const dark=document.body.classList.contains('dark');
-          chart.options.plugins=chart.options.plugins||{};
-          chart.options.plugins.tooltip={...chart.options.plugins.tooltip,backgroundColor:dark?'#0a1628':'#172b46',titleColor:'#ffffff',bodyColor:'#d8e8ff',borderColor:'#4d9dff',borderWidth:1,padding:12,cornerRadius:10};
-          chart.data.datasets.forEach(ds=>{if(chart.config.type==='bar'){ds.borderRadius=6;ds.borderSkipped=false;ds.maxBarThickness=24;}if(['pie','doughnut'].includes(chart.config.type)){ds.borderColor=dark?'#111e31':'#ffffff';ds.borderWidth=3;ds.hoverOffset=9;}});
-        }});
         Object.values(window.Chart?.instances||{}).forEach(chart=>chart.update('none'));
         showCadastro('edit','estoque');
 
