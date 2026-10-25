@@ -233,16 +233,16 @@ button:focus-visible{outline:2px solid #22d3ee!important;outline-offset:2px}
 window.seticBootReady=false;
 (function(){
  function falha(msg){if(window.seticBootReady)return;var box=document.getElementById('login-msg-container'),text=document.getElementById('login-msg-text');if(!box||!text)return;text.textContent=msg;box.classList.remove('hidden');box.style.color='#fecaca';var button=document.getElementById('btn-login');button.disabled=true;button.textContent='Recarregue a página';}
- window.addEventListener('error',function(event){if(event.message)falha('Falha ao iniciar o sistema. Recarregue com Ctrl + F5. Se persistir, informe a versão 2026.10.25-R3 e o erro: '+event.message);});
+ window.addEventListener('error',function(event){if(event.message)falha('Falha ao iniciar o sistema. Recarregue com Ctrl + F5. Se persistir, informe a versão 2026.10.25-R4 e o erro: '+event.message);});
  window.addEventListener('unhandledrejection',function(){falha('Não foi possível iniciar o sistema. Verifique a conexão e recarregue a página.');});
- window.addEventListener('DOMContentLoaded',function(){setTimeout(function(){falha('O sistema não terminou de carregar. Verifique sua conexão, recarregue com Ctrl + F5 e confirme a versão 2026.10.25-R3.');},20000);});
+ window.addEventListener('DOMContentLoaded',function(){setTimeout(function(){falha('O sistema não terminou de carregar. Verifique sua conexão, recarregue com Ctrl + F5 e confirme a versão 2026.10.25-R4.');},20000);});
 })();
 </script>
 <style id="setic-themes-r3">/* SETIC R3 — temas independentes inspirados nas referências fornecidas. */
 @media screen {
 :root{color-scheme:light}
 body{--ui-bg:#f1f4f9;--ui-panel:#ffffff;--ui-subtle:#eaf0f8;--ui-text:#182444;--ui-muted:#52627c;--ui-border:#cbd5e5;--ui-accent:#2851e8;--ui-nav:#13104f;--ui-nav-text:#ffffff;--ui-focus:#2851e8;--ui-selected:#e3ebff;--ui-selected-text:#173cae;color-scheme:light;background:var(--ui-bg)!important;color:var(--ui-text)!important}
-body.dark{--ui-bg:#22222d;--ui-panel:#2b2b38;--ui-subtle:#333443;--ui-text:#f5f5fa;--ui-muted:#bcc2d4;--ui-border:#53576c;--ui-accent:#ffd21c;--ui-nav:#1c1c26;--ui-nav-text:#f5f5fa;--ui-focus:#ffe16a;--ui-selected:#ffd21c;--ui-selected-text:#20212d;color-scheme:dark;background:var(--ui-bg)!important;color:var(--ui-text)!important}
+body.dark{--ui-bg:#071426;--ui-panel:#0d2038;--ui-subtle:#112944;--ui-text:#e7eef8;--ui-muted:#a6bad1;--ui-border:#294361;--ui-accent:#2f80ed;--ui-nav:#061226;--ui-nav-text:#e7eef8;--ui-focus:#f2bd32;--ui-selected:#153b62;--ui-selected-text:#e7eef8;color-scheme:dark;background:var(--ui-bg)!important;color:var(--ui-text)!important}
 body #navbar-main{background:var(--ui-nav)!important;border-bottom:4px solid var(--ui-accent)!important;box-shadow:0 3px 15px #10133022;color:var(--ui-nav-text)!important}
 body #navbar-main :is(button,span,i){color:inherit!important}
 body #navbar-main #btn-theme{border:1px solid #ffffff55;min-width:38px;min-height:38px}
@@ -305,6 +305,27 @@ body:not(.dark) ::-webkit-scrollbar-thumb{background:#8c9bb5}
 }
 @media print{#printable-report,#printable-simple-table{background:#fff!important;color:#111!important}#printable-report :is(th,td,p,span,h1,h2,h3),#printable-simple-table :is(th,td,p,span,h1,h2,h3){color:#111!important}#printable-report th{background:#edf1f6!important}}
 </style>
+<style id="setic-dark-restored-r4">
+@media screen {
+body.dark{background:radial-gradient(ellipse at 10% 0%,rgba(32,103,184,.20),transparent 36%),radial-gradient(ellipse at 95% 12%,rgba(245,185,45,.07),transparent 27%),#071426!important}
+body.dark #navbar-main{background:linear-gradient(110deg,#061226 0%,#0b1d35 58%,#12345a 100%)!important;border-bottom:3px solid #f2bd32!important;box-shadow:0 10px 32px rgba(0,0,0,.32)}
+body.dark .modern-card{background:linear-gradient(145deg,rgba(15,35,59,.98),rgba(9,25,44,.98))!important;border:1px solid rgba(111,157,205,.23)!important;border-radius:16px!important;box-shadow:0 14px 34px rgba(0,0,0,.22)!important}
+body.dark .modern-card:hover{border-color:rgba(242,189,50,.52)!important;box-shadow:0 18px 42px rgba(0,0,0,.34)!important}
+body.dark #main-system :is(input,select,textarea){background-color:#0a192c!important}
+body.dark table :is(thead,thead th){background:#102944!important;color:#f0f6ff!important}
+body.dark table tbody tr:nth-child(even){background:#10263f!important}
+body.dark table tbody tr:hover{background:#153b62!important}
+body.dark :is(#dashboard-detail,#alert-chart-dialog){background:linear-gradient(145deg,#0d2038,#09172a)!important;box-shadow:0 30px 90px rgba(0,0,0,.55)!important}
+body.dark #dashboard-detail-body article{background:#112944!important}
+body.dark #main-system .grid.mb-6>.modern-card[role="button"]:after{color:#f2c94c!important}
+body.dark #main-system canvas{filter:drop-shadow(0 3px 8px rgba(0,0,0,.18))}
+body.dark #login-screen>div.bg-white{background:linear-gradient(145deg,#10233b,#09172a)!important;border:1px solid rgba(242,189,50,.38)!important;border-top:4px solid #f2bd32!important}
+body.dark #login-screen input{background:#071426!important}
+body.dark button:is(.btn-primary,.bg-blue-600,.bg-indigo-600){background:#2563eb!important;color:#ffffff!important}
+body.dark #btn-login{background:linear-gradient(135deg,#ffe16a,#f6bd20)!important;color:#10213a!important}
+body.dark #btn-login :is(i,span){color:#10213a!important}
+}
+</style>
 </head>
 <body class="transition-colors duration-200">
     <!-- WIDGETS GLOBAIS -->
@@ -317,7 +338,7 @@ body:not(.dark) ::-webkit-scrollbar-thumb{background:#8c9bb5}
             <div class="text-center mb-8">
                 <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
                 <h2 id="login-title" class="text-2xl font-bold text-slate-800">Almoxarifado TIC</h2>
-                <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p><p id="versao-sistema" class="text-slate-400 mt-1" style="font-size:11px">Versão 2026.10.25-R3</p>
+                <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p><p id="versao-sistema" class="text-slate-400 mt-1" style="font-size:11px">Versão 2026.10.25-R4</p>
             </div>
             <form id="login-form" class="space-y-5" novalidate>
                 <div><label for="login-email" class="block text-sm font-semibold text-slate-700">E-mail Corporativo</label><input type="email" id="login-email" name="email" autocomplete="username" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-blue-500 focus:border-blue-500 transition"></div>
@@ -947,7 +968,7 @@ body:not(.dark) ::-webkit-scrollbar-thumb{background:#8c9bb5}
             for(const scale of Object.values(chart.options.scales||{})){if(scale.ticks)scale.ticks.color=color;if(scale.title)scale.title.color=color;if(scale.grid)scale.grid.color=dark?'rgba(203,213,225,.14)':'rgba(51,65,85,.10)';}
             if(chart.options.plugins?.legend?.labels)chart.options.plugins.legend.labels.color=color;
  if(chart.options.plugins?.datalabels)chart.options.plugins.datalabels.color=color;
- for(const data of chart.data.datasets||[])if(data.borderColor==='#fff'||data.borderColor==='#2b2b38')data.borderColor=dark?'#2b2b38':'#fff';
+ for(const data of chart.data.datasets||[])if(data.borderColor==='#fff'||data.borderColor==='#0d2038')data.borderColor=dark?'#0d2038':'#fff';
         }});
         document.getElementById('print-dashboard-detail').onclick=()=>{
             const popup=window.open('','_blank','width=900,height=700');
@@ -1172,7 +1193,7 @@ body:not(.dark) ::-webkit-scrollbar-thumb{background:#8c9bb5}
         }
 
         // Versão do sistema: confira na tela de login se a página está atualizada.
-        const VERSAO_SISTEMA = '2026.10.25-R3';
+        const VERSAO_SISTEMA = '2026.10.25-R4';
         document.getElementById('versao-sistema').textContent = 'Versão ' + VERSAO_SISTEMA;
         document.getElementById('navbar-title').title = 'Versão ' + VERSAO_SISTEMA;
 
@@ -1198,7 +1219,7 @@ body:not(.dark) ::-webkit-scrollbar-thumb{background:#8c9bb5}
         function aplicarTemaSetic(escuro, salvar=false) {
  document.body.classList.toggle('dark',escuro);
  document.documentElement.style.colorScheme=escuro?'dark':'light';
- document.querySelector('meta[name="theme-color"]').content=escuro?'#1c1c26':'#13104f';
+ document.querySelector('meta[name="theme-color"]').content=escuro?'#061226':'#13104f';
  const button=document.getElementById('btn-theme');
  button.setAttribute('aria-pressed',String(escuro));button.setAttribute('aria-label',escuro?'Ativar modo claro':'Ativar modo escuro');button.title=escuro?'Ativar modo claro':'Ativar modo escuro';
  button.innerHTML=escuro?'<i class="fas fa-sun text-lg" aria-hidden="true"></i>':'<i class="fas fa-moon text-lg" aria-hidden="true"></i>';
@@ -1832,7 +1853,7 @@ window.atualizarInterfaceEstoque = function() {
         }
 
         let selectedStockCategory = null;
-        function stockPalette(){return document.body.classList.contains('dark')?['#ffd21c','#8fb0ff','#5cc9ef','#d8c0ff','#ffe991','#b7caff','#73d8dc','#c3a5ed']:['#13104f','#2851e8','#4685d6','#2789a6','#5357a8','#265d9c','#346b82','#7379c8'];}
+        function stockPalette(){return document.body.classList.contains('dark')?['#2563eb','#059669','#d97706','#7c3aed','#db2777','#0891b2','#dc2626','#4f46e5']:['#13104f','#2851e8','#4685d6','#2789a6','#5357a8','#265d9c','#346b82','#7379c8'];}
         const stockCategoryKey = value => String(value||'Sem categoria').trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
         function stockCategories(){
             const map=new Map();
