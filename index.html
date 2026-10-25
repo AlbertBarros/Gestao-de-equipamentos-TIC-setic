@@ -6,7 +6,7 @@
     <title>Painel de Gestão de Estoque - SETIC</title>
     <!-- Aplicativo instalável (PWA) -->
     <link rel="manifest" href="./manifest.webmanifest">
-    <meta name="theme-color" content="#161B33">
+    <meta name="theme-color" content="#13104f">
     <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32.png">
     <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
     <meta name="mobile-web-app-capable" content="yes">
@@ -217,31 +217,6 @@ button:focus-visible{outline:2px solid #22d3ee!important;outline-offset:2px}
 @media(max-width:767px){.modern-card{border-radius:15px}#main-system .max-w-\[1400px\]{padding-top:1rem}.modern-card:hover{transform:none}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
 
-/* MODELO 1 — institucional escuro: camada visual בלבד; sem alterar regras de negócio */
-:root{color-scheme:dark;--setic-ink:#071426;--setic-panel:#0d2038;--setic-line:rgba(148,181,219,.19);--setic-cyan:#36b8f4;--setic-blue:#2f80ed;--setic-muted:#9bb0c9;--setic-surface:#0d1b2e;--setic-shadow:0 16px 38px rgba(0,0,0,.24)}
-body{background:radial-gradient(ellipse at 10% 0%,rgba(32,103,184,.20),transparent 36%),radial-gradient(ellipse at 95% 12%,rgba(245,185,45,.07),transparent 27%),#071426!important;color:#e7eef8!important}
-#navbar-main{background:linear-gradient(110deg,#061226 0%,#0b1d35 58%,#12345a 100%)!important;border-bottom:3px solid #f2bd32!important;box-shadow:0 10px 32px rgba(0,0,0,.32)}
-.modern-card{background:linear-gradient(145deg,rgba(15,35,59,.98),rgba(9,25,44,.98))!important;border:1px solid rgba(111,157,205,.23)!important;border-radius:16px!important;box-shadow:0 14px 34px rgba(0,0,0,.22)!important;color:#e7eef8!important;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
-.modern-card:hover{border-color:rgba(242,189,50,.52)!important;box-shadow:0 18px 42px rgba(0,0,0,.34)!important}
-#main-system h1,#main-system h2,#main-system h3,#main-system h4,#main-system .text-slate-800,#main-system .text-gray-800,#main-system .text-slate-700{color:#e7eef8!important}
-#main-system .text-slate-500,#main-system .text-gray-500,#main-system .text-slate-400{color:#9bb0c9!important}
-#main-system input,#main-system select,#main-system textarea{background-color:#0a192c!important;color:#e7eef8!important;border-color:#294361!important}
-#main-system input::placeholder,#main-system textarea::placeholder{color:#8298b2!important}
-#main-system table{color:#dce8f6!important;border-color:#29415d!important}
-#main-system thead{background:#102944!important;color:#f0f6ff!important}
-#main-system tbody tr{border-color:rgba(111,157,205,.16)!important}
-#main-system tbody tr:nth-child(even){background:rgba(26,55,86,.28)!important}
-#main-system tbody tr:hover{background:rgba(36,105,170,.20)!important}
-#dashboard-detail,#alert-chart-dialog{background:linear-gradient(145deg,#0d2038,#09172a)!important;color:#e7eef8!important;border:1px solid #294361!important;box-shadow:0 30px 90px rgba(0,0,0,.55)!important}
-#dashboard-detail-title,#dashboard-detail-body{color:#e7eef8!important}
-#dashboard-detail-body article{background:#112944!important;color:#e7eef8!important;border-color:#294361!important}
-#main-system .grid.mb-6>.modern-card[role="button"]:after{color:#f2c94c}
-#main-system canvas{filter:drop-shadow(0 3px 8px rgba(0,0,0,.18))}
-#login-screen>div.bg-white{background:linear-gradient(145deg,#10233b,#09172a)!important;color:#e7eef8!important;border:1px solid rgba(242,189,50,.38)!important;border-top:4px solid #f2bd32!important}
-#login-title{color:#f3f7fc!important}#login-screen label{color:#d7e4f3!important}#login-screen input{background:#071426!important;color:#f3f7fc!important;border-color:#294361!important}
-#login-screen .text-slate-500,#login-screen .text-slate-400{color:#a6bad1!important}
-button:focus-visible{outline:2px solid #f2bd32!important;outline-offset:2px}
-@media(prefers-reduced-motion:reduce){.modern-card{transition:none!important}}
 </style>
 
 <style id="setic-login-r2">
@@ -258,11 +233,78 @@ button:focus-visible{outline:2px solid #f2bd32!important;outline-offset:2px}
 window.seticBootReady=false;
 (function(){
  function falha(msg){if(window.seticBootReady)return;var box=document.getElementById('login-msg-container'),text=document.getElementById('login-msg-text');if(!box||!text)return;text.textContent=msg;box.classList.remove('hidden');box.style.color='#fecaca';var button=document.getElementById('btn-login');button.disabled=true;button.textContent='Recarregue a página';}
- window.addEventListener('error',function(event){if(event.message)falha('Falha ao iniciar o sistema. Recarregue com Ctrl + F5. Se persistir, informe a versão 2026.10.24-R2 e o erro: '+event.message);});
+ window.addEventListener('error',function(event){if(event.message)falha('Falha ao iniciar o sistema. Recarregue com Ctrl + F5. Se persistir, informe a versão 2026.10.25-R3 e o erro: '+event.message);});
  window.addEventListener('unhandledrejection',function(){falha('Não foi possível iniciar o sistema. Verifique a conexão e recarregue a página.');});
- window.addEventListener('DOMContentLoaded',function(){setTimeout(function(){falha('O sistema não terminou de carregar. Verifique sua conexão, recarregue com Ctrl + F5 e confirme a versão 2026.10.24-R2.');},20000);});
+ window.addEventListener('DOMContentLoaded',function(){setTimeout(function(){falha('O sistema não terminou de carregar. Verifique sua conexão, recarregue com Ctrl + F5 e confirme a versão 2026.10.25-R3.');},20000);});
 })();
 </script>
+<style id="setic-themes-r3">/* SETIC R3 — temas independentes inspirados nas referências fornecidas. */
+@media screen {
+:root{color-scheme:light}
+body{--ui-bg:#f1f4f9;--ui-panel:#ffffff;--ui-subtle:#eaf0f8;--ui-text:#182444;--ui-muted:#52627c;--ui-border:#cbd5e5;--ui-accent:#2851e8;--ui-nav:#13104f;--ui-nav-text:#ffffff;--ui-focus:#2851e8;--ui-selected:#e3ebff;--ui-selected-text:#173cae;color-scheme:light;background:var(--ui-bg)!important;color:var(--ui-text)!important}
+body.dark{--ui-bg:#22222d;--ui-panel:#2b2b38;--ui-subtle:#333443;--ui-text:#f5f5fa;--ui-muted:#bcc2d4;--ui-border:#53576c;--ui-accent:#ffd21c;--ui-nav:#1c1c26;--ui-nav-text:#f5f5fa;--ui-focus:#ffe16a;--ui-selected:#ffd21c;--ui-selected-text:#20212d;color-scheme:dark;background:var(--ui-bg)!important;color:var(--ui-text)!important}
+body #navbar-main{background:var(--ui-nav)!important;border-bottom:4px solid var(--ui-accent)!important;box-shadow:0 3px 15px #10133022;color:var(--ui-nav-text)!important}
+body #navbar-main :is(button,span,i){color:inherit!important}
+body #navbar-main #btn-theme{border:1px solid #ffffff55;min-width:38px;min-height:38px}
+body.dark #navbar-main #btn-theme{color:#ffd21c!important;border-color:#ffd21c66}
+body .modern-card,body #login-screen>div.bg-white{background:var(--ui-panel)!important;color:var(--ui-text)!important;border:1px solid var(--ui-border)!important;box-shadow:0 3px 14px #1725540b!important}
+body .modern-card:hover{border-color:var(--ui-accent)!important;box-shadow:0 6px 20px #17255414!important}
+body #main-system .grid.mb-6>.modern-card[role="button"]:after{color:var(--ui-muted)!important}
+body :is(#tools-modal>div:first-child,dialog,#ai-chat-window){background:var(--ui-panel)!important;color:var(--ui-text)!important;border-color:var(--ui-border)!important}
+body #tools-modal>div:first-child>div:first-of-type{background:var(--ui-subtle)!important;border-color:var(--ui-border)!important}
+body :is(#dashboard-detail-body,#dashboard-detail-title,#dashboard-detail-body article){color:var(--ui-text)!important}
+body #dashboard-detail-body article{background:var(--ui-subtle)!important;border-color:var(--ui-border)!important}
+body :is(#main-system,#tools-modal,dialog,#ai-chatbot-container,#login-screen) :is(h1,h2,h3,h4,h5,label){color:var(--ui-text)}
+body :is(#main-system,#tools-modal,dialog,#ai-chatbot-container,#login-screen) :is(.text-black,.text-slate-900,.text-slate-800,.text-slate-700,.text-gray-900,.text-gray-800,.text-gray-700){color:var(--ui-text)!important}
+body :is(#main-system,#tools-modal,dialog,#ai-chatbot-container,#login-screen) :is(.text-slate-600,.text-slate-500,.text-slate-400,.text-gray-600,.text-gray-500,.text-gray-400){color:var(--ui-muted)!important}
+body :is(#main-system,#tools-modal,dialog,#ai-chatbot-container) :is(.bg-white,.bg-slate-50,.bg-gray-50,.bg-slate-100,.bg-gray-100){background:var(--ui-subtle)!important;border-color:var(--ui-border)!important}
+body :is(input:not([type=checkbox]):not([type=radio]):not([type=color]),select,textarea){background:var(--ui-panel)!important;color:var(--ui-text)!important;border-color:var(--ui-border)!important;accent-color:var(--ui-accent)}
+body :is(input,textarea)::placeholder{color:var(--ui-muted)!important;opacity:1}
+body :is(input,select,textarea):focus-visible{outline:2px solid var(--ui-focus);outline-offset:2px}
+body :is(input[type=checkbox],input[type=radio]){accent-color:var(--ui-accent)}
+body select option{background:var(--ui-panel);color:var(--ui-text)}
+body table{color:var(--ui-text)!important;border-color:var(--ui-border)!important}
+body table :is(thead,thead th){background:var(--ui-subtle)!important;color:var(--ui-text)!important}
+body table tbody tr{background:var(--ui-panel)!important;border-color:var(--ui-border)!important}
+body table tbody tr:nth-child(even){background:var(--ui-subtle)!important}
+body table tbody tr:hover{background:var(--ui-selected)!important;color:var(--ui-selected-text)!important}
+body table tbody tr:hover td{color:var(--ui-selected-text)!important}
+body .admin-section{background:var(--ui-panel)!important;color:var(--ui-text)!important;border-color:var(--ui-border)!important}
+body :is(.admin-actions button,[data-cadastro-base],#stock-category-buttons button,#cond-buttons button,#ramais-legend button,#rastreio-legend button){background:var(--ui-subtle)!important;color:var(--ui-text)!important;border-color:var(--ui-border)!important}
+body :is(.admin-actions button[aria-expanded=true],[data-cadastro-base][aria-pressed=true],#stock-category-buttons button[aria-pressed=true],#cond-buttons button[aria-pressed=true]){background:var(--ui-selected)!important;color:var(--ui-selected-text)!important;border-color:var(--ui-accent)!important}
+body :is(button,a):focus-visible{outline:3px solid var(--ui-focus)!important;outline-offset:3px}
+body #login-screen>div.bg-white{border-top:4px solid #ffd21c!important}
+body #login-title,body #login-screen label{color:var(--ui-text)!important}
+body #btn-login{color:#10213a!important;background:linear-gradient(135deg,#ffe16a,#f6bd20)!important}
+body #btn-forgot-password{color:var(--ui-selected-text)!important}
+body.dark #btn-forgot-password{color:#ffe16a!important}
+body.dark :is(.text-blue-500,.text-blue-600,.text-blue-700,.text-blue-800,.text-blue-900,.text-indigo-600,.text-indigo-700,.text-indigo-800,.text-indigo-900){color:#b7caff!important}
+body.dark :is(.text-purple-600,.text-purple-700,.text-purple-800){color:#d8c0ff!important}
+body.dark :is(.text-red-500,.text-red-600,.text-red-700,.text-red-800){color:#ffb4bb!important}
+body.dark :is(.text-orange-500,.text-orange-600,.text-orange-700,.text-orange-800,.text-yellow-600,.text-yellow-700,.text-yellow-800){color:#ffe08a!important}
+body.dark :is(.text-emerald-500,.text-emerald-600,.text-emerald-700,.text-emerald-800,.text-green-600,.text-green-700){color:#9ce8c0!important}
+body.dark :is(.bg-blue-50,.bg-blue-100,.bg-indigo-50,.bg-indigo-100){background:#303b57!important}
+body.dark :is(.bg-purple-50,.bg-purple-100){background:#433351!important}
+body.dark :is(.bg-red-50,.bg-red-100){background:#4b2c38!important}
+body.dark :is(.bg-orange-50,.bg-orange-100,.bg-yellow-50,.bg-yellow-100){background:#493e28!important}
+body.dark :is(.bg-emerald-50,.bg-emerald-100,.bg-green-50,.bg-green-100){background:#24463b!important}
+body button:is(.btn-primary,.bg-blue-600,.bg-indigo-600){background:var(--ui-accent)!important;color:#ffffff!important}
+body.dark button:is(.btn-primary,.bg-blue-600,.bg-indigo-600){color:#20212d!important}
+body button:is(.btn-primary,.bg-blue-600,.bg-indigo-600) :is(i,span){color:inherit!important}
+body #btn-login,body #btn-login :is(i,span){color:#10213a!important}
+body.dark #main-system :is(#view-estoque-btn,#view-rastreio-btn,#view-voip-btn){color:var(--ui-text)!important}
+body.dark #main-system :is(#view-estoque-btn,#view-rastreio-btn,#view-voip-btn).text-blue-600{color:#ffd21c!important;border-color:#ffd21c!important}
+body #ai-chat-body,body #ai-chatbot-container .chat-bubble-ai{background:var(--ui-subtle)!important;color:var(--ui-text)!important;border-color:var(--ui-border)!important}
+body #ai-chatbot-container .chat-bubble-user{background:#2851e8!important;color:#ffffff!important}
+body #ai-chat-window>div:first-child{background:var(--ui-nav)!important;color:#fff!important}
+body #ai-chat-window>div:first-child :is(h3,p,button,i){color:#fff!important}
+body.dark #ai-greeting-balloon{background:var(--ui-panel)!important;color:var(--ui-text)!important;border-color:var(--ui-border)!important}
+body.dark #login-msg-container:not(.hidden){border-color:#ffb4bb!important}
+body.dark ::-webkit-scrollbar-thumb{background:#6b7187}
+body:not(.dark) ::-webkit-scrollbar-thumb{background:#8c9bb5}
+}
+@media print{#printable-report,#printable-simple-table{background:#fff!important;color:#111!important}#printable-report :is(th,td,p,span,h1,h2,h3),#printable-simple-table :is(th,td,p,span,h1,h2,h3){color:#111!important}#printable-report th{background:#edf1f6!important}}
+</style>
 </head>
 <body class="transition-colors duration-200">
     <!-- WIDGETS GLOBAIS -->
@@ -275,7 +317,7 @@ window.seticBootReady=false;
             <div class="text-center mb-8">
                 <img src="https://raw.githubusercontent.com/AlbertBarros/Gestao-de-equipamentos-TIC-setic/main/bras%C3%A3o?v=1" alt="PRF Logo" class="h-24 mx-auto mb-4 drop-shadow-md">
                 <h2 id="login-title" class="text-2xl font-bold text-slate-800">Almoxarifado TIC</h2>
-                <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p><p id="versao-sistema" class="text-slate-400 mt-1" style="font-size:11px">Versão 2026.10.24-R2</p>
+                <p class="text-sm text-slate-500 font-medium">Acesso Restrito - SETIC</p><p id="versao-sistema" class="text-slate-400 mt-1" style="font-size:11px">Versão 2026.10.25-R3</p>
             </div>
             <form id="login-form" class="space-y-5" novalidate>
                 <div><label for="login-email" class="block text-sm font-semibold text-slate-700">E-mail Corporativo</label><input type="email" id="login-email" name="email" autocomplete="username" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-3 border focus:ring-blue-500 focus:border-blue-500 transition"></div>
@@ -900,10 +942,12 @@ window.seticBootReady=false;
 
 
         if(window.Chart)window.Chart.register({id:'seticThemeContrast',beforeUpdate(chart){
-            const dark=document.body.classList.contains('dark'),color=dark?'#f8fafc':'#334155';
+            const dark=document.body.classList.contains('dark'),color=dark?'#f5f5fa':'#182444';
             chart.options.color=color;
             for(const scale of Object.values(chart.options.scales||{})){if(scale.ticks)scale.ticks.color=color;if(scale.title)scale.title.color=color;if(scale.grid)scale.grid.color=dark?'rgba(203,213,225,.14)':'rgba(51,65,85,.10)';}
             if(chart.options.plugins?.legend?.labels)chart.options.plugins.legend.labels.color=color;
+ if(chart.options.plugins?.datalabels)chart.options.plugins.datalabels.color=color;
+ for(const data of chart.data.datasets||[])if(data.borderColor==='#fff'||data.borderColor==='#2b2b38')data.borderColor=dark?'#2b2b38':'#fff';
         }});
         document.getElementById('print-dashboard-detail').onclick=()=>{
             const popup=window.open('','_blank','width=900,height=700');
@@ -944,7 +988,7 @@ window.seticBootReady=false;
             if (e.target.closest('#btn-tools')) { document.getElementById('tools-modal').classList.remove('hidden'); return; }
 
             // Modo Noturno
-            if (e.target.closest('#btn-theme')) { const escuro = document.body.classList.toggle('dark'); try { localStorage.setItem('pref_tema', escuro ? 'escuro' : 'claro'); } catch {} Object.values(window.Chart?.instances||{}).forEach(chart=>chart.update('none')); return; }
+            if (e.target.closest('#btn-theme')) { aplicarTemaSetic(!document.body.classList.contains('dark'), true); if(window.Chart && !document.getElementById('main-system').classList.contains('hidden')) renderChartsUIUX(); return; }
 
             // Controles exclusivos do assistente: minimizar preserva; fechar limpa.
             if(e.target.closest('#btn-ai-dismiss-greeting')) { SETIC_AI.dismissGreeting(); return; }
@@ -1128,7 +1172,7 @@ window.seticBootReady=false;
         }
 
         // Versão do sistema: confira na tela de login se a página está atualizada.
-        const VERSAO_SISTEMA = '2026.10.24-R2';
+        const VERSAO_SISTEMA = '2026.10.25-R3';
         document.getElementById('versao-sistema').textContent = 'Versão ' + VERSAO_SISTEMA;
         document.getElementById('navbar-title').title = 'Versão ' + VERSAO_SISTEMA;
 
@@ -1151,7 +1195,18 @@ window.seticBootReady=false;
             if(document.getElementById('login-screen')) document.getElementById('login-screen').style.backgroundImage = `url('${bgImage}')`;
         }
         carregarPreferencias(); 
-        try { if (localStorage.getItem('pref_tema') === 'escuro') document.body.classList.add('dark'); } catch {}
+        function aplicarTemaSetic(escuro, salvar=false) {
+ document.body.classList.toggle('dark',escuro);
+ document.documentElement.style.colorScheme=escuro?'dark':'light';
+ document.querySelector('meta[name="theme-color"]').content=escuro?'#1c1c26':'#13104f';
+ const button=document.getElementById('btn-theme');
+ button.setAttribute('aria-pressed',String(escuro));button.setAttribute('aria-label',escuro?'Ativar modo claro':'Ativar modo escuro');button.title=escuro?'Ativar modo claro':'Ativar modo escuro';
+ button.innerHTML=escuro?'<i class="fas fa-sun text-lg" aria-hidden="true"></i>':'<i class="fas fa-moon text-lg" aria-hidden="true"></i>';
+ if(salvar){try{localStorage.setItem('pref_tema',escuro?'escuro':'claro');}catch{}}
+ Object.values(window.Chart?.instances||{}).forEach(chart=>chart.update('none'));
+}
+let temaSalvo='claro';try{temaSalvo=localStorage.getItem('pref_tema')||'claro';}catch{}
+aplicarTemaSetic(temaSalvo==='escuro');
 
         if(document.getElementById('pref-bg-upload')) document.getElementById('pref-bg-upload').addEventListener('change', function(e) { const file = e.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = function(event) { window.tempBgBase64 = event.target.result; }; reader.readAsDataURL(file); } });
         if(document.getElementById('btn-clear-bg')) document.getElementById('btn-clear-bg').addEventListener('click', () => { localStorage.removeItem('pref_bg'); window.tempBgBase64 = null; document.getElementById('pref-bg-upload').value = ''; carregarPreferencias(); showToast("Imagem restaurada!"); });
@@ -1777,12 +1832,12 @@ window.atualizarInterfaceEstoque = function() {
         }
 
         let selectedStockCategory = null;
-        const stockPalette = ['#2563eb','#059669','#d97706','#7c3aed','#db2777','#0891b2','#dc2626','#4f46e5'];
+        function stockPalette(){return document.body.classList.contains('dark')?['#ffd21c','#8fb0ff','#5cc9ef','#d8c0ff','#ffe991','#b7caff','#73d8dc','#c3a5ed']:['#13104f','#2851e8','#4685d6','#2789a6','#5357a8','#265d9c','#346b82','#7379c8'];}
         const stockCategoryKey = value => String(value||'Sem categoria').trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
         function stockCategories(){
             const map=new Map();
             window.estoqueLocal.forEach(item=>{const key=stockCategoryKey(item.Categoria);if(!map.has(key))map.set(key,{key,name:String(item.Categoria||'Sem categoria').trim(),total:0});map.get(key).total+=Number(item.Quantidade)||0;});
-            return [...map.values()].sort((a,b)=>a.name.localeCompare(b.name,'pt-BR')).map((c,i)=>({...c,color:stockPalette[i%stockPalette.length]}));
+            return [...map.values()].sort((a,b)=>a.name.localeCompare(b.name,'pt-BR')).map((c,i)=>({...c,color:stockPalette()[i%stockPalette().length]}));
         }
         function selectStockCategory(key){ selectedStockCategory=key===selectedStockCategory?null:key; renderStockDetail();renderStockCategoryButtons(); aplicarCategoriaNaTabela(selectedStockCategory,true); }
         // Liga o gráfico "Divisão por categoria" à tabela "Estoque Consolidado".
@@ -1946,7 +2001,7 @@ window.atualizarInterfaceEstoque = function() {
             const cv=document.getElementById('chartStatusVoip');if(cv)chartStatusVoip=new ChartLib(cv,{type:'pie',data:{labels:ramalGroups.map(g=>g.name),datasets:[{data:ramalGroups.map(g=>g.rows.length),backgroundColor:ramalGroups.map(g=>g.color),borderColor:'#fff',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,animation:{onComplete:function(){window.imgChartVoip=this.toBase64Image();}},plugins:{legend:{display:false},datalabels:{display:false}},onClick:(e,els)=>{if(els.length)showRamais(ramalGroups[els[0].index]);}}});
             dashboardLegend('ramais-legend',ramalGroups.map(g=>({name:g.name,quantity:g.rows.length,color:g.color,click:()=>showRamais(g)})));
             const rastreioMap=new Map();window.localidadesLocais.forEach(l=>{const name=String(l.Equipamento||'Sem equipamento').trim();if(!rastreioMap.has(name))rastreioMap.set(name,[]);rastreioMap.get(name).push(l);});
-            const groups=[...rastreioMap].map(([name,rows],i)=>({name,rows,quantity:rows.reduce((n,l)=>n+(Number(l.Quantidade)||0),0),color:stockPalette[i%stockPalette.length]}));
+            const groups=[...rastreioMap].map(([name,rows],i)=>({name,rows,quantity:rows.reduce((n,l)=>n+(Number(l.Quantidade)||0),0),color:stockPalette()[i%stockPalette().length]}));
             const showTracking=g=>openDashboardDetail(`Rastreio — ${g.name}`,g.rows.map(l=>({name:l.Equipamento||'-',detail:`Local: ${l.Local||'-'} · SIPAC: ${l.LocalSipac||'-'} · Patrimônio: ${l.Patrimonio||'-'} · Série: ${l.Serie||'-'} · Quantidade: ${Number(l.Quantidade)||0}`})));
             chartRastreio=compactDashboardChart('chartRastreio',groups,groups.map(g=>g.color),showTracking);
             if(chartRastreio){chartRastreio.options.animation.onComplete=function(){window.imgChartRastreio=this.toBase64Image();};}
