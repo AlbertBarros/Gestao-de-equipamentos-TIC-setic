@@ -186,26 +186,62 @@
 .dark #dashboard-detail-body .border-b{border-color:#475569;}
 </style>
 
-<style id="setic-prf-button-fix">
-    /* Identidade institucional SETIC: azul-marinho e amarelo */
-    #btn-login {
-        background: #FFC629 !important;
-        color: #10233F !important;
-        border: 2px solid #FFC629 !important;
-        border-radius: 10px !important;
-        font-weight: 800 !important;
-        box-shadow: 0 5px 16px rgba(0,0,0,.20) !important;
-        transition: background .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease;
-    }
-    #btn-login:hover:not(:disabled) {
-        background: #FFD75E !important;
-        color: #0B1D35 !important;
-        transform: translateY(-1px);
-        box-shadow: 0 7px 20px rgba(255,198,41,.22) !important;
-    }
-    #btn-login:focus-visible { outline: 3px solid #FFFFFF !important; outline-offset: 3px; }
-    #btn-login:disabled { opacity: .78; cursor: wait; }
-    #login-msg-container:not(.hidden) { display: block; }
+<style id="setic-futuristic-design">
+:root{--setic-ink:#0b1224;--setic-panel:#111c33;--setic-line:rgba(148,163,184,.22);--setic-cyan:#22d3ee;--setic-blue:#60a5fa;--setic-muted:#64748b;--setic-surface:#fff;--setic-shadow:0 14px 38px rgba(15,23,42,.08)}
+body{background:radial-gradient(ellipse at 12% 0%,rgba(59,130,246,.08),transparent 34%),radial-gradient(ellipse at 94% 12%,rgba(34,211,238,.06),transparent 28%),#f4f7fb!important;color:#172033}
+#navbar-main{background:linear-gradient(110deg,#0b1224 0%,#111c33 58%,#172b4d 100%)!important;border-bottom:3px solid #22d3ee!important;box-shadow:0 10px 30px rgba(2,8,23,.18)}
+#navbar-main img{filter:drop-shadow(0 0 8px rgba(34,211,238,.18))}
+.modern-card{background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(248,251,255,.96));border:1px solid rgba(148,163,184,.24);border-radius:18px;box-shadow:var(--setic-shadow);transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;}
+.modern-card:hover{box-shadow:0 18px 42px rgba(15,23,42,.12);border-color:rgba(59,130,246,.35)}
+#stock-chart-card,.modern-card:has(canvas){backdrop-filter:blur(10px)}
+#main-system .max-w-\[1400px\]{padding-top:1.75rem}
+#main-system .grid.mb-6>.modern-card[role="button"]{cursor:pointer;outline:none;isolation:isolate}
+#main-system .grid.mb-6>.modern-card[role="button"]:hover{transform:translateY(-4px);box-shadow:0 18px 36px rgba(37,99,235,.14)}
+#main-system .grid.mb-6>.modern-card[role="button"]:focus-visible{outline:3px solid rgba(34,211,238,.8);outline-offset:3px}
+#main-system .grid.mb-6>.modern-card[role="button"]:after{content:'VER DETALHES  ↗';position:absolute;right:13px;bottom:10px;font-size:9px;font-weight:800;letter-spacing:.11em;color:#64748b;opacity:0;transform:translateY(3px);transition:.2s;z-index:2}
+#main-system .grid.mb-6>.modern-card[role="button"]:hover:after,#main-system .grid.mb-6>.modern-card[role="button"]:focus-visible:after{opacity:1;transform:translateY(0)}
+#main-system h3{letter-spacing:-.015em}
+#main-system canvas{filter:drop-shadow(0 2px 5px rgba(15,23,42,.035))}
+button{transition:transform .16s ease,box-shadow .16s ease,background-color .16s ease,border-color .16s ease}
+button:focus-visible{outline:2px solid #22d3ee!important;outline-offset:2px}
+#dashboard-detail,#alert-chart-dialog{background:linear-gradient(145deg,#fff,#f6f9ff);box-shadow:0 30px 90px rgba(2,8,23,.3);border:1px solid rgba(148,163,184,.32);border-radius:22px}
+#dashboard-detail::backdrop,#alert-chart-dialog::backdrop{background:rgba(5,12,28,.62);backdrop-filter:blur(5px)}
+#dashboard-detail-title{font-size:1.12rem;letter-spacing:-.02em}
+#dashboard-detail-body article{border:1px solid rgba(148,163,184,.22)!important;border-radius:12px;padding:12px 14px;margin:8px 0;background:rgba(248,250,252,.9)}
+.dark body,.dark{background:#070d1a!important;color:#e2e8f0}
+.dark .modern-card{background:linear-gradient(145deg,rgba(15,23,42,.98),rgba(17,28,51,.96));border-color:rgba(100,116,139,.3);box-shadow:0 16px 36px rgba(0,0,0,.22)}
+.dark .modern-card:hover{border-color:rgba(34,211,238,.42);box-shadow:0 18px 42px rgba(0,0,0,.34)}
+.dark #dashboard-detail,.dark #alert-chart-dialog{background:linear-gradient(145deg,#0f172a,#111c33);color:#e2e8f0;border-color:#334155}
+.dark #dashboard-detail-title,.dark #dashboard-detail-body,.dark #dashboard-detail-body article{color:#e2e8f0!important}
+.dark #dashboard-detail-body article{background:#172338!important;border-color:#334155!important}
+@media(max-width:767px){.modern-card{border-radius:15px}#main-system .max-w-\[1400px\]{padding-top:1rem}.modern-card:hover{transform:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
+
+/* MODELO 1 — institucional escuro: camada visual בלבד; sem alterar regras de negócio */
+:root{color-scheme:dark;--setic-ink:#071426;--setic-panel:#0d2038;--setic-line:rgba(148,181,219,.19);--setic-cyan:#36b8f4;--setic-blue:#2f80ed;--setic-muted:#9bb0c9;--setic-surface:#0d1b2e;--setic-shadow:0 16px 38px rgba(0,0,0,.24)}
+body{background:radial-gradient(ellipse at 10% 0%,rgba(32,103,184,.20),transparent 36%),radial-gradient(ellipse at 95% 12%,rgba(245,185,45,.07),transparent 27%),#071426!important;color:#e7eef8!important}
+#navbar-main{background:linear-gradient(110deg,#061226 0%,#0b1d35 58%,#12345a 100%)!important;border-bottom:3px solid #f2bd32!important;box-shadow:0 10px 32px rgba(0,0,0,.32)}
+.modern-card{background:linear-gradient(145deg,rgba(15,35,59,.98),rgba(9,25,44,.98))!important;border:1px solid rgba(111,157,205,.23)!important;border-radius:16px!important;box-shadow:0 14px 34px rgba(0,0,0,.22)!important;color:#e7eef8!important;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.modern-card:hover{border-color:rgba(242,189,50,.52)!important;box-shadow:0 18px 42px rgba(0,0,0,.34)!important}
+#main-system h1,#main-system h2,#main-system h3,#main-system h4,#main-system .text-slate-800,#main-system .text-gray-800,#main-system .text-slate-700{color:#e7eef8!important}
+#main-system .text-slate-500,#main-system .text-gray-500,#main-system .text-slate-400{color:#9bb0c9!important}
+#main-system input,#main-system select,#main-system textarea{background-color:#0a192c!important;color:#e7eef8!important;border-color:#294361!important}
+#main-system input::placeholder,#main-system textarea::placeholder{color:#8298b2!important}
+#main-system table{color:#dce8f6!important;border-color:#29415d!important}
+#main-system thead{background:#102944!important;color:#f0f6ff!important}
+#main-system tbody tr{border-color:rgba(111,157,205,.16)!important}
+#main-system tbody tr:nth-child(even){background:rgba(26,55,86,.28)!important}
+#main-system tbody tr:hover{background:rgba(36,105,170,.20)!important}
+#dashboard-detail,#alert-chart-dialog{background:linear-gradient(145deg,#0d2038,#09172a)!important;color:#e7eef8!important;border:1px solid #294361!important;box-shadow:0 30px 90px rgba(0,0,0,.55)!important}
+#dashboard-detail-title,#dashboard-detail-body{color:#e7eef8!important}
+#dashboard-detail-body article{background:#112944!important;color:#e7eef8!important;border-color:#294361!important}
+#main-system .grid.mb-6>.modern-card[role="button"]:after{color:#f2c94c}
+#main-system canvas{filter:drop-shadow(0 3px 8px rgba(0,0,0,.18))}
+#login-screen>div.bg-white{background:linear-gradient(145deg,#10233b,#09172a)!important;color:#e7eef8!important;border:1px solid rgba(242,189,50,.38)!important;border-top:4px solid #f2bd32!important}
+#login-title{color:#f3f7fc!important}#login-screen label{color:#d7e4f3!important}#login-screen input{background:#071426!important;color:#f3f7fc!important;border-color:#294361!important}
+#login-screen .text-slate-500,#login-screen .text-slate-400{color:#a6bad1!important}
+button:focus-visible{outline:2px solid #f2bd32!important;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.modern-card{transition:none!important}}
 </style>
 
 </head>
@@ -1110,31 +1146,34 @@
         }
 
         async function fazerLogin() {
-            const email = document.getElementById('login-email')?.value.trim() || '';
-            const pass = document.getElementById('login-password')?.value || '';
+            const email = document.getElementById('login-email').value.trim();
+            const pass = document.getElementById('login-password').value;
             const botao = document.getElementById('btn-login');
-            if (!email || !pass) return showLoginMessage('Preencha e-mail e senha.', true);
-            const textoOriginal = '<i class="fas fa-sign-in-alt mr-2"></i> Autenticar';
-            if (botao) { botao.disabled = true; botao.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Autenticando...'; }
+            if (!email || !pass) return showLoginMessage("Preencha e-mail e senha.", true);
+
+            botao.disabled = true;
+            botao.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Autenticando...';
             try {
                 await signInWithEmailAndPassword(auth, email, pass);
-                // O onAuthStateChanged existente continua responsável por abrir o sistema
-                // e verificar a autorização do usuário.
+                // A tela principal é exibida pelo observador onAuthStateChanged.
             } catch (error) {
-                console.error('[SETIC] Erro de autenticação:', error.code || error.message, error);
+                console.error('Falha no login SETIC:', error.code || error.message || error);
                 const mensagens = {
-                    'auth/invalid-credential': 'E-mail ou senha incorretos.',
-                    'auth/user-not-found': 'Não existe uma conta cadastrada com esse e-mail.',
-                    'auth/wrong-password': 'Senha incorreta.',
                     'auth/invalid-email': 'O formato do e-mail é inválido.',
-                    'auth/too-many-requests': 'Muitas tentativas. Aguarde e tente novamente.',
-                    'auth/network-request-failed': 'Falha de conexão. Verifique sua internet.',
-                    'auth/operation-not-allowed': 'O login por e-mail e senha está desativado no Firebase.',
-                    'auth/api-key-not-valid': 'A chave de API do Firebase é inválida.'
+                    'auth/user-disabled': 'Esta conta foi desativada. Solicite apoio ao administrador.',
+                    'auth/user-not-found': 'Não foi encontrada uma conta com esse e-mail.',
+                    'auth/wrong-password': 'Senha incorreta.',
+                    'auth/invalid-credential': 'E-mail ou senha incorretos. Confira os dados e tente novamente.',
+                    'auth/invalid-login-credentials': 'E-mail ou senha incorretos. Confira os dados e tente novamente.',
+                    'auth/too-many-requests': 'Muitas tentativas. Aguarde alguns minutos e tente novamente.',
+                    'auth/network-request-failed': 'Falha de conexão. Verifique a internet e tente novamente.',
+                    'auth/operation-not-allowed': 'O login por e-mail e senha está desativado no Firebase Authentication.',
+                    'auth/api-key-not-valid.-please-pass-a-valid-api-key.': 'A chave de API do Firebase não foi aceita. Confira a configuração do projeto.'
                 };
-                showLoginMessage(mensagens[error.code] || `Falha no login (${error.code || 'erro desconhecido'}). Consulte o Console (F12).`, true);
+                showLoginMessage(mensagens[error.code] || `Não foi possível entrar no sistema (${error.code || 'erro desconhecido'}). Confira a conexão e a configuração do Firebase.`, true);
             } finally {
-                if (botao) { botao.disabled = false; botao.innerHTML = textoOriginal; }
+                botao.disabled = false;
+                botao.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Autenticar';
             }
         }
         // O bind do login agora é feito via Delegação de Evento, mas mantenho o Enter Key press.
@@ -3177,6 +3216,54 @@ function addExplicitSearch(id,kind){
             window.mudarModoEdicao=function(tipo,action){mudarModoAnterior(tipo,action);if(tipo==='estoque')document.getElementById('edit-filtros').classList.toggle('hidden',document.getElementById('estoque-edit-container').classList.contains('hidden'));};
         })();
         showCadastro('edit','estoque');
+
+
+        // Camada visual: gráficos mais consistentes sem alterar seus dados ou regras de negócio.
+        try {
+            if (window.Chart && window.Chart.defaults) {
+                window.Chart.defaults.font.family = "Inter, ui-sans-serif, system-ui, sans-serif";
+                window.Chart.defaults.font.size = 11;
+                window.Chart.defaults.color = document.body.classList.contains('dark') ? '#cbd5e1' : '#64748b';
+                window.Chart.defaults.borderColor = document.body.classList.contains('dark') ? 'rgba(148,163,184,.16)' : 'rgba(148,163,184,.20)';
+                window.Chart.defaults.plugins = window.Chart.defaults.plugins || {};
+                window.Chart.defaults.plugins.tooltip = Object.assign({}, window.Chart.defaults.plugins.tooltip || {}, {
+                    backgroundColor: '#0b1224', titleColor: '#f8fafc', bodyColor: '#e2e8f0',
+                    borderColor: 'rgba(34,211,238,.45)', borderWidth: 1, padding: 12, cornerRadius: 10,
+                    displayColors: true, boxPadding: 5
+                });
+                window.Chart.defaults.animation = Object.assign({}, window.Chart.defaults.animation || {}, { duration: 450, easing: 'easeOutQuart' });
+            }
+        } catch (e) { console.warn('Não foi possível aplicar o tema visual aos gráficos:', e); }
+
+        // Cards KPI clicáveis: abrem detalhes dos dados já carregados, sem alterar registros.
+        (() => {
+            const cards = [...document.querySelectorAll('#main-system .grid.mb-6 > .modern-card')];
+            const cardMap = [
+                ['kpi-total-estoque', 'Estoque — registros cadastrados', () => (window.estoqueLocal || []).map(i => ({name: i.Nome || i.nome || i.Componente || i.componente || i.Equipamento || i.equipamento || i.Patrimonio || i.patrimonio || 'Item de estoque', detail: `Quantidade: ${Number(i.Quantidade ?? i.quantidade ?? 0) || 0} · Categoria: ${i.Categoria || i.categoria || 'Não informada'} · Patrimônio: ${i.Patrimonio || i.patrimonio || 'Não informado'}`}))],
+                ['kpi-total-rastreio', 'Rastreio — ativos cadastrados', () => (window.localidadesLocais || []).map(i => ({name: i.Nome || i.nome || i.Equipamento || i.equipamento || i.Patrimonio || i.patrimonio || 'Ativo rastreado', detail: `Local: ${i.Local || i.local || i.Localidade || i.localidade || 'Não informado'} · Quantidade: ${Number(i.Quantidade ?? i.quantidade ?? 0) || 0} · Condição: ${i.Condicao || i.condicao || 'Não informada'}`}))],
+                ['kpi-total-voip', 'Ramais — registros cadastrados', () => (window.voipLocal || []).map(i => ({name: i.Nome || i.nome || i.Setor || i.setor || i.Ramal || i.ramal || 'Ramal', detail: `Ramal: ${i.Ramal || i.ramal || 'Não informado'} · Setor: ${i.Setor || i.setor || 'Não informado'} · IP: ${i.IP || i.ip || 'Não informado'}`}))],
+                ['kpi-total-saidas', 'Itens retirados — movimentações registradas', () => (window.logsRetiradas || window.logsLocal || []).filter(i => String(i.tipo || i.Tipo || '').toUpperCase() === 'SAÍDA' && !i.revertida).map(i => ({name: i.itemNome || i.Item || i.item || 'Retirada', detail: `Quantidade: ${i.qtd ?? i.Quantidade ?? 0} · Data: ${i.dataHora?.toDate ? i.dataHora.toDate().toLocaleString('pt-BR') : (i.dataHora || i.data || 'Não informada')} · Responsável: ${i.responsavel || i.usuario || 'Não informado'}`}))],
+                ['kpi-zerado', 'Itens em alerta', () => typeof dashboardAlerts === 'function' ? dashboardAlerts().map(g => ({name: g.nome || 'Componente', detail: `Quantidade: ${g.total ?? '—'} · Mínimo: ${g.minimo ?? '—'} · Categoria: ${g.categoria || 'Não informada'}`})) : []],
+                ['kpi-manutencao', 'Equipamentos em manutenção ou com defeito', () => [...(window.estoqueLocal || []), ...(window.localidadesLocais || [])].filter(i => ['em manutenção', 'não funcionando'].includes(String(i.Condicao || i.condicao || '').toLocaleLowerCase('pt-BR'))).map(i => ({name: i.Nome || i.nome || i.Equipamento || i.equipamento || i.Patrimonio || i.patrimonio || 'Equipamento', detail: `Condição: ${i.Condicao || i.condicao} · Quantidade: ${i.Quantidade ?? i.quantidade ?? 0} · Local: ${i.Local || i.local || i.Localidade || i.localidade || 'Não informado'}`}))]
+            ];
+            for (const card of cards) {
+                const metric = card.querySelector('[id^="kpi-"]');
+                if (!metric) continue;
+                const config = cardMap.find(item => item[0] === metric.id);
+                if (!config) continue;
+                card.setAttribute('role', 'button'); card.setAttribute('tabindex', '0');
+                card.setAttribute('aria-label', `Abrir detalhes: ${config[1]}`);
+                const abrir = () => {
+                    let rows = [];
+                    try { rows = config[2](); } catch (e) { console.warn('Não foi possível carregar detalhes do indicador:', e); }
+                    if (typeof openDashboardDetail === 'function') {
+                        openDashboardDetail(config[1], rows.length ? rows : [{name: 'Nenhum detalhe disponível', detail: 'Não há registros para exibir neste indicador no momento.'}]);
+                    }
+                };
+                card.addEventListener('click', event => { if (event.target.closest('button,a,input,select,textarea')) return; abrir(); });
+                card.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); abrir(); } });
+            }
+        })();
 
     </script>
 </body>
